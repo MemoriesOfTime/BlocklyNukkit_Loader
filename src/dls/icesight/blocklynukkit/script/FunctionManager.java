@@ -30,6 +30,8 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
+    //玩家方块交互API
+
     //简易存储API
     public void putEasy(String string,String string2){
         Loader.easytmpmap.put(string, string2);

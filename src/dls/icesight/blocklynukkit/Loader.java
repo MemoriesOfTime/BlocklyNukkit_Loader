@@ -10,6 +10,7 @@ import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import dls.icesight.blocklynukkit.script.BlockItemManager;
 import dls.icesight.blocklynukkit.script.FunctionManager;
 import dls.icesight.blocklynukkit.script.WindowManager;
 
@@ -71,6 +72,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("manager", new FunctionManager(this));
         engine.put("logger", getLogger());
         engine.put("window", new WindowManager());
+        engine.put("blockitem",new BlockItemManager());
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();

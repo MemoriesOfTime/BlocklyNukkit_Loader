@@ -1,0 +1,9 @@
+﻿name: BlocklyNukkit
+main: dls.icesight.blocklynukkit.Loader
+version: "0.0.1"
+author: BlocklyNukkit开发组（超神的冰凉发起）
+api: ["1.0.8"]
+description: BN插件加载器
+load: POSTWORLD
+depend:
+  - EconomyAPI

@@ -1,0 +1,76 @@
+2020-02-19 10:15:43.079 [main] INFO  - Loading §aserver.properties§f ...
+2020-02-19 10:15:43.095 [main] INFO  - 将 中文(简体) (chs) 设置为基本语言
+2020-02-19 10:15:43.095 [main] INFO  - 正在启动 Minecraft: BE §bv1.14.0§r
+2020-02-19 10:15:43.099 [main] INFO  - Selected Zlib Provider: 2 (cn.nukkit.utils.ZlibThreadLocal)
+2020-02-19 10:15:43.130 [main] INFO  - 正在于 0.0.0.0:19132 启动服务器
+2020-02-19 10:15:43.153 [main] INFO  - 此服务器正在运行 Nukkit §egit-666afc5§f 版本 "§b§f" (API 1.0.9)
+2020-02-19 10:15:43.153 [main] INFO  - Nukkit 根据 LGPL 许可发行
+2020-02-19 10:15:43.716 [main] INFO  - Loading recipes...
+2020-02-19 10:15:43.809 [main] INFO  - Loaded 1320 recipes.
+2020-02-19 10:15:43.810 [main] INFO  - 成功加载 0 个资源包
+2020-02-19 10:15:43.885 [main] INFO  - 读取 BossBar_MES v0.0.1 中
+2020-02-19 10:15:43.894 [main] INFO  - [BossBar_MES] 正在加载
+2020-02-19 10:15:43.896 [main] INFO  - 读取 BxFlight v1.0.0 中
+2020-02-19 10:15:43.898 [main] INFO  - [BxFlight] 插件开启中...
+2020-02-19 10:15:43.900 [main] INFO  - 读取 GlidingNpc v1.0.0 中
+2020-02-19 10:15:43.903 [main] INFO  - 读取 EconomyAPI v1.0.1 中
+2020-02-19 10:15:43.913 [main] INFO  - 读取 WorldProtection v1.0.0 中
+2020-02-19 10:15:43.916 [main] INFO  - 读取 Holograms v3.1.3 中
+2020-02-19 10:15:43.918 [RakNet Thread #17] INFO  - Epoll Status is false
+2020-02-19 10:15:43.929 [main] INFO  - [Holograms] Loading characters...
+2020-02-19 10:15:44.025 [main] INFO  - [Holograms] Loading config...
+2020-02-19 10:15:44.028 [main] INFO  - [Holograms] Updating config.yml...
+2020-02-19 10:15:44.042 [main] INFO  - [Holograms] Loading placeholders
+2020-02-19 10:15:44.043 [main] INFO  - [Holograms] Registering default grid sources
+2020-02-19 10:15:44.049 [main] INFO  - 读取 MainMenu v0.0.1 中
+2020-02-19 10:15:44.060 [main] INFO  - 开启 Holograms v3.1.3 中
+2020-02-19 10:15:44.060 [main] INFO  - [Holograms] Loading grid config...
+2020-02-19 10:15:44.072 [main] INFO  - [Holograms] Loading holograms
+2020-02-19 10:15:44.118 [main] INFO  - 准备世界 "§aworld§f" 中
+2020-02-19 10:15:44.175 [main] INFO  - 准备世界 "§anether§f" 中
+2020-02-19 10:15:44.177 [main] INFO  - 开启 BossBar_MES v0.0.1 中
+2020-02-19 10:15:44.178 [main] INFO  - [BossBar_MES] 加载完成
+2020-02-19 10:15:44.178 [main] INFO  - 开启 BxFlight v1.0.0 中
+2020-02-19 10:15:44.178 [main] INFO  - [BxFlight] 插件开启成功
+2020-02-19 10:15:44.199 [main] INFO  - [BxFlight] 数据创建成功
+2020-02-19 10:15:44.200 [main] INFO  - 开启 GlidingNpc v1.0.0 中
+2020-02-19 10:15:44.200 [main] INFO  - [GlidingNpc] loading......
+2020-02-19 10:15:44.211 [main] INFO  - 开启 EconomyAPI v1.0.1 中
+2020-02-19 10:15:44.237 [main] WARN  - [EconomyAPI] Data provider was set to: Yaml
+2020-02-19 10:15:44.240 [main] INFO  - 开启 WorldProtection v1.0.0 中
+2020-02-19 10:15:44.250 [main] INFO  - 开启 MainMenu v0.0.1 中
+2020-02-19 10:15:44.258 [main] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.259 [main] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.260 [main] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.260 [main] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.261 [testTimer] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.261 [main] WARN  - [MainMenu] 无法构造类,文件错误
+2020-02-19 10:15:44.262 [testTimer] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.262 [testTimer] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.262 [testTimer] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.263 [testTimer] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.262 [main] ERROR - Throwing
+java.lang.RuntimeException: java.lang.NullPointerException
+	at cn.nukkit.plugin.PluginManager.enablePlugin(PluginManager.java:443) [nukkit.jar:?]
+	at cn.nukkit.Server.enablePlugin(Server.java:735) [nukkit.jar:?]
+	at cn.nukkit.Server.enablePlugins(Server.java:724) [nukkit.jar:?]
+	at cn.nukkit.Server.<init>(Server.java:560) [nukkit.jar:?]
+	at cn.nukkit.Nukkit.main(Nukkit.java:112) [nukkit.jar:?]
+Caused by: java.lang.NullPointerException
+	at club.icesight.menu.onEnable(menu.java:84) ~[?:?]
+	at cn.nukkit.plugin.PluginBase.setEnabled(PluginBase.java:89) ~[nukkit.jar:?]
+	at cn.nukkit.plugin.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:117) ~[nukkit.jar:?]
+	at cn.nukkit.plugin.PluginManager.enablePlugin(PluginManager.java:439) ~[nukkit.jar:?]
+	... 4 more
+2020-02-19 10:15:44.266 [main] INFO  - 关闭 MainMenu v0.0.1 中
+2020-02-19 10:15:44.266 [main] INFO  - [MainMenu] 已结束
+2020-02-19 10:15:44.267 [main] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.267 [main] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.267 [main] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.268 [main] WARN  - [MainMenu] 对象写错误
+2020-02-19 10:15:44.268 [main] WARN  - [MainMenu] 对象读错误
+2020-02-19 10:15:44.283 [main] INFO  - 启动 GS4 状态监听器
+2020-02-19 10:15:44.283 [main] INFO  - 将 Query 端口设置为 19132
+2020-02-19 10:15:44.283 [main] INFO  - Query 运行于 0.0.0.0:19132
+2020-02-19 10:15:44.284 [main] INFO  - 默认游戏模式：生存模式
+2020-02-19 10:15:44.284 [main] INFO  - 启动完成 (1.298s)！如需帮助，请输入 "help" 或 "?"

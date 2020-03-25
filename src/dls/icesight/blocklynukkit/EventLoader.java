@@ -1,7 +1,8 @@
 package dls.icesight.blocklynukkit;
 
-import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockChest;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
@@ -15,10 +16,10 @@ import cn.nukkit.event.server.DataPacketReceiveEvent;
 import cn.nukkit.event.server.DataPacketSendEvent;
 import cn.nukkit.event.server.QueryRegenerateEvent;
 import cn.nukkit.event.server.ServerCommandEvent;
-import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.DummyBossBar;
+import cn.nukkit.scheduler.Task;
+import dls.icesight.blocklynukkit.script.StoneSpawnEvent;
 
 public class EventLoader implements Listener {
 
@@ -86,6 +87,16 @@ public class EventLoader implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractEvent event){
         plugin.callEventHandler(event, event.getEventName());
+        PlayerInteractEvent.Action action = event.getAction();
+        if(action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)){
+            plugin.callEventHandler(event, "RightClickBlockEvent");
+        }else if(action.equals(PlayerInteractEvent.Action.LEFT_CLICK_BLOCK)){
+            plugin.callEventHandler(event,"LeftClickBlockEvent");
+        }else if(action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_AIR)){
+            plugin.callEventHandler(event,"ClickOnAirEvent");
+        }else if(action.equals(PlayerInteractEvent.Action.PHYSICAL)){
+            plugin.callEventHandler(event,"PhysicalTouchEvent");
+        }
     }
 
     @EventHandler
@@ -259,5 +270,26 @@ public class EventLoader implements Listener {
     @EventHandler
     public void onQueryRegenerate(QueryRegenerateEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+
+    @EventHandler
+    public void onBlockForm(BlockFormEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+
+    @EventHandler
+    public void onLiquid(LiquidFlowEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        Position position = Position.fromObject(new Vector3(
+                        event.getBlock().x,event.getBlock().y,event.getBlock().z
+        ),event.getBlock().getLevel());
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            @Override
+            public void onRun(int i) {
+                if(position.getLevelBlock().getId()==4||position.getLevelBlock().getId()==1){
+                    plugin.callEventHandler(new StoneSpawnEvent(position,position.getLevelBlock()),"StoneSpawnEvent","StoneSpawnEvent");
+                }
+            }
+        },5);
     }
 }

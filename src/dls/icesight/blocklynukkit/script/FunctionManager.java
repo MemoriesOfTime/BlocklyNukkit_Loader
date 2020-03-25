@@ -5,6 +5,8 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.item.Item;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.plugin.Plugin;
@@ -13,6 +15,7 @@ import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
 import dls.icesight.blocklynukkit.Loader;
 import dls.icesight.blocklynukkit.other.Clothes;
+import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
 import java.io.File;
@@ -30,14 +33,35 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
-    //玩家方块交互API
+    //获取玩家是否op
+    public boolean PlayerIsOP(Player player){
+        return player.isOp();
+    }
 
     //简易存储API
-    public void putEasy(String string,String string2){
-        Loader.easytmpmap.put(string, string2);
+    public void putEasy(String string,Object object){
+        Loader.easytmpmap.put(string, object);
     }
-    public String getEasy(String string){
-        return Loader.easytmpmap.get(string);
+    public String getEasyString(String string){
+        return (String)Loader.easytmpmap.get(string);
+    }
+    public double getEasyNumber(String string){
+        return (Double)Loader.easytmpmap.get(string);
+    }
+    public boolean getEasyBoolean(String string){
+        return (Boolean)Loader.easytmpmap.get(string);
+    }
+    public Position getEasyPosition(String string){
+        return (Position)Loader.easytmpmap.get(string);
+    }
+    public Player getEasyPlayer(String string){
+        return (Player)Loader.easytmpmap.get(string);
+    }
+    public Item getEasyItem(String string){
+        return (Item)Loader.easytmpmap.get(string);
+    }
+    public Block getEasyBlock(String string){
+        return (Block)Loader.easytmpmap.get(string);
     }
     //configAPI
     public List getAllKeyInConfig(Config config){

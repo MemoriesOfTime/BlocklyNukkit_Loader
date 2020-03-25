@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="NukkitCustomScoreBoard">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/NukkitCustomScoreBoard.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

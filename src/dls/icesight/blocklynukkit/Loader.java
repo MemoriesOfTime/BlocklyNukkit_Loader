@@ -1,6 +1,7 @@
 package dls.icesight.blocklynukkit;
 
 import cn.nukkit.Player;
+import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
@@ -10,9 +11,8 @@ import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
-import dls.icesight.blocklynukkit.script.BlockItemManager;
-import dls.icesight.blocklynukkit.script.FunctionManager;
-import dls.icesight.blocklynukkit.script.WindowManager;
+import dls.icesight.blocklynukkit.other.BNCrafting;
+import dls.icesight.blocklynukkit.script.*;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -20,15 +20,15 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.*;
 
 public class Loader extends PluginBase implements Listener {
 
-    private ScriptEngine engine;
+    public ScriptEngine engine;
 
     public static Loader plugin;
+
+    public static String positionstmp = "";
 
     public static Map<String, Skin> playerskinmap = new HashMap<>();
     public static Map<String, Skin> playerclothesmap = new HashMap<>();
@@ -36,13 +36,19 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String> playergeonamemap = new HashMap<>();
     public static Map<String, String> playergeojsonmap = new HashMap<>();
     public static Map<Integer, String> functioncallback = new HashMap<>();
-    public static Map<String, String> easytmpmap = new HashMap<>();
+    public static Map<String, Object> easytmpmap = new HashMap<>();
+    public static BNCrafting bnCrafting = new BNCrafting();
 
     @Override
     public void onEnable() {
         plugin=this;
         MetricsLite metricsLite=new MetricsLite(this,6769);
-
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                Utils.checkupdate();
+            }
+        },0,3600*6*1000);
         Config config = new Config(this.getDataFolder()+"/update.yml",Config.YAML);
         if(!config.exists("mods")){
             config.set("mods", Arrays.asList("first.js"));
@@ -50,9 +56,9 @@ public class Loader extends PluginBase implements Listener {
         }
         List<String> list = (List<String>) config.get("mods");
         for(String a:list){
-            download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
+            Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
         }
-
+        this.getServer().getPluginManager().registerEvents(bnCrafting,this);
         final ScriptEngineManager manager = new ScriptEngineManager();
         engine = manager.getEngineByMimeType("text/javascript");
         if (engine == null) {
@@ -73,6 +79,8 @@ public class Loader extends PluginBase implements Listener {
         engine.put("logger", getLogger());
         engine.put("window", new WindowManager());
         engine.put("blockitem",new BlockItemManager());
+        engine.put("algorithm",new AlgorithmManager());
+        engine.put("entity",new EntityManager());
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
@@ -102,7 +110,8 @@ public class Loader extends PluginBase implements Listener {
 
         this.getServer().getPluginManager().registerEvents(this, this);
 
-        new EventLoader(this);
+        new EventLoader(this);//AlgorithmManager.test();
+        plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
     }
 
     public synchronized void callEventHandler(final Event e, final String functionName) {
@@ -111,6 +120,21 @@ public class Loader extends PluginBase implements Listener {
         }
         try {
             ((Invocable) engine).invokeFunction(functionName, e);
+        } catch (final Exception se) {
+            getLogger().error("在回调 " + functionName+" 时出错", se);
+            se.printStackTrace();
+        }
+    }
+
+    public synchronized void callEventHandler(final Event e, final String functionName,String type) {
+        if (engine.get(functionName) == null) {
+            return;
+        }
+        try {
+            if(type.equals("StoneSpawnEvent")){
+                StoneSpawnEvent event = ((StoneSpawnEvent)e);
+                ((Invocable) engine).invokeFunction(functionName, event);
+            }
         } catch (final Exception se) {
             getLogger().error("在回调 " + functionName+" 时出错", se);
             se.printStackTrace();
@@ -176,50 +200,63 @@ public class Loader extends PluginBase implements Listener {
 //        }
 //        System.out.println("end");
 //    }
-    private static void download(String downloadUrl, File file) {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            URL url = new URL(downloadUrl);
-            URLConnection connection = url.openConnection();
-            InputStream inputStream = connection.getInputStream();
-            int length = 0;
-            byte[] bytes = new byte[1024];
-            while ((length = inputStream.read(bytes)) != -1) {
-                fileOutputStream.write(bytes, 0, length);
-            }
-            fileOutputStream.close();
-            inputStream.close();
-            if(isWindows()){
-                getlogger().info(TextFormat.YELLOW+"正在为windows转码... "+TextFormat.GREEN+"作者对微软的嘲讽：(sb Windows,都老老实实用utf编码会死吗？)");
-            }
-        } catch (IOException e) {
-            getlogger().error("download error ! url :{"+downloadUrl+"}, exception:{"+e+"}");
-        }
-        getlogger().info(TextFormat.GREEN+"成功同步："+file.getName());
-    }
-    public static boolean isWindows() {
-        return System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1;
-    }
-    public static String readToString(File file) {
-        String encoding = "UTF-8";
 
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
-        try {
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public class ReloadJSCommand extends Command {
+
+        private String functionName;
+
+        public ReloadJSCommand() {
+            super("hotreloadjs","热重载js(仅控制台使用)");
         }
-        try {
-            return new String(filecontent, encoding);
-        } catch (UnsupportedEncodingException e) {
-            System.err.println("操作系统不支持 " + encoding);
-            e.printStackTrace();
-            return null;
+
+        @Override
+        public boolean execute(CommandSender sender, String s, String[] args) {
+            if(sender.isPlayer()){
+                sender.sendMessage("只有控制台才能执行此命令");
+                return false;
+            }
+            Config config = new Config(Loader.plugin.getDataFolder()+"/update.yml",Config.YAML);
+            if(!config.exists("mods")){
+                config.set("mods", Arrays.asList("first.js"));
+                config.save();
+            }
+            List<String> list = (List<String>) config.get("mods");
+            for(String a:list){
+                Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(Loader.plugin.getDataFolder()+"/"+a));
+            }
+
+            final ScriptEngineManager manager = new ScriptEngineManager();
+            Loader.plugin.engine=null;
+            Loader.plugin.engine = manager.getEngineByMimeType("text/javascript");
+
+            getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+
+            Loader.plugin.engine.put("server", getServer());
+            Loader.plugin.engine.put("plugin", this);
+            Loader.plugin.engine.put("manager", new FunctionManager(Loader.plugin));
+            Loader.plugin.engine.put("logger", getLogger());
+            Loader.plugin.engine.put("window", new WindowManager());
+            Loader.plugin.engine.put("blockitem",new BlockItemManager());
+            Loader.plugin.engine.put("algorithm",new AlgorithmManager());
+
+            getDataFolder().mkdir();
+            new File(getDataFolder()+"/skin").mkdir();
+
+
+            for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
+                if(file.isDirectory()) continue;
+                if(file.getName().contains(".js")){
+                    try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
+                        Loader.plugin.engine.eval(reader);
+                        getLogger().warning("加载BN插件: " + file.getName());
+                    } catch (final Exception e) {
+                        getLogger().error("无法加载： " + file.getName(), e);
+                    }
+                }
+            }
+            Loader.plugin.getServer().getScheduler().cancelAllTasks();
+            Loader.bnCrafting.craftEntryMap=new HashMap<>();
+            return false;
         }
     }
 }

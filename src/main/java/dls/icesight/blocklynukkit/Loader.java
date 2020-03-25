@@ -6,6 +6,7 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
+import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.scheduler.Task;
@@ -41,6 +42,43 @@ public class Loader extends PluginBase implements Listener {
 
     @Override
     public void onEnable() {
+        Map<String, Plugin> plugins = this.getServer().getPluginManager().getPlugins();
+        if (!plugins.containsKey("EconomyAPI")){
+            try {
+                Utils.downloadPlugin("https://repo.nukkitx.com/main/me/onebone/economyapi/2.0.0-SNAPSHOT/economyapi-2.0.0-20190517.112309-17.jar");
+                this.getPluginLoader().loadPlugin("EconomyAPI");
+                this.getPluginLoader().enablePlugin(this.getServer().getPluginManager().getPlugin("EconomyAPI"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (!plugins.containsKey("PlaceholderAPI")){
+            try {
+                Utils.downloadPlugin("https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
+                this.getPluginLoader().loadPlugin("PlaceholderAPI");
+                this.getPluginLoader().enablePlugin(this.getServer().getPluginManager().getPlugin("PlaceholderAPI"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (!plugins.containsKey("ScoreboardPlugin")){
+            try {
+                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/ScoreboardAPI-1.3-SNAPSHOT.jar");
+                this.getPluginLoader().loadPlugin("ScoreboardPlugin");
+                this.getPluginLoader().enablePlugin(this.getServer().getPluginManager().getPlugin("ScoreboardPlugin"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if (!plugins.containsKey("KotlinLib")){
+            try {
+                Utils.downloadPlugin(""); //KotlinLib url
+                this.getPluginLoader().loadPlugin("KotlinLib");
+                this.getPluginLoader().enablePlugin(this.getServer().getPluginManager().getPlugin("KotlinLib"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         plugin=this;
         MetricsLite metricsLite=new MetricsLite(this,6769);
         new Timer().schedule(new TimerTask() {
@@ -215,6 +253,7 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
+            Loader.bnCrafting.craftEntryMap=new HashMap<>();
             Config config = new Config(Loader.plugin.getDataFolder()+"/update.yml",Config.YAML);
             if(!config.exists("mods")){
                 config.set("mods", Arrays.asList("first.js"));
@@ -255,7 +294,7 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
             Loader.plugin.getServer().getScheduler().cancelAllTasks();
-            Loader.bnCrafting.craftEntryMap=new HashMap<>();
+
             return false;
         }
     }

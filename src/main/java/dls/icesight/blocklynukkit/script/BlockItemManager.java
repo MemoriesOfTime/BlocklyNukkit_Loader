@@ -156,6 +156,12 @@ public class BlockItemManager {
         }
         return string;
     }
+    //添加创造物品栏
+    public void addToCreativeBar(Item item){
+        if(!Item.isCreativeItem(item)){
+            Item.addCreativeItem(item);
+        }
+    }
     public void setItemLore(Item item,String string){
         item.setLore(string.split(";"));
     }

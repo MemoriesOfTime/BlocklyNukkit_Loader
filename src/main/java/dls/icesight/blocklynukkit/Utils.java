@@ -197,7 +197,28 @@ public class Utils {
         }
 
     }
-
+    public static void downloadPlugin(String urlStr) throws IOException {
+        File jar = new File(Server.getInstance().getPluginPath(), urlStr.substring(urlStr.lastIndexOf('/')+1,urlStr.length()));
+        if (jar.exists()){
+            return;
+        }
+        File tmp = new File(jar.getPath()+".au");
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setConnectTimeout(3*1000);
+        InputStream is = conn.getInputStream();
+        FileOutputStream os = new FileOutputStream(tmp);
+        byte[] buf = new byte[4096];
+        int size = 0;
+        while((size = is.read(buf)) != -1)
+            os.write(buf, 0, size);
+        is.close();
+        os.flush();
+        os.close();
+        if(jar.exists())
+            jar.delete();
+        tmp.renameTo(jar);
+    }
 
     /**
      * 从输入流中获取字节数组

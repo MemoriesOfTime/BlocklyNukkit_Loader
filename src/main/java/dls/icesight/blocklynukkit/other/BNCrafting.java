@@ -33,6 +33,7 @@ public class BNCrafting implements Listener {
                         if (craftEntry.timecall()){
                             if(Math.random()<craftEntry.percent){
                                 for (Item item:craftEntry.output){
+                                    //Loader.getlogger().info(item.toString());
                                     addItemToPlayer(Server.getInstance().getPlayer(entry.getKey()),item);
                                 }
                                 Server.getInstance().getPlayer(entry.getKey()).sendMessage("合成 "+craftEntry.description+" 成功");
@@ -63,13 +64,16 @@ public class BNCrafting implements Listener {
     public void showTypeToPlayer(String type, Player player){
         FormWindowSimple page = new FormWindowSimple("高级工作台",type);
         for(Map.Entry<String,ArrayList<CraftEntry>> entry:craftEntryMap.entrySet()){
-            Iterator<CraftEntry> iterator = entry.getValue().iterator();
-            while (iterator.hasNext()){
-                CraftEntry craftEntry=iterator.next();
-                if(PlayercontainsItem(player,1,craftEntry.input)){
-                    page.addButton(new ElementButton(craftEntry.description));
+            if(entry.getKey().equals(type)){
+                Iterator<CraftEntry> iterator = entry.getValue().iterator();
+                while (iterator.hasNext()){
+                    CraftEntry craftEntry=iterator.next();
+                    if(PlayercontainsItem(player,1,craftEntry.input)){
+                        page.addButton(new ElementButton(craftEntry.description));
+                    }
                 }
             }
+
         }
         player.showFormWindow(page,99876);
     }

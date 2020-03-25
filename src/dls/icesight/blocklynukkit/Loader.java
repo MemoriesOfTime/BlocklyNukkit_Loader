@@ -215,6 +215,7 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
+            Loader.bnCrafting.craftEntryMap=new HashMap<>();
             Config config = new Config(Loader.plugin.getDataFolder()+"/update.yml",Config.YAML);
             if(!config.exists("mods")){
                 config.set("mods", Arrays.asList("first.js"));
@@ -255,7 +256,7 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
             Loader.plugin.getServer().getScheduler().cancelAllTasks();
-            Loader.bnCrafting.craftEntryMap=new HashMap<>();
+
             return false;
         }
     }

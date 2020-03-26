@@ -131,7 +131,6 @@ public class Loader extends PluginBase implements Listener {
 
 
 
-
         this.getServer().getScheduler().scheduleDelayedRepeatingTask(new Task() {
             @Override
             public void onRun(int i) {

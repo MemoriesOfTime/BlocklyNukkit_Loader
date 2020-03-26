@@ -111,6 +111,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("blockitem",new BlockItemManager());
         engine.put("algorithm",new AlgorithmManager());
         engine.put("entity",new EntityManager());
+        engine.put("inventory",new InventoryManager());
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();

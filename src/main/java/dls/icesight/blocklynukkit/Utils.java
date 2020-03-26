@@ -207,19 +207,24 @@ public class Utils {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setConnectTimeout(3*1000);
         InputStream is = conn.getInputStream();
+        int totalSize = conn.getContentLength();
+        ProgressBarThread pbt = new ProgressBarThread(totalSize);
+        new Thread(pbt).start();
         FileOutputStream os = new FileOutputStream(tmp);
         byte[] buf = new byte[4096];
         int size = 0;
-        while((size = is.read(buf)) != -1)
+        while((size = is.read(buf)) != -1) {
             os.write(buf, 0, size);
+            pbt.updateProgress(size);
+        }
         is.close();
         os.flush();
         os.close();
         if(jar.exists())
             jar.delete();
         tmp.renameTo(jar);
+        Server.getInstance().getPluginManager().loadPlugin(jar.getPath());
     }
-
     /**
      * 从输入流中获取字节数组
      * @param inputStream

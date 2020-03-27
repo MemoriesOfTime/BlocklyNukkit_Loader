@@ -25,10 +25,6 @@
     </build>
     <repositories>
         <repository>
-            <id>nukkit-repo</id>
-            <url>https://repo.nukkitx.com/maven-snapshots</url>
-        </repository>
-        <repository>
             <id>nukkitx-repo</id>
             <url>http://repo.nukkitx.com/main/</url>
         </repository>

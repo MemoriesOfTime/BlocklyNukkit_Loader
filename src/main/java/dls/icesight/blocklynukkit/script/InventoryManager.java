@@ -1,5 +1,6 @@
 package dls.icesight.blocklynukkit.script;
 
+<<<<<<< HEAD
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
@@ -72,4 +73,10 @@ public class InventoryManager {
         Inventory inv = player.getInventory();
         return inv;
     }
+=======
+import cn.nukkit.item.Item;
+import cn.nukkit.level.Position;
+
+public class InventoryManager {
+>>>>>>> 839f26fa055b7616c8ebc578a0f25d313600db46
 }

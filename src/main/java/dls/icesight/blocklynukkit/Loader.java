@@ -64,9 +64,16 @@ public class Loader extends PluginBase implements Listener {
                 e.printStackTrace();
             }
         }
+        if (!plugins.containsKey("FakeInventories")){
+            try {
+                Utils.downloadPlugin("https://ci.nukkitx.com/job/NukkitX/job/FakeInventories/job/master/lastSuccessfulBuild/artifact/target/fakeinventories-1.0.3-SNAPSHOT.jar");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
         if (!plugins.containsKey("ScoreboardPlugin")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/ScoreboardAPI-1.3-SNAPSHOT.jar");
+                Utils.downloadPlugin("https://repo.nukkitx.com/snapshot/com/nukkitx/fakeinventories/1.0.3-SNAPSHOT/fakeinventories-1.0.3-20190326.084826-4.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -111,6 +118,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("blockitem",new BlockItemManager());
         engine.put("algorithm",new AlgorithmManager());
         engine.put("entity",new EntityManager());
+        engine.put("inventory",new InventoryManager());
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
@@ -127,7 +135,6 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
         }
-
 
 
 
@@ -269,6 +276,8 @@ public class Loader extends PluginBase implements Listener {
             Loader.plugin.engine.put("window", new WindowManager());
             Loader.plugin.engine.put("blockitem",new BlockItemManager());
             Loader.plugin.engine.put("algorithm",new AlgorithmManager());
+            Loader.plugin.engine.put("inventory",new InventoryManager());
+
 
             getDataFolder().mkdir();
             new File(getDataFolder()+"/skin").mkdir();

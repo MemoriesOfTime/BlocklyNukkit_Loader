@@ -19,7 +19,11 @@ import cn.nukkit.event.server.ServerCommandEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.scheduler.Task;
+import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
 import dls.icesight.blocklynukkit.script.StoneSpawnEvent;
+
+import javax.script.Invocable;
+import javax.script.ScriptException;
 
 public class EventLoader implements Listener {
 
@@ -291,5 +295,15 @@ public class EventLoader implements Listener {
                 }
             }
         },5);
+    }
+    @EventHandler
+    public static void onSlotChange(FakeSlotChangeEvent event){
+        try {
+            ((Invocable)Loader.plugin.engine).invokeFunction(event.getClass().getSimpleName(),event);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 }

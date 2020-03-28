@@ -65,6 +65,9 @@ public class InventoryManager {
         inv.removeItem(item);
         return inv;
     }
+    public boolean containsItemInInv(Inventory inv,Item item){
+        return inv.contains(item);
+    }
     public Inventory getBlockInv(Position pos){
         pos.fromObject(new Vector3(pos.getFloorX(),pos.getFloorY(),pos.getFloorZ()),pos.getLevel());
         BlockEntity blockEntity = pos.getLevel().getBlockEntity(pos);

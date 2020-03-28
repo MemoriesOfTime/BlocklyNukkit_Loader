@@ -16,6 +16,8 @@ import dls.icesight.blocklynukkit.EventLoader;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class InventoryManager {
@@ -68,6 +70,9 @@ public class InventoryManager {
         inv.removeItem(item);
         return inv;
     }
+    public boolean containsItemInInv(Inventory inv,Item item){
+        return inv.contains(item);
+    }
     public Inventory getBlockInv(Position pos){
         pos.fromObject(new Vector3(pos.getFloorX(),pos.getFloorY(),pos.getFloorZ()),pos.getLevel());
         BlockEntity blockEntity = pos.getLevel().getBlockEntity(pos);
@@ -111,4 +116,5 @@ public class InventoryManager {
     public void setPlayerInv(Player player, Inventory inv){
         player.getInventory().setContents(inv.getContents());
     }
+
 }

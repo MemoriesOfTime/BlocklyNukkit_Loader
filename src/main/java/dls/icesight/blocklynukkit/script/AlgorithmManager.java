@@ -1,5 +1,7 @@
 package dls.icesight.blocklynukkit.script;
 
+import cn.nukkit.Player;
+import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
@@ -48,5 +50,14 @@ public class AlgorithmManager {
         if(level.getBlockIdAt(x-1,y,z)==id&&(!Loader.positionstmp.contains(posinttostr(x-1,y,z))))forLinkedBlock(x-1,y,z,callback,step+1,level,id);
         if(level.getBlockIdAt(x,y,z+1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z+1))))forLinkedBlock(x,y,z+1,callback,step+1,level,id);
         if(level.getBlockIdAt(x,y,z-1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z-1))))forLinkedBlock(x,y,z-1,callback,step+1,level,id);
+    }
+    public static Position buildPosition(Object args){
+        if (args instanceof Block){
+            return (Position) args;
+        }
+        if (args instanceof Player){
+            return ((Player) args).getPosition();
+        }
+        return null;
     }
 }

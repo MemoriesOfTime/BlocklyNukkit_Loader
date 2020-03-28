@@ -296,7 +296,7 @@ public class EventLoader implements Listener {
             }
         },5);
     }
-    @EventHandler
+    //
     public static void onSlotChange(FakeSlotChangeEvent event){
         try {
             ((Invocable)Loader.plugin.engine).invokeFunction(event.getClass().getSimpleName(),event);

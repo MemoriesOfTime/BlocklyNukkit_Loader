@@ -16,6 +16,8 @@ import com.nukkitx.fakeinventories.inventory.DoubleChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.FakeInventory;
 import dls.icesight.blocklynukkit.EventLoader;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class InventoryManager {
@@ -35,6 +37,10 @@ public class InventoryManager {
         }
         inv.addListener(EventLoader::onSlotChange);
         return inv;
+    }
+    public List getItemsInInv(Inventory inv){
+        ArrayList<Item> arrayList=new ArrayList<>(inv.getContents().values());
+        return arrayList;
     }
     public void showFakeInv(Player player,FakeInventory inv){
         if(inv!=null){
@@ -111,4 +117,5 @@ public class InventoryManager {
     public void setPlayerInv(Player player, Inventory inv){
         player.getInventory().setContents(inv.getContents());
     }
+
 }

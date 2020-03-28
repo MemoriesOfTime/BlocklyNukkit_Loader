@@ -15,13 +15,13 @@ import com.nukkitx.fakeinventories.inventory.ChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.DoubleChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.FakeInventory;
 import dls.icesight.blocklynukkit.EventLoader;
+import dls.icesight.blocklynukkit.Loader;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class InventoryManager {
-
     public Inventory addInv(boolean isDoubleChest, Item[] item, String name){
         ChestFakeInventory inv;
         if (isDoubleChest){

@@ -49,22 +49,4 @@ public class AlgorithmManager {
         if(level.getBlockIdAt(x,y,z+1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z+1))))forLinkedBlock(x,y,z+1,callback,step+1,level,id);
         if(level.getBlockIdAt(x,y,z-1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z-1))))forLinkedBlock(x,y,z-1,callback,step+1,level,id);
     }
-
-//    public void whatclass(Object object){
-//        System.out.println(object.getClass());
-//        Object[] arrayList=(Object[]) object;
-//        for(Object a:arrayList){
-//            System.out.println(a.toString());
-//        }
-//    }
-//
-//    public static void test(){
-//        ScriptEngine myengine = new ScriptEngineManager().getEngineByName("nashorn");
-//        try {
-//            myengine.put("tests",new AlgorithmManager());
-//            myengine.eval("var arr2 = ['nice', 'hello', 'good', 'hi'];\ntests.whatclass(Java.to(arr2,\"java.lang.String[]\"));");
-//        } catch (ScriptException e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

@@ -117,6 +117,11 @@ public class BlockItemManager {
         }
         return true;
     }
+    public void removeItemToPlayer(Player player,Item item){
+        if(PlayercontainsItem(player,1,item)){
+            player.getInventory().removeItem(item);
+        }
+    }
     //获取世界掉落物
     public List getDropItems(Position position){
         ArrayList<EntityItem> list = new ArrayList();

@@ -21,4 +21,13 @@ public class EntityManager {
     public void setEntityNameTagAlwaysVisable(Entity entity,boolean vis){
         entity.setNameTagAlwaysVisible(vis);
     }
+    //设置生物血量
+    public void setEntityHealth(Entity entity,double health){
+        entity.setHealth((float)health);
+    }
+    //设置生物最大血量
+    public void setEntityMaxHealth(Entity entity,double health){
+        entity.setMaxHealth((int) health);
+    }
+    //获取生物血量
 }

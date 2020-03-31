@@ -2,33 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/C3P0Utils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/DatabaseManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/LevelManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/c3p0-config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/BlocklyNukkit.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BlocklyNukkit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__cn_nukkit_nukkit_1_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_creeperface_nukkit_placeholderapi_PlaceholderAPI_1_4_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__com_nukkitx_fakeinventories_1_0_3_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__de_theamychan_ScoreboardAPI_1_3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__me_onebone_economyapi_2_0_0_SNAPSHOT.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_annotations_13_0.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_reflect_1_3_70.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_1_3_70.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_70.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_projectlombok_lombok_1_16_18.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/Loader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/AlgorithmManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/AlgorithmManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit.jar" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -43,7 +18,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/Loader.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="572">
@@ -76,20 +51,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="858">
-              <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="205">
+              <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="732">
-              <caret line="305" column="9" selection-start-line="305" selection-start-column="9" selection-end-line="305" selection-end-column="9" />
+            <state relative-caret-position="1562">
+              <caret line="308" selection-start-line="308" selection-end-line="308" />
             </state>
           </provider>
         </entry>
@@ -188,9 +160,9 @@
         <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/BlockItemManager.java" />
         <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
         <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/AlgorithmManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/Loader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java" />
       </list>
     </option>
   </component>
@@ -396,14 +368,21 @@
       <option name="project" value="LOCAL" />
       <updated>1585366027281</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Merge branch 'master' of https://gitee.com/Kingdom_of_dragon/BlocklyNukkit_Loader&#10;&#10;# Conflicts:&#10;#&#9;src/main/java/dls/icesight/blocklynukkit/EventLoader.java">
+      <created>1585660327135</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1585660327135</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1742" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17992873" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17992873" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -417,12 +396,12 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Version Control" order="7" weight="0.32997987" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="7" sideWeight="0.4994062" visible="true" weight="0.32997987" />
       <window_info anchor="bottom" id="Log Analyzer" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4994062" weight="0.32997987" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50059384" side_tool="true" weight="0.32997987" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50059384" side_tool="true" visible="true" weight="0.32997987" />
       <window_info anchor="bottom" id="SOQL Query" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.49821854" weight="0.32997987" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4976247" weight="0.32997987" />
       <window_info anchor="bottom" id="Anonymous Apex" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -559,16 +538,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="858">
-          <caret line="57" column="5" selection-start-line="57" selection-start-column="5" selection-end-line="57" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/C3P0Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -621,13 +590,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="732">
-          <caret line="305" column="9" selection-start-line="305" selection-start-column="9" selection-end-line="305" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/Loader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="572">
@@ -635,6 +597,20 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/script/InventoryManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="205">
+          <caret line="14" column="33" selection-start-line="14" selection-start-column="33" selection-end-line="14" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/dls/icesight/blocklynukkit/EventLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1562">
+          <caret line="308" selection-start-line="308" selection-end-line="308" />
         </state>
       </provider>
     </entry>

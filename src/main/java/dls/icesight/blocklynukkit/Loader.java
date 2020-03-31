@@ -25,7 +25,7 @@ import java.util.*;
 
 public class Loader extends PluginBase implements Listener {
 
-    public ScriptEngine engine;
+    public static ScriptEngine engine;
 
     public static Loader plugin;
 
@@ -39,6 +39,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<Integer, String> functioncallback = new HashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
+    public static FunctionManager functionManager;
 
     @Override
     public void onEnable() {
@@ -78,7 +79,7 @@ public class Loader extends PluginBase implements Listener {
                 e.printStackTrace();
             }
         }
-        plugin=this;
+        plugin=this;functionManager=new FunctionManager(plugin);
         MetricsLite metricsLite=new MetricsLite(this,6769);
         new Timer().schedule(new TimerTask() {
             @Override
@@ -112,7 +113,7 @@ public class Loader extends PluginBase implements Listener {
 
         engine.put("server", getServer());
         engine.put("plugin", this);
-        engine.put("manager", new FunctionManager(this));
+        engine.put("manager", functionManager);
         engine.put("logger", getLogger());
         engine.put("window", new WindowManager());
         engine.put("blockitem",new BlockItemManager());
@@ -151,19 +152,19 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
     }
 
-    public synchronized void callEventHandler(final Event e, final String functionName) {
+    public static synchronized void callEventHandler(final Event e, final String functionName) {
         if (engine.get(functionName) == null) {
             return;
         }
         try {
             ((Invocable) engine).invokeFunction(functionName, e);
         } catch (final Exception se) {
-            getLogger().error("在回调 " + functionName+" 时出错", se);
+            plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
             se.printStackTrace();
         }
     }
 
-    public synchronized void callEventHandler(final Event e, final String functionName,String type) {
+    public static synchronized void callEventHandler(final Event e, final String functionName,String type) {
         if (engine.get(functionName) == null) {
             return;
         }
@@ -173,7 +174,7 @@ public class Loader extends PluginBase implements Listener {
                 ((Invocable) engine).invokeFunction(functionName, event);
             }
         } catch (final Exception se) {
-            getLogger().error("在回调 " + functionName+" 时出错", se);
+            plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
             se.printStackTrace();
         }
     }

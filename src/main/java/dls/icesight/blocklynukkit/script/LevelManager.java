@@ -29,6 +29,9 @@ public class LevelManager {
         }
 
     }
+    public void loadLevel(String string){
+        Server.getInstance().loadLevel(string);
+    }
     private class Void extends cn.nukkit.level.generator.Generator {
         private final String NAME = "Void";
         private ChunkManager chunkManager;

@@ -40,6 +40,12 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
     public static FunctionManager functionManager;
+    public static WindowManager windowManager;
+    public static AlgorithmManager algorithmManager;
+    public static BlockItemManager blockItemManager;
+    public static EntityManager entityManager;
+    public static InventoryManager inventoryManager;
+    public static LevelManager levelManager;
 
     @Override
     public void onEnable() {
@@ -79,7 +85,9 @@ public class Loader extends PluginBase implements Listener {
                 e.printStackTrace();
             }
         }
-        plugin=this;functionManager=new FunctionManager(plugin);
+        plugin=this;functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
+        algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
+
         MetricsLite metricsLite=new MetricsLite(this,6769);
         new Timer().schedule(new TimerTask() {
             @Override
@@ -113,13 +121,14 @@ public class Loader extends PluginBase implements Listener {
 
         engine.put("server", getServer());
         engine.put("plugin", this);
-        engine.put("manager", functionManager);
+        engine.put("manager", Loader.functionManager);
         engine.put("logger", getLogger());
-        engine.put("window", new WindowManager());
-        engine.put("blockitem",new BlockItemManager());
-        engine.put("algorithm",new AlgorithmManager());
-        engine.put("entity",new EntityManager());
-        engine.put("inventory",new InventoryManager());
+        engine.put("window", Loader.windowManager);
+        engine.put("blockitem",Loader.blockItemManager);
+        engine.put("algorithm",Loader.algorithmManager);
+        engine.put("inventory",Loader.inventoryManager);
+        engine.put("world",Loader.levelManager);
+        engine.put("entity",Loader.entityManager);
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
@@ -272,13 +281,14 @@ public class Loader extends PluginBase implements Listener {
 
             Loader.plugin.engine.put("server", getServer());
             Loader.plugin.engine.put("plugin", this);
-            Loader.plugin.engine.put("manager", new FunctionManager(Loader.plugin));
+            Loader.plugin.engine.put("manager", Loader.functionManager);
             Loader.plugin.engine.put("logger", getLogger());
-            Loader.plugin.engine.put("window", new WindowManager());
-            Loader.plugin.engine.put("blockitem",new BlockItemManager());
-            Loader.plugin.engine.put("algorithm",new AlgorithmManager());
-            Loader.plugin.engine.put("inventory",new InventoryManager());
-
+            Loader.plugin.engine.put("window", Loader.windowManager);
+            Loader.plugin.engine.put("blockitem",Loader.blockItemManager);
+            Loader.plugin.engine.put("algorithm",Loader.algorithmManager);
+            Loader.plugin.engine.put("inventory",Loader.inventoryManager);
+            Loader.plugin.engine.put("world",Loader.levelManager);
+            Loader.plugin.engine.put("entity",Loader.entityManager);
 
             getDataFolder().mkdir();
             new File(getDataFolder()+"/skin").mkdir();

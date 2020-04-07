@@ -3,6 +3,7 @@ package dls.icesight.blocklynukkit.script;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -65,4 +66,5 @@ public class AlgorithmManager {
     public Position buildPositionfromBlock(Block block){
         return (Position)block;
     }
+    public Position buildPositionfromEntity(Entity entity){return (Position) entity;}
 }

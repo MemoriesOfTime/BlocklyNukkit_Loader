@@ -30,4 +30,12 @@ public class EntityManager {
         entity.setMaxHealth((int) health);
     }
     //获取生物血量
+    public float getEntityHealth(Entity entity){
+        return entity.getHealth();
+    }
+    //获取生物最大血量
+    public float getEntityMaxHealth(Entity entity){
+        return entity.getMaxHealth();
+    }
+    //
 }

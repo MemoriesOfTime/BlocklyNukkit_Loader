@@ -37,7 +37,13 @@ public class DatabaseManager {
         Connection conn = C3P0Utils.getConnection();
         C3P0Utils.update("CREATE TABLE IF NOT EXISTS "+table,conn);
     }
-
+    public void databaseOpen(String url,String username,String password,String table){
+        try {
+            open(url, username, password, table);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     /**
      * {@code update(String, Object...)} 方法可以实现在数据库中的更新(无返回)
      * 若要使用变量,在SQL语句中把变量以{@code ?}代替,然后在objs参数内填入相对的数值
@@ -50,7 +56,7 @@ public class DatabaseManager {
      * @param objs  参数
      * @throws SQLException
      */
-    public void update(String stt, Object... objs) throws SQLException {
+    public void update(String stt, Object[] objs) throws SQLException {
         Connection conn = C3P0Utils.getConnection();
         PreparedStatement ps = conn.prepareStatement(stt);
         for (int i = 0; i < countStr(stt, "?"); i++) {
@@ -59,7 +65,13 @@ public class DatabaseManager {
         ps.executeUpdate();
         C3P0Utils.release(conn,ps,null);
     }
-
+    public void databaseUpdate(String stt, Object[] objs){
+        try {
+            update(stt, objs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * {@code query(String,String,Object...)} 方法可以实现在数据库中的查询(有返回)
      * 若要使用变量,在SQL语句中把变量以{@code ?}代替,然后在objs参数内填入相对的数值
@@ -74,7 +86,7 @@ public class DatabaseManager {
      * @return 查询结果列表
      * @throws SQLException
      */
-    public List query(String stt, String col, Object... objs) throws SQLException {
+    public List query(String stt, String col, Object[] objs) throws SQLException {
         Connection conn = C3P0Utils.getConnection();
         PreparedStatement ps = conn.prepareStatement(stt);
         for (int i = 0; i < countStr(stt, "?"); i++) {
@@ -87,6 +99,13 @@ public class DatabaseManager {
         }
         C3P0Utils.release(conn,ps,rs);
         return result;
+    }
+    public void databaseQuery(String stt,String col,Object[] objs){
+        try {
+            query(stt, col, objs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     private static int countStr(String source, String str) {
         int beforeLen = source.length();

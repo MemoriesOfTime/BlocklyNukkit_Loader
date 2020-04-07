@@ -132,6 +132,14 @@ public class BlockItemManager {
         }
         return list;
     }
+    //获取世界生物
+    public List getEntities(Position position){
+        ArrayList<Entity> list = new ArrayList();
+        for (Entity entity:position.getLevel().getEntities()){
+            list.add(entity);
+        }
+        return list;
+    }
     /********************************* 纯方块物品方法 *************************************/
     //-构建方块
     public Block buildBlock(int id,int data){

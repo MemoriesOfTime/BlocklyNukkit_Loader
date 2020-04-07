@@ -13,6 +13,7 @@ import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import dls.icesight.blocklynukkit.other.BNCrafting;
+import dls.icesight.blocklynukkit.other.card.CardMaker;
 import dls.icesight.blocklynukkit.script.*;
 
 import javax.script.Invocable;
@@ -46,6 +47,8 @@ public class Loader extends PluginBase implements Listener {
     public static EntityManager entityManager;
     public static InventoryManager inventoryManager;
     public static LevelManager levelManager;
+    public static DatabaseManager databaseManager;
+    public static CardMaker cardMaker;
 
     @Override
     public void onEnable() {
@@ -87,6 +90,7 @@ public class Loader extends PluginBase implements Listener {
         }
         plugin=this;functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
+        databaseManager=new DatabaseManager();cardMaker=new CardMaker();
 
         MetricsLite metricsLite=new MetricsLite(this,6769);
         new Timer().schedule(new TimerTask() {
@@ -129,6 +133,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("inventory",Loader.inventoryManager);
         engine.put("world",Loader.levelManager);
         engine.put("entity",Loader.entityManager);
+        engine.put("database",Loader.databaseManager);
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
@@ -159,6 +164,16 @@ public class Loader extends PluginBase implements Listener {
 
         new EventLoader(this);//AlgorithmManager.test();
         plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
+
+        Config portconfig = new Config(this.getDataFolder()+"/port.yml");
+        int portto=8182;
+        if(portconfig.exists("port")){
+            portto=(int)portconfig.get("port");
+        }else {
+            portconfig.set("port",8182);
+        }
+        portconfig.save();
+        Utils.runHttpServer(portto);
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
@@ -229,24 +244,6 @@ public class Loader extends PluginBase implements Listener {
     public static PluginLogger getlogger(){
         return plugin.getLogger();
     }
-//    private static void downloadZip(String downloadUrl, File file) {
-//        try {
-//            FileOutputStream fileOutputStream = new FileOutputStream(file);
-//            URL url = new URL(downloadUrl);
-//            URLConnection connection = url.openConnection();
-//            InputStream inputStream = connection.getInputStream();
-//            int length = 0;
-//            byte[] bytes = new byte[1024];
-//            while ((length = inputStream.read(bytes)) != -1) {
-//                fileOutputStream.write(bytes, 0, length);
-//            }
-//            fileOutputStream.close();
-//            inputStream.close();
-//        } catch (IOException e) {
-//            log.error("download error ! url :{}, exception:{}", downloadUrl, e);
-//        }
-//        System.out.println("end");
-//    }
 
     public class ReloadJSCommand extends Command {
 
@@ -289,6 +286,7 @@ public class Loader extends PluginBase implements Listener {
             Loader.plugin.engine.put("inventory",Loader.inventoryManager);
             Loader.plugin.engine.put("world",Loader.levelManager);
             Loader.plugin.engine.put("entity",Loader.entityManager);
+            Loader.plugin.engine.put("database",Loader.databaseManager);
 
             getDataFolder().mkdir();
             new File(getDataFolder()+"/skin").mkdir();

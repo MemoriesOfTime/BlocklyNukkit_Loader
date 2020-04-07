@@ -2,15 +2,49 @@ package dls.icesight.blocklynukkit;
 
 import cn.nukkit.Server;
 import cn.nukkit.utils.TextFormat;
+import dls.icesight.blocklynukkit.other.SocketServer;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.security.MessageDigest;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 public class Utils {
+    public static void runHttpServer(int port){
+        ServerSocket server=null;
+        //线程池，简单来说，就是把线程start()改成ex.execute(),然后可以提高服务器性能
+        ExecutorService ex= Executors.newFixedThreadPool(20);
+        try {
+            //建立服务器监听端口
+            server=new ServerSocket(port);
+            //然后把接收到socket传给SocketServer并执行该线程
+            ex.execute(new SocketServer(server));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public String readToString(String fileName) {
+        String encoding = "UTF-8";
+        File file = new File(fileName);
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+        try {
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+            return new String(filecontent, encoding);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public static String randomDeveloper(){
+        String[] list = new String[]{"冰凉","电池酱","企鹅","红楼君","夏亚","亦染","WetABQ","HBJ","你的旺财","若水","神奇的YYT"
+        ,"pqguanfang","泥土怪","P(屁)爷"};
+        return list[(int)Math.floor(list.length*Math.random())];
+    }
     public static void checkupdate(){
         try {
             File jar = new File(Loader.plugin.getDataFolder()+"/BlocklyNukkit.jar");

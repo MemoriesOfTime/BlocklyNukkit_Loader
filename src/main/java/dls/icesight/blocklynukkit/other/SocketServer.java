@@ -52,13 +52,14 @@ public class SocketServer implements Runnable {
                     String html = Utils.readToString(new File(url));
                     if(html.length()<=3)html="<p>404_error</p>";
                     html = PlaceholderAPI.getInstance().translateString(html);
-                    html.replaceAll("%request_path%",road);
-                    html.replaceAll("%time%", LocalDateTime.now().toString());
+                    html = html.replaceAll("%request_path%",road);
+                    html = html.replaceAll("%random_developer%", Utils.randomDeveloper());
                     for (Map.Entry<String,Object> entry:Loader.easytmpmap.entrySet()){
                         if(html.contains(entry.getKey())){
                             html.replaceAll(entry.getKey(),(String)entry.getValue());
                         }
                     }
+                    html = html.replaceAll("##","%");
                     os.write(html.getBytes());
                 }else {
                     os.write(("<h1>哦！网页被"+Utils.randomDeveloper()+"偷走了！</h1>").getBytes());
@@ -70,6 +71,8 @@ public class SocketServer implements Runnable {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e){
                 e.printStackTrace();
             }
         }

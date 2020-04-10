@@ -13,6 +13,7 @@ import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import dls.icesight.blocklynukkit.other.BNCrafting;
+import dls.icesight.blocklynukkit.other.SocketServer;
 import dls.icesight.blocklynukkit.other.card.CardMaker;
 import dls.icesight.blocklynukkit.script.*;
 
@@ -39,6 +40,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String> playergeojsonmap = new HashMap<>();
     public static Map<Integer, String> functioncallback = new HashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
+    public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
     public static FunctionManager functionManager;
     public static WindowManager windowManager;
@@ -83,7 +85,7 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("ScoreboardPlugin")){
             try {
-                Utils.downloadPlugin("https://repo.nukkitx.com/snapshot/com/nukkitx/fakeinventories/1.0.3-SNAPSHOT/fakeinventories-1.0.3-20190326.084826-4.jar");
+                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/ScoreboardAPI-1.3-SNAPSHOT.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -173,7 +175,7 @@ public class Loader extends PluginBase implements Listener {
             portconfig.set("port",8182);
         }
         portconfig.save();
-        Utils.runHttpServer(portto);
+        Utils.makeHttpServer(portto);
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {

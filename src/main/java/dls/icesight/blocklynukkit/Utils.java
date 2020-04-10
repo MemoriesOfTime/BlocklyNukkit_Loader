@@ -1,29 +1,40 @@
 package dls.icesight.blocklynukkit;
 
 import cn.nukkit.Server;
+import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import com.sun.net.httpserver.HttpServer;
+import dls.icesight.blocklynukkit.other.MyHttpHandler;
 import dls.icesight.blocklynukkit.other.SocketServer;
 
 import java.io.*;
 import java.net.*;
 import java.security.MessageDigest;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
 public class Utils {
-    public static void runHttpServer(int port){
-        ServerSocket server=null;
-        //线程池，简单来说，就是把线程start()改成ex.execute(),然后可以提高服务器性能
-        ExecutorService ex= Executors.newFixedThreadPool(20);
+    public static void makeHttpServer(int port){
+        HttpServer httpServer = null;
         try {
-            //建立服务器监听端口
-            server=new ServerSocket(port);
-            //然后把接收到socket传给SocketServer并执行该线程
-            ex.execute(new SocketServer(server));
+            httpServer = HttpServer.create(new InetSocketAddress(port), 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //创建一个HttpContext，将路径为/myserver请求映射到MyHttpHandler处理器
+        httpServer.createContext("/", new MyHttpHandler());
+
+        //设置服务器的线程池对象
+        httpServer.setExecutor(Executors.newFixedThreadPool(10));
+
+        //启动服务器
+        httpServer.start();
     }
     public String readToString(String fileName) {
         String encoding = "UTF-8";
@@ -275,6 +286,46 @@ public class Utils {
         }
         bos.close();
         return bos.toByteArray();
+    }
+
+    public static String sendGet(String url, String param) {
+        String result = "";
+        BufferedReader in = null;
+        try {
+            String urlNameString = url + "?" + param;
+            URL realUrl = new URL(urlNameString);
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 获取所有响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            Loader.getlogger().warning(TextFormat.RED+"BlackBE的云黑数据库炸了！快去https://ban.bugmc.com/求救！");
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
     }
 
 }

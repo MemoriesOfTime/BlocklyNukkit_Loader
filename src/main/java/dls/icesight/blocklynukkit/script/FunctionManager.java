@@ -14,6 +14,7 @@ import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
 import dls.icesight.blocklynukkit.Loader;
+import dls.icesight.blocklynukkit.Utils;
 import dls.icesight.blocklynukkit.other.Clothes;
 import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
@@ -33,6 +34,29 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
+
+    //云黑检测
+    public boolean checkIsBear(Player player){
+        String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player.getName());
+        return !response.equals("0");
+    }
+
+    //获取玩家地理位置
+    public String getPlayerArea(Player player){
+        String response = Utils.sendGet("http://whois.pconline.com.cn/ip.jsp","ip="+player.getAddress().substring(0, player.getAddress().indexOf(":")));
+        return response.split(" ")[0];
+    }
+
+    //html占位符
+    public void setHTMLPlaceholder(String key,String value){
+        Loader.htmlholdermap.put(key, value);
+    }
+
+    //踢了玩家
+    public void kickPlayer(Player player,String reason){
+        player.kick(reason);
+    }
+
     //获取玩家是否op
     public boolean PlayerIsOP(Player player){
         return player.isOp();

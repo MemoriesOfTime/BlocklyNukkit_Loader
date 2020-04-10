@@ -140,6 +140,10 @@ public class BlockItemManager {
         }
         return list;
     }
+    //获取世界名称
+    public String getLevelName(Level level){
+        return level.getName();
+    }
     /********************************* 纯方块物品方法 *************************************/
     //-构建方块
     public Block buildBlock(int id,int data){

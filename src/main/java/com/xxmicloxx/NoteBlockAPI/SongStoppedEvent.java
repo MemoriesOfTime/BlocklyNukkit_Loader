@@ -20,7 +20,7 @@ public class SongStoppedEvent extends Event {
         return song;
     }
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlers() {
         return handlers;
     }
 }

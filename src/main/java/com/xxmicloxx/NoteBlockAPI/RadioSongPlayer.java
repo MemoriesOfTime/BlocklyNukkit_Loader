@@ -1,6 +1,9 @@
 package com.xxmicloxx.NoteBlockAPI;
 
 import cn.nukkit.Player;
+import cn.nukkit.level.Position;
+import cn.nukkit.math.Vector3;
+import dls.icesight.blocklynukkit.Loader;
 
 public class RadioSongPlayer extends SongPlayer {
 
@@ -17,10 +20,11 @@ public class RadioSongPlayer extends SongPlayer {
             if (note == null) {
                 continue;
             }
-            p.getLevel().addSound(p.getPosition().getLocation().getDirectionVector(),
+            Position po = p.getPosition();
+            p.getLevel().addSound(new Vector3(po.x,po.y,po.z),
                     Instrument.getInstrument(note.getInstrument()),
-                    (l.getVolume() * (int) volume * (int) playerVolume) / 1000000f,
-                    NotePitch.getPitch(note.getKey() - 33),p
+                    ((l.getVolume() * (int) volume * (int) playerVolume) / 1000000f),
+                    NotePitch.getPitch(note.getKey() - 33)
                     );
         }
     }

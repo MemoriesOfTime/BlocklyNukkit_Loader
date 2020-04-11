@@ -62,9 +62,15 @@ public class Utils {
             Utils.downLoadFromUrl("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/BlocklyNukkit.jar","BlocklyNukkit.jar",Loader.plugin.getDataFolder().getPath());
             File pl = new File(Server.getInstance().getPluginPath()+"/BlocklyNukkit.jar");
             if(!check(jar,pl)){
-                Loader.getlogger().warning(TextFormat.YELLOW+"您的BlocklyNukkit解释器不是最新版！");
-                Loader.getlogger().warning(TextFormat.WHITE+"最新版BlocklyNukkit已经下载到了 "+jar.getPath());
-                Loader.getlogger().warning(TextFormat.WHITE+"请您手动更换掉plugin文件夹的旧版本！");
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Loader.getlogger().warning(TextFormat.YELLOW+"您的BlocklyNukkit解释器不是最新版！");
+                    Loader.getlogger().warning(TextFormat.WHITE+"最新版BlocklyNukkit已经下载到了 "+jar.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE+"请您手动更换掉plugin文件夹的旧版本！");
+                }else {
+                    Loader.getlogger().warning(TextFormat.YELLOW+"Your BlocklyNukkit.jar is not the latest version!");
+                    Loader.getlogger().warning(TextFormat.WHITE+"The latest version of BlocklyNukkit has been downloaded to: "+jar.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE+"Please replace the old version in plugins folder!");
+                }
             }
         }catch (IOException e){
             e.printStackTrace();
@@ -85,12 +91,18 @@ public class Utils {
             fileOutputStream.close();
             inputStream.close();
             if(isWindows()){
-                Loader.getlogger().info(TextFormat.YELLOW+"正在为windows转码... "+TextFormat.GREEN+"作者对微软的嘲讽：(sb Windows,都老老实实用utf编码会死吗？)");
+                if (Server.getInstance().getLanguage().getName().contains("中文"))
+                    Loader.getlogger().info(TextFormat.YELLOW+"正在为windows转码... "+TextFormat.GREEN+"作者对微软的嘲讽：(sb Windows,都老老实实用utf编码会死吗？)");
+                else
+                    Loader.getlogger().info(TextFormat.YELLOW+"Transcoding for windows... "+TextFormat.GREEN+"The Author says:(Will Bill Gates die if windows uses utf in all countries?)");
             }
         } catch (IOException e) {
             Loader.getlogger().error("download error ! url :{"+downloadUrl+"}, exception:{"+e+"}");
         }
-        Loader.getlogger().info(TextFormat.GREEN+"成功同步："+file.getName());
+        if (Server.getInstance().getLanguage().getName().contains("中文"))
+            Loader.getlogger().info(TextFormat.GREEN+"成功同步："+file.getName());
+        else
+            Loader.getlogger().info(TextFormat.GREEN+"successfully update: "+file.getName());
     }
     public static boolean isWindows() {
         return System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1;
@@ -112,7 +124,10 @@ public class Utils {
         try {
             return new String(filecontent, encoding);
         } catch (UnsupportedEncodingException e) {
-            System.err.println("操作系统不支持 " + encoding);
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                System.err.println("操作系统不支持 " + encoding);
+            else
+                System.err.println("Your os does not support " + encoding);
             e.printStackTrace();
             return null;
         }
@@ -202,8 +217,6 @@ public class Utils {
             inputStream.close();
         }
 
-
-        System.out.println("info:"+url+" download success");
 
     }
     /**
@@ -312,6 +325,7 @@ public class Utils {
                 result += line;
             }
         } catch (Exception e) {
+            Loader.getlogger().warning(TextFormat.RED+"The cloud black-list server crashed!goto https://ban.bugmc.com/ to solve the provlem!");
             Loader.getlogger().warning(TextFormat.RED+"BlackBE的云黑数据库炸了！快去https://ban.bugmc.com/求救！");
             e.printStackTrace();
         }

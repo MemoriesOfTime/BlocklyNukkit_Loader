@@ -20,6 +20,9 @@ import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.scheduler.Task;
 import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
+import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
+import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
+import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import dls.icesight.blocklynukkit.script.StoneSpawnEvent;
 
 import javax.script.Invocable;
@@ -304,5 +307,17 @@ public class EventLoader implements Listener {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+    }
+    @EventHandler
+    public void onSongEnd(SongEndEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onSongDestroy(SongDestroyingEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onSongStop(SongStoppedEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 }

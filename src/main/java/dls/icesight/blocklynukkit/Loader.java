@@ -1,6 +1,7 @@
 package dls.icesight.blocklynukkit;
 
 import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.data.Skin;
@@ -12,6 +13,7 @@ import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import dls.icesight.blocklynukkit.other.BNCrafting;
 import dls.icesight.blocklynukkit.other.SocketServer;
 import dls.icesight.blocklynukkit.other.card.CardMaker;
@@ -42,6 +44,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
+    public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
     public static FunctionManager functionManager;
     public static WindowManager windowManager;
     public static AlgorithmManager algorithmManager;
@@ -51,6 +54,8 @@ public class Loader extends PluginBase implements Listener {
     public static LevelManager levelManager;
     public static DatabaseManager databaseManager;
     public static CardMaker cardMaker;
+    public static NotemusicManager notemusicManager;
+
 
     @Override
     public void onEnable() {
@@ -71,7 +76,10 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("PlaceholderAPI")){
             try {
-                Utils.downloadPlugin("https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
+                if (Server.getInstance().getLanguage().getName().contains("中文"))
+                Loader.getlogger().warning(TextFormat.RED+"您没有安装PlaceholderAPI,虽然不是必须安装，但PlaceHolderAPI是速建官网和计分板组件的必须前置，建议您安装，下载地址：https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
+                if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                Loader.getlogger().warning(TextFormat.RED+"You haven't installed PlaceholderAPI,although it's not necessary,but PlaceHolderAPI is needed by the moudle inner_http_page_server and moudle scoreboard,we suggest you to install,download link: https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -92,7 +100,8 @@ public class Loader extends PluginBase implements Listener {
         }
         plugin=this;functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
-        databaseManager=new DatabaseManager();cardMaker=new CardMaker();
+        databaseManager=new DatabaseManager();cardMaker=new CardMaker();notemusicManager=new NotemusicManager();
+        noteBlockPlayerMain.onEnable();
 
         MetricsLite metricsLite=new MetricsLite(this,6769);
         new Timer().schedule(new TimerTask() {
@@ -114,16 +123,25 @@ public class Loader extends PluginBase implements Listener {
         final ScriptEngineManager manager = new ScriptEngineManager();
         engine = manager.getEngineByMimeType("text/javascript");
         if (engine == null) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().error("JavaScript引擎加载出错！");
+            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+            getLogger().error("JavaScript interpreter crashed!");
             return;
         }
         if (!(engine instanceof Invocable)) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().error("JavaScript引擎版本过低！");
+            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+            getLogger().error("JavaScript interpreter's version is too low!");
             engine = null;
             return;
         }
 
+        if (Server.getInstance().getLanguage().getName().contains("中文"))
         getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+        else
+        getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
 
         engine.put("server", getServer());
         engine.put("plugin", this);
@@ -136,9 +154,11 @@ public class Loader extends PluginBase implements Listener {
         engine.put("world",Loader.levelManager);
         engine.put("entity",Loader.entityManager);
         engine.put("database",Loader.databaseManager);
+        engine.put("notemusic",Loader.notemusicManager);
 
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
+        new File(getDataFolder()+"/notemusic").mkdir();
 
 
         for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
@@ -146,9 +166,15 @@ public class Loader extends PluginBase implements Listener {
             if(file.getName().contains(".js")){
                 try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                     engine.eval(reader);
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().warning("加载BN插件: " + file.getName());
+                    else
+                    getLogger().warning("loading BN plugin: " + file.getName());
                 } catch (final Exception e) {
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().error("无法加载： " + file.getName(), e);
+                    else
+                    getLogger().error("cannot load:" + file.getName(), e);
                 }
             }
         }
@@ -185,7 +211,10 @@ public class Loader extends PluginBase implements Listener {
         try {
             ((Invocable) engine).invokeFunction(functionName, e);
         } catch (final Exception se) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
+            else
+            plugin.getLogger().error("errors when calling " + functionName, se);
             se.printStackTrace();
         }
     }
@@ -200,7 +229,10 @@ public class Loader extends PluginBase implements Listener {
                 ((Invocable) engine).invokeFunction(functionName, event);
             }
         } catch (final Exception se) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
+            else
+            plugin.getLogger().error("errors when calling " + functionName, se);
             se.printStackTrace();
         }
     }
@@ -212,7 +244,10 @@ public class Loader extends PluginBase implements Listener {
         try {
             ((Invocable) engine).invokeFunction(functionName, sender, args);
         } catch (final Exception se) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().error("在回调 " + functionName+" 时出错", se);
+            else
+            plugin.getLogger().error("errors when calling " + functionName, se);
             se.printStackTrace();
         }
     }
@@ -224,7 +259,10 @@ public class Loader extends PluginBase implements Listener {
         try {
             ((Invocable) engine).invokeFunction(functionName, args);
         } catch (final Exception se) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().error("在回调 " + functionName+"时出错", se);
+            else
+            plugin.getLogger().error("errors when calling " + functionName, se);
             se.printStackTrace();
         }
     }
@@ -258,6 +296,9 @@ public class Loader extends PluginBase implements Listener {
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
             if(sender.isPlayer()){
+                if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                sender.sendMessage("Only console can use this command!");
+                else
                 sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
@@ -276,7 +317,10 @@ public class Loader extends PluginBase implements Listener {
             Loader.plugin.engine=null;
             Loader.plugin.engine = manager.getEngineByMimeType("text/javascript");
 
-            getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+            else
+                getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
 
             Loader.plugin.engine.put("server", getServer());
             Loader.plugin.engine.put("plugin", this);
@@ -289,6 +333,7 @@ public class Loader extends PluginBase implements Listener {
             Loader.plugin.engine.put("world",Loader.levelManager);
             Loader.plugin.engine.put("entity",Loader.entityManager);
             Loader.plugin.engine.put("database",Loader.databaseManager);
+            Loader.plugin.engine.put("notemusic",Loader.notemusicManager);
 
             getDataFolder().mkdir();
             new File(getDataFolder()+"/skin").mkdir();
@@ -299,9 +344,15 @@ public class Loader extends PluginBase implements Listener {
                 if(file.getName().contains(".js")){
                     try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                         Loader.plugin.engine.eval(reader);
-                        getLogger().warning("加载BN插件: " + file.getName());
+                        if (Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().warning("加载BN插件: " + file.getName());
+                        else
+                            getLogger().warning("loading BN plugin: " + file.getName());
                     } catch (final Exception e) {
-                        getLogger().error("无法加载： " + file.getName(), e);
+                        if (Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().error("无法加载： " + file.getName(), e);
+                        else
+                            getLogger().error("cannot load:" + file.getName(), e);
                     }
                 }
             }

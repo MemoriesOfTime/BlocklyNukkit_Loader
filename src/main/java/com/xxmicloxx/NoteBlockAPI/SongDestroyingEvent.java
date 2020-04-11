@@ -22,7 +22,7 @@ public class SongDestroyingEvent extends Event implements Cancellable {
         return song;
     }
 
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlers() {
         return handlers;
     }
 

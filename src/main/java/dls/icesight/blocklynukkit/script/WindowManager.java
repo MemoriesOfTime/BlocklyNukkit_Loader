@@ -15,7 +15,6 @@ import dls.icesight.blocklynukkit.script.window.Custom;
 import dls.icesight.blocklynukkit.script.window.Modal;
 import dls.icesight.blocklynukkit.script.window.Simple;
 
-import java.util.List;
 
 public class WindowManager {
     public void updateAllScoreBoard(String title,String text){

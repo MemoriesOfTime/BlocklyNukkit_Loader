@@ -21,6 +21,7 @@ import me.onebone.economyapi.EconomyAPI;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class FunctionManager {
@@ -35,9 +36,24 @@ public class FunctionManager {
         return new Vector3(x,y,z);
     }
 
+    //私有回调
+    public void setPrivateCall(String event,String callname){
+        if(Loader.privatecalls.containsKey(event)){
+            Loader.privatecalls.get(event).add(callname);
+        }else {
+            HashSet<String> set = new HashSet<>();
+            set.add(callname);
+            Loader.privatecalls.put(event,set);
+        }
+    }
+
     //云黑检测
     public boolean checkIsBear(Player player){
         String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player.getName());
+        return !response.equals("0");
+    }
+    public boolean checkIsBearName(String player){
+        String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player);
         return !response.equals("0");
     }
 
@@ -172,6 +188,10 @@ public class FunctionManager {
 
     public TaskHandler createLoopTask(String functionName, int delay){
         return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(new ModTask(functionName), 20, delay);
+    }
+
+    public int getTaskId(TaskHandler handler){
+        return handler.getTaskId();
     }
 
     public void cancelTask(int id){

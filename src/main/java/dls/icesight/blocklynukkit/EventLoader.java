@@ -18,6 +18,7 @@ import cn.nukkit.event.server.QueryRegenerateEvent;
 import cn.nukkit.event.server.ServerCommandEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.scheduler.Task;
 import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
@@ -320,4 +321,12 @@ public class EventLoader implements Listener {
     public void onSongStop(SongStoppedEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
+//    @EventHandler
+//    public void DataPackRecive(DataPacketReceiveEvent event){
+//        DataPacket packet = event.getPacket();
+//        packet.decode();
+//        System.out.println(packet);
+//        System.out.println(packet.reliability);
+//        System.out.println(packet.get());
+//    }
 }

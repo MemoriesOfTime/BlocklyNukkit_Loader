@@ -19,12 +19,10 @@ import dls.icesight.blocklynukkit.other.SocketServer;
 import dls.icesight.blocklynukkit.other.card.CardMaker;
 import dls.icesight.blocklynukkit.script.*;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Loader extends PluginBase implements Listener {
@@ -32,6 +30,8 @@ public class Loader extends PluginBase implements Listener {
     public static ScriptEngine engine;
 
     public static Loader plugin;
+
+    public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
 
     public static String positionstmp = "";
 
@@ -59,6 +59,7 @@ public class Loader extends PluginBase implements Listener {
 
     @Override
     public void onEnable() {
+        plugin=this;
         Map<String, Plugin> plugins = this.getServer().getPluginManager().getPlugins();
         if (!plugins.containsKey("EconomyAPI")){
             try {
@@ -98,7 +99,7 @@ public class Loader extends PluginBase implements Listener {
                 e.printStackTrace();
             }
         }
-        plugin=this;functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
+        functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
         databaseManager=new DatabaseManager();cardMaker=new CardMaker();notemusicManager=new NotemusicManager();
         noteBlockPlayerMain.onEnable();
@@ -155,7 +156,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("entity",Loader.entityManager);
         engine.put("database",Loader.databaseManager);
         engine.put("notemusic",Loader.notemusicManager);
-
+        
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
@@ -170,6 +171,7 @@ public class Loader extends PluginBase implements Listener {
                     getLogger().warning("加载BN插件: " + file.getName());
                     else
                     getLogger().warning("loading BN plugin: " + file.getName());
+
                 } catch (final Exception e) {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().error("无法加载： " + file.getName(), e);
@@ -210,6 +212,13 @@ public class Loader extends PluginBase implements Listener {
         }
         try {
             ((Invocable) engine).invokeFunction(functionName, e);
+            if(privatecalls.containsKey(functionName)){
+                for(String a:privatecalls.get(functionName)){
+                    if(engine.get(functionName) != null){
+                        ((Invocable) engine).invokeFunction(a, e);
+                    }
+                }
+            }
         } catch (final Exception se) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
             plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
@@ -227,6 +236,13 @@ public class Loader extends PluginBase implements Listener {
             if(type.equals("StoneSpawnEvent")){
                 StoneSpawnEvent event = ((StoneSpawnEvent)e);
                 ((Invocable) engine).invokeFunction(functionName, event);
+                if(privatecalls.containsKey(functionName)){
+                    for(String a:privatecalls.get(functionName)){
+                        if(engine.get(functionName) != null){
+                            ((Invocable) engine).invokeFunction(a, e);
+                        }
+                    }
+                }
             }
         } catch (final Exception se) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -264,6 +280,22 @@ public class Loader extends PluginBase implements Listener {
             else
             plugin.getLogger().error("errors when calling " + functionName, se);
             se.printStackTrace();
+        }
+    }
+
+    public synchronized String callbackString(String functionName, Object... args){
+        if(engine.get(functionName) == null){
+            return "NO FUNCTION";
+        }
+        try {
+            return String.valueOf(((Invocable) engine).invokeFunction(functionName, args));
+        } catch (final Exception se) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                getLogger().error("在回调 " + functionName+"时出错", se);
+            else
+                plugin.getLogger().error("errors when calling " + functionName, se);
+            se.printStackTrace();
+            return "ERROR";
         }
     }
 

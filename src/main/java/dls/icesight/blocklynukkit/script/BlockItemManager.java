@@ -274,7 +274,7 @@ public class BlockItemManager {
     }
     //比较物品
     public boolean isSame(Item item1,Item item2,boolean damage,boolean nbt){
-        return item1.equals(item1,damage,nbt);
+        return item1.equals(item2,damage,nbt);
     }
     //makeenchant
     private void addEnchantment(Item item,int level,Enchantment... enchantments) {

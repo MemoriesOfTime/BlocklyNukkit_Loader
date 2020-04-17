@@ -4,6 +4,8 @@ import cn.nukkit.Server;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.sun.net.httpserver.HttpServer;
+import dls.icesight.blocklynukkit.other.MyCustomHandler;
+import dls.icesight.blocklynukkit.other.MyFileHandler;
 import dls.icesight.blocklynukkit.other.MyHttpHandler;
 import dls.icesight.blocklynukkit.other.SocketServer;
 
@@ -29,6 +31,8 @@ public class Utils {
 
         //创建一个HttpContext，将路径为/myserver请求映射到MyHttpHandler处理器
         httpServer.createContext("/", new MyHttpHandler());
+        httpServer.createContext("/file",new MyFileHandler());
+        httpServer.createContext("/api",new MyCustomHandler());
 
         //设置服务器的线程池对象
         httpServer.setExecutor(Executors.newFixedThreadPool(10));
@@ -302,7 +306,7 @@ public class Utils {
     }
 
     public static String sendGet(String url, String param) {
-        String result = "";
+        String result = "NULL";
         BufferedReader in = null;
         try {
             String urlNameString = url + "?" + param;

@@ -5,6 +5,7 @@ import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
+import cn.nukkit.event.block.BlockUpdateEvent;
 import cn.nukkit.inventory.FurnaceRecipe;
 import cn.nukkit.inventory.ShapedRecipe;
 import cn.nukkit.inventory.ShapelessRecipe;
@@ -77,6 +78,7 @@ public class BlockItemManager {
         if(particle==true){
             position.getLevel().addParticle(new DestroyBlockParticle(new Vector3(position.x+0.5,position.y+0.5,position.z+0.5),position.getLevelBlock()));
         }
+        Server.getInstance().getPluginManager().callEvent(new BlockUpdateEvent(position.getLevelBlock()));
         position.getLevel().setBlockAt(
                 (int)position.x,(int)position.y,(int)position.z,block.getId(),block.getDamage()
         );
@@ -132,6 +134,15 @@ public class BlockItemManager {
         }
         return list;
     }
+    public List getDropItems(Level level){
+        ArrayList<EntityItem> list = new ArrayList();
+        for (Entity entity:level.getEntities()){
+            if(entity.getNetworkId()==64){
+                list.add((EntityItem)entity);
+            }
+        }
+        return list;
+    }
     //获取世界生物
     public List getEntities(Position position){
         ArrayList<Entity> list = new ArrayList();
@@ -143,6 +154,10 @@ public class BlockItemManager {
     //获取世界名称
     public String getLevelName(Level level){
         return level.getName();
+    }
+    //here 4/23
+    public void PositionMove(Position position,double x,double y,double z){
+        position = position.add(x, y, z);
     }
     /********************************* 纯方块物品方法 *************************************/
     //-构建方块
@@ -258,12 +273,6 @@ public class BlockItemManager {
                 output,shape,map,linkedList
         );
         Server.getInstance().addRecipe(recipe);
-//        System.out.println(recipe.toString());
-//        System.out.println(recipe.getWidth());
-//        System.out.println(recipe.getHeight());
-//        System.out.println(map);
-//        System.out.println(linkedList);
-//        System.out.println(append.length);
         Server.getInstance().getCraftingManager().rebuildPacket();
     }
     //添加附魔

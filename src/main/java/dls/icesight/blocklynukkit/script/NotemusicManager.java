@@ -45,4 +45,7 @@ public class NotemusicManager {
     public Song getSongInRadio(RadioSongPlayer radioSongPlayer){
         return radioSongPlayer.getSong();
     }
+    public int getSongLength(Song song){
+        return song.getLength();
+    }
 }

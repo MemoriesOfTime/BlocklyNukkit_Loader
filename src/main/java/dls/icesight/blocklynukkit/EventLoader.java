@@ -1,9 +1,11 @@
 package dls.icesight.blocklynukkit;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockChest;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.*;
@@ -25,6 +27,7 @@ import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import dls.icesight.blocklynukkit.script.StoneSpawnEvent;
+import dls.icesight.blocklynukkit.script.event.EntityDamageByPlayerEvent;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -57,7 +60,10 @@ public class EventLoader implements Listener {
     public void onLogin(PlayerPreLoginEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
-
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
     @EventHandler
     public void onJoin(PlayerJoinEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
@@ -92,9 +98,9 @@ public class EventLoader implements Listener {
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event){
-        plugin.callEventHandler(event, event.getEventName());
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
         PlayerInteractEvent.Action action = event.getAction();
         if(action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)){
             plugin.callEventHandler(event, "RightClickBlockEvent");
@@ -133,6 +139,14 @@ public class EventLoader implements Listener {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+
+    @EventHandler
+    public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        if(event.getDamager() instanceof Player && (event.getDamager().getNetworkId()==63 || event.getDamager().getNetworkId()==319)){
+            plugin.callEventHandler(new EntityDamageByPlayerEvent(event),"EntityDamageByPlayerEvent","EntityDamageByPlayerEvent");
+        }
     }
 
     @EventHandler
@@ -321,12 +335,5 @@ public class EventLoader implements Listener {
     public void onSongStop(SongStoppedEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
-//    @EventHandler
-//    public void DataPackRecive(DataPacketReceiveEvent event){
-//        DataPacket packet = event.getPacket();
-//        packet.decode();
-//        System.out.println(packet);
-//        System.out.println(packet.reliability);
-//        System.out.println(packet.get());
-//    }
+
 }

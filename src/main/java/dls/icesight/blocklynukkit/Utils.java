@@ -28,17 +28,43 @@ public class Utils {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        try{
+            httpServer.createContext("/", new MyHttpHandler());
+            httpServer.createContext("/file",new MyFileHandler());
+            httpServer.createContext("/api",new MyCustomHandler());
+            //设置服务器的线程池对象
+            httpServer.setExecutor(Executors.newFixedThreadPool(10));
+            //启动服务器
+            httpServer.start();
+        }catch (NullPointerException e){
+            try {
+                httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
+                httpServer.createContext("/", new MyHttpHandler());
+                httpServer.createContext("/file",new MyFileHandler());
+                httpServer.createContext("/api",new MyCustomHandler());
+                //设置服务器的线程池对象
+                httpServer.setExecutor(Executors.newFixedThreadPool(10));
+                //启动服务器
+                httpServer.start();
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Loader.getlogger().info(TextFormat.RED+"您的"+port+"端口被占用！尝试在54321端口启动httpapi！");
+                }else {
+                    Loader.getlogger().info(TextFormat.RED+"The server's PORT"+port+" is not available! BlocklyNukkit is trying to start htttpapi service on PORT54321!");
+                }
+            }catch (IOException e2){
+                e2.printStackTrace();
+            }catch (NullPointerException e3){
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Loader.getlogger().info(TextFormat.RED+"启动httpapi服务失败！端口被完全拦截！");
+                }else {
+                    Loader.getlogger().info(TextFormat.RED+"Failed to start httpapi service!No available PORT to use!");
+                }
+            }
+        }
         //创建一个HttpContext，将路径为/myserver请求映射到MyHttpHandler处理器
-        httpServer.createContext("/", new MyHttpHandler());
-        httpServer.createContext("/file",new MyFileHandler());
-        httpServer.createContext("/api",new MyCustomHandler());
 
-        //设置服务器的线程池对象
-        httpServer.setExecutor(Executors.newFixedThreadPool(10));
 
-        //启动服务器
-        httpServer.start();
+
     }
     public String readToString(String fileName) {
         String encoding = "UTF-8";
@@ -138,6 +164,9 @@ public class Utils {
     }
     public static boolean check(File file1, File file2) {
         boolean isSame = false;
+        if((!file1.exists())||(!file2.exists())){
+            return false;
+        }
         String img1Md5 = getMD5(file1);
         String img2Md5 = getMD5(file2);
         if (img1Md5.equals(img2Md5)) {
@@ -346,4 +375,58 @@ public class Utils {
         return result;
     }
 
+    public static String sendPost(String url, String param){
+        try {
+            return sendPost(url, param, null);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "NULL";
+        }
+    }
+
+    public static String sendPost(String url, String param, Map<String, String> header) throws UnsupportedEncodingException, IOException {
+        PrintWriter out = null;
+        BufferedReader in = null;
+        String result = "";
+        URL realUrl = new URL(url);
+        // 打开和URL之间的连接
+        URLConnection conn = realUrl.openConnection();
+        //设置超时时间
+        conn.setConnectTimeout(5000);
+        conn.setReadTimeout(15000);
+        // 设置通用的请求属性
+        if (header!=null) {
+            for (Map.Entry<String, String> entry : header.entrySet()) {
+                conn.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+        }
+        conn.setRequestProperty("accept", "*/*");
+        conn.setRequestProperty("connection", "Keep-Alive");
+        conn.setRequestProperty("user-agent",
+                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+        // 发送POST请求必须设置如下两行
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        // 获取URLConnection对象对应的输出流
+        out = new PrintWriter(conn.getOutputStream());
+        // 发送请求参数
+        out.print(param);
+        // flush输出流的缓冲
+        out.flush();
+        // 定义BufferedReader输入流来读取URL的响应
+        in = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), "utf8"));
+        String line;
+        while ((line = in.readLine()) != null) {
+            result += line;
+        }
+        if(out!=null){
+            out.close();
+        }
+        if(in!=null){
+            in.close();
+        }
+        return result;
+    }
 }
+

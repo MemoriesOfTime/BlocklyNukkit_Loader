@@ -7,6 +7,9 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
+import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
+import cn.nukkit.network.protocol.LoginPacket;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
@@ -17,7 +20,10 @@ import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import dls.icesight.blocklynukkit.other.BNCrafting;
 import dls.icesight.blocklynukkit.other.SocketServer;
 import dls.icesight.blocklynukkit.other.card.CardMaker;
+import dls.icesight.blocklynukkit.other.cmd.BuildJarCommand;
+import dls.icesight.blocklynukkit.other.generator.SkyLand;
 import dls.icesight.blocklynukkit.script.*;
+import dls.icesight.blocklynukkit.script.event.EntityDamageByPlayerEvent;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
@@ -32,6 +38,7 @@ public class Loader extends PluginBase implements Listener {
     public static Loader plugin;
 
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
+    public static Set<String> bnpluginset = new HashSet<>();
 
     public static String positionstmp = "";
 
@@ -110,7 +117,7 @@ public class Loader extends PluginBase implements Listener {
             public void run() {
                 Utils.checkupdate();
             }
-        },0,3600*6*1000);
+        },0,3600*4*1000);
         Config config = new Config(this.getDataFolder()+"/update.yml",Config.YAML);
         if(!config.exists("mods")){
             config.set("mods", Arrays.asList("first.js"));
@@ -143,7 +150,6 @@ public class Loader extends PluginBase implements Listener {
         getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
         else
         getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
-
         engine.put("server", getServer());
         engine.put("plugin", this);
         engine.put("manager", Loader.functionManager);
@@ -156,7 +162,6 @@ public class Loader extends PluginBase implements Listener {
         engine.put("entity",Loader.entityManager);
         engine.put("database",Loader.databaseManager);
         engine.put("notemusic",Loader.notemusicManager);
-        
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
@@ -164,14 +169,14 @@ public class Loader extends PluginBase implements Listener {
 
         for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
             if(file.isDirectory()) continue;
-            if(file.getName().contains(".js")){
+            if(file.getName().endsWith(".js")){
                 try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                     engine.eval(reader);
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().warning("加载BN插件: " + file.getName());
                     else
                     getLogger().warning("loading BN plugin: " + file.getName());
-
+                    bnpluginset.add(file.getName());
                 } catch (final Exception e) {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().error("无法加载： " + file.getName(), e);
@@ -192,10 +197,13 @@ public class Loader extends PluginBase implements Listener {
 
         this.getServer().getPluginManager().registerEvents(this, this);
 
-        new EventLoader(this);//AlgorithmManager.test();
+        new EventLoader(this);
         plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
+        plugin.getServer().getCommandMap().register("buildtojar",new BuildJarCommand());
+        plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
+        plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
 
-        Config portconfig = new Config(this.getDataFolder()+"/port.yml");
+        Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
         int portto=8182;
         if(portconfig.exists("port")){
             portto=(int)portconfig.get("port");
@@ -206,15 +214,19 @@ public class Loader extends PluginBase implements Listener {
         Utils.makeHttpServer(portto);
     }
 
+    @Override
+    public void onDisable(){
+        entityManager.recycleAllFloatingText();
+    }
+
     public static synchronized void callEventHandler(final Event e, final String functionName) {
-        if (engine.get(functionName) == null) {
-            return;
-        }
         try {
-            ((Invocable) engine).invokeFunction(functionName, e);
+            if (engine.get(functionName) != null) {
+                ((Invocable) engine).invokeFunction(functionName, e);
+            }
             if(privatecalls.containsKey(functionName)){
                 for(String a:privatecalls.get(functionName)){
-                    if(engine.get(functionName) != null){
+                    if(engine.get(a) != null){
                         ((Invocable) engine).invokeFunction(a, e);
                     }
                 }
@@ -229,16 +241,28 @@ public class Loader extends PluginBase implements Listener {
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName,String type) {
-        if (engine.get(functionName) == null) {
-            return;
-        }
+
         try {
             if(type.equals("StoneSpawnEvent")){
                 StoneSpawnEvent event = ((StoneSpawnEvent)e);
-                ((Invocable) engine).invokeFunction(functionName, event);
+                if (engine.get(functionName) != null){
+                    ((Invocable) engine).invokeFunction(functionName, event);
+                }
                 if(privatecalls.containsKey(functionName)){
                     for(String a:privatecalls.get(functionName)){
-                        if(engine.get(functionName) != null){
+                        if(engine.get(a) != null){
+                            ((Invocable) engine).invokeFunction(a, e);
+                        }
+                    }
+                }
+            }else if(type.equals("EntityDamageByPlayerEvent")){
+                EntityDamageByPlayerEvent event = ((EntityDamageByPlayerEvent)e);
+                if (engine.get(functionName) != null){
+                    ((Invocable) engine).invokeFunction(functionName, event);
+                }
+                if(privatecalls.containsKey(functionName)){
+                    for(String a:privatecalls.get(functionName)){
+                        if(engine.get(a) != null){
                             ((Invocable) engine).invokeFunction(a, e);
                         }
                     }
@@ -334,6 +358,7 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
+            entityManager.recycleAllFloatingText();
             Loader.bnCrafting.craftEntryMap=new HashMap<>();
             Config config = new Config(Loader.plugin.getDataFolder()+"/update.yml",Config.YAML);
             if(!config.exists("mods")){
@@ -390,6 +415,39 @@ public class Loader extends PluginBase implements Listener {
             }
             Loader.plugin.getServer().getScheduler().cancelAllTasks();
 
+            return false;
+        }
+    }
+
+    public class BNPluginsListCommand extends Command{
+        public BNPluginsListCommand() {
+            super("bnplugins","查看所有安装的blocklynukkit插件");
+        }
+        @Override
+        public boolean execute(CommandSender sender, String s, String[] args){
+            String out = TextFormat.GREEN+"BlocklyNukkit插件("+bnpluginset.size()+"): ";
+            for(String a:bnpluginset){
+                out+=a+", ";
+            }
+            sender.sendMessage(out);
+            return false;
+        }
+    }
+
+    public class GenTestWorldCommand extends Command{
+        public GenTestWorldCommand() {
+            super("gentestworld","生成测试世界");
+        }
+        @Override
+        public boolean execute(CommandSender sender, String s, String[] args){
+            if(args.length<1){
+                return false;
+            }
+            levelManager.genLevel(args[0],999, "VOID");
+            levelManager.loadLevel(args[0]);
+            if(sender.isPlayer()){
+                ((Player)sender).teleport(Server.getInstance().getLevelByName(args[0]).getSafeSpawn());
+            }
             return false;
         }
     }

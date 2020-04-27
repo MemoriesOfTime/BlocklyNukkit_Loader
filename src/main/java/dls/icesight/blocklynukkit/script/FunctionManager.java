@@ -35,7 +35,17 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
-
+    //http
+    public String httpRequest(String method,String url,String data){
+        method=method.toUpperCase();
+        if(method.equals("GET")){
+            return Utils.sendGet(url,data);
+        }else if(method.equals("POST")){
+            return Utils.sendPost(url,data);
+        }else {
+            return "NO SUCH METHOD";
+        }
+    }
     //私有回调
     public void setPrivateCall(String event,String callname){
         if(Loader.privatecalls.containsKey(event)){
@@ -48,19 +58,19 @@ public class FunctionManager {
     }
 
     //云黑检测
-    public boolean checkIsBear(Player player){
+    public String checkIsBear(Player player){
         String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player.getName());
-        return !response.equals("0");
+        return response;
     }
-    public boolean checkIsBearName(String player){
+    public String checkIsBearName(String player){
         String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player);
-        return !response.equals("0");
+        return response;
     }
 
     //获取玩家地理位置
     public String getPlayerArea(Player player){
         String response = Utils.sendGet("http://whois.pconline.com.cn/ip.jsp","ip="+player.getAddress().substring(0, player.getAddress().indexOf(":")));
-        return response.split(" ")[0];
+        return response;
     }
 
     //html占位符

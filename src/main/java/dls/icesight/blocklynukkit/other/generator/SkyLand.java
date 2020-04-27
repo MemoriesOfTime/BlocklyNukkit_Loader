@@ -66,7 +66,7 @@ public class SkyLand extends Generator {
 
     @Override
     public int getId() {
-        return TYPE_INFINITE;
+        return 4213;
     }
 
     @Override
@@ -109,9 +109,9 @@ public class SkyLand extends Generator {
         //this should run before all other populators so that we don't do things like generate ground cover on bedrock or something
         PopulatorGroundCover cover = new PopulatorGroundCover();
         this.generationPopulators.add(cover);
-
-        PopulatorBedrock bedrock = new PopulatorBedrock();
-        this.generationPopulators.add(bedrock);
+        //An island in the sky needs no bedrock
+//        PopulatorBedrock bedrock = new PopulatorBedrock();
+//        this.generationPopulators.add(bedrock);
 
         PopulatorOre ores = new PopulatorOre();
         ores.setOreTypes(new OreType[]{
@@ -129,7 +129,7 @@ public class SkyLand extends Generator {
         });
         this.populators.add(ores);
 
-        PopulatorCaves caves = new PopulatorCaves();
+        PopulatorCavesNoLava caves = new PopulatorCavesNoLava();
         this.populators.add(caves);
 
         //TODO: fix ravines

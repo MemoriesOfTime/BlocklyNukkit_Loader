@@ -30,10 +30,11 @@ public class LevelManager {
                 Server.getInstance().generateLevel(name,seed, Nether.class);
                 break;
             case "VOID":
-                Server.getInstance().generateLevel(name,seed, Void.class);
+                Server.getInstance().generateLevel(name,seed, Generator.getGenerator("void_bn"));
                 break;
             case "SKYLAND":
-                Server.getInstance().generateLevel(name,seed, SkyLand.class);
+                Server.getInstance().generateLevel(name,seed, Generator.getGenerator("skyland_bn"));
+                break;
             case "NORMAL":
             default:
                 Server.getInstance().generateLevel(name,seed, Normal.class);
@@ -48,13 +49,13 @@ public class LevelManager {
     public List<Level> getServerLevels(){
         return new ArrayList<>(Server.getInstance().getLevels().values());
     }
-    private class Void extends cn.nukkit.level.generator.Generator {
+    public class Void extends cn.nukkit.level.generator.Generator {
         private final String NAME = "void_bn";
         private ChunkManager chunkManager;
         private NukkitRandom random;
         @Override
         public int getId() {
-            return 4;
+            return 3324;
         }
 
         @Override

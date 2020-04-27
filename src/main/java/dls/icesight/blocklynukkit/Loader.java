@@ -440,11 +440,10 @@ public class Loader extends PluginBase implements Listener {
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args){
-            if(args.length<1){
+            if(args.length<2){
                 return false;
             }
-            levelManager.genLevel(args[0],999, "VOID");
-            levelManager.loadLevel(args[0]);
+            levelManager.genLevel(args[0],999, args[1]);
             if(sender.isPlayer()){
                 ((Player)sender).teleport(Server.getInstance().getLevelByName(args[0]).getSafeSpawn());
             }

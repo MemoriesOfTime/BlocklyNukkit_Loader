@@ -3,7 +3,6 @@ package com.xxmicloxx.NoteBlockAPI;
 import cn.nukkit.Player;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import dls.icesight.blocklynukkit.Loader;
 
 public class RadioSongPlayer extends SongPlayer {
 

@@ -1,5 +1,5 @@
 ﻿name: BlocklyNukkit
-main: dls.icesight.blocklynukkit.Loader
+main: Loader
 version: "1.2.4"
 author: BlocklyNukkit开发组-超神的冰凉发起(BlocklyNukkit_Developers)
 authors:

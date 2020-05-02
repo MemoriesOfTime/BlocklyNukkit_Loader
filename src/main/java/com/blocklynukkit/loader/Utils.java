@@ -30,7 +30,7 @@ public class Utils {
             httpServer.setExecutor(Executors.newFixedThreadPool(10));
             //启动服务器
             httpServer.start();
-        }catch (NullPointerException e){
+        }catch (Exception e){
             try {
                 httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
                 httpServer.createContext("/", new MyHttpHandler());
@@ -47,18 +47,16 @@ public class Utils {
                 }
             }catch (IOException e2){
                 e2.printStackTrace();
-            }catch (NullPointerException e3){
+            }catch (Exception e3){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     Loader.getlogger().info(TextFormat.RED+"启动httpapi服务失败！端口被完全拦截！");
+                    Loader.getlogger().info(TextFormat.YELLOW+"解释器正在以无网络服务模式运行！修改port.yml以解决此问题！");
                 }else {
                     Loader.getlogger().info(TextFormat.RED+"Failed to start httpapi service!No available PORT to use!");
+                    Loader.getlogger().info(TextFormat.YELLOW+"BlocklyNukkit is running without providing net service! Rewrite port.yml to solve this problem!");
                 }
             }
         }
-        //创建一个HttpContext，将路径为/myserver请求映射到MyHttpHandler处理器
-
-
-
     }
     public String readToString(String fileName) {
         String encoding = "UTF-8";

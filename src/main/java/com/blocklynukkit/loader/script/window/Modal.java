@@ -23,8 +23,10 @@ public class Modal {
         btn2=text;
     }
     public void showToPlayer(Player p, String callback){
-        Loader.functioncallback.put(id,callback);
-        FormWindowModal modal=new FormWindowModal(title,context,btn1,btn2);
-        p.showFormWindow(modal,id);
+        synchronized (Loader.functioncallback){
+            Loader.functioncallback.put(id,callback);
+            FormWindowModal modal=new FormWindowModal(title,context,btn1,btn2);
+            p.showFormWindow(modal,id);
+        }
     }
 }

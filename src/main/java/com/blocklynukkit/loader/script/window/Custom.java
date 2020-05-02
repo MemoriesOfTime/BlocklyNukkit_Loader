@@ -15,9 +15,11 @@ public class Custom {
         this.title=title;
     }
     public void showToPlayer(Player p, String callback){
-        Loader.functioncallback.put(id,callback);
-        FormWindowCustom window=new FormWindowCustom(title,elements);
-        p.showFormWindow(window,id);
+        synchronized (Loader.functioncallback){
+            Loader.functioncallback.put(id,callback);
+            FormWindowCustom window=new FormWindowCustom(title,elements);
+            p.showFormWindow(window,id);
+        }
     }
     public void addNewElement(Element element){
         elements.add(element);

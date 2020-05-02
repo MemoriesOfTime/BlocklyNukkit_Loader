@@ -29,11 +29,13 @@ public class Simple {
         this.context=context;
     }
     public void showToPlayer(Player p,String callback){
-        Loader.functioncallback.put(id,callback);
-        FormWindowSimple window=new FormWindowSimple(title,context);
-        for(ElementButton button:buttonsmap){
-            window.addButton(button);
+        synchronized (Loader.functioncallback){
+            Loader.functioncallback.put(id,callback);
+            FormWindowSimple window=new FormWindowSimple(title,context);
+            for(ElementButton button:buttonsmap){
+                window.addButton(button);
+            }
+            p.showFormWindow(window,id);
         }
-        p.showFormWindow(window,id);
     }
 }

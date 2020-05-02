@@ -28,6 +28,7 @@ import com.blocklynukkit.loader.script.StoneSpawnEvent;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
+import java.util.Iterator;
 
 public class EventLoader implements Listener {
 
@@ -78,9 +79,15 @@ public class EventLoader implements Listener {
 
     @EventHandler
     public void onFormResponse(PlayerFormRespondedEvent event){
-        for(int a:Loader.functioncallback.keySet()){
-            if(event.getFormID()==a){
-                plugin.callEventHandler(event,Loader.functioncallback.get(a));
+        synchronized (Loader.functioncallback){
+            if(!event.wasClosed()&&event.getResponse()!=null){
+                Iterator it = Loader.functioncallback.keySet().iterator();
+                while (it.hasNext()){
+                    int a = (int) it.next();
+                    if(event.getFormID()==a){
+                        plugin.callEventHandler(event,Loader.functioncallback.get(a));
+                    }
+                }
             }
         }
     }

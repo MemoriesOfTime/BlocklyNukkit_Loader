@@ -5,6 +5,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.Position;
 import cn.nukkit.level.biome.Biome;
 import cn.nukkit.level.generator.Flat;
 import cn.nukkit.level.generator.Generator;
@@ -15,6 +16,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Config;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.SkyLand;
+import com.blocklynukkit.loader.other.generator.VoidGenerator;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import java.util.Map;
 public class LevelManager {
     public Map<String,Object> skylandoptions = new HashMap<>();
     public LevelManager(){
-        Generator.addGenerator(Void.class,"void_bn",Generator.TYPE_INFINITE);
+        Generator.addGenerator(VoidGenerator.class,"void_bn2",Generator.TYPE_INFINITE);
         Generator.addGenerator(SkyLand.class,"skyland_bn3",Generator.TYPE_INFINITE);
     }
     public void genLevel(String name, long seed, String generator){
@@ -37,12 +39,16 @@ public class LevelManager {
                 Server.getInstance().generateLevel(name,seed, Nether.class);
                 break;
             case "VOID":
-                Server.getInstance().generateLevel(name,seed, Generator.getGenerator("void_bn"));
+                Server.getInstance().generateLevel(name,seed, Generator.getGenerator("void_bn2"));
+                Level l2 = Server.getInstance().getLevelByName(name);
+                Position pos = l2.getSafeSpawn();
+                l2.setBlock(pos.add(0,-2,0), Block.get(BlockID.BEDROCK));
                 break;
             case "SKYLAND":
                 Server.getInstance().generateLevel(name,seed, Generator.getGenerator("skyland_bn3"));
                 Level l = Server.getInstance().getLevelByName(name);
-                l.setBlock(l.getSafeSpawn().add(0,-2,0), Block.get(BlockID.BEDROCK));
+                Position pos2 = l.getSafeSpawn();
+                l.setBlock(pos2.add(0,-2,0), Block.get(BlockID.BEDROCK));
                 break;
             case "NORMAL":
             default:
@@ -143,53 +149,5 @@ public class LevelManager {
     //here 4/23
     public List<Level> getServerLevels(){
         return new ArrayList<>(Server.getInstance().getLevels().values());
-    }
-    public class Void extends cn.nukkit.level.generator.Generator {
-        private final String NAME = "void_bn";
-        private ChunkManager chunkManager;
-        private NukkitRandom random;
-        @Override
-        public int getId() {
-            return 3324;
-        }
-
-        @Override
-        public void init(ChunkManager chunkManager, NukkitRandom nukkitRandom) {
-            this.chunkManager = chunkManager;
-        }
-
-        @Override
-        public void generateChunk(int i, int i1) {
-
-        }
-
-        @Override
-        public void populateChunk(int chunkX, int chunkZ) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    this.chunkManager.getChunk(chunkX, chunkZ).setBiomeId(x, z, Biome.AIR);
-                }
-            }
-        }
-
-        @Override
-        public Map<String, Object> getSettings() {
-            return null;
-        }
-
-        @Override
-        public String getName() {
-            return NAME;
-        }
-
-        @Override
-        public Vector3 getSpawn() {
-            return new Vector3(128.0, 65.0, 128.0);
-        }
-
-        @Override
-        public ChunkManager getChunkManager() {
-            return chunkManager;
-        }
     }
 }

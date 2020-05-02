@@ -18,7 +18,6 @@ import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
 import com.blocklynukkit.loader.other.cmd.BuildJarCommand;
-import dls.icesight.blocklynukkit.script.*;
 import com.blocklynukkit.loader.script.event.EntityDamageByPlayerEvent;
 
 import javax.script.*;
@@ -42,6 +41,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, BufferedImage> skinimagemap = new HashMap<>();
     public static Map<String, String> playergeonamemap = new HashMap<>();
     public static Map<String, String> playergeojsonmap = new HashMap<>();
+    public static Map<String, String[]>mcfunctionmap = new HashMap<>();
     public static Map<Integer, String> functioncallback = new HashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
@@ -57,6 +57,7 @@ public class Loader extends PluginBase implements Listener {
     public static DatabaseManager databaseManager;
     public static CardMaker cardMaker;
     public static NotemusicManager notemusicManager;
+    public static ParticleManager particleManager;
 
 
     @Override
@@ -80,7 +81,7 @@ public class Loader extends PluginBase implements Listener {
         if (!plugins.containsKey("PlaceholderAPI")){
             try {
                 if (Server.getInstance().getLanguage().getName().contains("中文"))
-                Loader.getlogger().warning(TextFormat.RED+"您没有安装PlaceholderAPI,虽然不是必须安装，但PlaceHolderAPI是速建官网和计分板组件的必须前置，建议您安装，下载地址：https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
+                Loader.getlogger().warning(TextFormat.RED+"您没有安装PlaceholderAPI,虽然不是必须安装，但PlaceHolderAPI前置有些作用，建议您安装，下载地址：https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
                 if (!Server.getInstance().getLanguage().getName().contains("中文"))
                 Loader.getlogger().warning(TextFormat.RED+"You haven't installed PlaceholderAPI,although it's not necessary,but PlaceHolderAPI is needed by the moudle inner_http_page_server and moudle scoreboard,we suggest you to install,download link: https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
             } catch (Exception e) {
@@ -103,7 +104,7 @@ public class Loader extends PluginBase implements Listener {
         }
         functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
-        databaseManager=new DatabaseManager();cardMaker=new CardMaker();notemusicManager=new NotemusicManager();
+        databaseManager=new DatabaseManager();cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();
         noteBlockPlayerMain.onEnable();
 
         MetricsLite metricsLite=new MetricsLite(this,6769);
@@ -158,6 +159,7 @@ public class Loader extends PluginBase implements Listener {
         engine.put("entity",Loader.entityManager);
         engine.put("database",Loader.databaseManager);
         engine.put("notemusic",Loader.notemusicManager);
+        engine.put("particle",Loader.particleManager);
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
@@ -165,7 +167,7 @@ public class Loader extends PluginBase implements Listener {
 
         for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
             if(file.isDirectory()) continue;
-            if(file.getName().endsWith(".js")){
+            if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                 try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                     engine.eval(reader);
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -200,11 +202,12 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
 
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
-        int portto=8182;
+        int portto;
         if(portconfig.exists("port")){
             portto=(int)portconfig.get("port");
         }else {
             portconfig.set("port",8182);
+            portto=8182;
         }
         portconfig.save();
         Utils.makeHttpServer(portto);
@@ -388,6 +391,7 @@ public class Loader extends PluginBase implements Listener {
             Loader.plugin.engine.put("entity",Loader.entityManager);
             Loader.plugin.engine.put("database",Loader.databaseManager);
             Loader.plugin.engine.put("notemusic",Loader.notemusicManager);
+            Loader.plugin.engine.put("particle",Loader.particleManager);
 
             getDataFolder().mkdir();
             new File(getDataFolder()+"/skin").mkdir();
@@ -395,7 +399,7 @@ public class Loader extends PluginBase implements Listener {
 
             for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
                 if(file.isDirectory()) continue;
-                if(file.getName().contains(".js")){
+                if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                     try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                         Loader.plugin.engine.eval(reader);
                         if (Server.getInstance().getLanguage().getName().contains("中文"))

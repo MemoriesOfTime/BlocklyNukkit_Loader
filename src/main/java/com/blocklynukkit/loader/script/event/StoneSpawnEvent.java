@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader.script;
+package com.blocklynukkit.loader.script.event;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.level.Position;

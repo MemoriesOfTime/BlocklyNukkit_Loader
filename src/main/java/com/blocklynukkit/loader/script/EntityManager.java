@@ -11,6 +11,7 @@ import cn.nukkit.potion.Effect;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -130,5 +131,23 @@ public class EntityManager {
                 entity.close();
             }
         }
+    }
+    //here 5/2
+    //获取实体所有的药水效果
+    public List<Effect> getEntityEffect(Entity entity){
+        List<Effect> list = new ArrayList<>(entity.getEffects().values());
+        return list;
+    }
+    //获取药水效果等级
+    public int getEffectLevel(Effect effect){
+        return effect.getAmplifier();
+    }
+    //同上id
+    public int getEffectID(Effect effect){
+        return effect.getId();
+    }
+    //同上剩余时间(s)
+    public int getEffectTime(Effect effect){
+        return effect.getDuration();
     }
 }

@@ -14,6 +14,7 @@ import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.script.*;
+import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;

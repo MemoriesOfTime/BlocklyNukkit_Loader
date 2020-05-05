@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 public class FunctionManager {
 
@@ -58,11 +59,11 @@ public class FunctionManager {
 
     //云黑检测
     public String checkIsBear(Player player){
-        String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player.getName());
+        String response = Utils.sendGet("http://47.103.201.235/api/check.php?","id="+player.getName());
         return response;
     }
     public String checkIsBearName(String player){
-        String response = Utils.sendGet("http://blackbe-api.bugmc.com:2222/BlackBE/check.php","id="+player);
+        String response = Utils.sendGet("http://47.103.201.235/api/check.php","id="+player);
         return response;
     }
 

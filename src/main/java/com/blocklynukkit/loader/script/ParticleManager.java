@@ -1,7 +1,9 @@
 package com.blocklynukkit.loader.script;
 
+import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
+import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.other.McFunction;
 import com.blocklynukkit.loader.other.particle.CircleFlat;
@@ -17,6 +19,9 @@ public class ParticleManager {
     }
     public void drawFireWork(Position pos, int colornum, boolean flick, boolean trail, int shape, int second){
         FireworkRocket.make(pos.level,pos,colornum,flick,trail,shape,second);
+    }
+    public void drawBlockBreak(Position pos, Block block){
+        pos.level.addParticle(new DestroyBlockParticle(pos,block));
     }
     public void drawParticleFactoryMcFunction(String fun,Position pos,double turn){
         new McFunction(fun,pos,pos.level).setturn(turn).run();

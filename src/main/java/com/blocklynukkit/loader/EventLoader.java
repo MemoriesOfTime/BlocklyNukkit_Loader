@@ -24,7 +24,7 @@ import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
-import com.blocklynukkit.loader.script.StoneSpawnEvent;
+import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;

@@ -99,8 +99,8 @@ public class EntityManager {
         tmp.setNameTagVisible(false);
         tmp.setNameTag(text);
         tmp.setNameTagAlwaysVisible(false);
-        tmp.setMaxHealth(9999);
-        tmp.setHealth(9999);
+        tmp.setMaxHealth(29999);
+        tmp.setHealth(29999);
         tmp.setPosition(new Vector3(x,y,z));
         tmp.setScale(0.0001f);
         tmp.setLevel(level);
@@ -118,7 +118,7 @@ public class EntityManager {
     public List<FloatingText> getLevelFloatingText(Level level){
         List<FloatingText> list=new ArrayList<>();
         for(Entity e:level.getEntities()){
-            if(e.getNetworkId()==36&&e.getMaxHealth()>=9998&&e.getScale()<=0.001f&&(!e.isClosed())){
+            if(e.getNetworkId()==36&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
                 list.add((FloatingText)e);
             }
         }

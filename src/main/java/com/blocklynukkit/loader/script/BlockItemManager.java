@@ -335,4 +335,12 @@ public class BlockItemManager {
     public void openBNCraftForPlayer(String type, Player player){
         Loader.bnCrafting.showTypeToPlayer(type, player);
     }
+    //获取nbt字符串
+    public String getNBTString(Item item){
+        return String.valueOf(item.getCompoundTag());
+    }
+    //给物品注入nbt字符串
+    public void putinNBTString(Item item,String str){
+        item.setCompoundTag(str.getBytes());
+    }
 }

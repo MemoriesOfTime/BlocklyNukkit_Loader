@@ -15,8 +15,13 @@ import com.blocklynukkit.loader.script.window.Custom;
 import com.blocklynukkit.loader.script.window.Modal;
 import com.blocklynukkit.loader.script.window.Simple;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class WindowManager {
+    public Map<String,Scoreboard> boards = new HashMap<>();
+
     public void updateAllScoreBoard(String title,String text){
         for (Player p: Server.getInstance().getOnlinePlayers().values()){
             if(title.contains("%"))
@@ -26,11 +31,17 @@ public class WindowManager {
             Scoreboard sb = ScoreboardAPI.createScoreboard();
             ScoreboardDisplay sbd = sb.addDisplay(DisplaySlot.SIDEBAR, "dumy", title);
             String[] l = text.split(";");
-
             for(int i = 0; i < l.length; ++i) {
                 sbd.addLine(l[i], i);
             }
-            ScoreboardAPI.setScoreboard(p, sb);
+            if(boards.containsKey(p.getName())){
+                boards.get(p.getName()).hideFor(p);
+                sb.showFor(p);
+                boards.put(p.getName(),sb);
+            }else {
+                sb.showFor(p);
+                boards.put(p.getName(),sb);
+            }
         }
     }
     public void updateOneScoreBoard(String title,String text,Player p){
@@ -45,7 +56,14 @@ public class WindowManager {
         for(int i = 0; i < l.length; ++i) {
             sbd.addLine(l[i], i);
         }
-        ScoreboardAPI.setScoreboard(p, sb);
+        if(boards.containsKey(p.getName())){
+            boards.get(p.getName()).hideFor(p);
+            sb.showFor(p);
+            boards.put(p.getName(),sb);
+        }else {
+            sb.showFor(p);
+            boards.put(p.getName(),sb);
+        }
     }
 
     public Simple getSimpleWindowBuilder(String title,String context){

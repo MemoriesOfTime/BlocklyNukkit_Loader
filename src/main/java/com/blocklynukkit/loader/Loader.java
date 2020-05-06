@@ -20,6 +20,7 @@ import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
 import com.blocklynukkit.loader.other.cmd.BuildJarCommand;
 import com.blocklynukkit.loader.script.event.EntityDamageByPlayerEvent;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
@@ -28,10 +29,11 @@ import java.util.*;
 
 public class Loader extends PluginBase implements Listener {
 
-    public static ScriptEngine engine;
+    //public static ScriptEngine engine;
 
     public static Loader plugin;
 
+    public static Map<String, ScriptEngine> engineMap = new HashMap<>();
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
     public static Set<String> bnpluginset = new HashSet<>();
 
@@ -109,6 +111,7 @@ public class Loader extends PluginBase implements Listener {
         noteBlockPlayerMain.onEnable();
 
         MetricsLite metricsLite=new MetricsLite(this,6769);
+        System.setProperty("nashorn.args", "--language=es6");
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -116,6 +119,7 @@ public class Loader extends PluginBase implements Listener {
             }
         },0,3600*4*1000);
         levelManager.doreloadSkyLandGeneratorSettings();
+        this.getServer().getPluginManager().registerEvents(bnCrafting,this);
         Config config = new Config(this.getDataFolder()+"/update.yml",Config.YAML);
         if(!config.exists("mods")){
             config.set("mods", Arrays.asList("first.js"));
@@ -125,42 +129,43 @@ public class Loader extends PluginBase implements Listener {
         for(String a:list){
             Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
         }
-        this.getServer().getPluginManager().registerEvents(bnCrafting,this);
-        final ScriptEngineManager manager = new ScriptEngineManager();
-        engine = manager.getEngineByMimeType("text/javascript");
-        if (engine == null) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("JavaScript引擎加载出错！");
-            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("JavaScript interpreter crashed!");
-            return;
-        }
-        if (!(engine instanceof Invocable)) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("JavaScript引擎版本过低！");
-            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("JavaScript interpreter's version is too low!");
-            engine = null;
-            return;
-        }
 
-        if (Server.getInstance().getLanguage().getName().contains("中文"))
-        getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
-        else
-        getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
-        engine.put("server", getServer());
-        engine.put("plugin", this);
-        engine.put("manager", Loader.functionManager);
-        engine.put("logger", getLogger());
-        engine.put("window", Loader.windowManager);
-        engine.put("blockitem",Loader.blockItemManager);
-        engine.put("algorithm",Loader.algorithmManager);
-        engine.put("inventory",Loader.inventoryManager);
-        engine.put("world",Loader.levelManager);
-        engine.put("entity",Loader.entityManager);
-        engine.put("database",Loader.databaseManager);
-        engine.put("notemusic",Loader.notemusicManager);
-        engine.put("particle",Loader.particleManager);
+//        final ScriptEngineManager manager = new ScriptEngineManager();
+//        engine = manager.getEngineByMimeType("text/javascript");
+//        if (engine == null) {
+//            if (Server.getInstance().getLanguage().getName().contains("中文"))
+//            getLogger().error("JavaScript引擎加载出错！");
+//            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+//            getLogger().error("JavaScript interpreter crashed!");
+//            return;
+//        }
+//        if (!(engine instanceof Invocable)) {
+//            if (Server.getInstance().getLanguage().getName().contains("中文"))
+//            getLogger().error("JavaScript引擎版本过低！");
+//            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+//            getLogger().error("JavaScript interpreter's version is too low!");
+//            engine = null;
+//            return;
+//        }
+//
+//        if (Server.getInstance().getLanguage().getName().contains("中文"))
+//        getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+//        else
+//        getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
+//        engine.put("server", getServer());
+//        engine.put("plugin", this);
+//        engine.put("manager", Loader.functionManager);
+//        engine.put("logger", getLogger());
+//        engine.put("window", Loader.windowManager);
+//        engine.put("blockitem",Loader.blockItemManager);
+//        engine.put("algorithm",Loader.algorithmManager);
+//        engine.put("inventory",Loader.inventoryManager);
+//        engine.put("world",Loader.levelManager);
+//        engine.put("entity",Loader.entityManager);
+//        engine.put("database",Loader.databaseManager);
+//        engine.put("notemusic",Loader.notemusicManager);
+//        engine.put("particle",Loader.particleManager);
+
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
@@ -170,7 +175,35 @@ public class Loader extends PluginBase implements Listener {
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                 try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
-                    engine.eval(reader);
+                    engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("nashorn"));
+                    if (engineMap.get(file.getName()) == null) {
+                        if (Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().error("JavaScript引擎加载出错！");
+                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().error("JavaScript interpreter crashed!");
+                        return;
+                    }
+                    if (!(engineMap.get(file.getName()) instanceof Invocable)) {
+                        if (Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().error("JavaScript引擎版本过低！");
+                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                            getLogger().error("JavaScript interpreter's version is too low!");
+                        return;
+                    }
+                    engineMap.get(file.getName()).put("server", getServer());
+                    engineMap.get(file.getName()).put("plugin", this);
+                    engineMap.get(file.getName()).put("manager", Loader.functionManager);
+                    engineMap.get(file.getName()).put("logger", getLogger());
+                    engineMap.get(file.getName()).put("window", Loader.windowManager);
+                    engineMap.get(file.getName()).put("blockitem",Loader.blockItemManager);
+                    engineMap.get(file.getName()).put("algorithm",Loader.algorithmManager);
+                    engineMap.get(file.getName()).put("inventory",Loader.inventoryManager);
+                    engineMap.get(file.getName()).put("world",Loader.levelManager);
+                    engineMap.get(file.getName()).put("entity",Loader.entityManager);
+                    engineMap.get(file.getName()).put("database",Loader.databaseManager);
+                    engineMap.get(file.getName()).put("notemusic",Loader.notemusicManager);
+                    engineMap.get(file.getName()).put("particle",Loader.particleManager);
+                    engineMap.get(file.getName()).eval(reader);
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().warning("加载BN插件: " + file.getName());
                     else
@@ -184,15 +217,6 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
         }
-
-
-
-        this.getServer().getScheduler().scheduleDelayedRepeatingTask(new Task() {
-            @Override
-            public void onRun(int i) {
-                engine.put("players", getServer().getOnlinePlayers().values());
-            }
-        }, 20, 20, true);
 
         this.getServer().getPluginManager().registerEvents(this, this);
 
@@ -222,16 +246,19 @@ public class Loader extends PluginBase implements Listener {
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
         try {
-            if (engine.get(functionName) != null) {
-                ((Invocable) engine).invokeFunction(functionName, e);
-            }
-            if(privatecalls.containsKey(functionName)){
-                for(String a:privatecalls.get(functionName)){
-                    if(engine.get(a) != null){
-                        ((Invocable) engine).invokeFunction(a, e);
+            for(ScriptEngine engine:engineMap.values()){
+                if (engine.get(functionName) != null) {
+                    ((Invocable) engine).invokeFunction(functionName, e);
+                }
+                if(privatecalls.containsKey(functionName)){
+                    for(String a:privatecalls.get(functionName)){
+                        if(engine.get(a) != null){
+                            ((Invocable) engine).invokeFunction(a, e);
+                        }
                     }
                 }
             }
+
         } catch (final Exception se) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
             plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
@@ -242,33 +269,35 @@ public class Loader extends PluginBase implements Listener {
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName,String type) {
-
         try {
-            if(type.equals("StoneSpawnEvent")){
-                StoneSpawnEvent event = ((StoneSpawnEvent)e);
-                if (engine.get(functionName) != null){
-                    ((Invocable) engine).invokeFunction(functionName, event);
-                }
-                if(privatecalls.containsKey(functionName)){
-                    for(String a:privatecalls.get(functionName)){
-                        if(engine.get(a) != null){
-                            ((Invocable) engine).invokeFunction(a, e);
+            for(ScriptEngine engine:engineMap.values()){
+                if(type.equals("StoneSpawnEvent")){
+                    StoneSpawnEvent event = ((StoneSpawnEvent)e);
+                    if (engine.get(functionName) != null){
+                        ((Invocable) engine).invokeFunction(functionName, event);
+                    }
+                    if(privatecalls.containsKey(functionName)){
+                        for(String a:privatecalls.get(functionName)){
+                            if(engine.get(a) != null){
+                                ((Invocable) engine).invokeFunction(a, e);
+                            }
                         }
                     }
-                }
-            }else if(type.equals("EntityDamageByPlayerEvent")){
-                EntityDamageByPlayerEvent event = ((EntityDamageByPlayerEvent)e);
-                if (engine.get(functionName) != null){
-                    ((Invocable) engine).invokeFunction(functionName, event);
-                }
-                if(privatecalls.containsKey(functionName)){
-                    for(String a:privatecalls.get(functionName)){
-                        if(engine.get(a) != null){
-                            ((Invocable) engine).invokeFunction(a, e);
+                }else if(type.equals("EntityDamageByPlayerEvent")){
+                    EntityDamageByPlayerEvent event = ((EntityDamageByPlayerEvent)e);
+                    if (engine.get(functionName) != null){
+                        ((Invocable) engine).invokeFunction(functionName, event);
+                    }
+                    if(privatecalls.containsKey(functionName)){
+                        for(String a:privatecalls.get(functionName)){
+                            if(engine.get(a) != null){
+                                ((Invocable) engine).invokeFunction(a, e);
+                            }
                         }
                     }
                 }
             }
+
         } catch (final Exception se) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
             plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
@@ -279,63 +308,116 @@ public class Loader extends PluginBase implements Listener {
     }
 
     public synchronized void callCommand(CommandSender sender, String[] args, String functionName){
-        if(engine.get(functionName) == null){
-            return;
-        }
-        try {
-            ((Invocable) engine).invokeFunction(functionName, sender, args);
-        } catch (final Exception se) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("在回调 " + functionName+" 时出错", se);
-            else
-            plugin.getLogger().error("errors when calling " + functionName, se);
-            se.printStackTrace();
+        for(ScriptEngine engine:engineMap.values()){
+            if(engine.get(functionName) == null){
+                continue;
+            }
+            try {
+                ((Invocable) engine).invokeFunction(functionName, sender, args);
+            } catch (final Exception se) {
+                if (Server.getInstance().getLanguage().getName().contains("中文"))
+                    getLogger().error("在回调 " + functionName+" 时出错", se);
+                else
+                    plugin.getLogger().error("errors when calling " + functionName, se);
+                se.printStackTrace();
+            }
         }
     }
 
     public synchronized void call(String functionName, Object... args){
-        if(engine.get(functionName) == null){
-            return;
-        }
-        try {
-            ((Invocable) engine).invokeFunction(functionName, args);
-        } catch (final Exception se) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().error("在回调 " + functionName+"时出错", se);
-            else
-            plugin.getLogger().error("errors when calling " + functionName, se);
-            se.printStackTrace();
+        if(functionName.contains("::")) {
+            String[] sp = functionName.split("::");
+            if(engineMap.containsKey(sp[0])) {
+                ScriptEngine engine = engineMap.get(sp[0]);
+                if(engine.get(functionName) == null){
+                    return ;
+                }
+                try {
+                    ((Invocable) engine).invokeFunction(sp[1], args);
+                } catch (final Exception se) {
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
+                        getLogger().error("在回调 " + functionName+"时出错", se);
+                    else
+                        plugin.getLogger().error("errors when calling " + functionName, se);
+                    se.printStackTrace();
+                }
+            }
+        }else {
+            for(ScriptEngine engine:engineMap.values()){
+                if(engine.get(functionName) == null){
+                    continue;
+                }
+                try {
+                    ((Invocable) engine).invokeFunction(functionName, args);
+                } catch (final Exception se) {
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
+                        getLogger().error("在回调 " + functionName+"时出错", se);
+                    else
+                        plugin.getLogger().error("errors when calling " + functionName, se);
+                    se.printStackTrace();
+                }
+            }
         }
     }
 
+
     public synchronized String callbackString(String functionName, Object... args){
-        if(engine.get(functionName) == null){
+        if(functionName.contains("::")){
+            String[] sp = functionName.split("::");
+            if(engineMap.containsKey(sp[0])){
+                ScriptEngine engine = engineMap.get(sp[0]);
+                if(engine.get(functionName) == null){
+                    return "NO FUNCTION";
+                }
+                try {
+                    return String.valueOf(((Invocable) engine).invokeFunction(sp[1], args));
+                } catch (final Exception se) {
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
+                        getLogger().error("在回调 " + functionName+"时出错", se);
+                    else
+                        plugin.getLogger().error("errors when calling " + functionName, se);
+                    se.printStackTrace();
+                    return "ERROR";
+                }
+            }else {
+                return "NO FUNCTION";
+            }
+        }else {
+            for(ScriptEngine engine:engineMap.values()){
+                if(engine.get(functionName) == null){
+                    continue;
+                }
+                try {
+                    return String.valueOf(((Invocable) engine).invokeFunction(functionName, args));
+                } catch (final Exception se) {
+                    if (Server.getInstance().getLanguage().getName().contains("中文"))
+                        getLogger().error("在回调 " + functionName+"时出错", se);
+                    else
+                        plugin.getLogger().error("errors when calling " + functionName, se);
+                    se.printStackTrace();
+                    return "ERROR";
+                }
+            }
             return "NO FUNCTION";
         }
-        try {
-            return String.valueOf(((Invocable) engine).invokeFunction(functionName, args));
-        } catch (final Exception se) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getLogger().error("在回调 " + functionName+"时出错", se);
-            else
-                plugin.getLogger().error("errors when calling " + functionName, se);
-            se.printStackTrace();
-            return "ERROR";
-        }
+
     }
 
     private synchronized Object eval(final CommandSender sender, final String expression) throws ScriptException {
-        if (sender != null && sender.isPlayer()) {
-            final Player player = (Player) sender;
-            engine.put("me", player);
-            engine.put("level", player.getPosition().level);
-            engine.put("pos", player.getPosition());
-        } else {
-            engine.put("me", null);
-            engine.put("level", getServer().getDefaultLevel());
-            engine.put("pos", null);
+        for(ScriptEngine engine:engineMap.values()){
+            if (sender != null && sender.isPlayer()) {
+                final Player player = (Player) sender;
+                engine.put("me", player);
+                engine.put("level", player.getPosition().level);
+                engine.put("pos", player.getPosition());
+            } else {
+                engine.put("me", null);
+                engine.put("level", getServer().getDefaultLevel());
+                engine.put("pos", null);
+            }
+            return engine.eval(expression);
         }
-        return engine.eval(expression);
+        return null;
     }
 
     public static PluginLogger getlogger(){
@@ -347,62 +429,68 @@ public class Loader extends PluginBase implements Listener {
         private String functionName;
 
         public ReloadJSCommand() {
-            super("hotreloadjs","热重载js(仅控制台使用)");
+            super("hotreloadjs", "热重载js(仅控制台使用)");
         }
 
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-            if(sender.isPlayer()){
+            if (sender.isPlayer()) {
                 if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                sender.sendMessage("Only console can use this command!");
+                    sender.sendMessage("Only console can use this command!");
                 else
-                sender.sendMessage("只有控制台才能执行此命令");
+                    sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
             entityManager.recycleAllFloatingText();
-            Loader.bnCrafting.craftEntryMap=new HashMap<>();
-            Config config = new Config(Loader.plugin.getDataFolder()+"/update.yml",Config.YAML);
-            if(!config.exists("mods")){
+            Loader.plugin.getServer().getScheduler().cancelAllTasks();
+            Loader.bnCrafting.craftEntryMap = new HashMap<>();
+            Config config = new Config(Loader.plugin.getDataFolder() + "/update.yml", Config.YAML);
+            if (!config.exists("mods")) {
                 config.set("mods", Arrays.asList("first.js"));
                 config.save();
             }
             List<String> list = (List<String>) config.get("mods");
-            for(String a:list){
-                Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(Loader.plugin.getDataFolder()+"/"+a));
+            for (String a : list) {
+                Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/" + a, new File(Loader.plugin.getDataFolder() + "/" + a));
             }
 
-            final ScriptEngineManager manager = new ScriptEngineManager();
-            Loader.plugin.engine=null;
-            Loader.plugin.engine = manager.getEngineByMimeType("text/javascript");
-
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getLogger().info(TextFormat.WHITE + "已经载入Javascript引擎: " + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
-            else
-                getLogger().info(TextFormat.WHITE + "successfully loaded Javascript interpreter:" + engine.getFactory().getEngineName() + " " + engine.getFactory().getEngineVersion());
-
-            Loader.plugin.engine.put("server", getServer());
-            Loader.plugin.engine.put("plugin", this);
-            Loader.plugin.engine.put("manager", Loader.functionManager);
-            Loader.plugin.engine.put("logger", getLogger());
-            Loader.plugin.engine.put("window", Loader.windowManager);
-            Loader.plugin.engine.put("blockitem",Loader.blockItemManager);
-            Loader.plugin.engine.put("algorithm",Loader.algorithmManager);
-            Loader.plugin.engine.put("inventory",Loader.inventoryManager);
-            Loader.plugin.engine.put("world",Loader.levelManager);
-            Loader.plugin.engine.put("entity",Loader.entityManager);
-            Loader.plugin.engine.put("database",Loader.databaseManager);
-            Loader.plugin.engine.put("notemusic",Loader.notemusicManager);
-            Loader.plugin.engine.put("particle",Loader.particleManager);
-
             getDataFolder().mkdir();
-            new File(getDataFolder()+"/skin").mkdir();
+            new File(getDataFolder() + "/skin").mkdir();
 
 
-            for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
-                if(file.isDirectory()) continue;
-                if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
-                    try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
-                        Loader.plugin.engine.eval(reader);
+            for (File file : Objects.requireNonNull(Loader.plugin.getDataFolder().listFiles())) {
+                if (file.isDirectory()) continue;
+                if (file.getName().endsWith(".js") && !file.getName().contains("bak")) {
+                    try (final Reader reader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
+                        engineMap.put(file.getName(), new ScriptEngineManager().getEngineByName("nashorn"));
+                        if (engineMap.get(file.getName()) == null) {
+                            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                                getLogger().error("JavaScript引擎加载出错！");
+                            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                                getLogger().error("JavaScript interpreter crashed!");
+                            return false;
+                        }
+                        if (!(engineMap.get(file.getName()) instanceof Invocable)) {
+                            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                                getLogger().error("JavaScript引擎版本过低！");
+                            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                                getLogger().error("JavaScript interpreter's version is too low!");
+                            return false;
+                        }
+                        engineMap.get(file.getName()).put("server", getServer());
+                        engineMap.get(file.getName()).put("plugin", Loader.plugin);
+                        engineMap.get(file.getName()).put("manager", Loader.functionManager);
+                        engineMap.get(file.getName()).put("logger", getLogger());
+                        engineMap.get(file.getName()).put("window", Loader.windowManager);
+                        engineMap.get(file.getName()).put("blockitem", Loader.blockItemManager);
+                        engineMap.get(file.getName()).put("algorithm", Loader.algorithmManager);
+                        engineMap.get(file.getName()).put("inventory", Loader.inventoryManager);
+                        engineMap.get(file.getName()).put("world", Loader.levelManager);
+                        engineMap.get(file.getName()).put("entity", Loader.entityManager);
+                        engineMap.get(file.getName()).put("database", Loader.databaseManager);
+                        engineMap.get(file.getName()).put("notemusic", Loader.notemusicManager);
+                        engineMap.get(file.getName()).put("particle", Loader.particleManager);
+                        engineMap.get(file.getName()).eval(reader);
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
                             getLogger().warning("加载BN插件: " + file.getName());
                         else
@@ -415,8 +503,6 @@ public class Loader extends PluginBase implements Listener {
                     }
                 }
             }
-            Loader.plugin.getServer().getScheduler().cancelAllTasks();
-
             return false;
         }
     }

@@ -29,6 +29,7 @@ import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.util.Iterator;
+import java.util.UUID;
 
 public class EventLoader implements Listener {
 
@@ -60,6 +61,7 @@ public class EventLoader implements Listener {
     }
     @EventHandler
     public void onQuit(PlayerQuitEvent event){
+
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
     @EventHandler
@@ -319,13 +321,7 @@ public class EventLoader implements Listener {
         },5);
     }
     public static void onSlotChange(FakeSlotChangeEvent event){
-        try {
-            ((Invocable)Loader.plugin.engine).invokeFunction(event.getClass().getSimpleName(),event);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+        Loader.plugin.call(event.getClass().getSimpleName(),event);
     }
     @EventHandler
     public void onSongEnd(SongEndEvent event){

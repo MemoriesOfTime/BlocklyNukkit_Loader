@@ -30,6 +30,9 @@ public class Custom {
     public void buildInput(String title,String placeholder){
         addNewElement(new ElementInput(title,placeholder));
     }
+    public void buildInput(String title,String placeholder,String defaulttext){
+        addNewElement(new ElementInput(title,placeholder,defaulttext));
+    }
     public void buildToggle(String title){
         addNewElement(new ElementToggle(title));
     }

@@ -35,6 +35,10 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
+    //跨命名空间调用
+    public void callFunciton(String functionname,Object... args){
+        Loader.plugin.call(functionname, args);
+    }
     //http
     public String httpRequest(String method,String url,String data){
         method=method.toUpperCase();

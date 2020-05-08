@@ -12,6 +12,7 @@ import cn.nukkit.plugin.Plugin;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
+import cn.nukkit.utils.ConfigSection;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.Clothes;
@@ -19,6 +20,7 @@ import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +36,51 @@ public class FunctionManager {
 
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
+    }
+    //json与yaml互转
+    public String JSONtoYAML(String json){
+        writeFile("./transferTMP.json",json);
+        Config jsonConfig = new Config(new File("./transferTMP.json"),Config.JSON);
+        ConfigSection section = jsonConfig.getRootSection();
+        Config yamlConfig = new Config(new File("./transferTMP.yml"),Config.YAML);
+        yamlConfig.setAll(section);
+        yamlConfig.save();
+        String out = readFile("./transferTMP.yml");
+        new File("./transferTMP.json").delete();
+        new File("./transferTMP.yml").delete();
+        return out;
+    }
+    public String YAMLtoJSON(String yaml){
+        writeFile("./transferTMP.yml",yaml);
+        Config yamlConfig = new Config(new File("./transferTMP.yml"),Config.YAML);
+        ConfigSection section = yamlConfig.getRootSection();
+        Config jsonConfig = new Config(new File("./transferTMP.json"),Config.JSON);
+        jsonConfig.setAll(section);
+        jsonConfig.save();
+        String out = readFile("./transferTMP.json");
+        new File("./transferTMP.json").delete();
+        new File("./transferTMP.yml").delete();
+        return out;
+    }
+    //文件读写
+    public String readFile(String path){
+        File file = new File(path);
+        if(file.exists()){
+            return Utils.readToString(file);
+        }else {
+            return "FILE NOT FOUND";
+        }
+    }
+    public void writeFile(String path,String text){
+        File file = new File(path);
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.writeWithString(file,text);
     }
     //跨命名空间调用
     public void callFunciton(String functionname,Object... args){
@@ -51,6 +98,7 @@ public class FunctionManager {
         }
     }
     //私有回调
+    @Deprecated
     public void setPrivateCall(String event,String callname){
         if(Loader.privatecalls.containsKey(event)){
             Loader.privatecalls.get(event).add(callname);

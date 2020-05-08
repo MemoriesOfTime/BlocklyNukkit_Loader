@@ -26,6 +26,7 @@ import javax.script.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Loader extends PluginBase implements Listener {
 
@@ -45,7 +46,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String> playergeonamemap = new HashMap<>();
     public static Map<String, String> playergeojsonmap = new HashMap<>();
     public static Map<String, String[]>mcfunctionmap = new HashMap<>();
-    public static Map<Integer, String> functioncallback = new HashMap<>();
+    public static ConcurrentHashMap<Integer, String> functioncallback = new ConcurrentHashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
@@ -111,6 +112,8 @@ public class Loader extends PluginBase implements Listener {
         noteBlockPlayerMain.onEnable();
 
         MetricsLite metricsLite=new MetricsLite(this,6769);
+        ClassLoader cl = plugin.getClass().getClassLoader();
+        Thread.currentThread().setContextClassLoader(cl);
         System.setProperty("nashorn.args", "--language=es6");
         new Timer().schedule(new TimerTask() {
             @Override
@@ -190,19 +193,7 @@ public class Loader extends PluginBase implements Listener {
                             getLogger().error("JavaScript interpreter's version is too low!");
                         return;
                     }
-                    engineMap.get(file.getName()).put("server", getServer());
-                    engineMap.get(file.getName()).put("plugin", this);
-                    engineMap.get(file.getName()).put("manager", Loader.functionManager);
-                    engineMap.get(file.getName()).put("logger", getLogger());
-                    engineMap.get(file.getName()).put("window", Loader.windowManager);
-                    engineMap.get(file.getName()).put("blockitem",Loader.blockItemManager);
-                    engineMap.get(file.getName()).put("algorithm",Loader.algorithmManager);
-                    engineMap.get(file.getName()).put("inventory",Loader.inventoryManager);
-                    engineMap.get(file.getName()).put("world",Loader.levelManager);
-                    engineMap.get(file.getName()).put("entity",Loader.entityManager);
-                    engineMap.get(file.getName()).put("database",Loader.databaseManager);
-                    engineMap.get(file.getName()).put("notemusic",Loader.notemusicManager);
-                    engineMap.get(file.getName()).put("particle",Loader.particleManager);
+                    putBaseObject(file.getName());
                     engineMap.get(file.getName()).eval(reader);
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getLogger().warning("加载BN插件: " + file.getName());
@@ -242,6 +233,47 @@ public class Loader extends PluginBase implements Listener {
     public void onDisable(){
         levelManager.dosaveSkyLandGeneratorSettings();
         entityManager.recycleAllFloatingText();
+    }
+
+    public static void putEngine(String name,String js){
+        engineMap.put(name,new ScriptEngineManager().getEngineByName("nashorn"));
+        if (engineMap.get(name) == null) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                getlogger().error("JavaScript引擎加载出错！");
+            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                getlogger().error("JavaScript interpreter crashed!");
+            return;
+        }
+        if (!(engineMap.get(name) instanceof Invocable)) {
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                getlogger().error("JavaScript引擎版本过低！");
+            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                getlogger().error("JavaScript interpreter's version is too low!");
+            return;
+        }
+        putBaseObject(name);
+        try {
+            engineMap.get(name).eval(js);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+        bnpluginset.add(name);
+    }
+
+    public static void putBaseObject(String name){
+        engineMap.get(name).put("server", plugin.getServer());
+        engineMap.get(name).put("plugin", plugin);
+        engineMap.get(name).put("manager", Loader.functionManager);
+        engineMap.get(name).put("logger", getlogger());
+        engineMap.get(name).put("window", Loader.windowManager);
+        engineMap.get(name).put("blockitem",Loader.blockItemManager);
+        engineMap.get(name).put("algorithm",Loader.algorithmManager);
+        engineMap.get(name).put("inventory",Loader.inventoryManager);
+        engineMap.get(name).put("world",Loader.levelManager);
+        engineMap.get(name).put("entity",Loader.entityManager);
+        engineMap.get(name).put("database",Loader.databaseManager);
+        engineMap.get(name).put("notemusic",Loader.notemusicManager);
+        engineMap.get(name).put("particle",Loader.particleManager);
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
@@ -477,19 +509,7 @@ public class Loader extends PluginBase implements Listener {
                                 getLogger().error("JavaScript interpreter's version is too low!");
                             return false;
                         }
-                        engineMap.get(file.getName()).put("server", getServer());
-                        engineMap.get(file.getName()).put("plugin", Loader.plugin);
-                        engineMap.get(file.getName()).put("manager", Loader.functionManager);
-                        engineMap.get(file.getName()).put("logger", getLogger());
-                        engineMap.get(file.getName()).put("window", Loader.windowManager);
-                        engineMap.get(file.getName()).put("blockitem", Loader.blockItemManager);
-                        engineMap.get(file.getName()).put("algorithm", Loader.algorithmManager);
-                        engineMap.get(file.getName()).put("inventory", Loader.inventoryManager);
-                        engineMap.get(file.getName()).put("world", Loader.levelManager);
-                        engineMap.get(file.getName()).put("entity", Loader.entityManager);
-                        engineMap.get(file.getName()).put("database", Loader.databaseManager);
-                        engineMap.get(file.getName()).put("notemusic", Loader.notemusicManager);
-                        engineMap.get(file.getName()).put("particle", Loader.particleManager);
+                        putBaseObject(file.getName());
                         engineMap.get(file.getName()).eval(reader);
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
                             getLogger().warning("加载BN插件: " + file.getName());

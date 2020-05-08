@@ -131,7 +131,6 @@ public class Utils {
     }
     public static String readToString(File file) {
         String encoding = "UTF-8";
-
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];
         try {
@@ -149,9 +148,21 @@ public class Utils {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 System.err.println("操作系统不支持 " + encoding);
             else
-                System.err.println("Your os does not support " + encoding);
+                System.err.println("Your OS does not support " + encoding);
             e.printStackTrace();
             return null;
+        }
+    }
+    public static void writeWithString(File file,String string) {
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
+            writer.write(string);
+            writer.flush();
+            writer.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e2) {
+            e2.printStackTrace();
         }
     }
     public static boolean check(File file1, File file2) {

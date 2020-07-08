@@ -15,6 +15,7 @@ import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Config;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.generator.OceanGenerator;
 import com.blocklynukkit.loader.other.generator.SkyLand;
 import com.blocklynukkit.loader.other.generator.VoidGenerator;
 
@@ -26,9 +27,11 @@ import java.util.Map;
 
 public class LevelManager {
     public Map<String,Object> skylandoptions = new HashMap<>();
+    public int OceanSeaLevel = 64;
     public LevelManager(){
         Generator.addGenerator(VoidGenerator.class,"void_bn2",Generator.TYPE_INFINITE);
         Generator.addGenerator(SkyLand.class,"skyland_bn3",Generator.TYPE_INFINITE);
+        Generator.addGenerator(OceanGenerator.class,"ocean_bn4",Generator.TYPE_INFINITE);
     }
     public void genLevel(String name, long seed, String generator){
         switch(generator){
@@ -45,10 +48,26 @@ public class LevelManager {
                 l2.setBlock(pos.add(0,-2,0), Block.get(BlockID.BEDROCK));
                 break;
             case "SKYLAND":
+                if(skylandoptions.keySet().size()<2){
+                    setSkyLandGenerator(64,0,true,
+                            20,17,0,128,20,9,0,64,
+                            8,8,0,16,1,7,0,10,
+                            2,9,0,32,1,8,0,16,
+                            10,33,0,128,8,33,0,128,
+                            10,33,0,80,10,33,0,80,
+                            10,33,0,80,true,true,true);
+                }
                 Server.getInstance().generateLevel(name,seed, Generator.getGenerator("skyland_bn3"));
                 Level l = Server.getInstance().getLevelByName(name);
                 Position pos2 = l.getSafeSpawn();
                 l.setBlock(pos2.add(0,-2,0), Block.get(BlockID.BEDROCK));
+                break;
+            case "OCEAN":
+                Server.getInstance().generateLevel(name,seed, Generator.getGenerator("ocean_bn4"));
+                Level l3 = Server.getInstance().getLevelByName(name);
+                Position pos3 = l3.getSafeSpawn();
+                pos3.y=OceanSeaLevel;
+                l3.setBlock(pos3.add(0,1,0), Block.get(BlockID.BEDROCK));
                 break;
             case "NORMAL":
             default:
@@ -126,6 +145,9 @@ public class LevelManager {
         map.put("andesite_option_max",andesitemax);
         skylandoptions=map;
     }
+    public void setOceanGenerator(int seaLevel){
+        this.OceanSeaLevel=seaLevel;
+    }
     public void dosaveSkyLandGeneratorSettings(){
         File folder=new File(Loader.plugin.getDataFolder()+"/GeneratorSettings");
         folder.mkdirs();
@@ -141,6 +163,19 @@ public class LevelManager {
             for(String each:config.getKeys()){
                 skylandoptions.put(each,config.get(each));
             }
+        }
+    }
+    public void dosaveOceanGeneratorSettings(){
+        File folder=new File(Loader.plugin.getDataFolder()+"/GeneratorSettings");
+        folder.mkdirs();
+        Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml");
+        config.set("OceanSeaLevel",OceanSeaLevel);
+        config.save();
+    }
+    public void doreloadOceanGeneratorSettings(){
+        if(new File(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml").exists()){
+            Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml");
+            OceanSeaLevel = config.getInt("OceanSeaLevel");
         }
     }
     public void loadLevel(String string){

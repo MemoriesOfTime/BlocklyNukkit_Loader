@@ -6,6 +6,7 @@ import cn.nukkit.event.player.PlayerFormRespondedEvent;
 import cn.nukkit.form.response.FormResponseCustom;
 import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
+import cn.nukkit.utils.DummyBossBar;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
@@ -110,5 +111,32 @@ public class WindowManager {
         }else {
             return "NULL";
         }
+    }
+    public void setPlayerBossBar(Player player,String text,float len){
+        for(long bar:player.getDummyBossBars().keySet()){
+            player.removeBossBar(bar);
+        }
+        player.createBossBar(new DummyBossBar.Builder(player).text(text).length(len).build());
+    }
+    public void removePlayerBossBar(Player player){
+        for(long bar:player.getDummyBossBars().keySet()){
+            player.removeBossBar(bar);
+        }
+    }
+    public double getLengthOfPlayerBossBar(Player player){
+        for(long bar:player.getDummyBossBars().keySet()){
+            return player.getDummyBossBar(bar).getLength();
+        }
+        return 0.0d;
+    }
+    public String getTextOfPlayerBossBar(Player player){
+        for(long bar:player.getDummyBossBars().keySet()){
+            return player.getDummyBossBar(bar).getText();
+        }
+        return "NULL";
+    }
+    //here 6/26
+    public void setBelowName(Player player,String str){
+        player.setScoreTag(str);
     }
 }

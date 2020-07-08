@@ -1,8 +1,10 @@
 package com.blocklynukkit.loader.script.window;
 
 import cn.nukkit.Player;
+import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowModal;
 import com.blocklynukkit.loader.Loader;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 public class Modal {
     public int id = (int) Math.floor(Math.random()*1000000);
@@ -10,23 +12,38 @@ public class Modal {
     public String context="";
     public String btn1="";
     public String btn2="";
-    public void setTitle(String title){
+    public Modal setTitle(String title){
         this.title=title;
+        return this;
     }
-    public void setContext(String context){
+    public Modal setContext(String context){
         this.context=context;
+        return this;
     }
-    public void setButton1(String text){
+    public Modal setButton1(String text){
         btn1=text;
+        return this;
     }
-    public void setButton2(String text){
+    public Modal setButton2(String text){
         btn2=text;
+        return this;
     }
-    public void showToPlayer(Player p, String callback){
+    public Modal showToPlayer(Player p, String callback){
         synchronized (Loader.functioncallback){
             Loader.functioncallback.put(id,callback);
             FormWindowModal modal=new FormWindowModal(title,context,btn1,btn2);
             p.showFormWindow(modal,id);
         }
+        return this;
+    }
+    public Modal showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
+        synchronized (Loader.scriptObjectMirrorCallback){
+            if(mirror!=null){
+                Loader.scriptObjectMirrorCallback.put(id,mirror);
+            }
+            FormWindowModal modal=new FormWindowModal(title,context,btn1,btn2);
+            p.showFormWindow(modal,id);
+        }
+        return this;
     }
 }

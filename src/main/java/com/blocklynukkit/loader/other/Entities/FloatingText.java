@@ -7,7 +7,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import com.blocklynukkit.loader.Loader;
 
 public class FloatingText extends EntityMob {
-    private int NetWorkId = 36;
+    private int NetWorkId = 61;
     public int CallTick = 20;
     public String CallBack = "FloatingTextUpdate";
 
@@ -62,6 +62,10 @@ public class FloatingText extends EntityMob {
         this.setNameTagVisible(false);
         this.setNameTagAlwaysVisible(false);
         super.close();
+    }
+    @Override
+    public String getName(){
+        return "BNFloatingText";
     }
 
 }

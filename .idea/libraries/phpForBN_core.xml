@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="phpForBN-core">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-core.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-debugger.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-engine.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-libs.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

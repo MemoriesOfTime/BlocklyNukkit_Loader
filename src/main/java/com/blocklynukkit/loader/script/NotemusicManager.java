@@ -1,11 +1,10 @@
 package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
+import cn.nukkit.level.Location;
+import cn.nukkit.level.Position;
 import com.blocklynukkit.loader.Loader;
-import com.xxmicloxx.NoteBlockAPI.NBSDecoder;
-import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
-import com.xxmicloxx.NoteBlockAPI.RadioSongPlayer;
-import com.xxmicloxx.NoteBlockAPI.Song;
+import com.xxmicloxx.NoteBlockAPI.*;
 
 import java.io.File;
 import java.util.List;
@@ -47,5 +46,28 @@ public class NotemusicManager {
     }
     public int getSongLength(Song song){
         return song.getLength();
+    }
+    public HornSongPlayer buildHorn(Song song, Position pos, boolean isloop, boolean isautodestroy){
+        HornSongPlayer hornSongPlayer = new HornSongPlayer(song);
+        hornSongPlayer.setTargetLocation(Location.fromObject(pos,pos.level));
+        hornSongPlayer.setLoop(isloop);
+        hornSongPlayer.setAutoDestroy(isautodestroy);
+        return hornSongPlayer;
+    }
+    public void addPlayerToHorn(HornSongPlayer SongPlayer, Player player){
+        SongPlayer.addPlayer(player);
+        NoteBlockPlayerMain.getPlayerVolume(player);
+    }
+    public void removePlayerToHorn(HornSongPlayer SongPlayer, Player player){
+        SongPlayer.removePlayer(player);
+    }
+    public List getPlayerInHorn(HornSongPlayer radioSongPlayer){
+        return radioSongPlayer.getPlayerList();
+    }
+    public void setHornStatus(HornSongPlayer radioSongPlayer, boolean isplaying){
+        radioSongPlayer.setPlaying(isplaying);
+    }
+    public Song getSongInHorn(HornSongPlayer radioSongPlayer){
+        return radioSongPlayer.getSong();
     }
 }

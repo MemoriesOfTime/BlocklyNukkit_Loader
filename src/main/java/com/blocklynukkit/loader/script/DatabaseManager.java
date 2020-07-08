@@ -50,7 +50,7 @@ public class DatabaseManager {
      * <p>
      * 例子:
      * <pre>
-     *     update("INSERT INTO database.user (username,password) VALUES (?,?)",username,password")
+     *     update("INSERT INTO database.user (username,password) VALUES (?,?)",username,password)
      * </pre>
      * @param stt   SQL语句
      * @param objs  参数

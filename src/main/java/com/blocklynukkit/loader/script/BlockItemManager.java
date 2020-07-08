@@ -19,6 +19,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 
 import java.util.*;
@@ -281,6 +282,16 @@ public class BlockItemManager {
         enchantment.setLevel(level);
         addEnchantment(item,level,enchantment);
     }
+    //获取附魔
+    public List getItemEnchant(Item item){
+        return Arrays.asList(item.getEnchantments());
+    }
+    public int getEnchantID(Enchantment enchantment){
+        return enchantment.getId();
+    }
+    public int getEnchantLevel(Enchantment enchantment){
+        return enchantment.getLevel();
+    }
     //比较物品
     public boolean isSame(Item item1,Item item2,boolean damage,boolean nbt){
         return item1.equals(item2,damage,nbt);
@@ -337,10 +348,10 @@ public class BlockItemManager {
     }
     //获取nbt字符串
     public String getNBTString(Item item){
-        return String.valueOf(item.getCompoundTag());
+        return Utils.bytesToHexString(item.getCompoundTag());
     }
     //给物品注入nbt字符串
     public void putinNBTString(Item item,String str){
-        item.setCompoundTag(str.getBytes());
+        item.setCompoundTag(Utils.hexStringToBytes(str));
     }
 }

@@ -20,16 +20,13 @@ import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.scheduler.Task;
 import com.blocklynukkit.loader.script.event.EntityDamageByPlayerEvent;
+import com.blocklynukkit.loader.script.event.EntityKilledByEntityEvent;
+import com.blocklynukkit.loader.script.event.PlayerDamageByPlayerEvent;
 import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
-
-import javax.script.Invocable;
-import javax.script.ScriptException;
-import java.util.Iterator;
-import java.util.UUID;
 
 public class EventLoader implements Listener {
 
@@ -40,7 +37,36 @@ public class EventLoader implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onInteractEntity(PlayerInteractEntityEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+
+    @EventHandler
     public void onTeleport(PlayerTeleportEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onSwim(PlayerToggleSwimEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onGlide(PlayerToggleGlideEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onSneak(PlayerToggleSneakEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onSprint(PlayerToggleSprintEvent event){
+        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onFlight(PlayerToggleFlightEvent event){
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
     @EventHandler
@@ -61,7 +87,6 @@ public class EventLoader implements Listener {
     }
     @EventHandler
     public void onQuit(PlayerQuitEvent event){
-
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
     @EventHandler
@@ -83,12 +108,13 @@ public class EventLoader implements Listener {
     public void onFormResponse(PlayerFormRespondedEvent event){
         synchronized (Loader.functioncallback){
             if(!event.wasClosed()&&event.getResponse()!=null){
-                Iterator it = Loader.functioncallback.keySet().iterator();
-                while (it.hasNext()){
-                    int a = (int) it.next();
-                    if(event.getFormID()==a){
-                        plugin.callEventHandler(event,Loader.functioncallback.get(a));
-                    }
+                if(Loader.functioncallback.keySet().contains((Integer) event.getFormID())){
+                    int a = event.getFormID();
+                    Loader.callEventHandler(event, Loader.functioncallback.get(a));
+                }
+                if(Loader.scriptObjectMirrorCallback.keySet().contains((Integer) event.getFormID())){
+                    int a = event.getFormID();
+                    Loader.scriptObjectMirrorCallback.get(a).call(Loader.windowManager,event);
                 }
             }
         }
@@ -152,6 +178,19 @@ public class EventLoader implements Listener {
         plugin.callEventHandler(event, event.getClass().getSimpleName());
         if(event.getDamager() instanceof Player && (event.getDamager().getNetworkId()==63 || event.getDamager().getNetworkId()==319)){
             plugin.callEventHandler(new EntityDamageByPlayerEvent(event),"EntityDamageByPlayerEvent","EntityDamageByPlayerEvent");
+            if(event.getEntity() instanceof Player && (event.getEntity().getNetworkId()==63 || event.getEntity().getNetworkId()==319)){
+                plugin.callEventHandler(new PlayerDamageByPlayerEvent(new EntityDamageByPlayerEvent(event)),"PlayerDamageByPlayerEvent","PlayerDamageByPlayerEvent");
+            }
+        }else {
+            if(event.getEntity() instanceof Player && (event.getEntity().getNetworkId()==63 || event.getEntity().getNetworkId()==319)){
+                plugin.callEventHandler(new PlayerDamageByPlayerEvent(new EntityDamageByPlayerEvent(event)),"PlayerDamageByEntityEvent","PlayerDamageByEntityEvent");
+            }
+        }
+        if(event.getEntity().getHealth()-event.getFinalDamage()<0.5){
+            plugin.callEventHandler(new EntityKilledByEntityEvent(event),"EntityKilledByEntityEvent","EntityKilledByEntityEvent");
+            if(event.getDamager() instanceof Player && (event.getDamager().getNetworkId()==63 || event.getDamager().getNetworkId()==319)){
+                plugin.callEventHandler(new EntityKilledByEntityEvent(event),"EntityKilledByPlayerEvent","EntityKilledByPlayerEvent");
+            }
         }
     }
 

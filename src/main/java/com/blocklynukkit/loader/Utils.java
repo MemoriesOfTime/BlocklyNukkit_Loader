@@ -1,6 +1,7 @@
 package com.blocklynukkit.loader;
 
 import cn.nukkit.Server;
+import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.other.MyHttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -8,38 +9,41 @@ import com.blocklynukkit.loader.other.MyCustomHandler;
 import com.blocklynukkit.loader.other.MyFileHandler;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.math.BigInteger;
 import java.net.*;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
 
 public class Utils {
     public static void makeHttpServer(int port){
-        HttpServer httpServer = null;
         try {
-            httpServer = HttpServer.create(new InetSocketAddress(port), 10);
+            InetSocketAddress address = new InetSocketAddress(port);
+            Loader.httpServer = HttpServer.create(address, 10);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try{
-            httpServer.createContext("/", new MyHttpHandler());
-            httpServer.createContext("/file",new MyFileHandler());
-            httpServer.createContext("/api",new MyCustomHandler());
+            Loader.httpServer.createContext("/", new MyHttpHandler());
+            Loader.httpServer.createContext("/file",new MyFileHandler());
+            Loader.httpServer.createContext("/api",new MyCustomHandler());
             //设置服务器的线程池对象
-            httpServer.setExecutor(Executors.newFixedThreadPool(10));
+            Loader.httpServer.setExecutor(Executors.newFixedThreadPool(10));
             //启动服务器
-            httpServer.start();
+            Loader.httpServer.start();
         }catch (Exception e){
             try {
-                httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
-                httpServer.createContext("/", new MyHttpHandler());
-                httpServer.createContext("/file",new MyFileHandler());
-                httpServer.createContext("/api",new MyCustomHandler());
+                Loader.httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
+                Loader.httpServer.createContext("/", new MyHttpHandler());
+                Loader.httpServer.createContext("/file",new MyFileHandler());
+                Loader.httpServer.createContext("/api",new MyCustomHandler());
                 //设置服务器的线程池对象
-                httpServer.setExecutor(Executors.newFixedThreadPool(10));
+                Loader.httpServer.setExecutor(Executors.newFixedThreadPool(10));
                 //启动服务器
-                httpServer.start();
+                Loader.httpServer.start();
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     Loader.getlogger().info(TextFormat.RED+"您的"+port+"端口被占用！尝试在54321端口启动httpapi！");
                 }else {
@@ -75,27 +79,65 @@ public class Utils {
     }
     public static String randomDeveloper(){
         String[] list = new String[]{"冰凉","电池酱","企鹅","红楼君","夏亚","亦染","WetABQ","HBJ","你的旺财","若水","神奇的YYT"
-        ,"pqguanfang","泥土怪","P(屁)爷"};
+        ,"pqguanfang","泥土怪","“伟大的”P(屁)爷"};
         return list[(int)Math.floor(list.length*Math.random())];
     }
     public static void checkupdate(){
         try {
-            File jar = new File(Loader.plugin.getDataFolder()+"/BlocklyNukkit.jar");
-            Utils.downLoadFromUrl("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/BlocklyNukkit.jar","BlocklyNukkit.jar",Loader.plugin.getDataFolder().getPath());
-            File pl = new File(Server.getInstance().getPluginPath()+"/BlocklyNukkit.jar");
-            if(!check(jar,pl)){
+            String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
+            String web = sendGet("https://tools.blocklynukkit.com/version.txt","");
+            web = web.replaceAll("[^0123456789.]","");
+            int webint = Integer.parseInt(web.replaceAll("\\.",""));
+            int verint = Integer.parseInt(version.replaceAll("\\.",""));
+            if(!version.equals(web)){
+                if(webint<verint){
+                    if (Server.getInstance().getLanguage().getName().contains("中文")){
+                        Loader.getlogger().warning(TextFormat.YELLOW+"您正在使用BlocklyNukkit先行测试版！");
+                    }else {
+                        Loader.getlogger().warning(TextFormat.YELLOW+"You are using BlocklyNukkit beta!");
+                    }
+                    return;
+                }
+                File folder = new File(Server.getInstance().getPluginPath());
+                File bn = null;
+                String name = "";
+                for(File file:folder.listFiles()){
+                    name = file.getName();
+                    if(name.contains("BlocklyNukkit")||name.contains("blocklynukkit") ||name.contains("Blocklynukkit")||
+                            name.contains("blocklyNukkit")|| name.contains("BN")||name.contains("]bn")){
+                        bn = file;
+                        break;
+                    }
+                }
+                bn.delete();
+                Utils.downLoadFromUrl("https://tools.blocklynukkit.com/BlocklyNukkit.jar",name+(name.endsWith("jar")?"":".jar"),Server.getInstance().getPluginPath());
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     Loader.getlogger().warning(TextFormat.YELLOW+"您的BlocklyNukkit解释器不是最新版！");
-                    Loader.getlogger().warning(TextFormat.WHITE+"最新版BlocklyNukkit已经下载到了 "+jar.getPath());
-                    Loader.getlogger().warning(TextFormat.WHITE+"请您手动更换掉plugin文件夹的旧版本！");
+                    Loader.getlogger().warning(TextFormat.WHITE+"最新版BlocklyNukkit已经为您自动更新到版本"+web+"！文件路径为： "+bn.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE+"新版本请重载插件或者重启服务器以使用。");
                 }else {
                     Loader.getlogger().warning(TextFormat.YELLOW+"Your BlocklyNukkit.jar is not the latest version!");
-                    Loader.getlogger().warning(TextFormat.WHITE+"The latest version of BlocklyNukkit has been downloaded to: "+jar.getPath());
-                    Loader.getlogger().warning(TextFormat.WHITE+"Please replace the old version in plugins folder!");
+                    Loader.getlogger().warning(TextFormat.WHITE+"BlocklyNukkit has been updated to the latest version: "+web+". The file path is: "+bn.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE+"Please reload plugins or restart your nukkit server to use the latest version!");
+                }
+                if(Loader.checkupdatetime>=1){
+                    if(LocalDateTime.now().getHour()>=23&&LocalDateTime.now().getHour()<=4){
+                        Server.getInstance().dispatchCommand(new ConsoleCommandSender(),"reload");
+                    }
                 }
             }
         }catch (IOException e){
-            e.printStackTrace();
+            String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
+            String web = sendGet("https://tools.blocklynukkit.com/version.txt","");
+            web = web.replaceAll("[^0123456789.]","");
+            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                Loader.getlogger().warning(TextFormat.YELLOW+"检测到新版本！当前版本"+version+" ,最新版本"+web);
+                Loader.getlogger().warning(TextFormat.RED+"自动更新失败，请您手动前往 https://tools.blocklynukkit.com/BlocklyNukkit.jar 更新！");
+            }else {
+                Loader.getlogger().warning(TextFormat.RED+"Failed to update!Please download the latest version on https://tools.blocklynukkit.com/BlocklyNukkit.jar .");
+            }
+        }finally {
+            Loader.checkupdatetime++;
         }
 
     }
@@ -130,7 +172,7 @@ public class Utils {
         return System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1;
     }
     public static String readToString(File file) {
-        String encoding = "UTF-8";
+        String encoding = getFilecharset(file);
         Long filelength = file.length();
         byte[] filecontent = new byte[filelength.intValue()];
         try {
@@ -278,7 +320,7 @@ public class Utils {
         //文件保存位置
         File saveDir = new File(savePath);
         if(!saveDir.exists()){
-            saveDir.mkdir();
+            saveDir.mkdirs();
         }
         File file = new File(saveDir+File.separator+fileName);
         FileOutputStream fos = new FileOutputStream(file);
@@ -338,6 +380,45 @@ public class Utils {
     }
 
     public static String sendGet(String url, String param) {
+        String result = "NULL";
+        BufferedReader in = null;
+        try {
+            String urlNameString = url + "?" + param;
+            URL realUrl = new URL(urlNameString);
+            // 打开和URL之间的连接
+            URLConnection connection = realUrl.openConnection();
+            // 设置通用的请求属性
+            connection.setRequestProperty("accept", "*/*");
+            connection.setRequestProperty("connection", "Keep-Alive");
+            connection.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            // 建立实际的连接
+            connection.connect();
+            // 获取所有响应头字段
+            // 定义 BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(new InputStreamReader(
+                    connection.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 使用finally块来关闭输入流
+        finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public static String sendGetBlackBE(String url, String param) {
         String result = "NULL";
         BufferedReader in = null;
         try {
@@ -430,6 +511,130 @@ public class Utils {
             in.close();
         }
         return result;
+    }
+
+    private static String getFilecharset(File sourceFile) {
+        String charset = "GBK";
+        byte[] first3Bytes = new byte[3];
+        try {
+            boolean checked = false;
+            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(sourceFile));
+            bis.mark(0);
+            int read = bis.read(first3Bytes, 0, 3);
+            if (read == -1) {
+                return charset; //文件编码为 ANSI
+            } else if (first3Bytes[0] == (byte) 0xFF
+                    && first3Bytes[1] == (byte) 0xFE) {
+                charset = "UTF-16LE"; //文件编码为 Unicode
+                checked = true;
+            } else if (first3Bytes[0] == (byte) 0xFE
+                    && first3Bytes[1] == (byte) 0xFF) {
+                charset = "UTF-16BE"; //文件编码为 Unicode big endian
+                checked = true;
+            } else if (first3Bytes[0] == (byte) 0xEF
+                    && first3Bytes[1] == (byte) 0xBB
+                    && first3Bytes[2] == (byte) 0xBF) {
+                charset = "UTF-8"; //文件编码为 UTF-8
+                checked = true;
+            }
+            bis.reset();
+            if (!checked) {
+                int loc = 0;
+                while ((read = bis.read()) != -1) {
+                    loc++;
+                    if (read >= 0xF0)
+                        break;
+                    if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
+                        break;
+                    if (0xC0 <= read && read <= 0xDF) {
+                        read = bis.read();
+                        if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
+                            // (0x80
+                            // - 0xBF),也可能在GB编码内
+                            continue;
+                        else
+                            break;
+                    } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
+                        read = bis.read();
+                        if (0x80 <= read && read <= 0xBF) {
+                            read = bis.read();
+                            if (0x80 <= read && read <= 0xBF) {
+                                charset = "UTF-8";
+                                break;
+                            } else
+                                break;
+                        } else
+                            break;
+                    }
+                }
+            }
+            bis.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return charset;
+    }
+    public static byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
+    }
+    public static String bytesToHexString(byte[] src){
+        StringBuilder stringBuilder = new StringBuilder("");
+        if (src == null || src.length <= 0) {
+            return null;
+        }
+        for (byte aSrc : src) {
+            int v = aSrc & 0xFF;
+            String hv = Integer.toHexString(v);
+            if (hv.length() < 2) {
+                stringBuilder.append(0);
+            }
+            stringBuilder.append(hv);
+        }
+        return stringBuilder.toString();
+    }
+
+    public static String StringEncryptor(String str,String type) {
+        try {
+            // 生成一个MD5加密计算摘要
+            MessageDigest md = MessageDigest.getInstance(type);
+            // 计算md5函数
+            md.update(str.getBytes());
+            return new BigInteger(1, md.digest()).toString(16);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Object getPrivateField(Object instance, String filedName) throws NoSuchFieldException, IllegalAccessException {
+        Field field = instance.getClass().getDeclaredField(filedName);
+        field.setAccessible(true);
+        return field.get(instance);
+    }
+
+    public static double limit(double a,double b){
+        b = Math.abs(b);
+        if(a>b){
+            return b;
+        }else if(a<(-b)){
+            return -b;
+        }else {
+            return a;
+        }
     }
 }
 

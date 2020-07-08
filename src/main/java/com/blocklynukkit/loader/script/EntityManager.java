@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.script;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
@@ -8,6 +9,8 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
+import com.blocklynukkit.loader.other.Clothes;
+import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class EntityManager {
     }
     //设置生物名称高亮
     public void setEntityNameTagAlwaysVisable(Entity entity,boolean vis){
+        entity.setNameTagVisible(vis);
         entity.setNameTagAlwaysVisible(vis);
     }
     //设置生物血量
@@ -97,7 +101,7 @@ public class EntityManager {
         Level level = pos.level;
         FloatingText tmp = new FloatingText(level.getChunk(((int)x)>>4,((int)z)>>4),Entity.getDefaultNBT(new Vector3(x,y,z)),calltick,callback);
         tmp.setNameTagVisible(false);
-        tmp.setNameTag(text);
+        tmp.setNameTag(text.replaceAll(";;","ahsfioabvb").replaceAll(";","\n").replaceAll("ahsfioabvb",";"));
         tmp.setNameTagAlwaysVisible(false);
         tmp.setMaxHealth(29999);
         tmp.setHealth(29999);
@@ -108,7 +112,7 @@ public class EntityManager {
     }
     //启动浮空字实体
     public void startDisplayFloatingText(Entity entity){
-        if(entity.getNetworkId()!=36){return;}
+        if(entity.getNetworkId()!=61){return;}
         entity.setNameTagVisible(true);
         entity.setNameTagAlwaysVisible(true);
         entity.getLevel().addEntity(entity);
@@ -118,7 +122,7 @@ public class EntityManager {
     public List<FloatingText> getLevelFloatingText(Level level){
         List<FloatingText> list=new ArrayList<>();
         for(Entity e:level.getEntities()){
-            if(e.getNetworkId()==36&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
+            if(e.getNetworkId()==61&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
                 list.add((FloatingText)e);
             }
         }
@@ -129,6 +133,17 @@ public class EntityManager {
         for(Level l:Server.getInstance().getLevels().values()){
             for(Entity entity:getLevelFloatingText(l)){
                 entity.close();
+
+            }
+        }
+    }
+    //回收所有BNNPC(不对外暴露)
+    public void recycleAllBNNPC(){
+        for (Level l:Server.getInstance().getLevels().values()){
+            for(Entity entity:l.getEntities()){
+                if(entity.getName().equals("BNNPC")){
+                    entity.close();
+                }
             }
         }
     }
@@ -149,5 +164,34 @@ public class EntityManager {
     //同上剩余时间(s)
     public int getEffectTime(Effect effect){
         return effect.getDuration();
+    }
+    //获取生物networkid
+    public int getNetworkID(Entity entity){
+        return entity.getNetworkId();
+    }
+    //获取生物标识名
+    public String getIDName(Entity entity){
+        if((entity.getNetworkId()==63||entity.getNetworkId()==-1)&&entity instanceof Player){
+            return "Player";
+        }else {
+            return entity.getName();
+        }
+    }
+    //生成生物
+    public void spawnEntity(String name,Position pos){
+        double x = pos.x;
+        double y = pos.y;
+        double z = pos.z;
+        Level level = pos.level;
+        Entity entity = Entity.createEntity(name,level.getChunk(((int)x)>>4,((int)z)>>4),Entity.getDefaultNBT(new Vector3(x,y,z)));
+        level.addEntity(entity);
+        entity.spawnToAll();
+    }
+    //构建bnNPC
+    public BNNPC buildNPC(Position pos,String name,String skinID){
+        return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID));
+    }
+    public BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction){
+        return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction);
     }
 }

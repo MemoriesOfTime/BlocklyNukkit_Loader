@@ -1,6 +1,6 @@
 ﻿name: BlocklyNukkit
 main: com.blocklynukkit.loader.Loader
-version: "1.2.6"
+version: "1.2.8.0"
 author: BlocklyNukkit开发组-超神的冰凉发起(BlocklyNukkit_Developers)
 authors:
   - 超神的冰凉
@@ -12,5 +12,6 @@ softdepend:
   - PlaceholderAPI
   - EconomyAPI
   - ScoreboardPlugin
+  - FakeInventories
 
 #声明：blocklynukkit使用的红石音乐引擎转制自bukkit版本

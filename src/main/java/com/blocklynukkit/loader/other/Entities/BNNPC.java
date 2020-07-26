@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.other.Entities;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
@@ -20,7 +21,6 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.Clothes;
 import com.mobplugin.route.WalkerRouteFinder;
-import javafx.geometry.Pos;
 
 
 import java.nio.charset.StandardCharsets;
@@ -35,6 +35,7 @@ public class BNNPC extends EntityHuman {
     public boolean enableKnockBack = false;public double knockBase = 1.2d;
 
     public String callbackfunction = "BNNPCUpdate";
+    public String attackfunction = "BNNPCAttack";
     public int calltimetick = 10;
 
     public boolean isjumping = false;public int jumpingtick = 0;public double jumphigh = 1;
@@ -58,6 +59,10 @@ public class BNNPC extends EntityHuman {
         this(chunk, nbt, name, clothes);
         calltimetick = calltick;
         callbackfunction=callback;
+    }
+    public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes,int calltick, String callback, String attackcall){
+        this(chunk, nbt, name, clothes,calltick, callback);
+        attackfunction = attackcall;
     }
     @Override
     public String getName(){
@@ -126,17 +131,34 @@ public class BNNPC extends EntityHuman {
         }
         //处理路径
         if(isonRoute && routeFinder!=null && routeFinder.hasNext()){
+            if(Position.fromObject(this,this.level).add(0,-0.5,0).getLevelBlock().getId()== BlockID.WATER){
+                this.setSwim(true);
+            }else {
+                this.setSwim(false);
+            }
             if(nowtarget==null){
                 nowtarget = routeFinder.next();
                 double dis = nowtarget.distance(this);
                 this.actions=(int)(dis/(speed*0.05));
+                if(nowtarget.y-this.y>0.1){
+                    this.actioinVec.x = (nowtarget.x-this.x)/(actions);
+                    this.actioinVec.z = (nowtarget.z-this.z)/actions;
+                    this.actioinVec.y = (nowtarget.y-this.y)/(actions);
+                    actions+=8;
+                }
                 this.actioinVec.x = (nowtarget.x-this.x)/actions;
                 this.actioinVec.z = (nowtarget.z-this.z)/actions;
                 this.actioinVec.y = (nowtarget.y-this.y)/actions;
             }else {
                 if(actions>0){
-                    this.dvec.x+=actioinVec.x;
-                    this.dvec.z+=actioinVec.z;
+                    if(actioinVec.y>0.0001 && actions> 8){
+                        this.dvec.x+=actioinVec.x;
+                        this.dvec.z+=actioinVec.z;
+                    }else if(actioinVec.y<0.0001){
+                        this.dvec.x+=actioinVec.x;
+                        this.dvec.z+=actioinVec.z;
+                    }
+
                     if(actioinVec.y>0.0001){
                         this.isjumping=true;
                     }else {
@@ -176,6 +198,7 @@ public class BNNPC extends EntityHuman {
     @Override
     public boolean attack(EntityDamageEvent source) {
         this.updateMovement();
+        Loader.plugin.call(attackfunction,this,source);
         if(enableHurt){
             this.displayHurt();
         }
@@ -242,11 +265,29 @@ public class BNNPC extends EntityHuman {
     public void setRouteMax(int m){
         this.routeMax = m;
     }
+    public void setSwim(boolean swim){
+        this.setSwimming(swim);
+    }
+    public void setSwim(){
+        this.setSwim(!this.isSwimming());
+    }
+    public void setTickCallback(String callback){
+        callbackfunction = callback;
+    }
+    public void setAttackCallback(String callback){
+        attackfunction = callback;
+    }
     public void displayHurt(){
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = this.id;
         pk.event = EntityEventPacket.HURT_ANIMATION;
-        Server.broadcastPacket(Server.getInstance().getOnlinePlayers().values(),pk);
+        this.getLevel().getPlayers().values().forEach((player -> player.dataPacket(pk)));
+    }
+    public void displaySwing(){
+        EntityEventPacket pk = new EntityEventPacket();
+        pk.eid = this.id;
+        pk.event = EntityEventPacket.ARM_SWING;
+        this.getLevel().getPlayers().values().forEach((player -> player.dataPacket(pk)));
     }
     public void jump(){
         if(isonRoute)return;
@@ -316,6 +357,7 @@ public class BNNPC extends EntityHuman {
             d = 1;
         }
         entity.attack(new EntityDamageByEntityEvent(this,entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK,(float) d,0.5f));
+        this.displaySwing();
     }
     public void start(){
         this.spawnToAll();

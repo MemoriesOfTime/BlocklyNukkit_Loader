@@ -22,10 +22,20 @@ public class BNLibrary {
                 new String[]{"jython","Python","Jython","python2","Python2","Python 2","python 2","Python 2.7","python 2.7","Python2.7","python2.7","py","PY","py2","PY2","py2.7","PY2.7",
                         "BNpython","pythonForBN","pythonForBN.jar","BNpython2","BNpython2.7","python.jar","Python.jar","Python2.jar","python2.jar"},
                 "http://tools.blocklynukkit.com/pythonForBN.jar"));
-        Libraries.add(new LibEntry("database","databaseForBN.jar",
+        Libraries.add(new LibEntry("database",new String[]{"databaseForBN.jar","databaseUtils.jar"},
                 new String[]{"database","db","DB","dblib","dblib.jar","DBLib.jar","DBLIB.jar","DbLib.jar","dbLib.jar","dbLib","DBLIB","DBlib","DbLib","BNdatabase","DataBase","SQL","sql",
                 "mysql","MYSQL","mySQL","MYSQL","MySQL","Mysql","MySql","SQLite","sqlite","SQLITE","databaseForBN","databaseForBN.jar"},
-                "http://tools.blocklynukkit.com/databaseForBN.jar"));
+                new String[]{"http://tools.blocklynukkit.com/databaseForBN.jar","http://tools.blocklynukkit.com/databaseUtils.jar"}));
+        Libraries.add(new LibEntry("php",new String[]{
+                "phpForBN-core.jar","phpForBN-debugger.jar","phpForBN-engine.jar","phpForBN-libs.jar"
+        },new String[]{
+                "PHP","the_best_language","Php","PHp","pHp","php5","PHP5","PHP7","php7","PHP7.2","php7.2","phpForBN"
+        },new String[]{
+                "http://tools.blocklynukkit.com/libs/phpForBN-core.jar",
+                "http://tools.blocklynukkit.com/libs/phpForBN-debugger.jar",
+                "http://tools.blocklynukkit.com/libs/phpForBN-engine.jar",
+                "http://tools.blocklynukkit.com/libs/phpForBN-libs.jar"
+        }));
         loadLibs();
     }
     public void loadLibs(){
@@ -46,10 +56,10 @@ public class BNLibrary {
                     }
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Server.getInstance().getLogger().info("正在下载"+entry.MainName+" ("+entry.FileName+")...");
+                        Server.getInstance().getLogger().info("正在下载"+entry.MainName+" ("+entry.FileName[0]+"等)...");
                         Server.getInstance().getLogger().info("这可能花费几分钟时间...");
                     }else {
-                        Server.getInstance().getLogger().info("Downloading "+entry.MainName+" ("+entry.FileName+") ...");
+                        Server.getInstance().getLogger().info("Downloading "+entry.MainName+" ("+entry.FileName[0]+" and more) ...");
                         Server.getInstance().getLogger().info("It will cost several minutes...");
                     }
                     boolean f = entry.download();if(f)return;
@@ -86,40 +96,47 @@ public class BNLibrary {
 }
 class LibEntry{
     public String MainName;
-    public String FileName;
+    public String[] FileName;
     public String[] OtherNames;
     public String[] DownloadUrl;
     public LibEntry(String mainName,String fileName,String[] otherNames,String downloadUrl){
         this.MainName = mainName;
         this.DownloadUrl = new String[]{downloadUrl};
-        this.FileName=fileName;
+        this.FileName=new String[]{fileName};
         this.OtherNames = otherNames;
     }
-    public LibEntry(String mainName,String fileName,String[] otherNames,String[] downloadUrls){
+    public LibEntry(String mainName,String[] fileNames,String[] otherNames,String[] downloadUrls){
         this.MainName = mainName;
         this.DownloadUrl = downloadUrls;
-        this.FileName=fileName;
+        this.FileName=fileNames;
         this.OtherNames = otherNames;
     }
     public boolean exists(){
-        return new File(BNLibrary.LibFolder+"/"+FileName).exists();
+        boolean ex = new File(BNLibrary.LibFolder+"/"+FileName[0]).exists();
+        for(int i=1;i<FileName.length;i++){
+            ex = ex&&new File(BNLibrary.LibFolder+"/"+FileName[i]).exists();
+        }
+        return ex;
     }
     public boolean download(){
-        for(String each:DownloadUrl){
+        for(int i=0;i<DownloadUrl.length;i++){
             try {
-                Utils.downLoadFromUrl(each,FileName,BNLibrary.LibFolder);
-                return true;
+                Utils.downLoadFromUrl(DownloadUrl[i],FileName[i],BNLibrary.LibFolder);
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Server.getInstance().getLogger().info(DownloadUrl[i]+"下载完成");
+                }else {
+                    Server.getInstance().getLogger().info(DownloadUrl[i]+" successfully downloaded!");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().warning(TextFormat.RED+"从"+each+" 安装依赖库"+MainName+" ("+FileName+") 到 "+BNLibrary.LibFolder+"/"+FileName+" 失败");
+                    Loader.getlogger().warning(TextFormat.RED+"从"+DownloadUrl[i]+" 安装依赖库"+MainName+" ("+FileName[i]+") 到 "+BNLibrary.LibFolder+"/"+FileName[i]+" 失败");
                 }else {
-                    Loader.getlogger().warning(TextFormat.RED+"Failed to install library "+MainName+" ("+FileName+") to path "+BNLibrary.LibFolder+"/"+FileName+" from "+each);
+                    Loader.getlogger().warning(TextFormat.RED+"Failed to install library "+MainName+" ("+FileName[i]+") to path "+BNLibrary.LibFolder+"/"+FileName[i]+" from "+DownloadUrl[i]);
                 }
-                return false;
+                return true;
             }
-        }
-        return false;
+        }return false;
     }
     public boolean isthis(String s){
         s=s.trim();
@@ -136,12 +153,14 @@ class LibEntry{
     }
     public void load(){
         try{
-            URL urls[] = new URL[ ]{ new File(BNLibrary.LibFolder+"/"+FileName).toURL() };
-            URLClassLoader urlLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            Class sysclass = URLClassLoader.class;
-            Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
-            method.setAccessible(true);
-            method.invoke(urlLoader, urls);
+            for(int i=0;i<FileName.length;i++){
+                URL urls[] = new URL[]{new File(BNLibrary.LibFolder+"/"+FileName[i]).toURL()};
+                URLClassLoader urlLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+                Class sysclass = URLClassLoader.class;
+                Method method = sysclass.getDeclaredMethod("addURL", new Class[]{URL.class});
+                method.setAccessible(true);
+                method.invoke(urlLoader, urls);
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

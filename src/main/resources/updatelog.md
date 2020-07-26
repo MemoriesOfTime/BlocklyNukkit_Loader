@@ -1,3 +1,55 @@
+## 1.2.8.1
+
+Entity
+
+- BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction,String attackfunction)
+- void showFloatingItem(Position pos,Item item)
+- void removeFloatingItem(Position pos,Item item)
+
+windowbuilder
+
+- Custom buildSlider(String title,double min,double max)
+- Custom buildSlider(String title,double min,double max,int step)
+- Custom buildSlider(String title,double min,double max,int step,double defaultvalue)
+- Custom buildStepSlider(String title,String options)
+- Custom buildStepSlider(String title,String options,int index)
+
+window
+
+- String getEventCustomVar(PlayerFormRespondedEvent event,int id,String mode)
+- mode可以为input toggle dropdown slider stepslider
+
+BNNPC
+
+- void displaySwing()
+- void setSwim(boolean swim)
+- void setSwim()
+- void setTickCallback(String callback)
+- void setAttackCallback(String callback)
+
+manager
+
+- void bStats(String pluginName,String pluginVer,String authorName,int pluginid)
+- void callFunction(String functionname,Object... args) --修复了错误的拼写
+
+world
+
+- void loadScreenTP(Player player,Position pos)
+- void loadScreenTP(Player player,Position pos,int loadScreenTick)
+- void clearChunk(Position pos)
+
+EventLoader
+
+- PlayerHeldEvent
+- InventoryClickEvent
+
+Bug Fixed
+
+- manager.kickPlayer不再会显示"kicked by admin"前缀了
+- bnnpc打人会正确地摇动手臂了
+- callFunction拼写是正确的了
+- database现在真的可用了，所有库都会被正确安装
+
 ## 1.2.8.0_LTS
 类库管理器
 

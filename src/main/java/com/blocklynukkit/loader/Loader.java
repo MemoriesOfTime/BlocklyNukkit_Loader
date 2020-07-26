@@ -9,6 +9,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
+import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
@@ -18,10 +19,13 @@ import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
+import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.BNLibrary;
+import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
+import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
@@ -62,6 +66,7 @@ public class Loader extends PluginBase implements Listener {
     public static BNCrafting bnCrafting = new BNCrafting();
     public static HttpServer httpServer = null;
     public static BNLibrary bnLibrary = null;
+    public static FloatingItemManager floatingItemManager = new FloatingItemManager();
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
     public static FunctionManager functionManager;
     public static WindowManager windowManager;
@@ -124,13 +129,11 @@ public class Loader extends PluginBase implements Listener {
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
         databaseManager=null;cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();
         noteBlockPlayerMain.onEnable();
-
+        //检测nk版本
         if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().warning("请注意：如果出现NoClassDefFoundError，说明您应该换新的NukkitX / PowerNukkit 版本了 ");
         else
             getLogger().warning("Please note: if NoClassDefFoundError appears, you should change to a new version of NukkitX or PowerNukkit ");
-        //加载统计器类
-        MetricsLite metricsLite=new MetricsLite(this,6769);
         //修改路径类加载器，使得脚本可以调用其他插件
         ClassLoader cl = plugin.getClass().getClassLoader();
         Thread.currentThread().setContextClassLoader(cl);
@@ -143,11 +146,15 @@ public class Loader extends PluginBase implements Listener {
                 Utils.checkupdate();
             }
         },0,3600*4*1000);
+        //加载统计器类
+        MetricsLite metricsLite=new MetricsLite(this,6769);
         //世界生成器初始化
         levelManager.doreloadSkyLandGeneratorSettings();
         levelManager.doreloadOceanGeneratorSettings();
         //bn高级合成台模块监听
         this.getServer().getPluginManager().registerEvents(bnCrafting,this);
+        //bn浮空物品模块监听
+        this.getServer().getPluginManager().registerEvents(floatingItemManager,this);
         //获取云端同步列表并下载
         Config config = new Config(this.getDataFolder()+"/update.yml",Config.YAML);
         if(!config.exists("mods")){
@@ -169,41 +176,12 @@ public class Loader extends PluginBase implements Listener {
         if(bnLibrary.hasLib("database")){
             databaseManager=new DatabaseManager();
         }
-        //加载js
+
+        //加载javascript
+        new JavaScriptLoader(plugin).loadplugins();
+
+        //如果是python文件但是没有安装依赖库发出警告
         for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
-            if(file.isDirectory()) continue;
-            if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
-                try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
-                    engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("nashorn"));
-                    if (engineMap.get(file.getName()) == null) {
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().error("JavaScript引擎加载出错！");
-                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().error("JavaScript interpreter crashed!");
-                        return;
-                    }
-                    if (!(engineMap.get(file.getName()) instanceof Invocable)) {
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().error("JavaScript引擎版本过低！");
-                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().error("JavaScript interpreter's version is too low!");
-                        return;
-                    }
-                    putBaseObject(file.getName());
-                    engineMap.get(file.getName()).eval(reader);
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                    getLogger().warning("加载BN插件: " + file.getName());
-                    else
-                    getLogger().warning("loading BN plugin: " + file.getName());
-                    bnpluginset.add(file.getName());
-                } catch (final Exception e) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                    getLogger().error("无法加载： " + file.getName(), e);
-                    else
-                    getLogger().error("cannot load: " + file.getName(), e);
-                }
-            }
-            //如果是python文件但是没有安装依赖库发出警告，否则留给下面去加载
             if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
                 if(!bnLibrary.hasLib("python")){
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -213,12 +191,14 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
         }
+
         //加载python
         //需要jython驱动
         //所以检查jython依赖库是否存在
         if(bnLibrary.hasLib("python")){
             new PythonLoader(this).loadplugins();
         }
+
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
         new EventLoader(this);
@@ -271,7 +251,7 @@ public class Loader extends PluginBase implements Listener {
     public static void putEngine(String name,String js){
         if(js.contains("//pragma JavaScript")||js.contains("//pragma javascript")||js.contains("//pragma js")||js.contains("//pragma JS")
         ||js.contains("// pragma JavaScript")||js.contains("// pragma javascript")||js.contains("// pragma js")||js.contains("// pragma JS")){
-            putJavaScriptEngine(name, js);
+            new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }else if(js.contains("#pragma Python")||js.contains("#pragma python")||js.contains("#pragma PY")||js.contains("#pragma py")||
                 js.contains("# pragma Python")||js.contains("# pragma python")||js.contains("# pragma PY")||js.contains("# pragma py")||
                 js.contains("'''pragma Python")||js.contains("'''pragma python")||js.contains("'''pragma PY")||js.contains("'''pragma py")||
@@ -286,34 +266,10 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
         }else {
-            putJavaScriptEngine(name, js);
+            new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }
     }
 
-    public static void putJavaScriptEngine(String name,String js){
-        engineMap.put(name,new ScriptEngineManager().getEngineByName("nashorn"));
-        if (engineMap.get(name) == null) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("JavaScript引擎加载出错！");
-            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("JavaScript interpreter crashed!");
-            return;
-        }
-        if (!(engineMap.get(name) instanceof Invocable)) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("JavaScript引擎版本过低！");
-            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("JavaScript interpreter's version is too low!");
-            return;
-        }
-        putBaseObject(name);
-        try {
-            engineMap.get(name).eval(js);
-        } catch (ScriptException e) {
-            e.printStackTrace();
-        }
-        bnpluginset.add(name);
-    }
 
     public static void putBaseObject(String name){
         engineMap.get(name).put("server", plugin.getServer());
@@ -676,6 +632,7 @@ public class Loader extends PluginBase implements Listener {
                     sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"Start to install "+args[0]+", please see details in nukkit console");
                 }
                 Loader.bnLibrary.install(args[0]);
+
             }else {
                 Loader.bnLibrary.install(args[0]);
             }
@@ -704,9 +661,10 @@ public class Loader extends PluginBase implements Listener {
 //                    10,33,0,128,8,33,0,128,
 //                    10,33,0,80,10,33,0,80,
 //                    10,33,0,80,true,true,true);
-            levelManager.genLevel(args[0],999,"OCEAN");
+            //levelManager.genLevel(args[0],999,"FLAT");
             if(sender.isPlayer()){
-                ((Player)sender).teleport(Server.getInstance().getLevelByName(args[0]).getSafeSpawn());
+                Server.getInstance().loadLevel(args[0]);
+                levelManager.loadScreenTP(((Player)sender),Server.getInstance().getLevelByName(args[0]).getSafeSpawn(),60);
             }
             return false;
         }

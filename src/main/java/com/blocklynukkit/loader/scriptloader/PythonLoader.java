@@ -21,13 +21,17 @@ public class PythonLoader {
         this.plugin=plugin;
     }
     public void loadplugins(){
-        File jython = new File(plugin.getDataFolder()+"/pythonForBN.jar");
+        File jython = new File(plugin.getDataFolder()+"/lib/pythonForBN.jar");
         if(jython.exists()){
             try{
                 for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
                     if(file.isDirectory()) continue;
                     if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
                         try (final InputStreamReader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
+                            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                                plugin.getLogger().warning("加载BN插件: " + file.getName());
+                            else
+                                plugin.getLogger().warning("loading BN plugin: " + file.getName());
                             plugin.engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("python"));
                             if (plugin.engineMap.get(file.getName()) == null) {
                                 if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -49,10 +53,7 @@ public class PythonLoader {
                             ip.setOut(System.out);
                             ip.setErr(System.out);
                             ip.execfile(new FileInputStream(file));
-                            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                plugin.getLogger().warning("加载BN插件: " + file.getName());
-                            else
-                                plugin.getLogger().warning("loading BN plugin: " + file.getName());
+
                             plugin.bnpluginset.add(file.getName());
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文"))

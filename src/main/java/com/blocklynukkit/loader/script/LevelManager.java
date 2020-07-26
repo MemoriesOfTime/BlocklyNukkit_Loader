@@ -1,18 +1,24 @@
 package com.blocklynukkit.loader.script;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
+import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.biome.Biome;
+import cn.nukkit.level.format.anvil.Chunk;
 import cn.nukkit.level.generator.Flat;
 import cn.nukkit.level.generator.Generator;
 import cn.nukkit.level.generator.Nether;
 import cn.nukkit.level.generator.Normal;
 import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.ChangeDimensionPacket;
+import cn.nukkit.network.protocol.PlayStatusPacket;
+import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.OceanGenerator;
@@ -184,5 +190,68 @@ public class LevelManager {
     //here 4/23
     public List<Level> getServerLevels(){
         return new ArrayList<>(Server.getInstance().getLevels().values());
+    }
+
+    public void loadScreenTP(Player player,Position pos){
+        this.loadScreenTP(player, pos, 60,false);
+    }
+    public void loadScreenTP(Player player,Position pos,int loadScreenTick){
+        this.loadScreenTP(player, pos, loadScreenTick,false);
+    }
+    public void loadScreenTP(Player player,Position pos,int loadScreenTick,boolean finish){
+        boolean has = false;
+        for (File file:new File(Server.getInstance().getDataPath()+"/worlds/").listFiles()){
+            if(file.getName().equals("loadScreenWorld")&&file.isDirectory()){
+                Server.getInstance().loadLevel("loadScreenWorld");
+                has = true;
+                break;
+            }
+        }
+        if(!has){
+            genLevel("loadScreenWorld",999,"VOID");
+        }
+
+        Level level = Server.getInstance().getLevelByName("loadScreenWorld");
+
+        ChangeDimensionPacket changeDimensionPacket = new ChangeDimensionPacket();
+        changeDimensionPacket.dimension = 2;
+        player.dataPacket(changeDimensionPacket);
+
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            public void onRun(int i) {
+                PlayStatusPacket playStatusPacket = new PlayStatusPacket();
+                playStatusPacket.status = 3;
+                player.dataPacket(playStatusPacket);
+            }
+        }, 1);
+
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            public void onRun(int i) {
+                ChangeDimensionPacket changeDimensionPacket = new ChangeDimensionPacket();
+                changeDimensionPacket.dimension = 0;
+                player.dataPacket(changeDimensionPacket);
+                player.teleport(level.getSpawnLocation(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+            }
+        }, 2);
+
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            public void onRun(int i) {
+                PlayStatusPacket playStatusPacket = new PlayStatusPacket();
+                playStatusPacket.status = 3;
+                player.dataPacket(playStatusPacket);
+            }
+        }, 3+loadScreenTick);
+        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+            public void onRun(int i) {
+                player.teleport(pos, PlayerTeleportEvent.TeleportCause.UNKNOWN);
+                if(!finish){
+                    loadScreenTP(player, pos, loadScreenTick,true);
+                }
+            }
+        }, 4+loadScreenTick);
+
+    }
+    public void clearChunk(Position pos){
+        pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4, Chunk.getEmptyChunk((int)pos.x>>4,(int)pos.z>>4));
     }
 }

@@ -129,7 +129,10 @@ public class EventLoader implements Listener {
     public void onInventory(InventoryTransactionEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
-
+    @EventHandler
+    public void onPlayerItemHeld(PlayerItemHeldEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
@@ -374,5 +377,8 @@ public class EventLoader implements Listener {
     public void onSongStop(SongStoppedEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
-
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
 }

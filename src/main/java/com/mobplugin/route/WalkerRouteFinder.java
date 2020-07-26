@@ -1,10 +1,14 @@
 package com.mobplugin.route;
 
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockID;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
+import javafx.geometry.Pos;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.PriorityQueue;
@@ -54,16 +58,6 @@ public class WalkerRouteFinder extends SimpleRouteFinder {
         if (this.start == null) {
             this.start = this.entity;
         }
-
-//        if (this.destination == null) {
-//            if (entity.getFollowTarget() != null) {
-//                this.destination = entity.getFollowTarget();
-//            } else {
-//                this.searching = false;
-//                this.finished = true;
-//                return false;
-//            }
-//        }
 
         this.resetTemporary();
 
@@ -133,6 +127,11 @@ public class WalkerRouteFinder extends SimpleRouteFinder {
     }
 
     private boolean isPassable(Vector3 vector3) {
+        //TODO: Support Water Path
+        if(Position.fromObject(vector3,entity.getLevel()).getLevelBlock().getId()== BlockID.WATER
+        || Position.fromObject(vector3,entity.getLevel()).getLevelBlock().getId()== BlockID.STILL_WATER){
+            return true;
+        }
         double radius = (this.entity.getWidth() * this.entity.getScale()) / 2;
         float height = this.entity.getHeight() * this.entity.getScale();
         AxisAlignedBB bb = new SimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);

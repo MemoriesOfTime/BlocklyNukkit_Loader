@@ -89,8 +89,8 @@ public class Utils {
             web = web.replaceAll("[^0123456789.]","");
             int webint = Integer.parseInt(web.replaceAll("\\.",""));
             int verint = Integer.parseInt(version.replaceAll("\\.",""));
-            if(!version.equals(web)){
-                if(webint<verint){
+            if((!version.equals(web)) || verint>10000){
+                if(webint<verint ){
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         Loader.getlogger().warning(TextFormat.YELLOW+"您正在使用BlocklyNukkit先行测试版！");
                     }else {
@@ -399,6 +399,7 @@ public class Utils {
             in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream()));
             String line;
+            result="";
             while ((line = in.readLine()) != null) {
                 result += line;
             }

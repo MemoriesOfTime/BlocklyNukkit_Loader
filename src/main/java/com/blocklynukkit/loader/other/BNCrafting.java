@@ -31,7 +31,6 @@ public class BNCrafting implements Listener {
                         if (craftEntry.timecall()){
                             if(Math.random()<craftEntry.percent){
                                 for (Item item:craftEntry.output){
-                                    //Loader.getlogger().info(item.toString());
                                     addItemToPlayer(Server.getInstance().getPlayer(entry.getKey()),item);
                                 }
                                 Server.getInstance().getPlayer(entry.getKey()).sendMessage("合成 "+craftEntry.description+" 成功");

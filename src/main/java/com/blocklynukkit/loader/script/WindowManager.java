@@ -7,6 +7,7 @@ import cn.nukkit.form.response.FormResponseCustom;
 import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.utils.DummyBossBar;
+import com.blocklynukkit.loader.Loader;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
@@ -108,6 +109,10 @@ public class WindowManager {
             return custom.getToggleResponse(id)?"TRUE":"FALSE";
         }else if(mode.equals("dropdown")){
             return custom.getDropdownResponse(id).getElementContent();
+        }else if(mode.equals("slider")){
+            return custom.getSliderResponse(id)+"";
+        }else if(mode.equals("stepslider")||mode.equals("step")){
+            return custom.getStepSliderResponse(id).getElementContent();
         }else {
             return "NULL";
         }

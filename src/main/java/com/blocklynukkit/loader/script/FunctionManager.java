@@ -5,19 +5,21 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
 import cn.nukkit.permission.Permission;
-import cn.nukkit.plugin.Plugin;
-import cn.nukkit.plugin.PluginManager;
+import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.MetricsLite;
 import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,13 +31,11 @@ import me.onebone.economyapi.EconomyAPI;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class FunctionManager {
 
@@ -43,6 +43,9 @@ public class FunctionManager {
 
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
+    }
+    public boolean hasLib(String libName){
+        return Loader.bnLibrary.hasLib(libName);
     }
     //here 6/28
     public void loadJar(String path){
@@ -56,6 +59,115 @@ public class FunctionManager {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+    public void bStats(String pluginName,String pluginVer,String authorName,int pluginid){
+        new BstatsBN(new Plugin() {
+            @Override
+            public void onLoad() {
+
+            }
+
+            @Override
+            public void onEnable() {
+
+            }
+
+            @Override
+            public boolean isEnabled() {
+                return false;
+            }
+
+            @Override
+            public void onDisable() {
+
+            }
+
+            @Override
+            public boolean isDisabled() {
+                return false;
+            }
+
+            @Override
+            public File getDataFolder() {
+                return null;
+            }
+
+            @Override
+            public PluginDescription getDescription() {
+                return new PluginDescription("name: "+pluginName+"\n" +
+                        "main: com.blocklynukkit.loader.Loader\n" +
+                        "version: \""+pluginVer+"\"\n" +
+                        "author: "+authorName+"\n" +
+                        "api: [\"1.0.8\"]\n" +
+                        "description: a blocklynukkit based plugin\n" +
+                        "load: POSTWORLD\n");
+            }
+
+            @Override
+            public InputStream getResource(String s) {
+                return null;
+            }
+
+            @Override
+            public boolean saveResource(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean saveResource(String s, boolean b) {
+                return false;
+            }
+
+            @Override
+            public boolean saveResource(String s, String s1, boolean b) {
+                return false;
+            }
+
+            @Override
+            public Config getConfig() {
+                return null;
+            }
+
+            @Override
+            public void saveConfig() {
+
+            }
+
+            @Override
+            public void saveDefaultConfig() {
+
+            }
+
+            @Override
+            public void reloadConfig() {
+
+            }
+
+            @Override
+            public Server getServer() {
+                return Server.getInstance();
+            }
+
+            @Override
+            public String getName() {
+                return pluginName;
+            }
+
+            @Override
+            public PluginLogger getLogger() {
+                return Loader.plugin.getLogger();
+            }
+
+            @Override
+            public PluginLoader getPluginLoader() {
+                return null;
+            }
+
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                return false;
+            }
+        },pluginid);
     }
     //here 5/8
     //用于测试
@@ -131,7 +243,7 @@ public class FunctionManager {
     }
     //end here
     //跨命名空间调用
-    public void callFunciton(String functionname,Object... args){
+    public void callFunction(String functionname,Object... args){
         Loader.plugin.call(functionname, args);
     }
     //http
@@ -180,7 +292,7 @@ public class FunctionManager {
 
     //踢了玩家
     public void kickPlayer(Player player,String reason){
-        player.kick(reason);
+        player.kick(PlayerKickEvent.Reason.UNKNOWN,reason,false);
     }
 
     //获取玩家是否op

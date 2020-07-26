@@ -40,6 +40,7 @@ public class Custom {
     }
     public Custom buildLabel(String text){
         addNewElement(new ElementLabel(text));
+        //addNewElement(new ElementSlider("标题",0,100,20,55));
         return this;
     }
     public Custom buildInput(String title,String placeholder){
@@ -64,6 +65,38 @@ public class Custom {
             dropdown.addOption(a);
         }
         addNewElement(dropdown);
+        return this;
+    }
+    public Custom buildSlider(String title,double min,double max,int step,double defaultvalue){
+        ElementSlider slider = new ElementSlider(title,(float) min,(float)max,step,(float)defaultvalue);
+        addNewElement(slider);
+        return this;
+    }
+    public Custom buildSlider(String title,double min,double max,int step){
+        ElementSlider slider = new ElementSlider(title,(float) min,(float)max,step);
+        addNewElement(slider);
+        return this;
+    }
+    public Custom buildSlider(String title,double min,double max){
+        ElementSlider slider = new ElementSlider(title,(float) min,(float)max);
+        addNewElement(slider);
+        return this;
+    }
+    public Custom buildStepSlider(String title,String options){
+        ElementStepSlider  stepSlider = new ElementStepSlider(title);
+        for(String each:options.split(";")){
+            stepSlider.addStep(each);
+        }
+        addNewElement(stepSlider);
+        return this;
+    }
+    public Custom buildStepSlider(String title,String options,int index){
+        ElementStepSlider  stepSlider = new ElementStepSlider(title);
+        for(String each:options.split(";")){
+            stepSlider.addStep(each);
+        }
+        stepSlider.setDefaultOptionIndex(index);
+        addNewElement(stepSlider);
         return this;
     }
 }

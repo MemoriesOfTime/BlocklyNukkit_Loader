@@ -9,6 +9,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
+import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
@@ -193,5 +194,15 @@ public class EntityManager {
     }
     public BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction);
+    }
+    public BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction,String attackfunction){
+        return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction,attackfunction);
+    }
+    //展示浮空物品
+    public void showFloatingItem(Position pos,Item item){
+        Loader.floatingItemManager.addFloatingItem(pos,item);
+    }
+    public void removeFloatingItem(Position pos,Item item){
+        Loader.floatingItemManager.removeFloatingItem(pos, item);
     }
 }

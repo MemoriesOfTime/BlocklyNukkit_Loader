@@ -2,49 +2,52 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
+import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import com.oracle.truffle.js.scriptengine.GraalJSEngineFactory;
 import com.sun.istack.internal.NotNull;
-import org.develnext.jphp.scripting.JPHPContext;
-import php.runtime.env.Environment;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static com.blocklynukkit.loader.Loader.*;
 
-public class PHPLoader {
+public class GraalJSLoader {
     public Loader plugin;
-    public PHPLoader(@NotNull Loader plugin){
+    public GraalJSLoader(@NotNull Loader plugin){
         this.plugin=plugin;
     }
     public void loadplugins(){
         //加载js
         for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
             if(file.isDirectory()) continue;
-            if(file.getName().endsWith(".php")&&!file.getName().contains("bak")){
+            if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                 try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                         getlogger().warning("加载BN插件: " + file.getName());
                     else
                         getlogger().warning("loading BN plugin: " + file.getName());
-                    engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("jphp"));
+                    ScriptEngine engine = new ScriptEngineManager().getEngineByName("graal.js");
+                    Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+                    bindings.put("polyglot.js.allowHostAccess", true);
+                    bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
+                    engineMap.put(file.getName(),engine);
                     if (engineMap.get(file.getName()) == null) {
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("PHP引擎加载出错！");
+                            getlogger().error("GraalJS引擎加载出错！");
                         if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("PHP interpreter crashed!");
+                            getlogger().error("GraalJS interpreter crashed!");
                         return;
                     }
                     if (!(engineMap.get(file.getName()) instanceof Invocable)) {
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("PHP引擎版本过低！");
+                            getlogger().error("GraalJS引擎版本过低！");
                         if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("PHP interpreter's version is too low!");
+                            getlogger().error("GraalJS interpreter's version is too low!");
                         return;
                     }
                     putBaseObject(file.getName());
@@ -57,29 +60,31 @@ public class PHPLoader {
                         getlogger().error("cannot load: " + file.getName(), e);
                 }
             }
-
-
         }
     }
-    public void putPHPEngine(String name,String php){
-        engineMap.put(name,new ScriptEngineManager().getEngineByName("jphp"));
+    public void putGraalJSEngine(String name,String js){
+        GraalJSScriptEngine engine = new GraalJSEngineFactory().getScriptEngine();
+        Bindings bindings = engine.getBindings(ScriptContext.ENGINE_SCOPE);
+        bindings.put("polyglot.js.allowHostAccess", true);
+        bindings.put("polyglot.js.allowHostClassLookup", (Predicate<String>) s -> true);
+        engineMap.put(name,engine);
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("PHP引擎加载出错！");
+                getlogger().error("GraalJS引擎加载出错！");
             if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("PHP interpreter crashed!");
+                getlogger().error("GraalJS interpreter crashed!");
             return;
         }
         if (!(engineMap.get(name) instanceof Invocable)) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("PHP引擎版本过低！");
+                getlogger().error("GraalJS引擎版本过低！");
             if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                getlogger().error("php interpreter's version is too low!");
+                getlogger().error("GraalJS interpreter's version is too low!");
             return;
         }
         putBaseObject(name);
         try {
-            engineMap.get(name).eval(php);
+            engineMap.get(name).eval(js);
         } catch (ScriptException e) {
             e.printStackTrace();
         }

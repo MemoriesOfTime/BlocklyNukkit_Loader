@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.Utils;
 import com.sun.istack.internal.NotNull;
 
 import javax.script.Invocable;
@@ -26,34 +27,16 @@ public class JavaScriptLoader {
         for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
-                try (final Reader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getlogger().warning("加载BN插件: " + file.getName());
-                    else
-                        getlogger().warning("loading BN plugin: " + file.getName());
-                    engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("nashorn"));
-                    if (engineMap.get(file.getName()) == null) {
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("JavaScript引擎加载出错！");
-                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("JavaScript interpreter crashed!");
-                        return;
-                    }
-                    if (!(engineMap.get(file.getName()) instanceof Invocable)) {
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("JavaScript引擎版本过低！");
-                        if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                            getlogger().error("JavaScript interpreter's version is too low!");
-                        return;
-                    }
-                    putBaseObject(file.getName());
-                    engineMap.get(file.getName()).eval(reader);
-                    bnpluginset.add(file.getName());
-                } catch (final Exception e) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getlogger().error("无法加载： " + file.getName(), e);
-                    else
-                        getlogger().error("cannot load: " + file.getName(), e);
+                if (Server.getInstance().getLanguage().getName().contains("中文"))
+                    getlogger().warning("加载BN插件: " + file.getName());
+                else
+                    getlogger().warning("loading BN plugin: " + file.getName());
+                String js = Utils.readToString(file);
+                if(js.contains("//pragma es9")||js.contains("//pragma es6")||js.contains("//pragma es2019")||js.contains("//pragma es2016")||js.contains("//pragma graal")||js.contains("//pragma Graal")||js.contains("//pragma graalvm")||js.contains("//pragma Graalvm")||js.contains("//pragma graalVM")||js.contains("//pragma GraalVM")||js.contains("//pragma graaljs")||js.contains("//pragma graalJS")||js.contains("//pragma Graaljs")||js.contains("//pragma GraalJS")||
+                        js.contains("// pragma es9")||js.contains("// pragma es6")||js.contains("// pragma es2019")||js.contains("// pragma es2016")||js.contains("// pragma graal")||js.contains("// pragma Graal")||js.contains("// pragma graalvm")||js.contains("// pragma Graalvm")||js.contains("// pragma graalVM")||js.contains("// pragma GraalVM")||js.contains("// pragma graaljs")||js.contains("// pragma graalJS")||js.contains("// pragma Graaljs")||js.contains("// pragma GraalJS")){
+                    new GraalJSLoader(plugin).putGraalJSEngine(file.getName(),js);
+                }else {
+                    putJavaScriptEngine(file.getName(),js);
                 }
             }
 

@@ -1,3 +1,24 @@
+## 1.2.8.2
+
+Bug Fixed
+
+- 修复了bnnpc和bn浮空字莫名其妙消失的问题
+
+New
+
+- 现在可以在js代码的开头加上一行注释//pragma es9来开启es9语言特性，但是会有些许性能损失，损失不大，可以放心使用
+- 此功能仍然是试验功能，如果报错，请立即反馈，感谢
+- bninstall命令已经弃用，所有库全部打包进bn解释器jar
+
+CustomWindowBuilder
+
+- Custom showAsSetting(Player p, String callback)
+- Custom buildDropdown(String title,String inner,int index)
+
+EventLoader
+
+- ChunkUnloadEvent
+
 ## 1.2.8.1
 
 Entity

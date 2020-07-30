@@ -9,7 +9,6 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
-import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
@@ -23,9 +22,8 @@ import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
-import com.blocklynukkit.loader.scriptloader.BNLibrary;
+import com.blocklynukkit.loader.scriptloader.GraalJSLoader;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
-import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
@@ -36,9 +34,6 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import javax.script.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -61,11 +56,11 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String[]>mcfunctionmap = new HashMap<>();
     public static ConcurrentHashMap<Integer, String> functioncallback = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<Integer, ScriptObjectMirror> scriptObjectMirrorCallback = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, String> serverSettingCallback = new ConcurrentHashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
     public static HttpServer httpServer = null;
-    public static BNLibrary bnLibrary = null;
     public static FloatingItemManager floatingItemManager = new FloatingItemManager();
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
     public static FunctionManager functionManager;
@@ -127,7 +122,7 @@ public class Loader extends PluginBase implements Listener {
         //这里没有database因为后面要检查依赖库是否存在再创建
         functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
-        databaseManager=null;cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();
+        databaseManager=null;cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();databaseManager=new DatabaseManager();
         noteBlockPlayerMain.onEnable();
         //检测nk版本
         if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -170,34 +165,12 @@ public class Loader extends PluginBase implements Listener {
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
         new File(getDataFolder()+"/lib").mkdir();
-        //初始化bn依赖库管理器
-        bnLibrary = new BNLibrary();
-        //检查数据库依赖是否存在
-        if(bnLibrary.hasLib("database")){
-            databaseManager=new DatabaseManager();
-        }
 
         //加载javascript
         new JavaScriptLoader(plugin).loadplugins();
 
-        //如果是python文件但是没有安装依赖库发出警告
-        for (File file : Objects.requireNonNull(getDataFolder().listFiles())) {
-            if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
-                if(!bnLibrary.hasLib("python")){
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("无法加载： "+file.getName()+" 没有安装python依赖库！");
-                    if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("cannot load: "+file.getName()+" python library not found!");
-                }
-            }
-        }
-
         //加载python
-        //需要jython驱动
-        //所以检查jython依赖库是否存在
-        if(bnLibrary.hasLib("python")){
-            new PythonLoader(this).loadplugins();
-        }
+        new PythonLoader(plugin).loadplugins();
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -256,15 +229,7 @@ public class Loader extends PluginBase implements Listener {
                 js.contains("# pragma Python")||js.contains("# pragma python")||js.contains("# pragma PY")||js.contains("# pragma py")||
                 js.contains("'''pragma Python")||js.contains("'''pragma python")||js.contains("'''pragma PY")||js.contains("'''pragma py")||
                 js.contains("''' pragma Python")||js.contains("''' pragma python")||js.contains("''' pragma PY")||js.contains("''' pragma py")){
-            if(bnLibrary.hasLib("python")){
-                new PythonLoader(plugin).putPythonEngine(name, js);
-            }else {
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    new BNLogger(name).warning(TextFormat.RED+"加载失败！丢失python依赖库！");
-                }else {
-                    new BNLogger(name).warning(TextFormat.RED+"Failed to load plugin! Python Lib cannot be found!");
-                }
-            }
+            new PythonLoader(plugin).putPythonEngine(name, js);
         }else {
             new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }
@@ -624,17 +589,10 @@ public class Loader extends PluginBase implements Listener {
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args){
-            if(sender.isPlayer()){
-                if(!sender.isOp())return false;
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"开始安装"+args[0]+"，详见服务器后台");
-                }else {
-                    sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"Start to install "+args[0]+", please see details in nukkit console");
-                }
-                Loader.bnLibrary.install(args[0]);
-
+            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"模块"+args[0]+"已经预装");
             }else {
-                Loader.bnLibrary.install(args[0]);
+                sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"Module "+args[0]+" has been installed");
             }
             return false;
         }

@@ -44,9 +44,6 @@ public class FunctionManager {
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
     }
-    public boolean hasLib(String libName){
-        return Loader.bnLibrary.hasLib(libName);
-    }
     //here 6/28
     public void loadJar(String path){
         try{

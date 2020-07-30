@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="graaljs">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graal-icu.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graal-regex.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graal-sdk.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graal-truffle-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graaljs-scriptengine.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/graaljs.jar!/" />
+      <root url="file://$PROJECT_DIR$/nukkit/plugins" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$PROJECT_DIR$/nukkit/plugins" recursive="false" />
+  </library>
+</component>

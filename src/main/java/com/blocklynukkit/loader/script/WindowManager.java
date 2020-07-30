@@ -3,6 +3,7 @@ package com.blocklynukkit.loader.script;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.event.player.PlayerFormRespondedEvent;
+import cn.nukkit.event.player.PlayerSettingsRespondedEvent;
 import cn.nukkit.form.response.FormResponseCustom;
 import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
@@ -102,6 +103,22 @@ public class WindowManager {
         }
     }
     public String getEventCustomVar(PlayerFormRespondedEvent event,int id,String mode){
+        FormResponseCustom custom=(FormResponseCustom)event.getResponse();
+        if(mode.equals("input")){
+            return custom.getInputResponse(id);
+        }else if(mode.equals("toggle")){
+            return custom.getToggleResponse(id)?"TRUE":"FALSE";
+        }else if(mode.equals("dropdown")){
+            return custom.getDropdownResponse(id).getElementContent();
+        }else if(mode.equals("slider")){
+            return custom.getSliderResponse(id)+"";
+        }else if(mode.equals("stepslider")||mode.equals("step")){
+            return custom.getStepSliderResponse(id).getElementContent();
+        }else {
+            return "NULL";
+        }
+    }
+    public String getEventCustomVar(PlayerSettingsRespondedEvent event, int id, String mode){
         FormResponseCustom custom=(FormResponseCustom)event.getResponse();
         if(mode.equals("input")){
             return custom.getInputResponse(id);

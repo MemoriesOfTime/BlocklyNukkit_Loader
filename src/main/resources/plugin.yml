@@ -1,6 +1,6 @@
 ﻿name: BlocklyNukkit
 main: com.blocklynukkit.loader.Loader
-version: "1.2.8.1"
+version: "1.2.8.2"
 author: BlocklyNukkit开发组-超神的冰凉发起(BlocklyNukkit_Developers)
 authors:
   - 超神的冰凉

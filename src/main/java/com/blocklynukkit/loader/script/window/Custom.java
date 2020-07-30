@@ -35,6 +35,13 @@ public class Custom {
         }
         return this;
     }
+    public Custom showAsSetting(Player p, String callback){
+        synchronized (Loader.serverSettingCallback){
+            Loader.serverSettingCallback.put(p.getName(),callback);
+            p.addServerSettings(new FormWindowCustom(title,elements));
+        }
+        return this;
+    }
     public void addNewElement(Element element){
         elements.add(element);
     }
@@ -64,6 +71,15 @@ public class Custom {
         for(String a:inner.split(";")){
             dropdown.addOption(a);
         }
+        addNewElement(dropdown);
+        return this;
+    }
+    public Custom buildDropdown(String title,String inner,int index){
+        ElementDropdown dropdown=new ElementDropdown(title);
+        for(String a:inner.split(";")){
+            dropdown.addOption(a);
+        }
+        dropdown.setDefaultOptionIndex(index);
         addNewElement(dropdown);
         return this;
     }

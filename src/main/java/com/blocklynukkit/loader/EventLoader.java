@@ -2,12 +2,14 @@ package com.blocklynukkit.loader;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.*;
 import cn.nukkit.event.inventory.*;
+import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.potion.PotionApplyEvent;
 import cn.nukkit.event.potion.PotionCollideEvent;
@@ -380,5 +382,22 @@ public class EventLoader implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent event){
+        for(Entity entity:event.getChunk().getEntities().values()){
+            String type = entity.getName();
+            if(type.equals("BNNPC")||type.equals("BNFloatingText")){
+                event.setCancelled();
+                break;
+            }
+        }
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+    }
+    @EventHandler
+    public void onPlayerSetting(PlayerSettingsRespondedEvent event){
+        if(!event.wasClosed()&&event.getResponse()!=null){
+            Loader.callEventHandler(event,Loader.serverSettingCallback.get(event.getPlayer().getName()));
+        }
     }
 }

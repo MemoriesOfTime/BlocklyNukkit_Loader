@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.9.14
+Implementation-Title: Jython fat jar with stdlib
+Implementation-Version: 2.7.2
+Built-By: Jeff
+Created-By: 1.8.0_241-b07 (Oracle Corporation)
+Main-Class: com.blocklynukkit.loader.Loader
+Implementation-Vendor: Python Software Foundation
+
+Name: Build-Info
+informix: true
+hg-build: true
+oracle: true
+build-compiler: modern
+debug: true
+version: 2.7.2
+jdk-target-version: 1.8
+

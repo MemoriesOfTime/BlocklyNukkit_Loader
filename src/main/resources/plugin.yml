@@ -13,5 +13,6 @@ softdepend:
   - EconomyAPI
   - ScoreboardPlugin
   - FakeInventories
+  - Tips
 
 #声明：blocklynukkit使用的红石音乐引擎转制自bukkit版本

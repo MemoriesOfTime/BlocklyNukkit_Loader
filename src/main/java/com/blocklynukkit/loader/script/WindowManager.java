@@ -24,6 +24,7 @@ import java.util.Map;
 
 public class WindowManager {
     public Map<String,Scoreboard> boards = new HashMap<>();
+    public Map<String,String> tipsVar = new HashMap<>();
 
     public void updateAllScoreBoard(String title,String text){
         for (Player p: Server.getInstance().getOnlinePlayers().values()){
@@ -160,5 +161,13 @@ public class WindowManager {
     //here 6/26
     public void setBelowName(Player player,String str){
         player.setScoreTag(str);
+    }
+
+    public void makeTipsVar(String varname,String provider){
+        tipsVar.put(varname,"function->"+provider);
+    }
+
+    public void makeTipsStatic(String varname,String toReplace){
+        tipsVar.put(varname, toReplace);
     }
 }

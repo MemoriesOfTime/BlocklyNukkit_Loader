@@ -68,6 +68,26 @@ public class EntityManager {
         Effect effect =Effect.getEffect(id).setAmplifier(level).setDuration(tick).setVisible(false);
         entity.addEffect(effect);
     }
+    //玩家经验操作
+    public void setPlayerExp(Player player,int exp){
+        player.sendExperience(exp);
+    }
+    public int getPlayerExp(Player player){
+        return player.getExperience();
+    }
+    public void setPlayerExpLevel(Player player,int lel){
+        player.sendExperienceLevel(lel);
+    }
+    public int getPlayerExpLevel(Player player){
+        return player.getExperienceLevel();
+    }
+    //玩家饥饿度操作
+    public void setPlayerHunger(Player player,int hunger){
+        player.getFoodData().setLevel(hunger);
+    }
+    public int getPlayerHunger(Player player){
+        return player.getFoodData().getLevel();
+    }
     //获取实体id
     public String getEntityID(Entity entity){
         return entity.getId()+"";

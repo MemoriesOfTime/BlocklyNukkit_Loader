@@ -19,6 +19,20 @@ EventLoader
 
 - ChunkUnloadEvent
 
+entity
+
+- void setPlayerExp(Player player,int exp)
+- int getPlayerExp(Player player)
+- void setPlayerExpLevel(Player player,int lel)
+- int getPlayerExpLevel(Player player)
+- void setPlayerHunger(Player player,int hunger)
+- int getPlayerHunger(Player player)
+
+window
+
+- void makeTipsVar(String varname,String providerCallback)
+- void makeTipsStatic(String varname,String toReplace)
+
 ## 1.2.8.1
 
 Entity

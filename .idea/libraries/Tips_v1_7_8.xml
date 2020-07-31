@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Tips_v1.7.8">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.7.8.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

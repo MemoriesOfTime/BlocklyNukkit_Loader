@@ -20,6 +20,7 @@ import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
+import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.GraalJSLoader;
@@ -207,6 +208,11 @@ public class Loader extends PluginBase implements Listener {
         }
         portconfig.save();
         Utils.makeHttpServer(portto);
+
+        //检测并注册Tips插件变量
+        if(plugins.containsKey("Tips")){
+            TipsUtil.registerTips();
+        }
     }
 
 

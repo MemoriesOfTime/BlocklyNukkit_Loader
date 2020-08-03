@@ -385,6 +385,7 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkUnload(ChunkUnloadEvent event){
+        if(event!=null)if(event.getChunk()!=null)return;
         for(Entity entity:event.getChunk().getEntities().values()){
             String type = entity.getName();
             if(type.equals("BNNPC")||type.equals("BNFloatingText")){

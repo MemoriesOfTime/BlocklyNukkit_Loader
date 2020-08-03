@@ -211,7 +211,21 @@ public class Loader extends PluginBase implements Listener {
 
         //检测并注册Tips插件变量
         if(plugins.containsKey("Tips")){
-            TipsUtil.registerTips();
+            boolean isTipsVersion = false;
+            try {
+                isTipsVersion = (null != Class.forName("tip.utils.variables.BaseVariable"));
+            } catch (Throwable t) {
+                isTipsVersion = false;
+            }
+            if(isTipsVersion){
+                TipsUtil.registerTips();
+            }else {
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning(TextFormat.RED+"Tips版本太低！");
+                }else {
+                    getlogger().warning(TextFormat.RED+"Tips plugin's version is too low");
+                }
+            }
         }
     }
 

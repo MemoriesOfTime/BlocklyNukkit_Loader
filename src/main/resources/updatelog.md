@@ -8,7 +8,7 @@ New
 
 - 现在可以在js代码的开头加上一行注释//pragma es9来开启es9语言特性，但是会有些许性能损失，损失不大，可以放心使用
 - 此功能仍然是试验功能，如果报错，请立即反馈，感谢
-- bninstall命令已经弃用，所有库全部打包进bn解释器jar
+- bninstall命令已经弃用，所有库全部打包进bn解释器jar，这样做是为了节约内存空间。
 
 CustomWindowBuilder
 

@@ -62,7 +62,7 @@ public class Utils {
             }
         }
     }
-    public String readToString(String fileName) {
+    public static String readToString(String fileName) {
         String encoding = "UTF-8";
         File file = new File(fileName);
         Long filelength = file.length();

@@ -3,11 +3,9 @@ package com.blocklynukkit.loader.other.tips;
 import cn.nukkit.Player;
 import com.blocklynukkit.loader.Loader;
 import tip.utils.variables.BaseVariable;
-import tip.utils.variables.defaults.ChangeMessage;
 
 import java.util.Map;
 
-@ChangeMessage
 public class TipsVariableEntry extends BaseVariable {
     Player player = null;
 

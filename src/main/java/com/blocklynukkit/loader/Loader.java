@@ -9,7 +9,10 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.TextPacket;
+import cn.nukkit.network.protocol.VideoStreamConnectPacket;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
@@ -23,8 +26,10 @@ import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
+import com.blocklynukkit.loader.script.window.GameManager;
 import com.blocklynukkit.loader.scriptloader.GraalJSLoader;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
+import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
@@ -45,6 +50,11 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, ScriptEngine> engineMap = new HashMap<>();
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
     public static Set<String> bnpluginset = new HashSet<>();
+
+    public static EntityDamageByEntityEvent previous;
+    public static Vector3 previousVecDamager = new Vector3();
+    public static Vector3 previousVecEntity = new Vector3();
+    public static long previousTime = System.currentTimeMillis();
 
     public static String positionstmp = "";
     public static int checkupdatetime = 0;
@@ -75,12 +85,14 @@ public class Loader extends PluginBase implements Listener {
     public static CardMaker cardMaker;
     public static NotemusicManager notemusicManager;
     public static ParticleManager particleManager;
+    public static GameManager gameManager;
+    public static Map<String, Plugin> plugins;
 
 
     @Override
     public void onEnable() {
         plugin=this;
-        Map<String, Plugin> plugins = this.getServer().getPluginManager().getPlugins();
+        plugins=this.getServer().getPluginManager().getPlugins();
         if (!plugins.containsKey("EconomyAPI")){
             try {
                 Utils.downloadPlugin("https://repo.nukkitx.com/main/me/onebone/economyapi/2.0.0-SNAPSHOT/economyapi-2.0.0-20190517.112309-17.jar");
@@ -119,12 +131,19 @@ public class Loader extends PluginBase implements Listener {
                 e.printStackTrace();
             }
         }
+        if (!plugins.containsKey("GameAPI")){
+            try {
+                Utils.downloadPlugin("https://tools.blocklynukkit.com/BNGameAPI.jar");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         //创建各种基对象
         //这里没有database因为后面要检查依赖库是否存在再创建
         functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
         databaseManager=null;cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();databaseManager=new DatabaseManager();
-        noteBlockPlayerMain.onEnable();
+        noteBlockPlayerMain.onEnable();if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //检测nk版本
         if (Server.getInstance().getLanguage().getName().contains("中文"))
             getLogger().warning("请注意：如果出现NoClassDefFoundError，说明您应该换新的NukkitX / PowerNukkit 版本了 ");
@@ -171,7 +190,9 @@ public class Loader extends PluginBase implements Listener {
         new JavaScriptLoader(plugin).loadplugins();
 
         //加载python
-        new PythonLoader(plugin).loadplugins();
+        if(plugins.containsKey("PyBN")){
+            new PythonLoader(plugin).loadplugins();
+        }
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -179,12 +200,18 @@ public class Loader extends PluginBase implements Listener {
         //检测nk版本，根据版本决定是否注册新增事件监听器
         boolean isNewNukkitVersion = false;
         try {
-            isNewNukkitVersion = (null != Class.forName("cn.nukkit.event.player.PlayerJumpEvent"));
+            isNewNukkitVersion = (null != Class.forName("cn.nukkit.event.player.PlayerJumpEvent")) && (null != Class.forName("cn.nukkit.event.player.PlayerLocallyInitializedEvent"));
         } catch (Throwable t) {
             isNewNukkitVersion = false;
         }
         if(isNewNukkitVersion){
             new CompatibleEventLoader(this);
+        }else {
+            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                getlogger().warning(TextFormat.RED+"Nukkit版本太低！这可能导致一些问题。");
+            }else {
+            getlogger().warning(TextFormat.RED+"Nukkit version is too low! This may cause problems.");
+            }
         }
         //注册bn的生物实体
         Entity.registerEntity("BNFloatingText", FloatingText.class);
@@ -195,7 +222,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
         //plugin.getServer().getCommandMap().register("testNPC",new testNPC());
-        //plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
+        plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
@@ -249,7 +276,18 @@ public class Loader extends PluginBase implements Listener {
                 js.contains("# pragma Python")||js.contains("# pragma python")||js.contains("# pragma PY")||js.contains("# pragma py")||
                 js.contains("'''pragma Python")||js.contains("'''pragma python")||js.contains("'''pragma PY")||js.contains("'''pragma py")||
                 js.contains("''' pragma Python")||js.contains("''' pragma python")||js.contains("''' pragma PY")||js.contains("''' pragma py")){
-            new PythonLoader(plugin).putPythonEngine(name, js);
+            if(plugins.containsKey("PyBN")){
+                new PythonLoader(plugin).putPythonEngine(name, js);
+            }else {
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning("无法加载:" + name+"! 缺少python依赖库");
+                    getlogger().warning("请到https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                }
+                else{
+                    getlogger().warning("cannot load BN plugin:" + name+" python libs not found!");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
+                }
+            }
         }else {
             new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }
@@ -270,11 +308,52 @@ public class Loader extends PluginBase implements Listener {
         engineMap.get(name).put("database",Loader.databaseManager);
         engineMap.get(name).put("notemusic",Loader.notemusicManager);
         engineMap.get(name).put("particle",Loader.particleManager);
+        engineMap.get(name).put("gameapi",Loader.gameManager);
         engineMap.get(name).put("__NAME__",name);
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
         try {
+            if(e instanceof EntityDamageByEntityEvent||e.getEventName().equals("EntityDamageByEntityEvent")){
+                Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
+                Entity entity = ((EntityDamageByEntityEvent) e).getEntity();
+                if(previous!=null){
+                    boolean sameDamage = previous.getFinalDamage()==((EntityDamageByEntityEvent) e).getFinalDamage()&&previous.getKnockBack()==((EntityDamageByEntityEvent) e).getKnockBack();
+                    boolean sameName = (previous.getEntity().getName().equals(((EntityDamageByEntityEvent) e).getEntity().getName()));
+                    boolean sameDamager = previousVecDamager.equals(damager);
+                    boolean sameEntity = previousVecEntity.equals(entity);
+                    boolean sametime = System.currentTimeMillis()-previousTime<10;
+                    previousTime=System.currentTimeMillis();
+                    getlogger().warning("发现了一个EntityDamageByEntityEvent的调用请求");
+                    getlogger().warning("实体名称一致"+(sameName)+
+                            "伤害一致"+(sameDamage)+
+                            "加害者位置一致"+(sameDamager)+
+                            "受害者位置一致"+(sameEntity)+"时间一致"+(sametime));
+                    if(sametime){
+                        if(sameDamage&&sameName&&sameDamager&&sameEntity){
+                            previous=((EntityDamageByEntityEvent) e);
+                            previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
+                            previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
+                            getlogger().warning("拦截了一个EntityDamageByEntityEvent");
+                            getlogger().warning("堆栈状态：");
+                            for(StackTraceElement element:Thread.currentThread().getStackTrace()){
+                                getlogger().info("栈上压入类"+element.getClassName()+"的方法"+element.getMethodName()+" 自"+element.getFileName()+"第"+element.getLineNumber()+"行");
+                            }
+                            return;
+                        }else {
+                            previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
+                            previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
+                            getlogger().warning("已将一个EntityDamageByEntityEvent推至栈顶");
+                            previous=((EntityDamageByEntityEvent) e);
+                        }
+                    }
+                }else {
+                    previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
+                    previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
+                    getlogger().warning("已将一个EntityDamageByEntityEvent推至栈顶");
+                    previous = ((EntityDamageByEntityEvent) e);
+                }
+            }
             for(ScriptEngine engine:engineMap.values()){
                 if (engine.get(functionName) != null) {
                     ((Invocable) engine).invokeFunction(functionName, e);
@@ -302,67 +381,6 @@ public class Loader extends PluginBase implements Listener {
             for(ScriptEngine engine:engineMap.values()){
                 if(type.equals("StoneSpawnEvent")){
                     StoneSpawnEvent event = ((StoneSpawnEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
-                        }
-                    }
-                }else if(type.equals("EntityDamageByPlayerEvent")){
-                    EntityDamageByPlayerEvent event = ((EntityDamageByPlayerEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
-                        }
-                    }
-                }else if(type.equals("PlayerDamageByPlayerEvent")){
-                    PlayerDamageByPlayerEvent event = ((PlayerDamageByPlayerEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
-                        }
-                    }
-                }
-                else if(type.equals("EntityKilledByEntityEvent")){
-                    EntityKilledByEntityEvent event = ((EntityKilledByEntityEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
-                        }
-                    }
-                }else if(type.equals("EntityKilledByPlayerEvent")){
-                    EntityKilledByPlayerEvent event = ((EntityKilledByPlayerEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
-                        }
-                    }
-                }else if(type.equals("PlayerDamageByEntityEvent")){
-                    PlayerDamageByEntityEvent event = ((PlayerDamageByEntityEvent)e);
                     if (engine.get(functionName) != null){
                         ((Invocable) engine).invokeFunction(functionName, event);
                     }
@@ -402,16 +420,16 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public synchronized void call(String functionName, Object... args){
+    public synchronized Object call(String functionName, Object... args){
         if(functionName.contains("::")) {
             String[] sp = functionName.split("::");
             if(engineMap.containsKey(sp[0])) {
                 ScriptEngine engine = engineMap.get(sp[0]);
                 if(engine.get(sp[1]) == null){
-                    return ;
+                    return null;
                 }
                 try {
-                    ((Invocable) engine).invokeFunction(sp[1], args);
+                    return ((Invocable) engine).invokeFunction(sp[1], args);
                 } catch (final Exception se) {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                         getLogger().error("在回调 " + functionName+"时出错", se);
@@ -426,7 +444,7 @@ public class Loader extends PluginBase implements Listener {
                     continue;
                 }
                 try {
-                    ((Invocable) engine).invokeFunction(functionName, args);
+                    return ((Invocable) engine).invokeFunction(functionName, args);
                 } catch (final Exception se) {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                         getLogger().error("在回调 " + functionName+"时出错", se);
@@ -436,6 +454,7 @@ public class Loader extends PluginBase implements Listener {
                 }
             }
         }
+        return null;
     }
 
     public synchronized String callbackString(String functionName, Object... args){
@@ -628,22 +647,27 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage(TextFormat.RED+"你无权使用这个命令");
                 return false;
             }
-            if(args.length<1){
-                return false;
-            }
-
-//            levelManager.setSkyLandGenerator(64,0,true,
-//                    20,17,0,128,20,9,0,64,
-//                    8,8,0,16,1,7,0,10,
-//                    2,9,0,32,1,8,0,16,
-//                    10,33,0,128,8,33,0,128,
-//                    10,33,0,80,10,33,0,80,
-//                    10,33,0,80,true,true,true);
-            //levelManager.genLevel(args[0],999,"FLAT");
-            if(sender.isPlayer()){
-                Server.getInstance().loadLevel(args[0]);
-                levelManager.loadScreenTP(((Player)sender),Server.getInstance().getLevelByName(args[0]).getSafeSpawn(),60);
-            }
+            VideoStreamConnectPacket packet = new  VideoStreamConnectPacket();
+            packet.address = args[0];
+            packet.action = VideoStreamConnectPacket.ACTION_OPEN;
+            packet.screenshotFrequency =1.0f;
+            ((Player)sender).dataPacket(packet);
+//            if(args.length<1){
+//                return false;
+//            }
+//
+////            levelManager.setSkyLandGenerator(64,0,true,
+////                    20,17,0,128,20,9,0,64,
+////                    8,8,0,16,1,7,0,10,
+////                    2,9,0,32,1,8,0,16,
+////                    10,33,0,128,8,33,0,128,
+////                    10,33,0,80,10,33,0,80,
+////                    10,33,0,80,true,true,true);
+//            //levelManager.genLevel(args[0],999,"FLAT");
+//            if(sender.isPlayer()){
+//                Server.getInstance().loadLevel(args[0]);
+//                levelManager.loadScreenTP(((Player)sender),Server.getInstance().getLevelByName(args[0]).getSafeSpawn(),60);
+//            }
             return false;
         }
     }

@@ -14,5 +14,7 @@ softdepend:
   - ScoreboardPlugin
   - FakeInventories
   - Tips
+  - PyBN
+  - GameAPI
 
 #声明：blocklynukkit使用的红石音乐引擎转制自bukkit版本

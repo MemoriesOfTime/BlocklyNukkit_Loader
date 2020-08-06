@@ -5,6 +5,7 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.sun.istack.internal.NotNull;
 import org.python.core.Py;
+import org.python.jsr223.PyScriptEngineFactory;
 import org.python.util.PythonInterpreter;
 
 import javax.script.Invocable;
@@ -32,7 +33,7 @@ public class PythonLoader {
                                 plugin.getLogger().warning("加载BN插件: " + file.getName());
                             else
                                 plugin.getLogger().warning("loading BN plugin: " + file.getName());
-                            plugin.engineMap.put(file.getName(),new ScriptEngineManager().getEngineByName("python"));
+                            plugin.engineMap.put(file.getName(),new PyScriptEngineFactory().getScriptEngine());
                             if (plugin.engineMap.get(file.getName()) == null) {
                                 if (Server.getInstance().getLanguage().getName().contains("中文"))
                                     plugin.getLogger().error("Python引擎加载出错！");
@@ -70,7 +71,7 @@ public class PythonLoader {
     }
 
     public void putPythonEngine(String name,String py){
-        plugin.engineMap.put(name,new ScriptEngineManager().getEngineByName("python"));
+        plugin.engineMap.put(name,new PyScriptEngineFactory().getScriptEngine());
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("Python引擎加载出错！");

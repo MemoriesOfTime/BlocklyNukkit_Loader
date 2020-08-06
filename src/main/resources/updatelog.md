@@ -1,3 +1,96 @@
+## 1.2.8.3
+
+manager
+
+- <E> callFunction(String functionname,Object... args) --callFunction会返回函数的返回值了
+- <E> getVariableFrom(String scriptName,String varName) --根据bn插件名和变量名获取变量内容
+- void putVariableTo(String scriptName,String varName,<E> var) --把变量值以指定变量名放到指定bn插件中
+- double getCPULoad()
+- int getCPUCores()
+- double getMemoryTotalSizeMB()
+- double getMemoryUsedSizeMB()
+
+entity
+
+- boolean isPlayer(Entity e)
+
+EventLoader --73 new
+
+- BlockFadeEvent
+- BlockFallEvent
+- BlockFromToEvent
+- BlockGrowEvent
+- BlockIgniteEvent
+- BlockPistonChangeEvent
+- BlockRedstoneEvent
+- DoorToggleEvent
+- CreatureSpawnEvent
+- CreeperPowerEvent
+- EntityArmorChangeEvent
+- EntityBlockChangeEvent
+- EntityCombustByBlockEvent
+- EntityCombustByEntityEvent
+- EntityCombustEvent
+- EntityDamageByBlockEvent
+- EntityDamageByChildEntityEvent
+- EntityExplodeEvent
+- EntityMotionEvent
+- EntityPortalEnterEvent
+- EntityRegainHealthEvent
+- EntityShootBowEvent
+- EntityVehicleEnterEvent
+- EntityVehicleExitEvent
+- ExplosionPrimeEvent
+- BrewEvent
+- EnchantItemEvent
+- InventoryMoveItemEvent
+- StartBrewEvent
+- ChunkLoadEvent
+- ChunkPopulateEvent
+- LevelInitEvent
+- LevelLoadEvent
+- LevelSaveEvent
+- LevelUnloadEvent
+- SpawnChangeEvent
+- ThunderChangeEvent
+- WeatherChangeEvent
+- PlayerAchievementAwardedEvent
+- PlayerAnimationEvent
+- PlayerAsyncPreLoginEvent
+- PlayerBlockPickEvent
+- PlayerBucketEmptyEvent
+- PlayerBucketFillEvent
+- PlayerChangeSkinEvent
+- PlayerChunkRequestEvent
+- PlayerCreationEvent
+- PlayerDropItemEvent
+- PlayerEatFoodEvent
+- PlayerEditBookEvent
+- PlayerFoodLevelChangeEvent
+- PlayerGameModeChangeEvent
+- PlayerGlassBottleFillEvent
+- PlayerInvalidMoveEvent
+- PlayerItemConsumeEvent
+- PlayerLocallyInitializedEvent
+- PlayerMapInfoRequestEvent
+- PlayerMouseOverEntityEvent
+- PlayerServerSettingsRequestEvent
+- PlayerSettingsRespondedEvent
+- PluginDisableEvent
+- PluginEnableEvent
+- PotionApplyEvent
+- PotionCollideEvent
+- PlayerDataSerializeEvent
+- RemoteServerCommandEvent
+- EntityEnterVehicleEvent
+- EntityExitVehicleEvent
+- VehicleCreateEvent
+- VehicleDamageEvent
+- VehicleDestroyEvent
+- VehicleMoveEvent
+- VehicleUpdateEvent
+- LightningStrikeEvent
+
 ## 1.2.8.2
 
 Bug Fixed

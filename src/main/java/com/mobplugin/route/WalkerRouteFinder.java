@@ -123,7 +123,7 @@ public class WalkerRouteFinder extends SimpleRouteFinder {
 
     private boolean isWalkable(Vector3 vector3) {
         Block block = level.getBlock(vector3, false);
-        return !block.canPassThrough() && canWalkOn(block);
+        return (!block.canPassThrough() || block.getId()==8 || block.getId() == 9) && canWalkOn(block);
     }
 
     private boolean isPassable(Vector3 vector3) {

@@ -73,11 +73,9 @@ public class Clothes {
                         reader.close();
                         Loader.playergeojsonmap.put(skinname,geotext);
                         skin.setGeometryData(geotext);
-                        Loader.getlogger().info("build_in_4D");
                     }
                 }
                 skin.generateSkinId(skinname);
-                Loader.getlogger().info("build_"+skinname+"_skin_for:"+playername);
                 return skin;
             }else {
                 Loader.getlogger().warning("没有该皮肤！");

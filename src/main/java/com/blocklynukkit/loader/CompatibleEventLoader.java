@@ -1,8 +1,10 @@
 package com.blocklynukkit.loader;
 
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJumpEvent;
+import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 
 public class CompatibleEventLoader implements Listener {
     private Loader plugin;
@@ -12,8 +14,12 @@ public class CompatibleEventLoader implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onJump(PlayerJumpEvent event){
         plugin.callEventHandler(event,event.getClass().getSimpleName());
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerLocallyInitializedEvent(PlayerLocallyInitializedEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 }

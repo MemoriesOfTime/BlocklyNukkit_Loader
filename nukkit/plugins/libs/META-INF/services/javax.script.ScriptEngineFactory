@@ -1,1 +1,1 @@
-org.python.jsr223.PyScriptEngineFactory
+com.oracle.truffle.js.scriptengine.GraalJSEngineFactory

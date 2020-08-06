@@ -2,7 +2,7 @@ package com.blocklynukkit.loader.script.event;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-
+@Deprecated
 public class PlayerDamageByPlayerEvent extends EntityDamageByPlayerEvent {
     public PlayerDamageByPlayerEvent(EntityDamageByPlayerEvent event){
         super(event);

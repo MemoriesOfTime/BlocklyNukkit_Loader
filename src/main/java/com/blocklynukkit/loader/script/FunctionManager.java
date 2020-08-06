@@ -10,6 +10,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
+import cn.nukkit.network.protocol.VideoStreamConnectPacket;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
@@ -29,9 +30,12 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
+import javax.script.ScriptEngine;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.management.ManagementFactory;
+import com.sun.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -44,7 +48,43 @@ public class FunctionManager {
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
     }
+
+    //here 8/5
+    public double getCPULoad(){
+        OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        return osMxBean.getSystemLoadAverage();
+    }
+    public int getCPUCores(){
+        OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        return osMxBean.getAvailableProcessors();
+    }
+    public double getMemoryTotalSizeMB(){
+        OperatingSystemMXBean mem = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        return mem.getTotalPhysicalMemorySize()/(1024d*1024d);
+    }
+    public double getMemoryUsedSizeMB(){
+        OperatingSystemMXBean mem = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        return (mem.getTotalPhysicalMemorySize()-mem.getFreePhysicalMemorySize())/(1024d*1024d);
+    }
+    public void forceDisconnect(Player player){
+        VideoStreamConnectPacket packet = new  VideoStreamConnectPacket();
+        packet.address = "8.8.8.8";
+        packet.action = VideoStreamConnectPacket.ACTION_OPEN;
+        packet.screenshotFrequency =1.0f;
+        player.dataPacket(packet);
+    }
+
+    //here 8/4
+    public Object getVariableFrom(String scriptName,String varName){
+        ScriptEngine engine = Loader.engineMap.get(scriptName);
+        return engine.get(varName);
+    }
+    public void putVariableTo(String scriptName,String varName,Object var){
+        ScriptEngine engine = Loader.engineMap.get(scriptName);
+        engine.put(varName,var);
+    }
     //here 6/28
+    @Deprecated
     public void loadJar(String path){
         try{
             URL urls[] = new URL[ ]{ new File(path).toURL() };
@@ -240,8 +280,8 @@ public class FunctionManager {
     }
     //end here
     //跨命名空间调用
-    public void callFunction(String functionname,Object... args){
-        Loader.plugin.call(functionname, args);
+    public Object callFunction(String functionname,Object... args){
+        return Loader.plugin.call(functionname, args);
     }
     //http
     public String httpRequest(String method,String url,String data){

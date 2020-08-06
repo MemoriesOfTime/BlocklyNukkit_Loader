@@ -5,6 +5,7 @@
       <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-debugger.jar!/" />
       <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-engine.jar!/" />
       <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-libs.jar!/" />
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/phpForBN-zend.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

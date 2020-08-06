@@ -4,6 +4,7 @@ import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.sun.istack.internal.NotNull;
+import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngineManager;
@@ -38,13 +39,20 @@ public class JavaScriptLoader {
                 }else {
                     putJavaScriptEngine(file.getName(),js);
                 }
+            }else if(file.getName().endsWith(".py")&&!file.getName().contains("bak") && !plugins.containsKey("PyBN")){
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning("无法加载:" + file.getName()+"! 缺少python依赖库");
+                    getlogger().warning("请到https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                }
+                else{
+                    getlogger().warning("cannot load BN plugin:" + file.getName()+" python libs not found!");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
+                }
             }
-
-
         }
     }
     public void putJavaScriptEngine(String name,String js){
-        engineMap.put(name,new ScriptEngineManager().getEngineByName("nashorn"));
+        engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine());
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 getlogger().error("JavaScript引擎加载出错！");

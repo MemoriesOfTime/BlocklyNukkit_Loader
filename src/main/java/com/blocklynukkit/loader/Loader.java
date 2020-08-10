@@ -50,6 +50,7 @@ public class Loader extends PluginBase implements Listener {
     public static Set<String> bnpluginset = new HashSet<>();
 
     public static long previousTime = System.currentTimeMillis();
+    public static ScriptException previousException = null;
 
     public static String positionstmp = "";
     public static int checkupdatetime = 0;
@@ -217,7 +218,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
-        //plugin.getServer().getCommandMap().register("testNPC",new testNPC());
+        plugin.getServer().getCommandMap().register("showstacktrace",new showStackTrace());
         plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
 
         //开启速建官网服务器
@@ -331,11 +332,23 @@ public class Loader extends PluginBase implements Listener {
             }
 
         } catch (final Exception se) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
-            else
-            plugin.getLogger().error("errors when calling " + functionName, se);
-            se.printStackTrace();
+            if(se instanceof ScriptException){
+                ScriptException ee = (ScriptException)se;
+                previousException = ee;
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Loader.getlogger().warning("在调用\""+ee.getFileName()+"\"中的函数"+functionName+"时");
+                    Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
+                    Loader.getlogger().warning(ee.getMessage());
+                    Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                }else {
+                    Loader.getlogger().warning("when calling function "+functionName+" in \""+ee.getFileName()+"\"");
+                    Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
+                    Loader.getlogger().warning(ee.getMessage());
+                    Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                }
+            }else {
+                se.printStackTrace();
+            }
         }
     }
 
@@ -358,11 +371,23 @@ public class Loader extends PluginBase implements Listener {
             }
 
         } catch (final Exception se) {
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-            plugin.getLogger().error("在回调 " + functionName+" 时出错", se);
-            else
-            plugin.getLogger().error("errors when calling " + functionName, se);
-            se.printStackTrace();
+            if(se instanceof ScriptException){
+                ScriptException ee = (ScriptException)se;
+                previousException = ee;
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    Loader.getlogger().warning("在调用\""+ee.getFileName()+"\"中的函数"+functionName+"时");
+                    Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
+                    Loader.getlogger().warning(ee.getMessage());
+                    Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                }else {
+                    Loader.getlogger().warning("when calling function "+functionName+" in \""+ee.getFileName()+"\"");
+                    Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
+                    Loader.getlogger().warning(ee.getMessage());
+                    Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                }
+            }else {
+                se.printStackTrace();
+            }
         }
     }
 
@@ -374,11 +399,23 @@ public class Loader extends PluginBase implements Listener {
             try {
                 ((Invocable) engine).invokeFunction(functionName, sender, args);
             } catch (final Exception se) {
-                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                    getLogger().error("在回调 " + functionName+" 时出错", se);
-                else
-                    plugin.getLogger().error("errors when calling " + functionName, se);
-                se.printStackTrace();
+                if(se instanceof ScriptException){
+                    ScriptException e = (ScriptException)se;
+                    previousException = e;
+                    if (Server.getInstance().getLanguage().getName().contains("中文")){
+                        Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                        Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                        Loader.getlogger().warning(e.getMessage());
+                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                    }else {
+                        Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                        Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                        Loader.getlogger().warning(e.getMessage());
+                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                    }
+                }else {
+                    se.printStackTrace();
+                }
             }
         }
     }
@@ -408,12 +445,21 @@ public class Loader extends PluginBase implements Listener {
                 }
                 try {
                     return ((Invocable) engine).invokeFunction(functionName, args);
-                } catch (final Exception se) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("在回调 " + functionName+"时出错", se);
-                    else
-                        plugin.getLogger().error("errors when calling " + functionName, se);
-                    se.printStackTrace();
+                } catch (final ScriptException e) {
+                    previousException = e;
+                    if (Server.getInstance().getLanguage().getName().contains("中文")){
+                        Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                        Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                        Loader.getlogger().warning(e.getMessage());
+                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                    }else {
+                        Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                        Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                        Loader.getlogger().warning(e.getMessage());
+                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                    }
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
                 }
             }
         }
@@ -432,11 +478,23 @@ public class Loader extends PluginBase implements Listener {
 
                     return String.valueOf(((Invocable) engine).invokeFunction(sp[1], args));
                 } catch (final Exception se) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("在回调 " + functionName+"时出错", se);
-                    else
-                        plugin.getLogger().error("errors when calling " + functionName, se);
-                    se.printStackTrace();
+                    if(se instanceof ScriptException){
+                        ScriptException e = (ScriptException)se;
+                        previousException = e;
+                        if (Server.getInstance().getLanguage().getName().contains("中文")){
+                            Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                        }else {
+                            Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                        }
+                    }else {
+                        se.printStackTrace();
+                    }
                     return "ERROR";
                 }
             }else {
@@ -461,23 +519,6 @@ public class Loader extends PluginBase implements Listener {
             return "NO FUNCTION";
         }
 
-    }
-
-    private synchronized Object eval(final CommandSender sender, final String expression) throws ScriptException {
-        for(ScriptEngine engine:engineMap.values()){
-            if (sender != null && sender.isPlayer()) {
-                final Player player = (Player) sender;
-                engine.put("me", player);
-                engine.put("level", player.getPosition().level);
-                engine.put("pos", player.getPosition());
-            } else {
-                engine.put("me", null);
-                engine.put("level", getServer().getDefaultLevel());
-                engine.put("pos", null);
-            }
-            return engine.eval(expression);
-        }
-        return null;
     }
 
     public static PluginLogger getlogger(){
@@ -642,22 +683,21 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public class testNPC extends Command{
-        public testNPC() {
-            super("testNPC","测试BNNPC");
+    public class showStackTrace extends Command{
+        public showStackTrace() {
+            super("showstacktrace","display previous error stacktrace");
             this.setPermission("blocklynukkit.opall");
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args){
             if(sender.isPlayer()){
-                if(!sender.isOp())return false;
-            }else {
+                sender.sendMessage(TextFormat.RED+"This command can only be called from console!");
                 return false;
+            }else {
+                if(previousException!=null){
+                    previousException.printStackTrace();
+                }
             }
-            Player player = Server.getInstance().getPlayer(sender.getName());
-            double x=player.x,y=player.y,z=player.z;
-            BNNPC tmp = new BNNPC(player.level.getChunk(((int)x)>>4,((int)z)>>4),Entity.getDefaultNBT(new Vector3(x,y,z)),"test",new Clothes(args[0]));
-            tmp.spawnToAll();
             return false;
         }
     }

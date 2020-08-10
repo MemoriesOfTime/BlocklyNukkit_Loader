@@ -45,8 +45,6 @@ public class FunctionManager {
 
     private Loader plugin;
     
-    final private static byte[] motdData = new byte[]{1, 0, 0, 0, 0, 0, 3, 106, 7, 0, -1, -1, 0, -2, -2, -2, -2, -3, -3, -3, -3, 18, 52, 86, 120, -100, 116, 22, -68};
-
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
     }
@@ -447,7 +445,7 @@ public class FunctionManager {
     }
     //end here
 
-    public TaskHand(String functionName, int delay){
+    public TaskHandler createTask(String functionName, int delay){
         return plugin.getServer().getScheduler().scheduleDelayedTask(new ModTask(functionName), delay);
     }
     //here 5/9
@@ -564,7 +562,7 @@ public class FunctionManager {
         private String host;
         private int port;
         
-        final private static byte[] motdData = new byte[]{1, 0, 0, 0, 0, 0, 3, 106, 7, 0, -1, -1, 0, -2, -2, -2, -2, -3, -3, -3, -3, 18, 52, 86, 120, -100, 116, 22, -68};
+        final private  byte[] motdData = new byte[]{1, 0, 0, 0, 0, 0, 3, 106, 7, 0, -1, -1, 0, -2, -2, -2, -2, -3, -3, -3, -3, 18, 52, 86, 120, -100, 116, 22, -68};
         
         public MotdThread(String host, int port, String callback)
         {
@@ -580,7 +578,7 @@ public class FunctionManager {
 		     {
 			       socket = new DatagramSocket();
 			       socket.setSoTimeout(5000);
-			       DatagramPacket packet = new DatagramPacket(Arrays.copyOf(this.data, 1024), 1024, InetAddress.getByName(this.host), this.port);
+			       DatagramPacket packet = new DatagramPacket(Arrays.copyOf(this.motdData, 1024), 1024, InetAddress.getByName(this.host), this.port);
 			       socket.send(packet);
 			       socket.receive(packet);
 

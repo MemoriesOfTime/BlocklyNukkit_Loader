@@ -8,6 +8,7 @@ Bugs Fixed
 
 - 修复了bnnpc浮空走路bug
 - 修复了浮空物品空事件报错
+- 现在的报错信息比以前好看多了
 
 manager
 

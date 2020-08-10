@@ -71,7 +71,18 @@ public class JavaScriptLoader {
         try {
             engineMap.get(name).eval(js);
         } catch (ScriptException e) {
-            e.printStackTrace();
+            previousException = e;
+            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                Loader.getlogger().warning("在初始化\""+e.getFileName()+"\"时");
+                Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                Loader.getlogger().warning(e.getMessage());
+                Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+            }else {
+                Loader.getlogger().warning("In initialization of\""+e.getFileName()+"\"");
+                Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                Loader.getlogger().warning(e.getMessage());
+                Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+            }
         }
         bnpluginset.add(name);
     }

@@ -1,5 +1,9 @@
 ## 1.2.8.3
 
+function
+
+- void getServerMotd(String host, int port, String callback) --根据服务器IP和端口获取在线人数信息
+
 Bugs Fixed
 
 - 修复了bnnpc浮空走路bug

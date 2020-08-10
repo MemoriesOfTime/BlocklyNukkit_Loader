@@ -36,6 +36,7 @@ inventory
 window
 
 - void forceClearWindow(Player player)
+- int getEventResponseIndex(PlayerFormRespondedEvent event)
 
 entity
 

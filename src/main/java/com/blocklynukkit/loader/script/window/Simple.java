@@ -44,6 +44,7 @@ public class Simple {
         }
         return this;
     }
+    @Deprecated
     public Simple showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
             if(mirror!=null){

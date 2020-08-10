@@ -236,8 +236,6 @@ public class EntityManager {
     public boolean isPlayer(Entity e){
         if(e.getName().equals("BNNPC")||e.getName().toUpperCase().equals("NPC")){
             return false;//优先排除各种npc
-        }else if(e.getNetworkId()!=-1||e.getNetworkId()!=63){
-            return false;//network id都不对了肯定不是
         }else{
             return e instanceof Player;//因为要遍历堆栈，性能消耗最高，能不做就不做
         }

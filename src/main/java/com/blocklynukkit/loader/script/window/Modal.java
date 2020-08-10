@@ -36,6 +36,7 @@ public class Modal {
         }
         return this;
     }
+    @Deprecated
     public Modal showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
             if(mirror!=null){

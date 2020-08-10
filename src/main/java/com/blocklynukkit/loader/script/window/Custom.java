@@ -25,6 +25,7 @@ public class Custom {
         }
         return this;
     }
+    @Deprecated
     public Custom showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
             if(mirror!=null){

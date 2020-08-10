@@ -7,6 +7,8 @@ import cn.nukkit.event.player.PlayerSettingsRespondedEvent;
 import cn.nukkit.form.response.FormResponseCustom;
 import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
+import cn.nukkit.form.window.FormWindowModal;
+import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.DummyBossBar;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -100,6 +102,18 @@ public class WindowManager {
             return modal.getClickedButtonText();
         }else {
             return "NULL";
+        }
+    }
+    public int getEventResponseIndex(PlayerFormRespondedEvent event){
+        if(event==null||event.wasClosed()){
+            return -2147483648;
+        }
+        if(event.getWindow() instanceof FormWindowSimple){
+            return ((FormResponseSimple)event.getResponse()).getClickedButtonId();
+        }else if(event.getWindow() instanceof FormWindowModal){
+            return ((FormResponseModal)event.getResponse()).getClickedButtonId();
+        }else {
+            return -2147483648;
         }
     }
     public String getEventCustomVar(PlayerFormRespondedEvent event,int id,String mode){

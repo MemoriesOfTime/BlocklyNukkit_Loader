@@ -5,6 +5,7 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.event.Event;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
@@ -49,6 +50,16 @@ public class FunctionManager {
         this.plugin = plugin;
     }
 
+    //here 8/8
+    public List<String> getEventFunctions(Event event){
+        List<String> list = new ArrayList<>();
+        for(Method method:event.getClass().getMethods()){
+            if(fiterMethod(method.getName())){
+                list.add(method.getName());
+            }
+        }
+        return list;
+    }
     //here 8/5
     public double getCPULoad(){
         OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -613,6 +624,18 @@ public class FunctionManager {
         @Override
         public void onRun(int i) {
             callback.call(Loader.functionManager,Args);
+        }
+    }
+
+    private boolean fiterMethod(String method){
+        if(method.endsWith("equals")||method.endsWith("clone")||method.endsWith("wait")||method.endsWith("getClass")||
+        method.endsWith("finalize")||method.endsWith("notify")||method.endsWith("notifyAll")||method.endsWith("toString")){
+            return false;
+        }else {
+            if(!(method.startsWith("get")||method.startsWith("is")||method.startsWith("set"))){
+                return false;
+            }else
+            return true;
         }
     }
 }

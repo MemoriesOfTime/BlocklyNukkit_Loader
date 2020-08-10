@@ -21,6 +21,7 @@ import cn.nukkit.nbt.tag.ListTag;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import io.netty.util.collection.CharObjectHashMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -181,6 +182,10 @@ public class BlockItemManager {
     //-获取物品数量*
     //-获取物品数据值*
     //-获取物品名称*
+    //-物品不可破坏*
+    public void setItemProperty(@NotNull Item item, Integer data, Integer count, Boolean unbreakable, String name, String lore, String nbt) {
+
+    }
     //未完成-获取工具种类*
     public String getItemLore(Item item){
         String string="";

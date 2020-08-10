@@ -11,7 +11,6 @@ import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.TextPacket;
 import cn.nukkit.network.protocol.VideoStreamConnectPacket;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
@@ -23,13 +22,11 @@ import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
+import com.blocklynukkit.loader.other.mirai.QQBotThread;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
-import com.blocklynukkit.loader.script.window.GameManager;
-import com.blocklynukkit.loader.scriptloader.GraalJSLoader;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
-import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
@@ -40,6 +37,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import javax.script.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,9 +49,6 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
     public static Set<String> bnpluginset = new HashSet<>();
 
-    public static EntityDamageByEntityEvent previous;
-    public static Vector3 previousVecDamager = new Vector3();
-    public static Vector3 previousVecEntity = new Vector3();
     public static long previousTime = System.currentTimeMillis();
 
     public static String positionstmp = "";
@@ -72,6 +67,7 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
     public static HttpServer httpServer = null;
+    public static EventLoader eventLoader;
     public static FloatingItemManager floatingItemManager = new FloatingItemManager();
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
     public static FunctionManager functionManager;
@@ -196,11 +192,11 @@ public class Loader extends PluginBase implements Listener {
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
-        new EventLoader(this);
+        eventLoader = new EventLoader(this);
         //检测nk版本，根据版本决定是否注册新增事件监听器
         boolean isNewNukkitVersion = false;
         try {
-            isNewNukkitVersion = (null != Class.forName("cn.nukkit.event.player.PlayerJumpEvent")) && (null != Class.forName("cn.nukkit.event.player.PlayerLocallyInitializedEvent"));
+            isNewNukkitVersion = (null != Class.forName("cn.nukkit.event.player.PlayerJumpEvent"));
         } catch (Throwable t) {
             isNewNukkitVersion = false;
         }
@@ -315,43 +311,10 @@ public class Loader extends PluginBase implements Listener {
     public static synchronized void callEventHandler(final Event e, final String functionName) {
         try {
             if(e instanceof EntityDamageByEntityEvent||e.getEventName().equals("EntityDamageByEntityEvent")){
-                Entity damager = ((EntityDamageByEntityEvent) e).getDamager();
-                Entity entity = ((EntityDamageByEntityEvent) e).getEntity();
-                if(previous!=null){
-                    boolean sameDamage = previous.getFinalDamage()==((EntityDamageByEntityEvent) e).getFinalDamage()&&previous.getKnockBack()==((EntityDamageByEntityEvent) e).getKnockBack();
-                    boolean sameName = (previous.getEntity().getName().equals(((EntityDamageByEntityEvent) e).getEntity().getName()));
-                    boolean sameDamager = previousVecDamager.equals(damager);
-                    boolean sameEntity = previousVecEntity.equals(entity);
-                    boolean sametime = System.currentTimeMillis()-previousTime<10;
-                    previousTime=System.currentTimeMillis();
-                    getlogger().warning("发现了一个EntityDamageByEntityEvent的调用请求");
-                    getlogger().warning("实体名称一致"+(sameName)+
-                            "伤害一致"+(sameDamage)+
-                            "加害者位置一致"+(sameDamager)+
-                            "受害者位置一致"+(sameEntity)+"时间一致"+(sametime));
-                    if(sametime){
-                        if(sameDamage&&sameName&&sameDamager&&sameEntity){
-                            previous=((EntityDamageByEntityEvent) e);
-                            previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
-                            previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
-                            getlogger().warning("拦截了一个EntityDamageByEntityEvent");
-                            getlogger().warning("堆栈状态：");
-                            for(StackTraceElement element:Thread.currentThread().getStackTrace()){
-                                getlogger().info("栈上压入类"+element.getClassName()+"的方法"+element.getMethodName()+" 自"+element.getFileName()+"第"+element.getLineNumber()+"行");
-                            }
-                            return;
-                        }else {
-                            previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
-                            previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
-                            getlogger().warning("已将一个EntityDamageByEntityEvent推至栈顶");
-                            previous=((EntityDamageByEntityEvent) e);
-                        }
-                    }
-                }else {
-                    previousVecDamager = new Vector3(damager.x,damager.y,damager.z);
-                    previousVecEntity = new Vector3(entity.x,entity.y,entity.z);
-                    getlogger().warning("已将一个EntityDamageByEntityEvent推至栈顶");
-                    previous = ((EntityDamageByEntityEvent) e);
+                boolean sametime = System.currentTimeMillis()-previousTime<8;
+                previousTime=System.currentTimeMillis();
+                if(sametime){
+                    return;
                 }
             }
             for(ScriptEngine engine:engineMap.values()){
@@ -647,27 +610,34 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage(TextFormat.RED+"你无权使用这个命令");
                 return false;
             }
-            VideoStreamConnectPacket packet = new  VideoStreamConnectPacket();
-            packet.address = args[0];
-            packet.action = VideoStreamConnectPacket.ACTION_OPEN;
-            packet.screenshotFrequency =1.0f;
-            ((Player)sender).dataPacket(packet);
-//            if(args.length<1){
-//                return false;
-//            }
-//
-////            levelManager.setSkyLandGenerator(64,0,true,
-////                    20,17,0,128,20,9,0,64,
-////                    8,8,0,16,1,7,0,10,
-////                    2,9,0,32,1,8,0,16,
-////                    10,33,0,128,8,33,0,128,
-////                    10,33,0,80,10,33,0,80,
-////                    10,33,0,80,true,true,true);
-//            //levelManager.genLevel(args[0],999,"FLAT");
-//            if(sender.isPlayer()){
-//                Server.getInstance().loadLevel(args[0]);
-//                levelManager.loadScreenTP(((Player)sender),Server.getInstance().getLevelByName(args[0]).getSafeSpawn(),60);
-//            }
+            Map<String,List<Map.Entry<String,String>>> map= new HashMap<>();
+            for(Method method:eventLoader.getClass().getMethods()){
+                if(method.getName().startsWith("on")){
+                    List<Map.Entry<String,String>> p = new ArrayList<>();
+                    Class tmp = method.getParameterTypes()[0];
+                    for(Method eventmethod:tmp.getMethods()){
+                        if(eventmethod.getName().startsWith("get")||eventmethod.getName().startsWith("set")||eventmethod.getName().startsWith("is")){
+                            p.add(new Map.Entry<String, String>() {
+                                @Override
+                                public String getKey() {
+                                    return eventmethod.getName();
+                                }
+
+                                @Override
+                                public String getValue() {
+                                    return eventmethod.getReturnType().getName();
+                                }
+
+                                @Override
+                                public String setValue(String value) {
+                                    return null;
+                                }
+                            });
+                        }
+
+                    }
+                }
+            }
             return false;
         }
     }

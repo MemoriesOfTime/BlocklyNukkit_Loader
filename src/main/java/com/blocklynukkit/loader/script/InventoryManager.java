@@ -1,9 +1,13 @@
 package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
+import cn.nukkit.block.BlockID;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityChest;
 import cn.nukkit.blockentity.BlockEntityContainer;
+import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
@@ -97,6 +101,8 @@ public class InventoryManager {
         if(blockEntity instanceof BlockEntityContainer){
             if (blockEntity instanceof BlockEntityChest){
                 ((BlockEntityChest) blockEntity).getInventory().setContents(inv.getContents());
+                Inventory chest = ((BlockEntityChest)blockEntity).getRealInventory();
+                chest.setContents(inv.getContents());
             }else{
                 for(int i=0;i<inv.getSize();i++){
                     ((BlockEntityContainer) blockEntity).setItem(i,inv.getItem(i));
@@ -113,6 +119,81 @@ public class InventoryManager {
     }
     public void setPlayerInv(Player player, Inventory inv){
         player.getInventory().setContents(inv.getContents());
+    }
+    public Item getEntityHelmet(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getInventory().getHelmet();
+        }else{
+            return null;
+        }
+    }
+    public Item getEntityChestplate(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getInventory().getChestplate();
+        }else{
+            return null;
+        }
+    }
+    public Item getEntityLeggings(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getInventory().getLeggings();
+        }else{
+            return null;
+        }
+    }
+    public Item getEntityBoots(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getInventory().getBoots();
+        }else{
+            return null;
+        }
+    }
+    public Item getEntityItemInHand(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getInventory().getItemInHand();
+        }else{
+            return null;
+        }
+    }
+    public Item getEntityItemInOffHand(Entity entity){
+        if(entity instanceof EntityHuman){
+            return ((EntityHuman)entity).getOffhandInventory().getItem(0);
+        }else{
+            return null;
+        }
+    }
+    public void setEntityItemChestplate(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getInventory().setChestplate(item);
+        }
+    }
+    public void setEntityItemLeggings(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getInventory().setLeggings(item);
+        }
+    }
+    public void setEntityItemHelmet(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getInventory().setHelmet(item);
+        }
+    }
+    public void setEntityItemBoots(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getInventory().setBoots(item);
+        }
+    }
+    public void setEntityItemInHand(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getInventory().setItemInHand(item);
+        }
+    }
+    public void setEntityItemInOffHand(Entity entity,Item item){
+        if(entity instanceof EntityHuman){
+            ((EntityHuman)entity).getOffhandInventory().setItem(0,item);
+        }
+    }
+    public Item getInventorySlot(Inventory inv,int slot){
+        return inv.getItem(slot);
     }
 
 }

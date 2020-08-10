@@ -26,6 +26,7 @@ public class FloatingItemManager implements Listener {
     }
     @EventHandler
     public void playerJoin(PlayerJoinEvent event){
+        if(event==null||event.getPlayer()==null||event.getPlayer().getLevel()==null)return;
         String levelName = event.getPlayer().getLevel().getName();
         for(Map.Entry<Position,Item> each:displayMap.keySet()){
             if(levelName.equals(each.getKey().getLevel().getName())){
@@ -35,6 +36,7 @@ public class FloatingItemManager implements Listener {
     }
     @EventHandler
     public void playerTeleport(PlayerTeleportEvent event){
+        if(event==null||event.getPlayer()==null||event.getFrom().getLevel()==null||event.getTo().getLevel()==null)return;
         if(!event.getFrom().getLevel().getName().equals(event.getTo().getLevel().getName())){
             for(Map.Entry<Position,Item> each:displayMap.keySet()){
                 if(each.getKey().getLevel().getName().equals(event.getFrom().getLevel().getName())){

@@ -169,4 +169,8 @@ public class WindowManager {
     public void makeTipsStatic(String varname,String toReplace){
         tipsVar.put(varname, toReplace);
     }
+    //here 8/7
+    public void forceClearWindow(Player player){
+        player.removeAllWindows();
+    }
 }

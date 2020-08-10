@@ -2,17 +2,24 @@ package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.DoubleTag;
+import cn.nukkit.nbt.tag.FloatTag;
+import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.potion.Effect;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
+import com.blocklynukkit.loader.other.Entities.NoFallBlock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -234,5 +241,21 @@ public class EntityManager {
         }else{
             return e instanceof Player;//因为要遍历堆栈，性能消耗最高，能不做就不做
         }
+    }
+    //生成方块实体
+    public void spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced){
+        CompoundTag tag = new CompoundTag().putList(new ListTag("Pos").add(new DoubleTag("", pos.x)).add(new DoubleTag("", pos.y)).add(new DoubleTag("", pos.z)))
+                .putList(new ListTag("Motion").add(new DoubleTag("", 0)).add(new DoubleTag("", 0)).add(new DoubleTag("", 0)))
+                .putList(new ListTag("Rotation").add(new FloatTag("", 0)).add(new FloatTag("", 0)))
+                .putInt("TileID", block.getId())
+                .putByte("Data", block.getDamage());
+        if(enableGravity){
+            EntityFallingBlock fallingBlock = new EntityFallingBlock(pos.getChunk(),tag);
+            fallingBlock.spawnToAll();
+        }else {
+            NoFallBlock nofallBlock = new NoFallBlock(pos.getChunk(),tag,canBePlaced);
+            nofallBlock.spawnToAll();
+        }
+
     }
 }

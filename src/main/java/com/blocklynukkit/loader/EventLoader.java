@@ -20,6 +20,7 @@ import cn.nukkit.event.vehicle.*;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.scheduler.Task;
 import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
@@ -349,6 +350,9 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketReceive(DataPacketReceiveEvent event){
+        if(event.getPacket().pid()== ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET){
+            plugin.callEventHandler(event,"PlayerLocallyInitializedEvent");
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -662,8 +666,6 @@ public class EventLoader implements Listener {
     public void onLightningStrikeEvent(LightningStrikeEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
-
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerItemConsumeEvent(PlayerItemConsumeEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());

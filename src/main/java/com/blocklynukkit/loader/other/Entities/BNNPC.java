@@ -101,7 +101,7 @@ public class BNNPC extends EntityHuman {
             Loader.plugin.call(callbackfunction,this,currentTick);
         }
         //计算并执行线性重力
-        if(enableGravity && !isjumping && !isonRoute){
+        if(enableGravity && !isjumping ){
             if (Position.fromObject(this,this.level).add(0,-0.05,0).getLevelBlock().isSolid()) {
                 if(!(this.y-((int)this.y)<=0.01)){
                     this.y = Math.round(this.y);

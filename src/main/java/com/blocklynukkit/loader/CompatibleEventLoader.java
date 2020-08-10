@@ -18,8 +18,4 @@ public class CompatibleEventLoader implements Listener {
     public void onJump(PlayerJumpEvent event){
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerLocallyInitializedEvent(PlayerLocallyInitializedEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
-    }
 }

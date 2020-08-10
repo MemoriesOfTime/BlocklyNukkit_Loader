@@ -1,5 +1,10 @@
 ## 1.2.8.3
 
+Bugs Fixed
+
+- 修复了bnnpc浮空走路bug
+- 修复了浮空物品空事件报错
+
 manager
 
 - <E> callFunction(String functionname,Object... args) --callFunction会返回函数的返回值了
@@ -9,10 +14,47 @@ manager
 - int getCPUCores()
 - double getMemoryTotalSizeMB()
 - double getMemoryUsedSizeMB()
+- void forceDisconnect(Player player)
+- Array<String> getEventFunctions(Event event)
+
+inventory
+
+- Item getEntityHelmet(Entity entity)
+- Item getEntityChestplate(Entity entity)
+- Item getEntityLeggings(Entity entity)
+- Item getEntityBoots(Entity entity)
+- Item getEntityItemInHand(Entity entity)
+- Item getEntityItemInOffHand(Entity entity)
+- void setEntityItemHelmet(Entity entity,Item item)
+- void setEntityItemChestplate(Entity entity,Item item)
+- void setEntityItemLeggings(Entity entity,Item item)
+- void setEntityItemBoots(Entity entity,Item item)
+- void setEntityItemInHand(Entity entity,Item item)
+- void setEntityItemInOffHand(Entity entity,Item item)
+- Item getInventorySlot(Inventory inv,int slot)
+
+window
+
+- void forceClearWindow(Player player)
 
 entity
 
 - boolean isPlayer(Entity e)
+- void spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced)
+
+gameapi --新的基对象
+
+- void createGame(String name,boolean useTeam,String startGameCallBack,String endGameCallBack,String mainLoopCallBack,String deathCallBack)
+    -- 创建一个小游戏房间
+- void joinGame(Player player, String gameName) --让玩家进入指定名称的小游戏，自动匹配房间
+- void leaveGame(Player player) --让玩家从小游戏房间离开
+- boolean isPlayerInGame(Player player) --玩家是否正在玩某个小游戏
+- GameBase getPlayerRoom(Player player) --获取玩家正在玩的小游戏对象
+- Array<GameBase> getAllRoomByName(String gameName) --获取游戏名称相同的所有小游戏房间对象组成的数组
+- Array<String> getAllGameNames() --获取所有正在运行的小游戏房间的名字组成的数组
+
+GameBase --小游戏房间对象
+
 
 EventLoader --73 new
 

@@ -5,13 +5,11 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.entity.data.Skin;
-import cn.nukkit.event.Event;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.PlayerSkinPacket;
-import cn.nukkit.network.protocol.VideoStreamConnectPacket;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
@@ -31,71 +29,28 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
-import javax.script.ScriptEngine;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.management.ManagementFactory;
-import com.sun.management.OperatingSystemMXBean;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
+import java.net.DatagramSocket;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+
 
 public class FunctionManager {
 
     private Loader plugin;
+    
+    final private static byte[] motdData = new byte[]{1, 0, 0, 0, 0, 0, 3, 106, 7, 0, -1, -1, 0, -2, -2, -2, -2, -3, -3, -3, -3, 18, 52, 86, 120, -100, 116, 22, -68};
 
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
     }
-
-    //here 8/8
-    public List<String> getEventFunctions(Event event){
-        List<String> list = new ArrayList<>();
-        for(Method method:event.getClass().getMethods()){
-            if(fiterMethod(method.getName())){
-                list.add(method.getName());
-            }
-        }
-        return list;
-    }
-    //here 8/5
-    public double getCPULoad(){
-        OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        return osMxBean.getSystemLoadAverage();
-    }
-    public int getCPUCores(){
-        OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        return osMxBean.getAvailableProcessors();
-    }
-    public double getMemoryTotalSizeMB(){
-        OperatingSystemMXBean mem = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        return mem.getTotalPhysicalMemorySize()/(1024d*1024d);
-    }
-    public double getMemoryUsedSizeMB(){
-        OperatingSystemMXBean mem = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        return (mem.getTotalPhysicalMemorySize()-mem.getFreePhysicalMemorySize())/(1024d*1024d);
-    }
-    public void forceDisconnect(Player player){
-        VideoStreamConnectPacket packet = new  VideoStreamConnectPacket();
-        packet.address = "8.8.8.8";
-        packet.action = VideoStreamConnectPacket.ACTION_OPEN;
-        packet.screenshotFrequency =1.0f;
-        player.dataPacket(packet);
-    }
-
-    //here 8/4
-    public Object getVariableFrom(String scriptName,String varName){
-        ScriptEngine engine = Loader.engineMap.get(scriptName);
-        return engine.get(varName);
-    }
-    public void putVariableTo(String scriptName,String varName,Object var){
-        ScriptEngine engine = Loader.engineMap.get(scriptName);
-        engine.put(varName,var);
-    }
     //here 6/28
-    @Deprecated
     public void loadJar(String path){
         try{
             URL urls[] = new URL[ ]{ new File(path).toURL() };
@@ -226,6 +181,12 @@ public class FunctionManager {
     public Vector3 buildvec3(double x,double y,double z){
         return new Vector3(x,y,z);
     }
+    
+    public void getServerMotd(String host, int port, String callback)
+    {
+		new MotdThread(host, port, callback).start();
+    }
+    
     //是不是神奇的Windows？
     public boolean isWindows(){
         return Utils.isWindows();
@@ -291,8 +252,8 @@ public class FunctionManager {
     }
     //end here
     //跨命名空间调用
-    public Object callFunction(String functionname,Object... args){
-        return Loader.plugin.call(functionname, args);
+    public void callFunction(String functionname,Object... args){
+        Loader.plugin.call(functionname, args);
     }
     //http
     public String httpRequest(String method,String url,String data){
@@ -486,7 +447,7 @@ public class FunctionManager {
     }
     //end here
 
-    public TaskHandler createTask(String functionName, int delay){
+    public TaskHand(String functionName, int delay){
         return plugin.getServer().getScheduler().scheduleDelayedTask(new ModTask(functionName), delay);
     }
     //here 5/9
@@ -596,6 +557,48 @@ public class FunctionManager {
 
 
     }
+    
+    public class MotdThread extends Thread
+    {
+        private String callback;
+        private String host;
+        private int port;
+        
+        final private static byte[] motdData = new byte[]{1, 0, 0, 0, 0, 0, 3, 106, 7, 0, -1, -1, 0, -2, -2, -2, -2, -3, -3, -3, -3, 18, 52, 86, 120, -100, 116, 22, -68};
+        
+        public MotdThread(String host, int port, String callback)
+        {
+             this.callback = callback;
+             this.host = host;
+             this.port = port;
+        }
+        
+        public void run()
+        {
+		     DatagramSocket socket = null;
+	         try
+		     {
+			       socket = new DatagramSocket();
+			       socket.setSoTimeout(5000);
+			       DatagramPacket packet = new DatagramPacket(Arrays.copyOf(this.data, 1024), 1024, InetAddress.getByName(this.host), this.port);
+			       socket.send(packet);
+			       socket.receive(packet);
+
+		           plugin.call(this.callback, new String(packet.getData(), 35, packet.getLength()).split(";"));
+		     }
+	    	 catch (Throwable e)
+	         {
+	    		   plugin.call(this.callback, false, e);
+	    	 }
+	    	 finally
+	    	 {
+	     		   if (socket != null)
+	    		   {
+	    			    socket.close();
+	    		   }
+             }
+        }
+    }
 
     public class ModTask extends Task{
 
@@ -624,18 +627,6 @@ public class FunctionManager {
         @Override
         public void onRun(int i) {
             callback.call(Loader.functionManager,Args);
-        }
-    }
-
-    private boolean fiterMethod(String method){
-        if(method.endsWith("equals")||method.endsWith("clone")||method.endsWith("wait")||method.endsWith("getClass")||
-        method.endsWith("finalize")||method.endsWith("notify")||method.endsWith("notifyAll")||method.endsWith("toString")){
-            return false;
-        }else {
-            if(!(method.startsWith("get")||method.startsWith("is")||method.startsWith("set"))){
-                return false;
-            }else
-            return true;
         }
     }
 }

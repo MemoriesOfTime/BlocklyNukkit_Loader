@@ -310,105 +310,101 @@ public class Loader extends PluginBase implements Listener {
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
-        try {
-            if(e instanceof EntityDamageByEntityEvent||e.getEventName().equals("EntityDamageByEntityEvent")){
-                boolean sametime = System.currentTimeMillis()-previousTime<8;
-                previousTime=System.currentTimeMillis();
-                if(sametime){
-                    return;
-                }
+        if(e instanceof EntityDamageByEntityEvent||e.getEventName().equals("EntityDamageByEntityEvent")){
+            boolean sametime = System.currentTimeMillis()-previousTime<8;
+            previousTime=System.currentTimeMillis();
+            if(sametime){
+                return;
             }
-            for(ScriptEngine engine:engineMap.values()){
-                if (engine.get(functionName) != null) {
-                    ((Invocable) engine).invokeFunction(functionName, e);
+        }
+        for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
+            try {
+                if (entry.getValue().get(functionName) != null) {
+                    ((Invocable) entry.getValue()).invokeFunction(functionName, e);
                 }
                 if(privatecalls.containsKey(functionName)){
                     for(String a:privatecalls.get(functionName)){
-                        if(engine.get(a) != null){
-                            ((Invocable) engine).invokeFunction(a, e);
+                        if(entry.getValue().get(a) != null){
+                            ((Invocable) entry.getValue()).invokeFunction(a, e);
                         }
                     }
                 }
-            }
-
-        } catch (final Exception se) {
-            if(se instanceof ScriptException){
-                ScriptException ee = (ScriptException)se;
-                previousException = ee;
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().warning("在调用\""+ee.getFileName()+"\"中的函数"+functionName+"时");
-                    Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
-                    Loader.getlogger().warning(ee.getMessage());
-                    Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                }else {
-                    Loader.getlogger().warning("when calling function "+functionName+" in \""+ee.getFileName()+"\"");
-                    Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
-                    Loader.getlogger().warning(ee.getMessage());
-                    Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+            }catch (final Exception se) {
+                if (se instanceof ScriptException) {
+                    ScriptException ee = (ScriptException) se;
+                    previousException = ee;
+                    if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                        Loader.getlogger().warning("在调用\"" + ee.getFileName() + "\"中的函数" + functionName + "时");
+                        Loader.getlogger().warning("在第" + ee.getLineNumber() + "行第" + ee.getColumnNumber() + "列发生错误:");
+                        Loader.getlogger().warning(ee.getMessage());
+                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                    } else {
+                        Loader.getlogger().warning("when calling function " + functionName + " in \"" + ee.getFileName() + "\"");
+                        Loader.getlogger().warning("at line " + ee.getLineNumber() + " column " + ee.getColumnNumber() + " occurred an error:");
+                        Loader.getlogger().warning(ee.getMessage());
+                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                    }
+                } else {
+                    se.printStackTrace();
                 }
-            }else {
-                se.printStackTrace();
             }
         }
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName,String type) {
-        try {
-            for(ScriptEngine engine:engineMap.values()){
-                if(type.equals("StoneSpawnEvent")){
-                    StoneSpawnEvent event = ((StoneSpawnEvent)e);
-                    if (engine.get(functionName) != null){
-                        ((Invocable) engine).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(engine.get(a) != null){
-                                ((Invocable) engine).invokeFunction(a, e);
-                            }
+        for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
+            try {if(type.equals("StoneSpawnEvent")){
+                StoneSpawnEvent event = ((StoneSpawnEvent)e);
+                if (entry.getValue().get(functionName) != null){
+                    ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                }
+                if(privatecalls.containsKey(functionName)){
+                    for(String a:privatecalls.get(functionName)){
+                        if(entry.getValue().get(a) != null){
+                            ((Invocable) entry.getValue()).invokeFunction(a, e);
                         }
                     }
                 }
-            }
-
-        } catch (final Exception se) {
-            if(se instanceof ScriptException){
-                ScriptException ee = (ScriptException)se;
-                previousException = ee;
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().warning("在调用\""+ee.getFileName()+"\"中的函数"+functionName+"时");
-                    Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
-                    Loader.getlogger().warning(ee.getMessage());
-                    Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+            }} catch (final Exception se) {
+                if(se instanceof ScriptException){
+                    ScriptException ee = (ScriptException)se;
+                    previousException = ee;
+                    if (Server.getInstance().getLanguage().getName().contains("中文")){
+                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
+                        Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
+                        Loader.getlogger().warning(ee.getMessage());
+                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                    }else {
+                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
+                        Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
+                        Loader.getlogger().warning(ee.getMessage());
+                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                    }
                 }else {
-                    Loader.getlogger().warning("when calling function "+functionName+" in \""+ee.getFileName()+"\"");
-                    Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
-                    Loader.getlogger().warning(ee.getMessage());
-                    Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                    se.printStackTrace();
                 }
-            }else {
-                se.printStackTrace();
             }
         }
     }
 
     public synchronized void callCommand(CommandSender sender, String[] args, String functionName){
-        for(ScriptEngine engine:engineMap.values()){
-            if(engine.get(functionName) == null){
+        for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
+            if(entry.getValue().get(functionName) == null){
                 continue;
             }
             try {
-                ((Invocable) engine).invokeFunction(functionName, sender, args);
+                ((Invocable) entry.getValue()).invokeFunction(functionName, sender, args);
             } catch (final Exception se) {
                 if(se instanceof ScriptException){
                     ScriptException e = (ScriptException)se;
                     previousException = e;
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
                         Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
                         Loader.getlogger().warning(e.getMessage());
                         Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
                     }else {
-                        Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
                         Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
                         Loader.getlogger().warning(e.getMessage());
                         Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
@@ -431,29 +427,41 @@ public class Loader extends PluginBase implements Listener {
                 try {
                     return ((Invocable) engine).invokeFunction(sp[1], args);
                 } catch (final Exception se) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("在回调 " + functionName+"时出错", se);
-                    else
-                        plugin.getLogger().error("errors when calling " + functionName, se);
-                    se.printStackTrace();
+                    if(se instanceof ScriptException){
+                        ScriptException e = (ScriptException)se;
+                        previousException = e;
+                        if (Server.getInstance().getLanguage().getName().contains("中文")){
+                            Loader.getlogger().warning("在调用\""+sp[0]+"\"中的函数"+functionName+"时");
+                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                        }else {
+                            Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                        }
+                    }else {
+                        se.printStackTrace();
+                    }
                 }
             }
         }else {
-            for(ScriptEngine engine:engineMap.values()){
-                if(engine.get(functionName) == null){
+            for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
+                if(entry.getValue().get(functionName) == null){
                     continue;
                 }
                 try {
-                    return ((Invocable) engine).invokeFunction(functionName, args);
+                    return ((Invocable) entry.getValue()).invokeFunction(functionName, args);
                 } catch (final ScriptException e) {
                     previousException = e;
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
                         Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
                         Loader.getlogger().warning(e.getMessage());
                         Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
                     }else {
-                        Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
+                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
                         Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
                         Loader.getlogger().warning(e.getMessage());
                         Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
@@ -482,7 +490,7 @@ public class Loader extends PluginBase implements Listener {
                         ScriptException e = (ScriptException)se;
                         previousException = e;
                         if (Server.getInstance().getLanguage().getName().contains("中文")){
-                            Loader.getlogger().warning("在调用\""+e.getFileName()+"\"中的函数"+functionName+"时");
+                            Loader.getlogger().warning("在调用\""+sp[0]+"\"中的函数"+functionName+"时");
                             Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
                             Loader.getlogger().warning(e.getMessage());
                             Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
@@ -501,18 +509,30 @@ public class Loader extends PluginBase implements Listener {
                 return "NO FUNCTION";
             }
         }else {
-            for(ScriptEngine engine:engineMap.values()){
-                if(engine.get(functionName) == null){
+            for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
+                if(entry.getValue().get(functionName) == null){
                     continue;
                 }
                 try {
-                    return String.valueOf(((Invocable) engine).invokeFunction(functionName, args));
+                    return String.valueOf(((Invocable) entry.getValue()).invokeFunction(functionName, args));
                 } catch (final Exception se) {
-                    if (Server.getInstance().getLanguage().getName().contains("中文"))
-                        getLogger().error("在回调 " + functionName+"时出错", se);
-                    else
-                        plugin.getLogger().error("errors when calling " + functionName, se);
-                    se.printStackTrace();
+                    if(se instanceof ScriptException){
+                        ScriptException e = (ScriptException)se;
+                        previousException = e;
+                        if (Server.getInstance().getLanguage().getName().contains("中文")){
+                            Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
+                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
+                        }else {
+                            Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
+                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
+                            Loader.getlogger().warning(e.getMessage());
+                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
+                        }
+                    }else {
+                        se.printStackTrace();
+                    }
                     return "ERROR";
                 }
             }

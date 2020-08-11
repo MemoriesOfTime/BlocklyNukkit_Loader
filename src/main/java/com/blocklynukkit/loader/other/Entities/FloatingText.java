@@ -27,6 +27,7 @@ public class FloatingText extends EntityMob {
         super(chunk, nbt);
         CallTick = callTick;
         CallBack = callBack;
+        this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
     }
     @Override
     public int getNetworkId() {
@@ -47,6 +48,7 @@ public class FloatingText extends EntityMob {
         if (this.closed) {
             return false;
         } else {
+            this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
             this.timing.startTiming();
             if(currentTick%CallTick==0){
                 Loader.plugin.call(CallBack,this);

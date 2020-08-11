@@ -413,13 +413,6 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkUnload(ChunkUnloadEvent event){
         if(event==null||event.getChunk()==null)return;
-        for(Entity entity:event.getChunk().getEntities().values()){
-            String type = entity.getName();
-            if(type.equals("BNNPC")||type.equals("BNFloatingText")){
-                event.setCancelled();
-                break;
-            }
-        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)

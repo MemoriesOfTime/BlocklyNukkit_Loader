@@ -39,6 +39,7 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event){
+        Loader.getlogger().info("on");
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)

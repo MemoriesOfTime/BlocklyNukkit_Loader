@@ -22,6 +22,11 @@ manager
 - void forceDisconnect(Player player)
 - Array<String> getEventFunctions(Event event)
 
+blockitem
+
+- void setItemColor(Item item,int r,int g,int b)
+- void setItemUnbreakable(Item item,boolean unbreakable)
+
 inventory
 
 - Item getEntityHelmet(Entity entity)

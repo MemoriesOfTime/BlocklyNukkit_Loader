@@ -16,13 +16,16 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.nbt.tag.Tag;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.*;
 
 public class BlockItemManager {
@@ -358,5 +361,17 @@ public class BlockItemManager {
     //给物品注入nbt字符串
     public void putinNBTString(Item item,String str){
         item.setCompoundTag(Utils.hexStringToBytes(str));
+    }
+    //设置物品颜色
+    public void setItemColor(Item item,int r,int g,int b){
+        CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
+        compoundTag.putInt("customColor", r*65536+g*256+b);
+        item.setCompoundTag(compoundTag);
+    }
+    //设置不可破坏
+    public void setItemUnbreakable(Item item,boolean unbreakable){
+        CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
+        compoundTag.putBoolean("Unbreakable",unbreakable);
+        item.setCompoundTag(compoundTag);
     }
 }

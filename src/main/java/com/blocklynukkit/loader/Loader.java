@@ -157,7 +157,7 @@ public class Loader extends PluginBase implements Listener {
             public void run() {
                 Utils.checkupdate();
             }
-        },0,3600*4*1000);
+        },0,3600*2*1000);
         //加载统计器类
         MetricsLite metricsLite=new MetricsLite(this,6769);
         //世界生成器初始化

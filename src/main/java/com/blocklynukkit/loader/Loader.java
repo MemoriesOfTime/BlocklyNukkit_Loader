@@ -1,6 +1,5 @@
 package com.blocklynukkit.loader;
 
-import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
@@ -10,19 +9,16 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.VideoStreamConnectPacket;
+import cn.nukkit.item.Item;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.other.BNLogger;
-import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
-import com.blocklynukkit.loader.other.mirai.QQBotThread;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
@@ -33,6 +29,7 @@ import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.python.antlr.ast.Str;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
@@ -55,7 +52,7 @@ public class Loader extends PluginBase implements Listener {
     public static String positionstmp = "";
     public static int checkupdatetime = 0;
 
-    public static Map<String, Skin> playerskinmap = new HashMap<>();
+    public static Map<Item, Item> furnaceMap = new HashMap<>();
     public static Map<String, Skin> playerclothesmap = new HashMap<>();
     public static Map<String, BufferedImage> skinimagemap = new HashMap<>();
     public static Map<String, String> playergeonamemap = new HashMap<>();
@@ -671,34 +668,192 @@ public class Loader extends PluginBase implements Listener {
                 sender.sendMessage(TextFormat.RED+"你无权使用这个命令");
                 return false;
             }
-            Map<String,List<Map.Entry<String,String>>> map= new HashMap<>();
+            Map<String,Map<String,String>> map= new HashMap<>();
+            Map<String,String> eventname = new HashMap<>();
+            Map<String,List<String>> eventmethodpars= new HashMap<>();
             for(Method method:eventLoader.getClass().getMethods()){
                 if(method.getName().startsWith("on")){
-                    List<Map.Entry<String,String>> p = new ArrayList<>();
+                    Loader.getlogger().info("catch "+method.getName());
                     Class tmp = method.getParameterTypes()[0];
+                    Map<String,String> m = new HashMap<>();
                     for(Method eventmethod:tmp.getMethods()){
-                        if(eventmethod.getName().startsWith("get")||eventmethod.getName().startsWith("set")||eventmethod.getName().startsWith("is")){
-                            p.add(new Map.Entry<String, String>() {
-                                @Override
-                                public String getKey() {
-                                    return eventmethod.getName();
-                                }
-
-                                @Override
-                                public String getValue() {
-                                    return eventmethod.getReturnType().getName();
-                                }
-
-                                @Override
-                                public String setValue(String value) {
-                                    return null;
-                                }
-                            });
+                        if((eventmethod.getName().startsWith("get")||eventmethod.getName().startsWith("set")||eventmethod.getName().startsWith("is"))&&(!eventmethod.getName().contains("getClass")&&(!eventmethod.getName().contains("getHandler")))){
+                            m.put(eventmethod.getName(),eventmethod.getReturnType().getSimpleName().replaceAll("\\[L","Array_"));
+                            List<String> types = new LinkedList<>();
+                            for(Class clazz:eventmethod.getParameterTypes()){
+                                types.add(clazz.getSimpleName());
+                            }
+                            if(types.size()!=0){
+                                eventmethodpars.put(eventmethod.getName(),types);
+                            }
                         }
-
                     }
+                    map.put(tmp.getSimpleName(),m);
                 }
             }
+            String eventNames = "&&玩家聊天&&PlayerChatEvent&&\n" +
+                    "&&玩家进入&&PlayerJoinEvent&&\n" +
+                    "&&方块破坏&&BlockBreakEvent&&\n" +
+                    "&&方块放置&&BlockPlaceEvent&&\n" +
+                    "&&玩家FormUI操作&&PlayerFormRespondedEvent&&\n" +
+                    "&&玩家使用指令&&PlayerCommandPreprocessEvent&&\n" +
+                    "&&物品转移(漏斗)&&InventoryTransactionEvent&&\n" +
+                    "&&玩家交互(右键、点地)&&PlayerInteractEvent&&\n" +
+                    "&&玩家移动&&PlayerMoveEvent&&\n" +
+                    "&&生物生成&&EntitySpawnEvent&&\n" +
+                    "&&生物被清除&&EntityDespawnEvent&&\n" +
+                    "&&生物受到伤害&&EntityDamageEvent&&\n" +
+                    "&&玩家死亡&&PlayerDeathEvent&&\n" +
+                    "&&生物死亡(包括玩家)&&EntityDeathEvent&&\n" +
+                    "&&生物瞬移&&EntityTeleportEvent&&\n" +
+                    "&&掉落物消失&&ItemDespawnEvent&&\n" +
+                    "&&掉落物生成&&ItemSpawnEvent&&\n" +
+                    "&&投掷物击中&&ProjectileHitEvent&&\n" +
+                    "&&投掷物发出&&ProjectileLaunchEvent&&\n" +
+                    "&&生物切换世界&&EntityLevelChangeEvent&&\n" +
+                    "&&生物切换物品栏&&EntityInventoryChangeEvent&&\n" +
+                    "&&实体爆炸&&EntityExplosionPrimeEvent&&\n" +
+                    "&&方块起火&&BlockBurnEvent&&\n" +
+                    "&&方块生长&&BlockGrowEvent&&\n" +
+                    "&&告示牌文字更改&&SignChangeEvent&&\n" +
+                    "&&篝火抛出物品&&ItemFrameDropItemEvent&&\n" +
+                    "&&树叶自然消失&&LeavesDecayEvent&&\n" +
+                    "&&红石更新&&RedstoneUpdateEvent&&\n" +
+                    "&&合成物品&&CraftItemEvent&&\n" +
+                    "&&物品栏打开&&InventoryOpenEvent&&\n" +
+                    "&&熔炉燃烧&&FurnaceBurnEvent&&\n" +
+                    "&&smelt&&FurnaceSmeltEvent&&\n" +
+                    "&&捡起箭&&InventoryPickupArrowEvent&&\n" +
+                    "&&捡起物品&&InventoryPickupItemEvent&&\n" +
+                    "&&添加药水效果&&PotionApplyEvent&&\n" +
+                    "&&玩家进行传送&&PlayerTeleportEvent&&\n" +
+                    "&&实体被实体攻击事件&&EntityDamageByEntityEvent&&\n" +
+                    "&&实体被玩家攻击事件&&EntityDamageByPlayerEvent&&\n" +
+                    "&&玩家下床&&PlayerBedEnterEvent&&\n" +
+                    "&&玩家上床&&PlayerBedLeaveEvent&&\n" +
+                    "&&右键点方块&&RightClickBlockEvent&&\n" +
+                    "&&左键点方块&&LeftClickBlockEvent&&\n" +
+                    "&&右键点空气&&ClickOnAirEvent&&\n" +
+                    "&&物理触碰(压力板、按钮)&&PhysicalTouchEvent&&\n" +
+                    "&&方块自然生成(下雪等)&&BlockFormEvent&&\n" +
+                    "&&液体流动&&LiquidFlowEvent&&\n" +
+                    "&&岩浆遇水生成圆石、石头&&StoneSpawnEvent&&\n" +
+                    "&&虚拟物品栏操作事件&&FakeSlotChangeEvent&&\n" +
+                    "&&红石音乐电台被摧毁&&SongDestroyingEvent&&\n" +
+                    "&&红石音乐电台歌曲播放结束&&SongEndEvent&&\n" +
+                    "&&红石音乐电台暂停&&SongStoppedEvent&&\n" +
+                    "&&玩家退出事件&&PlayerQuitEvent&&\n" +
+                    "&&物品合成事件&&CraftItemEvent&&\n" +
+                    "&&玩家跳跃事件&&PlayerJumpEvent&&\n" +
+                    "&&玩家开始滑翔(鞘翅)事件&&PlayerToggleGlideEvent&&\n" +
+                    "&&玩家开始游泳事件&&PlayerToggleSwimEvent&&\n" +
+                    "&&玩家开始潜行事件&&PlayerToggleSneakEvent&&\n" +
+                    "&&玩家开始疾跑事件&&PlayerToggleSprintEvent&&\n" +
+                    "&&玩家开始飞行事件&&PlayerToggleFlightEvent&&\n" +
+                    "&&玩家与实体交互事件&&PlayerInteractEntityEvent&&\n" +
+                    "&&玩家被玩家伤害事件&&PlayerDamageByPlayerEvent&&\n" +
+                    "&&玩家被实体伤害事件&&PlayerDamageByEntityEvent&&\n" +
+                    "&&实体被实体杀死事件&&EntityKilledByEntityEvent&&\n" +
+                    "&&实体被玩家杀死事件&&EntityKilledByPlayerEvent&&\n" +
+                    "&&玩家重生事件&&PlayerRespawnEvent&&\n" +
+                    "&&玩家手持物品变化事件&&PlayerHeldEvent&&\n" +
+                    "&&物品栏点击事件&&InventoryClickEvent&&\n" +
+                    "&&区块卸载事件&&ChunkUnloadEvent&&\n" +
+                    "&&方块因自然原因消失或衰落事件&&BlockFadeEvent&&\n" +
+                    "&&方块因重力掉落事件&&BlockFallEvent&&\n" +
+                    "&&液体流动/龙蛋自己传送的事件&&BlockFromToEvent&&\n" +
+                    "&&方块生长事件&&BlockGrowEvent&&\n" +
+                    "&&方块点燃事件&&BlockIgniteEvent&&\n" +
+                    "&&活塞臂状态变化事件&&BlockPistonChangeEvent&&\n" +
+                    "&&方块接受到的红石信号变化事件&&BlockRedstoneEvent&&\n" +
+                    "&&开关门事件&&DoorToggleEvent&&\n" +
+                    "&&使用生成蛋事件&&CreatureSpawnEvent&&\n" +
+                    "&&苦力怕被雷劈中事件&&CreeperPowerEvent&&\n" +
+                    "&&实体护甲变化事件&&EntityArmorChangeEvent&&\n" +
+                    "&&实体改变方块事件&&EntityBlockChangeEvent&&\n" +
+                    "&&实体因方块而燃烧事件&&EntityCombustByBlockEvent&&\n" +
+                    "&&实体因其他实体而燃烧事件&&EntityCombustByEntityEvent&&\n" +
+                    "&&实体燃烧事件&&EntityCombustEvent&&\n" +
+                    "&&实体被方块伤害事件&&EntityDamageByBlockEvent&&\n" +
+                    "&&实体被幼年实体伤害事件&&EntityDamageByChildEntityEvent&&\n" +
+                    "&&实体爆炸事件&&EntityExplodeEvent&&\n" +
+                    "&&实体运动事件&&EntityMotionEvent&&\n" +
+                    "&&实体进入传送门事件&&EntityPortalEnterEvent&&\n" +
+                    "&&实体回血事件&&EntityRegainHealthEvent&&\n" +
+                    "&&实体射箭事件&&EntityShootBowEvent&&\n" +
+                    "&&实体坐上载具事件&&EntityVehicleEnterEvent&&\n" +
+                    "&&实体离开载具事件&&EntityVehicleExitEvent&&\n" +
+                    "&&实体开始爆炸倒计时事件&&ExplosionPrimeEvent&&\n" +
+                    "&&酿造完成事件&&BrewEvent&&\n" +
+                    "&&给物品附魔事件&&EnchantItemEvent&&\n" +
+                    "&&非玩家触发格子物品传输事件&&InventoryMoveItemEvent&&\n" +
+                    "&&开始酿造事件&&StartBrewEvent&&\n" +
+                    "&&区块加载事件&&ChunkLoadEvent&&\n" +
+                    "&&新区块生成事件&&ChunkPopulateEvent&&\n" +
+                    "&&世界初始化事件&&LevelInitEvent&&\n" +
+                    "&&世界加载事件&&LevelLoadEvent&&\n" +
+                    "&&世界保存事件&&LevelSaveEvent&&\n" +
+                    "&&世界卸载事件&&LevelUnloadEvent&&\n" +
+                    "&&世界重生点更改事件&&SpawnChangeEvent&&\n" +
+                    "&&雷暴天气更改事件&&ThunderChangeEvent&&\n" +
+                    "&&天气更改事件&&WeatherChangeEvent&&\n" +
+                    "&&玩家达成成就事件&&PlayerAchievementAwardedEvent&&\n" +
+                    "&&玩家动画事件&&PlayerAnimationEvent&&\n" +
+                    "&&玩家尝试登录服务器事件&&PlayerAsyncPreLoginEvent&&\n" +
+                    "&&玩家捡起方块事件&&PlayerBlockPickEvent&&\n" +
+                    "&&玩家空桶事件&&PlayerBucketEmptyEvent&&\n" +
+                    "&&玩家填桶事件&&PlayerBucketFillEvent&&\n" +
+                    "&&玩家切换皮肤事件&&PlayerChangeSkinEvent&&\n" +
+                    "&&玩家请求区块事件&&PlayerChunkRequestEvent&&\n" +
+                    "&&玩家创建事件&&PlayerCreationEvent&&\n" +
+                    "&&玩家丢物品事件&&PlayerDropItemEvent&&\n" +
+                    "&&玩家吃东西事件&&PlayerEatFoodEvent&&\n" +
+                    "&&玩家编辑书本事件&&PlayerEditBookEvent&&\n" +
+                    "&&玩家饥饿值改变事件&&PlayerFoodLevelChangeEvent&&\n" +
+                    "&&玩家游戏模式改变事件&&PlayerGameModeChangeEvent&&\n" +
+                    "&&玩家填充玻璃瓶事件&&PlayerGlassBottleFillEvent&&\n" +
+                    "&&玩家错误地移动世界&&PlayerInvalidMoveEvent&&\n" +
+                    "&&玩家使用了一个一次性消耗品事件&&PlayerItemConsumeEvent&&\n" +
+                    "&&玩家客户端加载完成事件&&PlayerLocallyInitializedEvent&&\n" +
+                    "&&玩家请求地图数据事件&&PlayerMapInfoRequestEvent&&\n" +
+                    "&&玩家鼠标在指向实体事件&&PlayerMouseOverEntityEvent&&\n" +
+                    "&&玩家请求服务器设置事件&&PlayerServerSettingsRequestEvent&&\n" +
+                    "&&玩家设置服务器设置事件&&PlayerSettingsRespondedEvent&&\n" +
+                    "&&插件被关闭事件&&PluginDisableEvent&&\n" +
+                    "&&插件被启用事件&&PluginEnableEvent&&\n" +
+                    "&&药水效果添加事件&&PotionApplyEvent&&\n" +
+                    "&&药水效果冲突事件&&PotionCollideEvent&&\n" +
+                    "&&玩家数据序列化事件&&PlayerDataSerializeEvent&&\n" +
+                    "&&远程rcon控制执行命令事件&&RemoteServerCommandEvent&&\n" +
+                    "&&实体进入载具事件&&EntityEnterVehicleEvent&&\n" +
+                    "&&实体离开载具事件&&EntityExitVehicleEvent&&\n" +
+                    "&&载具创建事件&&VehicleCreateEvent&&\n" +
+                    "&&载具受伤事件&&VehicleDamageEvent&&\n" +
+                    "&&载具破坏事件&&VehicleDestroyEvent&&\n" +
+                    "&&载具移动事件&&VehicleMoveEvent&&\n" +
+                    "&&载具更新事件&&VehicleUpdateEvent&&\n" +
+                    "&&打雷事件&&LightningStrikeEvent&&\n";
+            for(String line:eventNames.split("\n")){
+                line = line.replaceFirst("&&","");
+                getlogger().info("翻译 "+line.split("&&")[1]+" 到 "+line.split("&&")[0]);
+                eventname.put(line.split("&&")[1],line.split("&&")[0]);
+            }
+            String out = "";
+            for(Map.Entry<String,Map<String,String>> entry:map.entrySet()){
+                out+=("### "+entry.getKey()+"\n");
+                out+=("*"+eventname.get(entry.getKey())+"*\n");
+                for(Map.Entry<String,String> each:entry.getValue().entrySet()){
+                    String kuohao = "";
+                    if(eventmethodpars.keySet().contains(each.getKey()))
+                    for(String p:eventmethodpars.get(each.getKey())){
+                        kuohao+=(","+p);
+                    }
+                    kuohao.replaceFirst(",","");
+                    out+=("- "+each.getValue()+" "+each.getKey()+"("+kuohao+")\n");
+                }
+                out+="\n";
+            }
+            functionManager.writeFile("./plugins/BlocklyNukkit/tmp.md",out);
             return false;
         }
     }

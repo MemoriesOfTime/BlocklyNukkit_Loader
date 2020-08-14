@@ -16,6 +16,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -217,6 +218,7 @@ public class BlockItemManager {
     public void addFurnaceCraft(Item input,Item output){
         Server.getInstance().addRecipe(new FurnaceRecipe(output,input));
         Server.getInstance().getCraftingManager().rebuildPacket();
+        Loader.furnaceMap.put(input,output);
     }
     //-有序合成
     public void addShapedCraft(String[] shape,Item output,Item[] append){

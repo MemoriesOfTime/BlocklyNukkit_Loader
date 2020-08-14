@@ -1,6 +1,8 @@
 package com.blocklynukkit.loader;
 
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockPiston;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -18,6 +20,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.server.*;
 import cn.nukkit.event.vehicle.*;
 import cn.nukkit.event.weather.LightningStrikeEvent;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.ProtocolInfo;
@@ -27,6 +30,8 @@ import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
+
+import java.util.Map;
 
 public class EventLoader implements Listener {
 
@@ -331,6 +336,15 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onFurnaceSmelt(FurnaceSmeltEvent event){
+        Item out = null;
+        for(Map.Entry<Item,Item> entry:Loader.furnaceMap.entrySet()){
+            if(entry.getKey().equals(event.getSource(),true,true)){
+                out = entry.getValue();
+            }
+        }
+        if(out!=null){
+            event.setResult(out);
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -414,6 +428,11 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkUnload(ChunkUnloadEvent event){
         if(event==null||event.getChunk()==null)return;
+        for(Entity entity:event.getChunk().getEntities().values()){
+            if(entity.getName().equals("BNNPC")||entity.getName().equals("BNFloatingText")){
+                event.setCancelled();
+            }
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)

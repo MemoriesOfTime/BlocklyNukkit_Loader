@@ -1,9 +1,5 @@
 ## 1.2.8.3
 
-function
-
-- void getServerMotd(String host, int port, String callback) --根据服务器IP和端口获取在线人数信息
-
 Bugs Fixed
 
 - 修复了bnnpc浮空走路bug
@@ -21,6 +17,7 @@ manager
 - double getMemoryUsedSizeMB()
 - void forceDisconnect(Player player)
 - Array<String> getEventFunctions(Event event)
+- void getServerMotd(String host, int port, String callback) --根据服务器IP和端口获取在线人数信息
 
 blockitem
 
@@ -63,6 +60,15 @@ gameapi --新的基对象
 - GameBase getPlayerRoom(Player player) --获取玩家正在玩的小游戏对象
 - Array<GameBase> getAllRoomByName(String gameName) --获取游戏名称相同的所有小游戏房间对象组成的数组
 - Array<String> getAllGameNames() --获取所有正在运行的小游戏房间的名字组成的数组
+- Messager getMessager(String prefix)
+- Messager getGameMessager(GameBase game)
+- Multiline getMultiline(String messageType)
+- InventoryMenu createInventoryMenu(String inventoryType, String title)
+- FormMenu createFormMenu(String title, String content)
+- void addMenuItem(InventoryMenu menu, int slot, Item item, String inventoryCallback)
+- void addMenuButton(FormMenu menu,String buttonText,String imageData,String formCallback)
+- Scoreboard getScoreboard(Player p)
+- void setObjective(Scoreboard sb, String objectiveName,String displayName)
 
 GameBase --小游戏房间对象
 

@@ -26,6 +26,7 @@ import com.blocklynukkit.loader.MetricsLite;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
+import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -52,6 +53,8 @@ import java.net.InetAddress;
 public class FunctionManager {
 
     private Loader plugin;
+
+    public bnqqbot qq = new bnqqbot();
     
     public FunctionManager(Loader plugin){
         this.plugin = plugin;

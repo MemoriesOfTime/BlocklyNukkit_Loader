@@ -77,12 +77,14 @@ public class EntityManager {
     }
     //玩家经验操作
     public void setPlayerExp(Player player,int exp){
+        player.setExperience(exp);
         player.sendExperience(exp);
     }
     public int getPlayerExp(Player player){
         return player.getExperience();
     }
     public void setPlayerExpLevel(Player player,int lel){
+        player.setExperience(player.getExperience(),lel);
         player.sendExperienceLevel(lel);
     }
     public int getPlayerExpLevel(Player player){

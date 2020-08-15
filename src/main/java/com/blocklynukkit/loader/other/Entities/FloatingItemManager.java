@@ -6,6 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityMetadata;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.item.Item;
@@ -39,6 +40,8 @@ public class FloatingItemManager implements Listener {
         if(event==null||event.getPlayer()==null||event.getFrom().getLevel()==null||event.getTo().getLevel()==null)return;
         if(!event.getFrom().getLevel().getName().equals(event.getTo().getLevel().getName())){
             for(Map.Entry<Position,Item> each:displayMap.keySet()){
+                if(each==null||each.getKey()==null||each.getValue()==null)return;
+                if(each.getKey().getLevel()==null||each.getKey().getLevel().getName()==null)continue;
                 if(each.getKey().getLevel().getName().equals(event.getFrom().getLevel().getName())){
                     forceRemoveFloatingItem(event.getPlayer(),each);
                 }

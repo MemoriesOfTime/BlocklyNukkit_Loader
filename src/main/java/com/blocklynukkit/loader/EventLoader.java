@@ -339,7 +339,14 @@ public class EventLoader implements Listener {
         Item out = null;
         for(Map.Entry<Item,Item> entry:Loader.furnaceMap.entrySet()){
             if(entry.getKey().equals(event.getSource(),true,true)){
-                out = entry.getValue();
+                Item res = event.getFurnace().getInventory().getResult();
+                if((res!=null||res.getId()!=0)&&!res.equals(entry.getValue(),true,true))continue;
+                if(res==null||res.getId()==0||res.getCount()==0){
+                    out = entry.getValue();
+                }else {
+                    out=entry.getValue();
+                    out.setCount(res.getCount()+1);
+                }
             }
         }
         if(out!=null){
@@ -407,6 +414,7 @@ public class EventLoader implements Listener {
         },5);
     }
     public static void onSlotChange(FakeSlotChangeEvent event){
+        event.getAction().getInventory().getName();
         Loader.plugin.call(event.getClass().getSimpleName(),event);
     }
     @EventHandler(priority = EventPriority.HIGHEST)

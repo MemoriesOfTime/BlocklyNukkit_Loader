@@ -1,3 +1,48 @@
+## 1.2.8.4
+new
+
+更新了qq机器人对接模块，使用小栗子qq机器人框架（因为这是唯一一个没跑路的免费机器人了），配好的包在bn群内下载
+
+Bug Fixed
+
+- 修复了熔炉配方nbt丢失问题
+
+manager
+
+- void qq.startBot() 启动qq机器人进程
+- void qq.sendFriendMessage(String fromQQ,String toQQ,String message) 发送好友信息
+- void qq.sendGroupMessage(String fromQQ,String toGroup,String message) 发送群信息
+- void qq.praise(String fromQQ,String toQQ,int count) qq点赞
+
+EventLoader
+
+- QQGroupMessageEvent --机器人收到qq群消息事件
+    - String getSelfQQ() --获取收到消息的qq账号
+    - String getFromQQ() --获取发送消息的qq账号
+    - String getFromGroup() --获取消息事件的qq群号
+    - String getMessage() -获取消息
+- QQFriendMessageEvent --机器人收到qq好友消息事件
+    - String getEventId() --获取事件id
+    - String getEventSeed() --获取事件中的群消息标识码
+    - String getFromQQ() --获取发送消息的qq
+    - String getSelfQQ() --获取接受到群消息的qq账号
+    - String getMessage() --获取事件的消息
+- QQOtherEvent
+    - String getFromGroup() --获取触发事件的qq群号
+    - String getFromQQ() --获取触发事件的qq账号
+    - String getSelfQQ() --获取收到事件的qq账号
+    - String getSeq() --获取收到事件的标识id
+    - int getType() --获取事件类型码
+    
+Entity
+
+- void setPlayerExp(Player player,int exp)
+- int getPlayerExp(Player player)
+- void setPlayerExpLevel(Player player,int lel)
+- int getPlayerExpLevel(Player player)
+- void setPlayerHunger(Player player,int hunger)
+- int getPlayerHunger(Player player)
+
 ## 1.2.8.3
 
 Bugs Fixed

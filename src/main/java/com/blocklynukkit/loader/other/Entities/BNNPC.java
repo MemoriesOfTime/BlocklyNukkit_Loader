@@ -48,13 +48,14 @@ public class BNNPC extends EntityHuman {
                 .putFloat("scale", 1));
         Skin sk = clothes.build();
         nbt.putByteArray("Data",sk.getSkinData().data);
-        nbt.putString("ModelID", this.skin.getSkinId()).putString("GeometryName", clothes.gen).putByteArray("GeometryData", sk.getGeometryData().getBytes(StandardCharsets.UTF_8));
+        nbt.putString("ModelID", sk.getSkinId())
+                .putString("GeometryName", clothes.gen)
+                .putByteArray("GeometryData", sk.getGeometryData().getBytes(StandardCharsets.UTF_8));
         nbt.putString("SkinResourcePatch","{\"geometry\" : {\"default\" : \""+clothes.gen+"\"}}\n");
         this.setSkin(clothes.build());
         this.setNameTag(name);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
-        this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
     }
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes,int calltick, String callback){
         this(chunk, nbt, name, clothes);
@@ -97,7 +98,6 @@ public class BNNPC extends EntityHuman {
     }
     @Override
     public boolean onUpdate(int currentTick){
-        this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
         //调用玩家自定义函数
         if(currentTick%calltimetick==0){
             Loader.plugin.call(callbackfunction,this,currentTick);
@@ -193,8 +193,6 @@ public class BNNPC extends EntityHuman {
         //处理当前刻运动
         this.x+=dvec.x;this.y+=dvec.y;this.z+=dvec.z;
         dvec = new Vector3(0,0,0);
-        //再次拦截垃圾处理
-        this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
         //调用nk预设函数
         return super.onUpdate(currentTick);
     }

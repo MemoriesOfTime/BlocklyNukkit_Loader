@@ -33,12 +33,7 @@ public class JavaScriptLoader {
                 else
                     getlogger().warning("loading BN plugin: " + file.getName());
                 String js = Utils.readToString(file);
-                if(js.contains("//pragma es9")||js.contains("//pragma es6")||js.contains("//pragma es2019")||js.contains("//pragma es2016")||js.contains("//pragma graal")||js.contains("//pragma Graal")||js.contains("//pragma graalvm")||js.contains("//pragma Graalvm")||js.contains("//pragma graalVM")||js.contains("//pragma GraalVM")||js.contains("//pragma graaljs")||js.contains("//pragma graalJS")||js.contains("//pragma Graaljs")||js.contains("//pragma GraalJS")||
-                        js.contains("// pragma es9")||js.contains("// pragma es6")||js.contains("// pragma es2019")||js.contains("// pragma es2016")||js.contains("// pragma graal")||js.contains("// pragma Graal")||js.contains("// pragma graalvm")||js.contains("// pragma Graalvm")||js.contains("// pragma graalVM")||js.contains("// pragma GraalVM")||js.contains("// pragma graaljs")||js.contains("// pragma graalJS")||js.contains("// pragma Graaljs")||js.contains("// pragma GraalJS")){
-                    new GraalJSLoader(plugin).putGraalJSEngine(file.getName(),js);
-                }else {
-                    putJavaScriptEngine(file.getName(),js);
-                }
+                putJavaScriptEngine(file.getName(),js);
             }else if(file.getName().endsWith(".py")&&!file.getName().contains("bak") && !plugins.containsKey("PyBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + file.getName()+"! 缺少python依赖库");

@@ -1,10 +1,10 @@
 package com.blocklynukkit.loader.other.Entities;
 
 import cn.nukkit.Player;
-import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.Entities.EntityMob;
 
 public class FloatingText extends EntityMob {
     private int NetWorkId = 61;
@@ -27,7 +27,6 @@ public class FloatingText extends EntityMob {
         super(chunk, nbt);
         CallTick = callTick;
         CallBack = callBack;
-        this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
     }
     @Override
     public int getNetworkId() {
@@ -48,7 +47,6 @@ public class FloatingText extends EntityMob {
         if (this.closed) {
             return false;
         } else {
-            this.level.cancelUnloadChunkRequest(this.getChunkX(),this.getChunkZ());
             this.timing.startTiming();
             if(currentTick%CallTick==0){
                 Loader.plugin.call(CallBack,this);

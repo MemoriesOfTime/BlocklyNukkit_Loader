@@ -2,6 +2,8 @@ package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.player.PlayerFormRespondedEvent;
 import cn.nukkit.event.player.PlayerSettingsRespondedEvent;
 import cn.nukkit.form.response.FormResponseCustom;
@@ -21,6 +23,7 @@ import com.blocklynukkit.loader.script.window.Simple;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class WindowManager {
@@ -186,5 +189,17 @@ public class WindowManager {
     //here 8/7
     public void forceClearWindow(Player player){
         player.removeAllWindows();
+    }
+    //here 8/18
+    public void setPauseScreenList(String list){
+        Map p = Server.getInstance().getOnlinePlayers();
+        for(String each:list.split(";")){
+            if(p.keySet().contains(each)){
+                Player player = Server.getInstance().getPlayer(each);
+                Server.getInstance().updatePlayerListData(UUID.randomUUID(), Entity.entityCount++,each,player.getSkin(),player.getLoginChainData().getXUID());
+            }else {
+                Server.getInstance().updatePlayerListData(UUID.randomUUID(), Entity.entityCount++,each,new Skin());
+            }
+        }
     }
 }

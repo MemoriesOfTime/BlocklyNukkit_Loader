@@ -1,4 +1,5 @@
 package com.blocklynukkit.loader.script;
+import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
@@ -41,7 +42,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -55,9 +58,24 @@ public class FunctionManager {
     private Loader plugin;
 
     public bnqqbot qq = new bnqqbot();
+    public String fakeNukkitCodeVersion = "";
     
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
+    }
+    //here 8/21
+    public void setNukkitCodeVersion(String string){
+        fakeNukkitCodeVersion = string;
+    }
+    //here 8/18
+    public String getPlayerDeviceModal(Player player){
+        return player.getLoginChainData().getDeviceModel();
+    }
+    public String getPlayerDeviceID(Player player){
+        return player.getLoginChainData().getDeviceId();
+    }
+    public int getPlayerDeviceOS(Player player){
+        return player.getLoginChainData().getDeviceOS();
     }
     public List<String> getEventFunctions(Event event){
         List<String> list = new ArrayList<>();
@@ -70,8 +88,22 @@ public class FunctionManager {
     }
     //here 8/5
     public double getCPULoad(){
-        OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        return osMxBean.getSystemLoadAverage();
+        double load = -1;
+        java.lang.management.OperatingSystemMXBean osMxBean = java.lang.management.ManagementFactory.getOperatingSystemMXBean();
+        load = osMxBean.getSystemLoadAverage();
+        if(load == -1){
+            OperatingSystemMXBean osMxBean2 = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+            load = osMxBean2.getSystemCpuLoad();
+        }
+        if(load == -1){
+            OperatingSystemMXBean osMxBean3 = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+            load = osMxBean3.getProcessCpuLoad();
+        }
+        if(load == -1){
+            OperatingSystemMXBean osMxBean4 = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+            load = osMxBean4.getSystemLoadAverage();
+        }
+        return load;
     }
     public int getCPUCores(){
         OperatingSystemMXBean osMxBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -415,6 +447,18 @@ public class FunctionManager {
         EconomyAPI.getInstance().addMoney(player, money);
     }
     public void setMoney(Player player,double money){
+        EconomyAPI.getInstance().setMoney(player, money);
+    }
+    public double getMoney(String player){
+        return EconomyAPI.getInstance().myMoney(player);
+    }
+    public void reduceMoney(String player,double money){
+        EconomyAPI.getInstance().reduceMoney(player, money);
+    }
+    public void addMoney(String player,double money){
+        EconomyAPI.getInstance().addMoney(player, money);
+    }
+    public void setMoney(String player,double money){
         EconomyAPI.getInstance().setMoney(player, money);
     }
 

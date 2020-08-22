@@ -15,7 +15,7 @@ public class DatabaseManager {
     /**
      * 例子:
      * <pre>
-     *     open("localhost:3306/database","root","password","money (id VARCHAR(64), money double null, constraint money_pk primary key(id))"
+     *     open("localhost:3306/database","root","password","money (id VARCHAR(64), money double null, constraint money_pk primary key(id))")
      * </pre>
      * @author Penguin_Captain
      * @param url       jdbc连接的url
@@ -24,6 +24,7 @@ public class DatabaseManager {
      * @param table     数据表信息
      * @throws SQLException
      */
+    Connection connection = null;
     public void open(String url,String username,String password,String table) throws SQLException {
         String substring = url.substring(url.lastIndexOf('/') + 1, url.length());
         if (url.indexOf('?') == -1){
@@ -35,6 +36,7 @@ public class DatabaseManager {
         C3P0Utils.dataSource.setUser(username);
         C3P0Utils.dataSource.setPassword(password);
         Connection conn = C3P0Utils.getConnection();
+        connection =conn;
         C3P0Utils.update("CREATE TABLE IF NOT EXISTS "+table,conn);
     }
     public void databaseOpen(String url,String username,String password,String table){
@@ -53,21 +55,17 @@ public class DatabaseManager {
      *     update("INSERT INTO database.user (username,password) VALUES (?,?)",username,password)
      * </pre>
      * @param stt   SQL语句
-     * @param objs  参数
      * @throws SQLException
      */
-    public void update(String stt, Object[] objs) throws SQLException {
+    public void update(String stt) throws SQLException {
         Connection conn = C3P0Utils.getConnection();
         PreparedStatement ps = conn.prepareStatement(stt);
-        for (int i = 0; i < countStr(stt, "?"); i++) {
-            ps.setObject(i+1,objs[i]);
-        }
         ps.executeUpdate();
         C3P0Utils.release(conn,ps,null);
     }
-    public void databaseUpdate(String stt, Object[] objs){
+    public void databaseUpdate(String stt){
         try {
-            update(stt, objs);
+            update(stt);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,16 +80,12 @@ public class DatabaseManager {
      * </pre>
      * @param stt   SQL语句
      * @param col   列
-     * @param objs  参数
      * @return 查询结果列表
      * @throws SQLException
      */
-    public List query(String stt, String col, Object[] objs) throws SQLException {
+    public List query(String stt, String col) throws SQLException {
         Connection conn = C3P0Utils.getConnection();
         PreparedStatement ps = conn.prepareStatement(stt);
-        for (int i = 0; i < countStr(stt, "?"); i++) {
-            ps.setObject(i+1,objs[i]);
-        }
         ResultSet rs = ps.executeQuery();
         ArrayList<Object> result = new ArrayList<>();
         while(rs.next()){
@@ -100,9 +94,9 @@ public class DatabaseManager {
         C3P0Utils.release(conn,ps,rs);
         return result;
     }
-    public void databaseQuery(String stt,String col,Object[] objs){
+    public void databaseQuery(String stt,String col){
         try {
-            query(stt, col, objs);
+            query(stt, col);
         } catch (SQLException e) {
             e.printStackTrace();
         }

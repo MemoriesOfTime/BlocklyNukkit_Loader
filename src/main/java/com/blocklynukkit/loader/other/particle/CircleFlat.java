@@ -2,6 +2,8 @@ package com.blocklynukkit.loader.other.particle;
 
 import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.GenericParticle;
+import cn.nukkit.math.Vector3;
+import com.blocklynukkit.loader.Loader;
 
 import java.util.Random;
 
@@ -21,7 +23,7 @@ public class CircleFlat implements Runnable{
     public void run(){
         double round = radius*2* PI;
         int parAnt = (int) (round/sep);
-        int perPI = (int)((2*PI)/(double)parAnt);
+        double perPI = ((2*PI)/(double)parAnt);
         Random random = new Random();
         for(int i=0;i<parAnt;i++){
             if(i%10==0) {
@@ -33,7 +35,8 @@ public class CircleFlat implements Runnable{
             }
             double dx = radius*sin(i*perPI);
             double dy = radius*cos(i*perPI);
-            pos.level.addParticle(new GenericParticle(pos.add(dx,0,dy),pid,random.nextInt()));
+            Vector3 vec = new Vector3(pos.x+dx,pos.y,pos.z+dy);
+            pos.level.addParticle(new GenericParticle(vec,pid,random.nextInt()));
         }
     }
 }

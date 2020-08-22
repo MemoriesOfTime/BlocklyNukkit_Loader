@@ -3,6 +3,7 @@ package com.blocklynukkit.loader.other;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.utils.Binary;
 import cn.nukkit.utils.Config;
 import com.blocklynukkit.loader.Loader;
 
@@ -11,7 +12,9 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.UUID;
 
 public class Clothes {
     public String skinname;
@@ -75,7 +78,9 @@ public class Clothes {
                         skin.setGeometryData(geotext);
                     }
                 }
-                skin.generateSkinId(skinname);
+//                byte[] data = Binary.appendBytes(skin.getSkinData().data, new byte[][]{skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8)});
+//                skin.setSkinId(UUID.nameUUIDFromBytes(data) + "." + skinname);
+                skin.setSkinId(UUID.randomUUID()+"."+skinname);
                 return skin;
             }else {
                 Loader.getlogger().warning("没有该皮肤！");

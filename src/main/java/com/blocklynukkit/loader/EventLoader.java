@@ -1,8 +1,10 @@
 package com.blocklynukkit.loader;
 
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockPiston;
+import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -21,11 +23,12 @@ import cn.nukkit.event.server.*;
 import cn.nukkit.event.vehicle.*;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.Item;
+import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.scheduler.Task;
-import com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent;
+import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
@@ -44,7 +47,6 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        Loader.getlogger().info("on");
         plugin.callEventHandler(event,event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -155,6 +157,17 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent event){
+        if(event.getMessage().equals("/version")||event.getMessage().equals("version")||
+                event.getMessage().equals("/version ")||event.getMessage().equals("version ")){
+            Player sender = event.getPlayer();
+            sender.sendMessage(new TranslationContainer("nukkit.server.info.extended", sender.getServer().getName(),
+                    sender.getServer().getNukkitVersion(),
+                    Loader.functionManager.fakeNukkitCodeVersion,
+                    sender.getServer().getApiVersion(),
+                    sender.getServer().getVersion(),
+                    String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));
+            event.setCancelled();
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -183,6 +196,17 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerCommand(ServerCommandEvent event){
+        if(event.getCommand().equals("/version")||event.getCommand().equals("version")||
+        event.getCommand().equals("/version ")||event.getCommand().equals("version ")){
+            CommandSender sender = event.getSender();
+            sender.sendMessage(new TranslationContainer("nukkit.server.info.extended", sender.getServer().getName(),
+                    sender.getServer().getNukkitVersion(),
+                    Loader.functionManager.fakeNukkitCodeVersion,
+                    sender.getServer().getApiVersion(),
+                    sender.getServer().getVersion(),
+                    String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));
+            event.setCancelled();
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -413,9 +437,8 @@ public class EventLoader implements Listener {
             }
         },5);
     }
-    public static void onSlotChange(FakeSlotChangeEvent event){
-        event.getAction().getInventory().getName();
-        Loader.plugin.call(event.getClass().getSimpleName(),event);
+    public static void onSlotChange(com.nukkitx.fakeinventories.inventory.FakeSlotChangeEvent event){
+        Loader.plugin.callEventHandler(new FakeSlotChangeEvent(event),"FakeSlotChangeEvent","FakeSlotChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSongEnd(SongEndEvent event){
@@ -437,6 +460,8 @@ public class EventLoader implements Listener {
     public void onChunkUnload(ChunkUnloadEvent event){
         if(event==null||event.getChunk()==null)return;
         for(Entity entity:event.getChunk().getEntities().values()){
+            if(entity==null)continue;
+            if(entity.getName()==null)continue;
             if(entity.getName().equals("BNNPC")||entity.getName().equals("BNFloatingText")){
                 event.setCancelled();
             }

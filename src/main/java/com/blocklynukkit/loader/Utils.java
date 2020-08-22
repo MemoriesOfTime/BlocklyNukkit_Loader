@@ -509,7 +509,7 @@ public class Utils {
 
 
     private static String getFilecharset(File sourceFile) {
-        String charset = "GBK";
+        String charset = "UTF-8";
         byte[] first3Bytes = new byte[3];
         try {
             boolean checked = false;
@@ -537,18 +537,21 @@ public class Utils {
                 int loc = 0;
                 while ((read = bis.read()) != -1) {
                     loc++;
-                    if (read >= 0xF0)
-                        break;
-                    if (0x80 <= read && read <= 0xBF) // 单独出现BF以下的，也算是GBK
-                        break;
+                    if (read >= 0xF0){
+                        charset = "GBK";break;
+                    }
+                    if (0x80 <= read && read <= 0xBF){// 单独出现BF以下的，也算是GBK
+                        charset = "GBK";break;
+                    }
                     if (0xC0 <= read && read <= 0xDF) {
                         read = bis.read();
                         if (0x80 <= read && read <= 0xBF) // 双字节 (0xC0 - 0xDF)
                             // (0x80
                             // - 0xBF),也可能在GB编码内
                             continue;
-                        else
-                            break;
+                        else{
+                            charset = "GBK";break;
+                        }
                     } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
                         read = bis.read();
                         if (0x80 <= read && read <= 0xBF) {
@@ -556,10 +559,12 @@ public class Utils {
                             if (0x80 <= read && read <= 0xBF) {
                                 charset = "UTF-8";
                                 break;
-                            } else
-                                break;
-                        } else
-                            break;
+                            } else{
+                                charset = "GBK";break;
+                            }
+                        } else{
+                            charset = "GBK";break;
+                        }
                     }
                 }
             }

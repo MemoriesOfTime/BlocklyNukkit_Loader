@@ -43,6 +43,21 @@ public class Custom {
         }
         return this;
     }
+    public Custom showAsSetting(Player p, String imageURL, String callback){
+        synchronized (Loader.serverSettingCallback){
+            Loader.serverSettingCallback.put(p.getName(),callback);
+            FormWindowCustom custom = new FormWindowCustom(title,elements);
+            if(imageURL.length()>=5){
+                if(imageURL.startsWith("http")){
+                    custom.setIcon(new ElementButtonImageData("url",imageURL));
+                }else {
+                    custom.setIcon(new ElementButtonImageData("path",imageURL));
+                }
+            }
+            p.addServerSettings(custom);
+        }
+        return this;
+    }
     public void addNewElement(Element element){
         elements.add(element);
     }

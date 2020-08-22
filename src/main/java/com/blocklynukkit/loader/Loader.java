@@ -400,6 +400,18 @@ public class Loader extends PluginBase implements Listener {
                             }
                         }
                     }
+                }else if(type.equals("FakeSlotChangeEvent")){
+                    FakeSlotChangeEvent event = (FakeSlotChangeEvent)e;
+                    if (entry.getValue().get(functionName) != null){
+                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                    }
+                    if(privatecalls.containsKey(functionName)){
+                        for(String a:privatecalls.get(functionName)){
+                            if(entry.getValue().get(a) != null){
+                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                            }
+                        }
+                    }
                 }
             } catch (final Exception se) {
                 if(se instanceof ScriptException){
@@ -703,7 +715,7 @@ public class Loader extends PluginBase implements Listener {
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-            new Thread(new QQBotThread(3317673684l,"superice666")).start();
+
             return false;
         }
     }

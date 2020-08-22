@@ -1,10 +1,12 @@
 package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
+import cn.nukkit.block.BlockHopper;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityChest;
 import cn.nukkit.blockentity.BlockEntityContainer;
+import cn.nukkit.blockentity.BlockEntityHopper;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.mob.EntityMob;
@@ -13,6 +15,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.EventLoader;
+import com.blocklynukkit.loader.Loader;
 import com.nukkitx.fakeinventories.inventory.ChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.DoubleChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.FakeInventory;
@@ -44,6 +47,7 @@ public class InventoryManager {
         return arrayList;
     }
     public void showFakeInv(Player player,FakeInventory inv){
+        player.getUIInventory().getCraftingGrid().getItem(0).toString();
         if(inv!=null){
             player.addWindow(inv);
         }
@@ -95,14 +99,31 @@ public class InventoryManager {
         }
         return null;
     }
-    public void setBlockInv(Position pos, Inventory inv){
+    public void setBlockInv(Position pos, Inventory inv){ ;
         pos.fromObject(new Vector3(pos.getFloorX(),pos.getFloorY(),pos.getFloorZ()),pos.getLevel());
         BlockEntity blockEntity = pos.getLevel().getBlockEntity(pos);
         if(blockEntity instanceof BlockEntityContainer){
             if (blockEntity instanceof BlockEntityChest){
-                ((BlockEntityChest) blockEntity).getInventory().setContents(inv.getContents());
-                Inventory chest = ((BlockEntityChest)blockEntity).getRealInventory();
-                chest.setContents(inv.getContents());
+                BlockEntityChest chest = ((BlockEntityChest) blockEntity);
+                chest.getInventory().setContents(inv.getContents());
+                Inventory chestr = ((BlockEntityChest)blockEntity).getRealInventory();
+                chestr.setContents(inv.getContents());
+                for (int i=0;i<chest.getInventory().getSize();i++){
+                    chest.getInventory().setItem(i,inv.getItem(i));
+                }
+                for (int i=0;i<chest.getRealInventory().getSize();i++){
+                    chest.getRealInventory().setItem(i,inv.getItem(i));
+                }
+                ((BlockEntityChest) blockEntity).saveNBT();
+            }else if(blockEntity instanceof BlockEntityHopper){
+                BlockEntityHopper hopper = (BlockEntityHopper)blockEntity;
+                for(int i=0;i<hopper.getInventory().getSize();i++){
+                    hopper.setItem(i,inv.getItem(i));
+                }
+                for(int i=0;i<hopper.getInventory().getSize();i++){
+                    hopper.getInventory().setItem(i,inv.getItem(i));
+                }
+                hopper.saveNBT();
             }else{
                 for(int i=0;i<inv.getSize();i++){
                     ((BlockEntityContainer) blockEntity).setItem(i,inv.getItem(i));

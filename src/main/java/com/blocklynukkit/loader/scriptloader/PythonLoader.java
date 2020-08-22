@@ -22,8 +22,7 @@ public class PythonLoader {
         this.plugin=plugin;
     }
     public void loadplugins(){
-        File jython = new File(plugin.getDataFolder()+"/lib/pythonForBN.jar");
-        if(jython.exists()){
+        if(plugin.plugins.containsKey("PyBN")){
             try{
                 for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
                     if(file.isDirectory()) continue;

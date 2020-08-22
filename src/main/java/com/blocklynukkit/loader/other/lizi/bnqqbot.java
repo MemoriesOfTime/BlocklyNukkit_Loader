@@ -3,7 +3,9 @@ package com.blocklynukkit.loader.other.lizi;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.lizi.json.Core;
 import com.blocklynukkit.loader.other.lizi.json.Main;
+import com.blocklynukkit.loader.other.lizi.json.StringUtils;
 
+import java.util.Base64;
 import java.util.Random;
 
 
@@ -22,7 +24,18 @@ public class bnqqbot {
     public void sendGroupMessage(String fromQQ,String toGroup,String message){
         Core.sendGroupMessages(Long.parseLong(fromQQ),Long.parseLong(toGroup),message,0);
     }
-    public void praise(String fromQQ,String toQQ,int count){
-        Core.callPraise(Long.parseLong(fromQQ),Long.parseLong(toQQ),count);
+    public void sendGroupPicMessage(String fromQQ,String toGroup,String picturePaths,String message){
+        String[] pics = picturePaths.split(";");
+        String[] base64s = new String[picturePaths.split(";").length];
+        for(int i=0;i<pics.length;i++){
+            byte[] bts = StringUtils.readFile(pics[i]);//读取文件
+            String base64Str = Base64.getEncoder().encodeToString(bts);//字节数组转Base64
+            base64Str = "[pic:"+ base64Str + "]";//组装图片的格式
+            base64s[i] = base64Str;
+        }
+        for(int i=0;i<pics.length;i++){
+            message = message.replaceAll("%picture"+i+"%",base64s[i]);
+        }
+        Core.sendGroupMessagesPicText(Long.parseLong(fromQQ), Long.parseLong(toGroup), message,0);
     }
 }

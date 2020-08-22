@@ -53,7 +53,7 @@ public class PHPLoader {
         }
         if (!(plugin.engineMap.get(name) instanceof Invocable)) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
-                plugin.getlogger().error("PHP！");
+                plugin.getlogger().error("PHP引擎不支持过程调用！");
             if (!Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("PHP interpreter's version is too low!");
             return;

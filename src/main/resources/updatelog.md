@@ -6,13 +6,34 @@ new
 Bug Fixed
 
 - 修复了熔炉配方nbt丢失问题
+- 修复了设置箱子和漏斗物品栏不好使的问题
+- 修复了py插件不可用问题
+
+window
+
+- setPauseScreenList(String list) --设置暂停界面右侧显示在线玩家区域的文字，用;分割多行
+
+CustoWindowBuilder
+
+-  this showAsSetting(Player p, String imageURL, String callback) --支持图标，和按钮图标书写方式相同
 
 manager
 
 - void qq.startBot() 启动qq机器人进程
 - void qq.sendFriendMessage(String fromQQ,String toQQ,String message) 发送好友信息
 - void qq.sendGroupMessage(String fromQQ,String toGroup,String message) 发送群信息
-- void qq.praise(String fromQQ,String toQQ,int count) qq点赞
+- void qq.sendGroupPicMessage(String fromQQ,String toGroup,String picturePaths,String message)
+    - 发送qq图文消息
+    - picturePaths用;分割多个本地图片路径
+    - 消息中使用图片只需用%picture数字%即可，数字指代第几个路径的图片，从0开始算起
+- String getPlayerDeviceID(Player player) --获取玩家的手机或电脑设备标识码
+- String getPlayerDeviceModal(Player player) --获取玩家的设备型号
+- int getPlayerDeviceOS(Player player) -- 获取玩家的操作系统id
+- double getMoney(String player)
+- void reduceMoney(String player,double money)
+- void addMoney(String player,double money)
+- void setMoney(String player,double money)
+- void setNukkitCodeVersion(String string) -- 修改version命令显示的nk版本
 
 EventLoader
 

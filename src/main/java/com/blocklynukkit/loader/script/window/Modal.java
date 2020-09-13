@@ -1,8 +1,10 @@
 package com.blocklynukkit.loader.script.window;
 
 import cn.nukkit.Player;
+import cn.nukkit.form.element.ElementButton;
 import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowModal;
+import cn.nukkit.form.window.FormWindowSimple;
 import com.blocklynukkit.loader.Loader;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -46,5 +48,10 @@ public class Modal {
             p.showFormWindow(modal,id);
         }
         return this;
+    }
+    @Override
+    public String toString() {
+        FormWindowModal modal=new FormWindowModal(title,context,btn1,btn2);
+        return "ModalWindowForm: "+modal.getJSONData()+"";
     }
 }

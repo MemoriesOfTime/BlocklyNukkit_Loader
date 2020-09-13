@@ -11,6 +11,10 @@ import com.blocklynukkit.loader.other.particle.FireworkRocket;
 import com.blocklynukkit.loader.other.particle.LineFlat;
 
 public class ParticleManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public void drawCircle(Position pos,double radius,int pid,double sep){
         new Thread(new CircleFlat(pos, radius, pid, sep)).start();
     }

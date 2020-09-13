@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class BlockItemManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     //-添加声音
     public void makeSound(Position position,String soundname){
         position.getLevel().addSound(new Vector3(position.x,position.y,position.z), Sound.valueOf(soundname));

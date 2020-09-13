@@ -6,9 +6,11 @@ import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.entity.item.EntityItem;
+import cn.nukkit.entity.item.EntityPrimedTNT;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
+import cn.nukkit.level.Sound;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
@@ -27,6 +29,10 @@ import java.util.List;
 
 
 public class EntityManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     //获取掉落物物品
     public Item getDropItemStack(EntityItem entityItem){
         return entityItem.getItem();
@@ -208,7 +214,7 @@ public class EntityManager {
         }
     }
     //生成生物
-    public void spawnEntity(String name,Position pos){
+    public Entity spawnEntity(String name,Position pos){
         double x = pos.x;
         double y = pos.y;
         double z = pos.z;
@@ -216,6 +222,7 @@ public class EntityManager {
         Entity entity = Entity.createEntity(name,level.getChunk(((int)x)>>4,((int)z)>>4),Entity.getDefaultNBT(new Vector3(x,y,z)));
         level.addEntity(entity);
         entity.spawnToAll();
+        return entity;
     }
     //构建bnNPC
     public BNNPC buildNPC(Position pos,String name,String skinID){
@@ -257,5 +264,9 @@ public class EntityManager {
             nofallBlock.spawnToAll();
         }
 
+    }
+    //单独播放声音
+    public void makeSoundToPlayer(Player player,String sound){
+        player.getLevel().addSound(player, Sound.valueOf(sound));
     }
 }

@@ -18,6 +18,15 @@ public class bnqqbot {
     public void startBot(){
         Main.start();
     }
+    public void reDirectBot(String ip){
+        Main.ip = ip.split(":")[0];
+        if(ip.split(":").length>1){
+            Main.port = Integer.parseInt(ip.split(":")[1]);
+        }
+        if(Main.clientTest!=null){
+            Main.start();
+        }
+    }
     public void sendFriendMessage(String fromQQ,String toQQ,String message){
         Core.sendPrivateMessages(Long.parseLong(fromQQ),Long.parseLong(toQQ),message,random.nextLong(),random.nextLong());
     }
@@ -38,4 +47,11 @@ public class bnqqbot {
         }
         Core.sendGroupMessagesPicText(Long.parseLong(fromQQ), Long.parseLong(toGroup), message,0);
     }
+    public void kickGroupMember(String fromQQ,String toGroup,String toQQ){
+        Core.delGroupMember(Long.parseLong(fromQQ),Long.parseLong(toGroup),Long.parseLong(toQQ),0);
+    }
+    public void banSpeakGroupMember(String fromQQ,String toGroup,String toQQ,int second){
+        Core.prohibitSpeak(Long.parseLong(fromQQ),Long.parseLong(toGroup),Long.parseLong(toQQ),second);
+    }
+
 }

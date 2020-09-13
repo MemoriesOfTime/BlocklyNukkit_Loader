@@ -26,6 +26,10 @@ import java.util.List;
 import java.util.Map;
 
 public class InventoryManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public Inventory addInv(boolean isDoubleChest, Item[] item, String name){
         ChestFakeInventory inv;
         if (isDoubleChest){

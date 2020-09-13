@@ -15,6 +15,8 @@
     <orderEntry type="library" name="graaljs" level="project" />
     <orderEntry type="library" name="Tips_v1.7.8" level="project" />
     <orderEntry type="library" name="GameAPI-1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="fastjson-1.2.62" level="project" />
+    <orderEntry type="library" name="flatlaf-0.41" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.onebone:economyapi:2.0.0-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.mamoe:mirai-core:0.39.5" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.jetbrains.kotlin:kotlin-reflect:1.3.72" level="project" />
@@ -59,6 +61,9 @@
     <orderEntry type="library" name="Maven: com.mchange:c3p0:0.9.5.5" level="project" />
     <orderEntry type="library" name="Maven: com.mchange:mchange-commons-java:0.2.19" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.46" level="project" />
-    <orderEntry type="library" name="fastjson-1.2.62" level="project" />
+    <orderEntry type="library" name="Maven: com.eclipsesource.j2v8:j2v8_win32_x86_64:4.5.0" level="project" />
+    <orderEntry type="library" name="Maven: com.eclipsesource.j2v8:j2v8_linux_x86_64:4.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.luaj:luaj-jse:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.carrotsearch:java-sizeof:0.0.5" level="project" />
   </component>
 </module>

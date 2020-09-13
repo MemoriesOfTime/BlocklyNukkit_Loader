@@ -54,4 +54,9 @@ public class AlgorithmManager {
         return (Position)block;
     }
     public Position buildPositionfromEntity(Entity entity){return (Position) entity;}
+
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
 }

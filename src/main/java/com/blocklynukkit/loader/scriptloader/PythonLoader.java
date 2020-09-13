@@ -53,7 +53,6 @@ public class PythonLoader {
                             ip.setOut(System.out);
                             ip.setErr(System.out);
                             ip.execfile(new FileInputStream(file));
-
                             plugin.bnpluginset.add(file.getName());
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文"))

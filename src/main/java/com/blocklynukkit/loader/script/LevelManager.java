@@ -32,6 +32,10 @@ import java.util.List;
 import java.util.Map;
 
 public class LevelManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public Map<String,Object> skylandoptions = new HashMap<>();
     public int OceanSeaLevel = 64;
     public LevelManager(){

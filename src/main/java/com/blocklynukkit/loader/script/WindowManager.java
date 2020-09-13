@@ -27,6 +27,10 @@ import java.util.UUID;
 
 
 public class WindowManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public Map<String,Scoreboard> boards = new HashMap<>();
     public Map<String,String> tipsVar = new HashMap<>();
 

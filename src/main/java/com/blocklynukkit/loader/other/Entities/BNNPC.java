@@ -12,6 +12,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
+import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
@@ -23,7 +24,10 @@ import com.blocklynukkit.loader.other.Clothes;
 import com.mobplugin.route.WalkerRouteFinder;
 
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BNNPC extends EntityHuman {
     public Vector3 dvec = new Vector3(0,0,0);
@@ -40,7 +44,9 @@ public class BNNPC extends EntityHuman {
 
     public boolean isjumping = false;public int jumpingtick = 0;public double jumphigh = 1;
     public int fallingtick = 0;
-    public boolean isonRoute = false;public Vector3 nowtarget = null;public double speed = 3;public int actions=0;public Vector3 actioinVec = new Vector3();public int routeMax = 50;
+    public boolean isonRoute = false;public Vector3 nowtarget = null;public double speed = 3;public int actions=0;
+    public Vector3 actioinVec = new Vector3();public int routeMax = 50;public Vector3 previousTo = null;
+    public boolean justDamaged = false;
 
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes) {
         super(chunk, nbt.putString("NameTag", name).putString("name", "BNNPC")
@@ -131,6 +137,23 @@ public class BNNPC extends EntityHuman {
                 this.dvec.y+=0.5*(10-jumpingtick)*jumphigh*0.05;
             }
         }
+        //被击退后重新寻路
+        if(justDamaged){
+            justDamaged = false;
+            if(isonRoute && routeFinder!=null && routeFinder.hasNext() && previousTo!=null){
+                double dis = nowtarget.distance(this);
+                this.actions=(int)(dis/(speed*0.05));
+                if(nowtarget.y-this.y>0.1){
+                    this.actioinVec.x = (nowtarget.x-this.x)/(actions);
+                    this.actioinVec.z = (nowtarget.z-this.z)/actions;
+                    this.actioinVec.y = (nowtarget.y-this.y)/(actions);
+                    actions+=8;
+                }
+                this.actioinVec.x = (nowtarget.x-this.x)/actions;
+                this.actioinVec.z = (nowtarget.z-this.z)/actions;
+                this.actioinVec.y = (nowtarget.y-this.y)/actions;
+            }
+        }
         //处理路径
         if(isonRoute && routeFinder!=null && routeFinder.hasNext()){
             if(Position.fromObject(this,this.level).add(0,-0.5,0).getLevelBlock().getId()== BlockID.WATER){
@@ -184,15 +207,21 @@ public class BNNPC extends EntityHuman {
                     }
                 }
             }
-
         }
         if(routeFinder!=null && !routeFinder.hasNext()){
             this.isonRoute=false;
             this.nowtarget=null;
         }
         //处理当前刻运动
-        this.x+=dvec.x;this.y+=dvec.y;this.z+=dvec.z;
-        dvec = new Vector3(0,0,0);
+        if(!Position.fromObject(this.add(dvec),this.level).getLevelBlock().isValid()){
+            this.y+=dvec.y;
+            dvec = new Vector3(0,0,0);
+        }else {
+            this.x+=dvec.x;this.y+=dvec.y;this.z+=dvec.z;
+            dvec = new Vector3(0,0,0);
+        }
+        //处理骑乘
+        this.updatePassengers();
         //调用nk预设函数
         return super.onUpdate(currentTick);
     }
@@ -205,6 +234,7 @@ public class BNNPC extends EntityHuman {
         }
         if(enableAttack){
             if(enableKnockBack){
+                justDamaged = true;
                 if(source instanceof EntityDamageByEntityEvent){
                     Entity damager = ((EntityDamageByEntityEvent)source).getDamager();
                     this.knockBack(damager,source.getFinalDamage(),-(damager.x-this.x),-(damager.z-this.z),knockBase);
@@ -307,10 +337,10 @@ public class BNNPC extends EntityHuman {
         this.yaw = yaw;
         this.pitch = pitch;
     }
-    public Player getNearestPlayer(){
+    public Player getNearestPlayer(double far){
         Player nearest = null;double distance = 999999999;
         for(Player p:Server.getInstance().getOnlinePlayers().values()){
-            if(!p.level.getName().equals(this.level.getName())){
+            if(!p.level.getName().equals(this.level.getName()) || p.distance(this)>far){
                 continue;
             }else {
                 double d = this.distance(p);
@@ -321,6 +351,32 @@ public class BNNPC extends EntityHuman {
             }
         }
         return nearest;
+    }
+    public Player getNearestPlayer(){
+        return getNearestPlayer(999999998);
+    }
+    public List<Player> getPlayersIn(double distance){
+        ArrayList<Player> players = new ArrayList<>();
+        for(Player p:Server.getInstance().getOnlinePlayers().values()){
+            if(!p.level.getName().equals(this.level.getName())){
+                continue;
+            }else {
+                double d = this.distance(p);
+                if(d<distance){
+                    players.add(p);
+                }
+            }
+        }
+        return players;
+    }
+    public List<Entity> getEntitiesIn(double distance){
+        ArrayList<Entity> entities = new ArrayList<>();
+        for(Entity e:this.level.getEntities()){
+            if(e.distance(this)<=distance){
+                entities.add(e);
+            }
+        }
+        return entities;
     }
     public boolean isSneak(){
         return this.isSneaking();
@@ -340,6 +396,7 @@ public class BNNPC extends EntityHuman {
         boolean out = routeFinder.search();
         if(out){
             isonRoute = true;
+            previousTo = to;
             return true;
         }else {
             return false;
@@ -362,5 +419,14 @@ public class BNNPC extends EntityHuman {
     }
     public void start(){
         this.spawnToAll();
+    }
+    public void setEntityRideOn(Entity entity){
+        this.mountEntity(entity);
+    }
+    public void isEntityRideOn(Entity entity){
+        this.isPassenger(entity);
+    }
+    public void setEntityRideOff(Entity entity){
+        this.dismountEntity(entity);
     }
 }

@@ -27,7 +27,11 @@ import com.blocklynukkit.loader.MetricsLite;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
+import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
+import com.blocklynukkit.loader.scriptloader.ExtendScriptLoader;
+import com.blocklynukkit.loader.scriptloader.NodeJSLoader;
+import com.blocklynukkit.loader.scriptloader.NodeJSNotFoundLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -54,14 +58,24 @@ import java.net.InetAddress;
 
 
 public class FunctionManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
 
     private Loader plugin;
 
     public bnqqbot qq = new bnqqbot();
     public String fakeNukkitCodeVersion = "";
+    public ExtendScriptLoader nodejs = null;
     
     public FunctionManager(Loader plugin){
         this.plugin = plugin;
+        if(Loader.plugins.keySet().contains("NodeBN_Windows_64")||Loader.plugins.keySet().contains("NodeBN_Linux_64")){
+            nodejs = new NodeJSLoader();
+        }else {
+            nodejs = new NodeJSNotFoundLoader();
+        }
     }
     //here 8/21
     public void setNukkitCodeVersion(String string){
@@ -540,21 +554,24 @@ public class FunctionManager {
 
     public void createCommand(String name, String description, String functionName){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName));
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
     }
     public void createCommand(String name, String description, String functionName, String per){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName, per));
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
     }
     //here 5/8
     public void newCommand(String name, String description, ScriptObjectMirror scriptObjectMirror){
         plugin.getServer().getCommandMap().register(name,new LambdaCommand(name,description,scriptObjectMirror));
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
     }
     public void newCommand(String name, String description, ScriptObjectMirror scriptObjectMirror,String per){
         plugin.getServer().getCommandMap().register(name,new LambdaCommand(name,description,scriptObjectMirror,per));
     }
     //end here
 
-    public TaskHandler createTask(String functionName, int delay){
-        return plugin.getServer().getScheduler().scheduleDelayedTask(new ModTask(functionName), delay);
+    public TaskHandler createTask(String functionName, int delay ,Object... args){
+        return plugin.getServer().getScheduler().scheduleDelayedTask(new ModTask(functionName,args), delay);
     }
     //here 5/9
     public int setTimeout(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
@@ -564,8 +581,8 @@ public class FunctionManager {
         plugin.getServer().getScheduler().cancelTask(id);
     }
     //end here
-    public TaskHandler createLoopTask(String functionName, int delay){
-        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(new ModTask(functionName), 20, delay);
+    public TaskHandler createLoopTask(String functionName, int delay,Object... args){
+        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(new ModTask(functionName,args), 20, delay);
     }
     //here 5/9
     public int setInterval(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
@@ -635,7 +652,7 @@ public class FunctionManager {
 
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-            plugin.callCommand(sender, args, functionName);
+            plugin.callCommand(this.getName(),sender, args, functionName);
             return false;
         }
     }
@@ -709,21 +726,27 @@ public class FunctionManager {
     public class ModTask extends Task{
 
         private String functionName;
+        public Object Args[];
 
-        public ModTask(String functionName){
+        public ModTask(String functionName,Object[] args){
             this.functionName = functionName;
+            this.Args = args;
         }
 
         @Override
         public void onRun(int i) {
-            plugin.call(functionName, i);
+            if(Args.length==0||Args==null){
+                plugin.call(functionName,i);
+            }else {
+                plugin.call(functionName,Args);
+            }
         }
     }
 
     public class LambdaTask extends Task{
 
         private ScriptObjectMirror callback;
-        private Object Args[];
+        public Object Args[];
 
         public LambdaTask(ScriptObjectMirror scriptObjectMirror,Object[] args){
             this.callback = scriptObjectMirror;

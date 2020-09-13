@@ -10,6 +10,7 @@ import com.blocklynukkit.loader.other.MyFileHandler;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.*;
 import java.security.MessageDigest;
@@ -155,12 +156,12 @@ public class Utils {
             }
             fileOutputStream.close();
             inputStream.close();
-            if(isWindows()){
-                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                    Loader.getlogger().info(TextFormat.YELLOW+"正在为windows转码... "+TextFormat.GREEN+"作者对微软的嘲讽：(sb Windows,都老老实实用utf编码会死吗？)");
-                else
-                    Loader.getlogger().info(TextFormat.YELLOW+"Transcoding for windows... "+TextFormat.GREEN+"The Author says:(Will Bill Gates die if windows uses utf in all countries?)");
-            }
+//            if(isWindows()){
+//                if (Server.getInstance().getLanguage().getName().contains("中文"))
+//                    Loader.getlogger().info(TextFormat.YELLOW+"正在为windows转码... "+TextFormat.GREEN+"作者对微软的嘲讽：(sb Windows,都老老实实用utf编码会死吗？)");
+//                else
+//                    Loader.getlogger().info(TextFormat.YELLOW+"Transcoding for windows... "+TextFormat.GREEN+"The Author says:(Will Bill Gates die if windows uses utf in all countries?)");
+//            }
         } catch (IOException e) {
             Loader.getlogger().error("download error ! url :{"+downloadUrl+"}, exception:{"+e+"}");
         }
@@ -635,6 +636,70 @@ public class Utils {
         }else {
             return a;
         }
+    }
+
+    /**
+     * 利用递归找一个类的指定方法，如果找不到，去父亲里面找直到最上层Object对象为止。
+     *
+     * @param clazz
+     *            目标类
+     * @param methodName
+     *            方法名
+     * @param classes
+     *            方法参数类型数组
+     * @return 方法对象
+     * @throws Exception
+     */
+    public static Method getMethod(Class clazz, String methodName,
+                                   final Class[] classes) throws Exception {
+        Method method = null;
+        try {
+            method = clazz.getDeclaredMethod(methodName, classes);
+        } catch (NoSuchMethodException e) {
+            try {
+                method = clazz.getMethod(methodName, classes);
+            } catch (NoSuchMethodException ex) {
+                if (clazz.getSuperclass() == null) {
+                    return method;
+                } else {
+                    method = getMethod(clazz.getSuperclass(), methodName,
+                            classes);
+                }
+            }
+        }
+        return method;
+    }
+
+    /**
+     *
+     * @param obj
+     *            调整方法的对象
+     * @param methodName
+     *            方法名
+     * @param classes
+     *            参数类型数组
+     * @param objects
+     *            参数数组
+     * @return 方法的返回值
+     */
+    public static Object invoke(final Object obj, final String methodName,
+                                final Class[] classes, final Object[] objects) {
+        try {
+            Method method = getMethod(obj.getClass(), methodName, classes);
+            method.setAccessible(true);// 调用private方法的关键一句话
+            return method.invoke(obj, objects);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Object invoke(final Object obj, final String methodName,
+                                final Class[] classes) {
+        return invoke(obj, methodName, classes, new Object[] {});
+    }
+
+    public static Object invoke(final Object obj, final String methodName) {
+        return invoke(obj, methodName, new Class[] {}, new Object[] {});
     }
 }
 

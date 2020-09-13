@@ -10,6 +10,10 @@ import java.io.File;
 import java.util.List;
 
 public class NotemusicManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public Song getSongFromFile(String name){
         return NBSDecoder.parse(new File(Loader.plugin.getDataFolder()+"/notemusic/"+name));
     }

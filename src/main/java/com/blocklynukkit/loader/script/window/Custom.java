@@ -131,4 +131,10 @@ public class Custom {
         addNewElement(stepSlider);
         return this;
     }
+
+    @Override
+    public String toString() {
+        FormWindowCustom window=new FormWindowCustom(title,elements);
+        return "CustomWindowForm: "+window.getJSONData();
+    }
 }

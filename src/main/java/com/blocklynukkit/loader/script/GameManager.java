@@ -14,6 +14,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public class GameManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     public void createGame(String name,boolean useTeam,String startGameCallBack,String endGameCallBack,String mainLoopCallBack,String deathCallBack){
         try {
             BNGame.newGame(name, useTeam, startGameCallBack, endGameCallBack, mainLoopCallBack, deathCallBack);

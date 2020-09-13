@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
+    @Override
+    public String toString() {
+        return "BlocklyNukkit Based Object";
+    }
     private String database;
 
     /**

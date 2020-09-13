@@ -5,6 +5,7 @@ import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.EntityMetadata;
 import cn.nukkit.event.EventHandler;
+import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
@@ -25,7 +26,7 @@ public class FloatingItemManager implements Listener {
     public FloatingItemManager(){
 
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void playerJoin(PlayerJoinEvent event){
         if(event==null||event.getPlayer()==null||event.getPlayer().getLevel()==null)return;
         String levelName = event.getPlayer().getLevel().getName();
@@ -35,13 +36,19 @@ public class FloatingItemManager implements Listener {
             }
         }
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void playerTeleport(PlayerTeleportEvent event){
-        if(event==null||event.getPlayer()==null||event.getFrom().getLevel()==null||event.getTo().getLevel()==null)return;
+        if(event==null)return;
+        if(event.getPlayer()==null)return;
+        if(event.getFrom().getLevel()==null)return;
+        if(event.getTo().getLevel()==null)return;
         if(!event.getFrom().getLevel().getName().equals(event.getTo().getLevel().getName())){
             for(Map.Entry<Position,Item> each:displayMap.keySet()){
-                if(each==null||each.getKey()==null||each.getValue()==null)return;
-                if(each.getKey().getLevel()==null||each.getKey().getLevel().getName()==null)continue;
+                if(each==null)continue;
+                if(each.getKey()==null)continue;
+                if(each.getValue()==null)continue;
+                if(each.getKey().getLevel()==null)continue;
+                if(each.getKey().getLevel().getName()==null)continue;
                 if(each.getKey().getLevel().getName().equals(event.getFrom().getLevel().getName())){
                     forceRemoveFloatingItem(event.getPlayer(),each);
                 }

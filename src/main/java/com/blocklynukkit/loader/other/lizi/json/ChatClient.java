@@ -16,7 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 public class ChatClient extends Thread{
 
     //定义一个Socket对象
-    Socket socket = null;
+    public Socket socket = null;
     public ChatClient() {
 
     }

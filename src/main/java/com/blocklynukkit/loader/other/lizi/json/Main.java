@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.other.lizi.json;
 
+import java.io.IOException;
 import java.util.Base64;
 
 import com.alibaba.fastjson.JSONObject;
@@ -10,13 +11,23 @@ import com.blocklynukkit.loader.script.event.QQOtherEvent;
 
 public class Main {
 
-    static ChatClient clientTest;
+    public static ChatClient clientTest = null;
+    public static String ip = "127.0.0.1";
+    public static int port = 8404;
 
     public Main(){
 
     }
     public static void start(){
-        clientTest = new ChatClient("127.0.0.1", 8404);
+        if(clientTest!=null) {
+            try {
+                clientTest.socket.close();
+            } catch (IOException e) {
+                Loader.getlogger().warning("与小栗子机器人框架通讯错误！");
+            }
+            clientTest.interrupt();
+        }
+        clientTest = new ChatClient(ip, port);
         clientTest.start();
     }
 

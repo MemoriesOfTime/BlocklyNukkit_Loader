@@ -2,12 +2,26 @@
 new
 
 更新了qq机器人对接模块，使用小栗子qq机器人框架（因为这是唯一一个没跑路的免费机器人了），配好的包在bn群内下载
+添加了com.blocklynukkit.JavaAPI类来提供bn对java的api
+添加了调试工具，使用命令bndebug打开调试工具
 
 Bug Fixed
 
 - 修复了熔炉配方nbt丢失问题
 - 修复了设置箱子和漏斗物品栏不好使的问题
 - 修复了py插件不可用问题
+- 修复了BNNPC在路径移动时被击退遁地问题
+- 修复了BNNPC导致的区块报错问题
+
+BNNPC
+
+- Array<Player> getPlayersIn(double distance)
+- Array<Entity> getEntitiesIn(double distance)
+- Player getNearestPlayer(double far)
+- Player getNearestPlayer()
+- void setEntityRideOn(Entity entity)
+- void isEntityRideOn(Entity entity)
+- void setEntityRideOff(Entity entity)
 
 window
 
@@ -20,12 +34,17 @@ CustoWindowBuilder
 manager
 
 - void qq.startBot() 启动qq机器人进程
+- void qq.reDirectBot(String ip) 
+    - 将机器人重定向到指定ip地址，并使用那台电脑的小栗子qq机器人框架
+    - 要求目标电脑开放8404-TCP端口，并且在小栗子的tcpapi插件中允许远程控制
 - void qq.sendFriendMessage(String fromQQ,String toQQ,String message) 发送好友信息
 - void qq.sendGroupMessage(String fromQQ,String toGroup,String message) 发送群信息
 - void qq.sendGroupPicMessage(String fromQQ,String toGroup,String picturePaths,String message)
     - 发送qq图文消息
     - picturePaths用;分割多个本地图片路径
     - 消息中使用图片只需用%picture数字%即可，数字指代第几个路径的图片，从0开始算起
+- void qq.kickGroupMember(String fromQQ,String toGroup,String toQQ) --踢了指定群员,fromQQ是机器人账号
+- void qq.banSpeakGroupMember(String fromQQ,String toGroup,String toQQ,int second) --禁言指定群员
 - String getPlayerDeviceID(Player player) --获取玩家的手机或电脑设备标识码
 - String getPlayerDeviceModal(Player player) --获取玩家的设备型号
 - int getPlayerDeviceOS(Player player) -- 获取玩家的操作系统id
@@ -34,6 +53,26 @@ manager
 - void addMoney(String player,double money)
 - void setMoney(String player,double money)
 - void setNukkitCodeVersion(String string) -- 修改version命令显示的nk版本
+- void nodejs.eval(String str,boolean isPath) -- 使用nodejs运行str
+    - 运行nodejs代码是隔离在nodejs环境运行的，而非java环境
+    - 若isPath为true，则执行该路径的文件
+    - 否则将str作为nodejs代码执行
+    - 其中可以使用callFunction(String BNFunctionName,String args...)来调用bn插件的函数
+- void nodejs.newDocker(String dockerName,String str,boolean isPath) --开启一个常驻nodejs容器
+    - dockerName是创建的nodejs容器的名字，容器一旦创建就会立即开始执行其中的代码
+    - 重启创建后执行完代码不会被销毁，而是可以继续通过callDockerFunction调用其中方法
+    - 如果需要在其他bn插件调用其中的nodejs函数，需要使用registerFunction(String 函数名,Function 函数)注册
+    - 其余同nodejs.eval函数
+- void nodejs.closeDocker(String dockerName) --关闭指定的nodejs容器并释放占用资源
+- String callDockerFunction(String function,String... args)
+    - 调用指定容器中的指定函数并向其传参，调用的函数必须先注册再使用，否则bn无法获取此函数内存地址进行调用
+    - 返回值将自动被转为字符串，如果被调函数无返回值则返回字符串"null"
+    - function指定调用的函数，格式为 容器名::函数名（同其他地方的调用格式）
+    - 若直接输入函数名，则将在所有未关闭容器中随机寻找一个有此名称函数的容器调用，若找不到，返回NO FUNCTION
+    - args参数只接受字符串，数量不限，也可没有
+- TaskHandler createTask(String functionName, int delay ,\<E+\>... args)
+- TaskHandler createLoopTask(String functionName, int delay,\<E+\>... args)
+    - 支持2-128个任意数量的参数，第一个参数为回调函数名，第二个为回调间隔tick，其余的是在调用函数时向函数传递的参数
 
 EventLoader
 
@@ -63,6 +102,9 @@ Entity
 - int getPlayerExpLevel(Player player)
 - void setPlayerHunger(Player player,int hunger)
 - int getPlayerHunger(Player player)
+- void makeSoundToPlayer(Player player,String sound)
+- Entity spawnEntity(String name,Position pos) --返回值更改
+
 
 ## 1.2.8.3
 

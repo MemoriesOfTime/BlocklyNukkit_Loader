@@ -26,13 +26,18 @@ import cn.nukkit.item.Item;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.ProtocolInfo;
+import cn.nukkit.network.protocol.StartGamePacket;
+import cn.nukkit.raknet.protocol.Packet;
 import cn.nukkit.scheduler.Task;
+import com.blocklynukkit.loader.other.packets.EducationSettingsPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
+import org.python.antlr.op.Load;
 
 import java.util.Map;
 
@@ -404,6 +409,11 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketSend(DataPacketSendEvent event){
+        DataPacket tmp = event.getPacket();
+        if(tmp.pid()==ProtocolInfo.START_GAME_PACKET){
+            StartGamePacket packet = (StartGamePacket)tmp;
+            packet.eduEditionOffer = 1;
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 

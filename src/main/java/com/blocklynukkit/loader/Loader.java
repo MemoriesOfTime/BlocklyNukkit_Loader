@@ -16,26 +16,27 @@ import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.other.BNLogger;
+import com.blocklynukkit.loader.other.debug.Debuger;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
-import com.blocklynukkit.loader.other.mirai.QQBotThread;
+import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
+import com.blocklynukkit.loader.scriptloader.LuaScriptLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import org.python.antlr.ast.Str;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -82,6 +83,7 @@ public class Loader extends PluginBase implements Listener {
     public static ParticleManager particleManager;
     public static GameManager gameManager;
     public static Map<String, Plugin> plugins;
+    public static Map<String, CommandInfo> plugincmdsmap = new HashMap<>();
 
 
     @Override
@@ -172,6 +174,7 @@ public class Loader extends PluginBase implements Listener {
             config.save();
         }
         List<String> list = (List<String>) config.get("mods");
+        if(list!=null)
         for(String a:list){
             Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
         }
@@ -188,6 +191,9 @@ public class Loader extends PluginBase implements Listener {
         if(plugins.containsKey("PyBN")){
             new PythonLoader(plugin).loadplugins();
         }
+
+        //加载Lua
+        new LuaScriptLoader(plugin).loadplugins();
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -218,6 +224,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
         plugin.getServer().getCommandMap().register("showstacktrace",new showStackTrace());
         plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
+        plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
@@ -283,6 +290,9 @@ public class Loader extends PluginBase implements Listener {
                     getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
                 }
             }
+        }else if(js.contains("--pragma Lua")||js.contains("--pragma lua")||js.contains("--pragma LUA")
+                ||js.contains("-- pragma Lua")||js.contains("-- pragma lua")||js.contains("-- pragma LUA")){
+            new LuaScriptLoader(plugin).putLuaEngine(name, js);
         }else {
             new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }
@@ -435,17 +445,21 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public synchronized void callCommand(CommandSender sender, String[] args, String functionName){
+    public synchronized void callCommand(String commandName,CommandSender sender, String[] args, String functionName){
+        long start = System.currentTimeMillis();
         for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
             if(entry.getValue().get(functionName) == null){
                 continue;
             }
             try {
+                Loader.plugincmdsmap.get(commandName).newCall(System.currentTimeMillis()-start,
+                    LocalDateTime.now().toString(),entry.getKey(),functionName,sender.getName(),args);
                 ((Invocable) entry.getValue()).invokeFunction(functionName, sender, args);
             } catch (final Exception se) {
                 if(se instanceof ScriptException){
                     ScriptException e = (ScriptException)se;
                     previousException = e;
+                    Loader.plugincmdsmap.get(commandName).setLastCallError("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误",se.getStackTrace());
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
                         Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
@@ -709,13 +723,28 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
+    public class DebugerCommand extends Command{
+        public DebugerCommand() {
+            super("bndebug","打开bn调试器");
+            this.setPermission("blocklynukkit.opall");
+        }
+        @Override
+        public boolean execute(CommandSender sender, String s, String[] args){
+            if(sender.isPlayer()){
+                sender.sendMessage(TextFormat.RED+"This command can only be called from console!");
+                return false;
+            }
+            new Debuger().display();
+            return false;
+        }
+    }
+
     public class GenTestWorldCommand extends Command{
         public GenTestWorldCommand() {
             super("gentestworld","生成测试世界");
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-
             return false;
         }
     }

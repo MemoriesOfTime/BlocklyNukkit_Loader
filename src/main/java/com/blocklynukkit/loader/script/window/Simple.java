@@ -58,4 +58,11 @@ public class Simple {
         }
         return this;
     }
+    @Override
+    public String toString() {FormWindowSimple window=new FormWindowSimple(title,context);
+        for(ElementButton button:buttonsmap){
+            window.addButton(button);
+        }
+        return "SimpleWindowForm: "+window.getJSONData()+"";
+    }
 }

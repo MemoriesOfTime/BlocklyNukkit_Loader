@@ -5,15 +5,15 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.sun.istack.internal.NotNull;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import jdk.nashorn.api.scripting.ScriptUtils;
+import jdk.nashorn.internal.objects.NativeFunction;
 
+import javax.script.Compilable;
 import javax.script.Invocable;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.Objects;
 
 import static com.blocklynukkit.loader.Loader.*;
@@ -64,7 +64,8 @@ public class JavaScriptLoader {
         }
         putBaseObject(name);
         try {
-            engineMap.get(name).eval(js);
+            ((Compilable)engineMap.get(name)).compile(js).eval();
+            //engineMap.get(name).eval(js);
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){

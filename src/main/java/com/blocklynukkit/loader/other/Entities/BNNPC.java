@@ -6,6 +6,7 @@ import cn.nukkit.block.BlockID;
 import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
+import cn.nukkit.entity.data.EntityData;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
@@ -62,6 +63,7 @@ public class BNNPC extends EntityHuman {
         this.setNameTag(name);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
+        //this.dataProperties.putString()
     }
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes,int calltick, String callback){
         this(chunk, nbt, name, clothes);
@@ -219,6 +221,15 @@ public class BNNPC extends EntityHuman {
         }else {
             this.x+=dvec.x;this.y+=dvec.y;this.z+=dvec.z;
             dvec = new Vector3(0,0,0);
+        }
+        try{
+            for(Entity entity:this.getPassengers()){
+                if(entity.distance(this)>3){
+                    this.setEntityRideOff(entity);
+                }
+            }
+        }catch (java.util.ConcurrentModificationException e){
+            //ignore
         }
         //处理骑乘
         this.updatePassengers();
@@ -427,6 +438,18 @@ public class BNNPC extends EntityHuman {
         this.isPassenger(entity);
     }
     public void setEntityRideOff(Entity entity){
+        entity.riding = null;
         this.dismountEntity(entity);
+        entity.setPosition(this);
+        this.getPassengers().clear();
+        this.updatePassengers();
+    }
+    public Player getRidingPlayer(){
+        for(Entity entity:this.getPassengers()){
+            if(Loader.entityManager.isPlayer(entity)){
+                return (Player)entity;
+            }
+        }
+        return null;
     }
 }

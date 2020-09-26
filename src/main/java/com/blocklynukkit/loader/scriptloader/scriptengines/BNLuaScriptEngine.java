@@ -4,6 +4,8 @@ import org.luaj.vm2.Lua;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.luaj.vm2.script.LuajContext;
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.script.*;
 
@@ -206,13 +208,13 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
         }
     }
 
-    static private LuaValue toLua(Object javaValue) {
+    static public LuaValue toLua(Object javaValue) {
         return javaValue == null? LuaValue.NIL:
                 javaValue instanceof LuaValue? (LuaValue) javaValue:
                         CoerceJavaToLua.coerce(javaValue);
     }
 
-    static private Object toJava(LuaValue luajValue) {
+    static public Object toJava(LuaValue luajValue) {
         switch ( luajValue.type() ) {
             case LuaValue.TNIL: return null;
             case LuaValue.TSTRING: return luajValue.tojstring();
@@ -257,8 +259,22 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
                     }
                     return toJava(fun.invoke(luaArgs));
                 }
-            }catch (Exception e){
-                throw new ScriptException(e);
+            }catch (LuaError e){
+                Pattern pattern = Pattern.compile("script:[0-9]+ ");
+                Matcher matcher = pattern.matcher(e.getMessage());
+                if(matcher.find()){
+                    int line = Integer.parseInt(matcher.group(0).replaceFirst("script:","").replaceAll(" ",""));
+                    ScriptException exception;
+                    try {
+                        //tm为啥报错
+                         exception = new ScriptException(e.getMessage()==null?"Error":e.getMessage(),"Lua",line,-1);
+                         throw exception;
+                    }catch (java.lang.IllegalArgumentException ill){
+                        throw new ScriptException(e.getMessage());
+                    }
+                }else {
+                    throw new ScriptException(e.getMessage());
+                }
             }
         }else {
             throw new NoSuchMethodException();

@@ -64,6 +64,20 @@ public class Utils {
             }
         }
     }
+    public static String replaceLast(String string, String match, String replace) {
+        if (null == replace) {
+            //参数不合法，原样返回
+            return string;
+        }
+
+        StringBuilder sBuilder = new StringBuilder(string);
+        int lastIndexOf = sBuilder.lastIndexOf(match);
+        if (-1 == lastIndexOf) {
+            return string;
+        }
+
+        return sBuilder.replace(lastIndexOf, lastIndexOf + match.length(), replace).toString();
+    }
     public static String readToString(String fileName) {
         String encoding = "UTF-8";
         File file = new File(fileName);

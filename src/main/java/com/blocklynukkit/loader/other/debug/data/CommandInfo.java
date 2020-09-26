@@ -1,11 +1,14 @@
 package com.blocklynukkit.loader.other.debug.data;
 
+import cn.nukkit.Server;
+
 import java.util.*;
 
 public class CommandInfo {
     public String commandName;
     public String commandDescription;
     public Stack<CallInfo> callInfos = new Stack<>();
+    public StringBuilder completer = new StringBuilder();
     public CommandInfo(String commandName,String commandDescription){
         this.commandName=commandName;
         this.commandDescription=commandDescription;
@@ -25,7 +28,11 @@ public class CommandInfo {
     public Map<String,String> getCallsTime(int times){
         Map<String, String> out = new LinkedHashMap<>();
         if(callInfos.empty()){
-            out.put("初始化","注册命令："+commandName+"\n命令描述："+commandDescription+"\n续写器：[args:text]\n");
+            completer = new StringBuilder();
+            Server.getInstance().getCommandMap().getCommand(commandName).getCommandParameters().forEach((key,value)->{
+                completer.append("\n    ").append(key).append(": ").append(Arrays.toString(value));
+            });
+            out.put("初始化","注册命令："+commandName+"\n命令描述："+commandDescription+"\n完成器："+completer.toString()+"\n");
         }
         Iterator it = callInfos.iterator();
         for(int i=0;i<times;i++){

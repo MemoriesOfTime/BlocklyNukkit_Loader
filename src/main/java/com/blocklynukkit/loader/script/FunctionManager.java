@@ -4,6 +4,8 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandEnum;
+import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
@@ -29,9 +31,7 @@ import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
-import com.blocklynukkit.loader.scriptloader.ExtendScriptLoader;
-import com.blocklynukkit.loader.scriptloader.NodeJSLoader;
-import com.blocklynukkit.loader.scriptloader.NodeJSNotFoundLoader;
+import com.blocklynukkit.loader.scriptloader.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -55,6 +55,8 @@ import java.util.*;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class FunctionManager {
@@ -76,6 +78,29 @@ public class FunctionManager {
         }else {
             nodejs = new NodeJSNotFoundLoader();
         }
+    }
+    //here 9/17
+    public void newPlugin(String path){
+        File file = new File(path);
+        Loader.putEngine(file.getName(),Utils.readToString(file));
+    }
+    public void newJSPlugin(String name,String code){
+        if(!name.endsWith(".js")){
+            name+=".js";
+        }
+        new JavaScriptLoader(Loader.plugin).putJavaScriptEngine(name,code);
+    }
+    public void newPYPlugin(String name,String code){
+        if(!name.endsWith(".py")){
+            name+=".py";
+        }
+        new PythonLoader(Loader.plugin).putPythonEngine(name,code);
+    }
+    public void newLUAPlugin(String name,String code){
+        if(!name.endsWith(".lua")){
+            name+=".lua";
+        }
+        new LuaScriptLoader(Loader.plugin).putLuaEngine(name,code);
     }
     //here 8/21
     public void setNukkitCodeVersion(String string){
@@ -551,7 +576,79 @@ public class FunctionManager {
     public boolean checkPlayerPermission(String per,Player player){
         return player.hasPermission(per);
     }
-
+    //here 9/19
+    @SuppressWarnings("unchecked")
+    public void addCommandCompleter(String cmd,String id,String completer){
+        completer += " ";
+        List<CommandParameter> commandParameters = new LinkedList<>();
+        Pattern pattern = Pattern.compile("[<\\[][a-zA-Z0-9_\\u4e00-\\u9fa5,()\\[\\].:!$@=;]+[>\\]]");
+        Matcher matcher = pattern.matcher(completer);
+        String[] all = completer.split(" ");
+        if(matcher.find()){
+            for(int i=0;i<all.length;i++){
+                if(all[i].replaceAll(" ","").length()<3)continue;
+                if(!pattern.matcher(all[i]).matches())continue;
+                boolean optional = all[i].startsWith("[");
+                String each = Utils.replaceLast(Utils.replaceLast(all[i].replaceFirst("[<\\[]",""),">",""),"]","");
+                String[] token = each.split(":");
+                String name = token[0];
+                String context,enums;
+                if(token[1].contains("=")){
+                    context = token[1].split("=")[0];
+                    enums = token[1].split("=")[1];
+                }else {
+                    context = token[1];
+                    enums = null;
+                }
+                CommandParameter current = new CommandParameter(name,optional);
+                switch (context) {
+                    case "@target":
+                        current.type = CommandParamType.TARGET;
+                        break;
+                    case "@blockpos":
+                        current.type = CommandParamType.BLOCK_POSITION;
+                        break;
+                    case "@pos":
+                        current.type = CommandParamType.POSITION;
+                        break;
+                    case "@int":
+                        current.type = CommandParamType.INT;
+                        break;
+                    case "@float":
+                        current.type = CommandParamType.FLOAT;
+                        break;
+                    case "@string":
+                        current.type = CommandParamType.STRING;
+                        break;
+                    case "@rawtext":
+                    case "@text":
+                        current.type = CommandParamType.RAWTEXT;
+                        break;
+                    case "@message":
+                        current.type = CommandParamType.MESSAGE;
+                        break;
+                    case "@command":
+                    case "@cmd":
+                        current.type = CommandParamType.COMMAND;
+                        break;
+                    case "@json":
+                    case "@JSON":
+                        current.type = CommandParamType.JSON;
+                        break;
+                    case "@filepath":
+                    case "@path":
+                        current.type = CommandParamType.FILE_PATH;
+                        break;
+                    case "@operator":
+                        current.type = CommandParamType.OPERATOR;
+                        break;
+                }
+                if(enums!=null)current.enumData = new CommandEnum(name,Arrays.asList(enums.split(";")));
+                commandParameters.add(current);
+            }
+        }
+        Server.getInstance().getCommandMap().getCommand(cmd).addCommandParameters(id,commandParameters.toArray(new CommandParameter[commandParameters.size()]));
+    }
     public void createCommand(String name, String description, String functionName){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName));
         Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
@@ -571,22 +668,22 @@ public class FunctionManager {
     //end here
 
     public TaskHandler createTask(String functionName, int delay ,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedTask(new ModTask(functionName,args), delay);
+        return plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new ModTask(functionName,args), delay);
     }
     //here 5/9
     public int setTimeout(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedTask(new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
+        return plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
     }
     public void clearTimeout(int id){
         plugin.getServer().getScheduler().cancelTask(id);
     }
     //end here
     public TaskHandler createLoopTask(String functionName, int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(new ModTask(functionName,args), 20, delay);
+        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new ModTask(functionName,args), 20, delay);
     }
     //here 5/9
     public int setInterval(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(new LambdaTask(scriptObjectMirror,args),delay,delay).getTaskId();
+        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay,delay).getTaskId();
     }
     public void clearInterval(int id){
         plugin.getServer().getScheduler().cancelTask(id);

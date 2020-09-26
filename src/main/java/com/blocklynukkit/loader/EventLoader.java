@@ -31,6 +31,7 @@ import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.network.protocol.StartGamePacket;
 import cn.nukkit.raknet.protocol.Packet;
 import cn.nukkit.scheduler.Task;
+import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.packets.EducationSettingsPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
@@ -235,7 +236,7 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDamageEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

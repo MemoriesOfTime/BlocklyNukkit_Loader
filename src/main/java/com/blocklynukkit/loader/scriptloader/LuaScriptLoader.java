@@ -5,12 +5,16 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNLuaScriptEngine;
 import com.sun.istack.internal.NotNull;
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.lib.OneArgFunction;
+import org.luaj.vm2.lib.jse.CoerceJavaToLua;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.io.File;
-import java.util.Objects;
+import java.util.*;
 
 public class LuaScriptLoader {
     public Loader plugin;
@@ -57,6 +61,88 @@ public class LuaScriptLoader {
             return;
         }
         plugin.putBaseObject(name);
+        //asTable函数实现
+        plugin.engineMap.get(name).put("asTable", new OneArgFunction() {
+            @Override
+            public LuaValue call(LuaValue luaValue) {
+                Object value = BNLuaScriptEngine.toJava(luaValue);
+                return to(value);
+            }
+            private LuaValue to(Object value){
+                System.out.println(value.getClass());
+                if(value instanceof List){
+                    LuaTable result = new LuaTable();
+                    List from = (List) value;
+                    int position = 1;
+                    for (Object each:from) {
+                        // LuaTable默认索引从1开始，0也可以，但是后面获取长度等有问题
+                        result.set(position,this.to(each));
+                    }
+                    return result;
+                }else if(value instanceof Map){
+                    LuaTable result = new LuaTable();
+                    Map<Object,Object> from = (Map) value;
+                    for(Map.Entry<Object,Object> entry:from.entrySet()){
+                        result.set(BNLuaScriptEngine.toLua(entry.getKey().toString()),BNLuaScriptEngine.toLua(entry.getValue()));
+                    }
+                    return result;
+                }else if(value instanceof Object[]){
+                    LuaTable result = new LuaTable();
+                    Object[] from = (Object[]) value;
+                    int position = 1;
+                    for (Object each:from) {
+                        // LuaTable默认索引从1开始，0也可以，但是后面获取长度等有问题
+                        result.set(position,this.to(each));
+                    }
+                }else if(value instanceof LuaValue){
+                    LuaValue from = (LuaValue)value;
+                    if(from.istable()){
+                        return (LuaTable)from;
+                    }
+                }
+                return BNLuaScriptEngine.toLua(value);
+            }
+        });
+        plugin.engineMap.get(name).put("asMap", new OneArgFunction(){
+            @Override
+            public LuaValue call(LuaValue luaValue) {
+                Object value = BNLuaScriptEngine.toJava(luaValue);
+                return to(value);
+            }
+            public LuaValue to(Object object){
+                if(object instanceof LuaValue){
+                    if(((LuaValue)object).istable()){
+                        LuaTable from = (LuaTable)((LuaValue)object);
+                        Map<Object,Object> result = new HashMap<>();
+                        for(LuaValue each:from.keys()){
+                            result.put(BNLuaScriptEngine.toJava(each),this.to(from.get(each)));
+                        }
+                        return BNLuaScriptEngine.toLua(result);
+                    }
+                }
+                return BNLuaScriptEngine.toLua(object);
+            }
+        });
+        plugin.engineMap.get(name).put("asList", new OneArgFunction(){
+            @Override
+            public LuaValue call(LuaValue luaValue) {
+                Object value = BNLuaScriptEngine.toJava(luaValue);
+                return to(value);
+            }
+            public LuaValue to(Object object){
+                if(object instanceof LuaValue){
+                    if(((LuaValue)object).istable()){
+                        LuaTable from = (LuaTable)((LuaValue)object);
+                        List<Object> result = new ArrayList<>();
+                        for(LuaValue each:from.keys()){
+                            result.add(this.to(from.get(each)));
+                        }
+                        return BNLuaScriptEngine.toLua(result);
+                    }
+                }
+                return BNLuaScriptEngine.toLua(object);
+            }
+        });
         try {
             plugin.engineMap.get(name).eval(Lua);
         } catch (ScriptException e) {

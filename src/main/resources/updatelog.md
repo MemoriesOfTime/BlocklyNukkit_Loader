@@ -2,8 +2,15 @@
 new
 
 更新了qq机器人对接模块，使用小栗子qq机器人框架（因为这是唯一一个没跑路的免费机器人了），配好的包在bn群内下载
+您也可以从官网下载框架并自行安装tcpapi.dll插件到机器人框架中，bn通过tcpapi来与其交互
 添加了com.blocklynukkit.JavaAPI类来提供bn对java的api
-添加了调试工具，使用命令bndebug打开调试工具
+添加了调试工具，使用命令bndebug打开调试工具，可以查看变量和监控命令情况
+
+Lua
+
+添加了lua语言支持，版本为luaj5.2，可以通过lua来制作bn插件，接口与js和py完全相同
+您需要使用:来访问基对象函数，此外还提供了用于和java交互的luajava对象和asTable asList asMap三个全局函数
+详见bn开发文档
 
 Bug Fixed
 
@@ -22,12 +29,13 @@ BNNPC
 - void setEntityRideOn(Entity entity)
 - void isEntityRideOn(Entity entity)
 - void setEntityRideOff(Entity entity)
+- Player getRidingPlayer()
 
 window
 
 - setPauseScreenList(String list) --设置暂停界面右侧显示在线玩家区域的文字，用;分割多行
 
-CustoWindowBuilder
+CustomWindowBuilder
 
 -  this showAsSetting(Player p, String imageURL, String callback) --支持图标，和按钮图标书写方式相同
 
@@ -64,7 +72,7 @@ manager
     - 如果需要在其他bn插件调用其中的nodejs函数，需要使用registerFunction(String 函数名,Function 函数)注册
     - 其余同nodejs.eval函数
 - void nodejs.closeDocker(String dockerName) --关闭指定的nodejs容器并释放占用资源
-- String callDockerFunction(String function,String... args)
+- String nodejs.callDockerFunction(String function,String... args)
     - 调用指定容器中的指定函数并向其传参，调用的函数必须先注册再使用，否则bn无法获取此函数内存地址进行调用
     - 返回值将自动被转为字符串，如果被调函数无返回值则返回字符串"null"
     - function指定调用的函数，格式为 容器名::函数名（同其他地方的调用格式）
@@ -73,6 +81,18 @@ manager
 - TaskHandler createTask(String functionName, int delay ,\<E+\>... args)
 - TaskHandler createLoopTask(String functionName, int delay,\<E+\>... args)
     - 支持2-128个任意数量的参数，第一个参数为回调函数名，第二个为回调间隔tick，其余的是在调用函数时向函数传递的参数
+- void newPlugin(String path) --加载指定路径上的bn插件
+- void newJSPlugin(String name,String code) --根据代码字符串创建一个新的bn插件
+- void newPYPlugin(String name,String code)
+- void newLUAPlugin(String name,String code)
+- void addCommandCompleter(String cmd,String id,String completer)
+    - 创建命令补全器，将被发送给玩家用作命令提示和tab补全
+    - cmd为要添加给的命令的名称，id为补全器标识符，随意只要不重复即可
+    - completer是补全器内容，由\<必选单元>和\[可选单元]由空格连缀组成
+    - 每个单元的内部格式为 名称:@类型=参数1;参数2;... 等于号及其后面的部分不是必须的
+    - 类型有：@target @blockpos @pos @int @float @string @text 
+    - 类型有：@message @command @json @filepath @operator
+    - 例如：<player:@target> <sentence:@message=BNNB!;blocklynukkit> [color:@text=red;green]
 
 EventLoader
 

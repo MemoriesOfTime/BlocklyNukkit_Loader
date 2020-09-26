@@ -268,6 +268,8 @@ public class Loader extends PluginBase implements Listener {
         if(httpServer!=null){
             httpServer.stop(0);
         }
+        engineMap.clear();
+        System.gc();
     }
 
     public static void putEngine(String name,String js){
@@ -319,7 +321,7 @@ public class Loader extends PluginBase implements Listener {
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
         if(e instanceof EntityDamageByEntityEvent||e.getEventName().equals("EntityDamageByEntityEvent")){
-            boolean sametime = System.currentTimeMillis()-previousTime<8;
+            boolean sametime = System.currentTimeMillis()-previousTime<10;
             previousTime=System.currentTimeMillis();
             if(sametime){
                 return;
@@ -342,12 +344,12 @@ public class Loader extends PluginBase implements Listener {
                     ScriptException ee = (ScriptException) se;
                     previousException = ee;
                     if (Server.getInstance().getLanguage().getName().contains("中文")) {
-                        Loader.getlogger().warning("在调用\"" + ee.getFileName() + "\"中的函数" + functionName + "时");
+                        Loader.getlogger().warning("在调用\"" + entry.getKey() + "\"中的函数" + functionName + "时");
                         Loader.getlogger().warning("在第" + ee.getLineNumber() + "行第" + ee.getColumnNumber() + "列发生错误:");
                         Loader.getlogger().warning(ee.getMessage());
                         Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
                     } else {
-                        Loader.getlogger().warning("when calling function " + functionName + " in \"" + ee.getFileName() + "\"");
+                        Loader.getlogger().warning("when calling function " + functionName + " in \"" + entry.getKey() + "\"");
                         Loader.getlogger().warning("at line " + ee.getLineNumber() + " column " + ee.getColumnNumber() + " occurred an error:");
                         Loader.getlogger().warning(ee.getMessage());
                         Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");

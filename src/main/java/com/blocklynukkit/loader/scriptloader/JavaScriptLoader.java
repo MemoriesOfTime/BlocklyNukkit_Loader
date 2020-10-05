@@ -4,6 +4,7 @@ import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.sun.istack.internal.NotNull;
+import javassist.*;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.api.scripting.ScriptUtils;
@@ -14,7 +15,12 @@ import javax.script.Invocable;
 import javax.script.ScriptException;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.blocklynukkit.loader.Loader.*;
 
@@ -47,6 +53,7 @@ public class JavaScriptLoader {
         }
     }
     public void putJavaScriptEngine(String name,String js){
+        js = formatExportJavaSript(name,js);
         engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine());
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -65,7 +72,6 @@ public class JavaScriptLoader {
         putBaseObject(name);
         try {
             ((Compilable)engineMap.get(name)).compile(js).eval();
-            //engineMap.get(name).eval(js);
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -81,5 +87,30 @@ public class JavaScriptLoader {
             }
         }
         bnpluginset.add(name);
+    }
+    public String formatExportJavaSript(String name,String code){
+        String[] lines = code.split("\n");
+        String output = "";String tmp;
+        Map<String,String[]> exportFunctions = new HashMap<>();
+        for(String line:lines){
+            tmp = line.trim();
+            if(tmp.startsWith("export function")){
+                output+=(line.replaceFirst("export ","")+"\n");
+                tmp = tmp.replaceFirst("export function ","");
+                String funName = tmp.split("\\(")[0].trim();
+                String[] funArgs = tmp.split("\\(")[1].split("\\)")[0]
+                        .trim().split(",");
+                exportFunctions.put(funName,funArgs);
+            }else {
+                output+=(line+"\n");
+            }
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z_$]+[A-Za-z_$.\\d]+$");
+        Matcher matcher = pattern.matcher(name);
+        if(matcher.matches()){
+            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
+            if(bn!=null) bnClasses.put(name,bn);
+        }
+        return output;
     }
 }

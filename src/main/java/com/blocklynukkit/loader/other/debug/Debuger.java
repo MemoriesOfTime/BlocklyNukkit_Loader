@@ -1,6 +1,5 @@
 package com.blocklynukkit.loader.other.debug;
 
-import com.blocklynukkit.loader.Loader;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
@@ -14,12 +13,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
+
 
 public class Debuger {
     public JFrame jf ;
     public JTabbedPane tab ;
     public Debuger(){
+        //com.blocklynukkit.loader.Loader.functionManager.callFunction()
         try {
             UIManager.setLookAndFeel( new FlatDarculaLaf());
         } catch( Exception ex ) {
@@ -59,7 +59,7 @@ public class Debuger {
      * @return Image
      */
     public Image getIcon(){
-        URL url = Loader.class.getResource("/BlocklyNukkit.png"); //声明url对象
+        URL url = com.blocklynukkit.loader.Loader.class.getResource("/BlocklyNukkit.png"); //声明url对象
         Image src = Toolkit.getDefaultToolkit().getImage(url);
         return src;
     }

@@ -38,6 +38,14 @@ public class Modal {
         }
         return this;
     }
+    public Modal showToPlayer(Player p,String callback,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(callback,true);
+            }
+        }
+        return this.showToPlayer(p, callback);
+    }
     @Deprecated
     public Modal showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
@@ -48,6 +56,15 @@ public class Modal {
             p.showFormWindow(modal,id);
         }
         return this;
+    }
+    @Deprecated
+    public Modal showToPlayerCallLambda(Player p,ScriptObjectMirror mirror,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(mirror.toString(),true);
+            }
+        }
+        return this.showToPlayerCallLambda(p, mirror);
     }
     @Override
     public String toString() {

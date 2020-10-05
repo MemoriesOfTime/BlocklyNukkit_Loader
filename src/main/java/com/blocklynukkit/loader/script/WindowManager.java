@@ -96,6 +96,11 @@ public class WindowManager {
         return custom;
     }
     public String getEventResponseText(PlayerFormRespondedEvent event){
+        if(event==null){
+            return "NULL";
+        }else if(event.wasClosed()){
+            return "NULL";
+        }
         FormResponseSimple simple=(FormResponseSimple)event.getResponse();
         if(simple!=null){
             return simple.getClickedButton().getText();
@@ -104,6 +109,11 @@ public class WindowManager {
         }
     }
     public String getEventResponseModal(PlayerFormRespondedEvent event){
+        if(event==null){
+            return "NULL";
+        }else if(event.wasClosed()){
+            return "NULL";
+        }
         FormResponseModal modal=(FormResponseModal)event.getResponse();
         if(modal!=null){
             return modal.getClickedButtonText();
@@ -124,6 +134,11 @@ public class WindowManager {
         }
     }
     public String getEventCustomVar(PlayerFormRespondedEvent event,int id,String mode){
+        if(event==null){
+            return "NULL";
+        }else if(event.wasClosed()){
+            return "NULL";
+        }
         FormResponseCustom custom=(FormResponseCustom)event.getResponse();
         if(mode.equals("input")){
             return custom.getInputResponse(id);

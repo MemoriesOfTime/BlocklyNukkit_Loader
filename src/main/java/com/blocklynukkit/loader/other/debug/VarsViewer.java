@@ -34,7 +34,7 @@ public class VarsViewer {
         pluginsList.setSelectedIndex(0);
         pluginsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pluginsPane = new JScrollPane(pluginsList);
-        varInfoPane = new JScrollPane(makeTable(RamUsageEstimator.isSupportedJVM()?
+        varInfoPane = new JScrollPane(makeTable(false?//出现bug
                 new Object[][]{{"","","",""}}:new Object[][]{{"","",""}}));
         varsPane = new JSplitPane();
         varsPane.setContinuousLayout(false);
@@ -79,7 +79,8 @@ public class VarsViewer {
                 }
                 copy.add(each);
             }
-            if(RamUsageEstimator.isSupportedJVM()){
+            //if(RamUsageEstimator.isSupportedJVM()){
+            if(false){//出现bug
                 Object[][] datas = new Object[copy.size()][4];
                 int it = 0;
                 for(Map.Entry<String,Object> entry:copy){
@@ -107,7 +108,7 @@ public class VarsViewer {
     }
     public JTable makeTable(Object[][] rowData){
         Object[] columnNames = {"变量名称", "变量类型", "关联内存", "变量内容"};
-        if(!RamUsageEstimator.isSupportedJVM()){
+        if(/*!RamUsageEstimator.isSupportedJVM()*/true){//出现bug
             columnNames = new Object[]{"变量名称", "变量类型", "变量内容"};
         }
         JTable jTable = new JTable(rowData, columnNames);

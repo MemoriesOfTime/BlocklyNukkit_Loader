@@ -25,6 +25,14 @@ public class Custom {
         }
         return this;
     }
+    public Custom showToPlayer(Player p,String callback,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(callback,true);
+            }
+        }
+        return this.showToPlayer(p, callback);
+    }
     @Deprecated
     public Custom showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
@@ -35,6 +43,15 @@ public class Custom {
             p.showFormWindow(window,id);
         }
         return this;
+    }
+    @Deprecated
+    public Custom showToPlayerCallLambda(Player p,ScriptObjectMirror mirror,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(mirror.toString(),true);
+            }
+        }
+        return this.showToPlayerCallLambda(p, mirror);
     }
     public Custom showAsSetting(Player p, String callback){
         synchronized (Loader.serverSettingCallback){

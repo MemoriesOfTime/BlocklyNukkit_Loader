@@ -1,3 +1,17 @@
+## 1.2.9.0
+
+PHP
+
+更新了基于quercusPHP6引擎的php插件编写支持
+quercus提供的运行环境请看http://quercus.caucho.com/quercus-3.1/doc/quercus.xtp
+兼容全部的java类、nukkit的api和bn的基对象，调用bn的api记得前面加$
+
+WindowBuilders
+
+- void showToPlayer(Player p,String callback,boolean acceptClose)
+    - acceptClose用于指定是否在窗口关闭的时候调用一次回调函数
+
+
 ## 1.2.8.4
 new
 

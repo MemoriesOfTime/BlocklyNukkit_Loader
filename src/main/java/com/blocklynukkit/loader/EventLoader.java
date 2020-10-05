@@ -131,6 +131,13 @@ public class EventLoader implements Listener {
                     int a = event.getFormID();
                     Loader.scriptObjectMirrorCallback.get(a).call(Loader.windowManager,event);
                 }
+            }else {
+                synchronized (Loader.acceptCloseCallback){
+                    String fun = Loader.functioncallback.get(event.getFormID());
+                    if(Loader.acceptCloseCallback.get(fun)!=null||Loader.acceptCloseCallback.get(fun)){
+                        Loader.callEventHandler(event,fun);
+                    }
+                }
             }
         }
         plugin.callEventHandler(event,event.getClass().getSimpleName());

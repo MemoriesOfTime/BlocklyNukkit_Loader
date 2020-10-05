@@ -13,6 +13,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
+import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.other.BNLogger;
@@ -26,11 +27,14 @@ import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
 import com.blocklynukkit.loader.scriptloader.LuaScriptLoader;
+import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
+import javassist.CannotCompileException;
+import javassist.CtClass;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.*;
@@ -39,6 +43,8 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
 
 public class Loader extends PluginBase implements Listener {
 
@@ -63,6 +69,7 @@ public class Loader extends PluginBase implements Listener {
     public static ConcurrentHashMap<Integer, String> functioncallback = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<Integer, ScriptObjectMirror> scriptObjectMirrorCallback = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, String> serverSettingCallback = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
@@ -84,6 +91,7 @@ public class Loader extends PluginBase implements Listener {
     public static GameManager gameManager;
     public static Map<String, Plugin> plugins;
     public static Map<String, CommandInfo> plugincmdsmap = new HashMap<>();
+    public static Map<String,CtClass> bnClasses = new HashMap<>();
 
 
     @Override
@@ -192,6 +200,11 @@ public class Loader extends PluginBase implements Listener {
             new PythonLoader(plugin).loadplugins();
         }
 
+        //加载PHP
+        if(plugins.containsKey("PHPBN")){
+            new PHPLoader(plugin).loadplugins();
+        }
+
         //加载Lua
         new LuaScriptLoader(plugin).loadplugins();
 
@@ -219,12 +232,13 @@ public class Loader extends PluginBase implements Listener {
         Entity.registerEntity("BNNPC", BNNPC.class);
         //注册bn命令
         functionManager.createPermission("blocklynukkit.opall","blocklynukkit插件op权限","OP");
-        plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
+        //plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
         plugin.getServer().getCommandMap().register("showstacktrace",new showStackTrace());
         plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
         plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
+        plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
@@ -260,6 +274,7 @@ public class Loader extends PluginBase implements Listener {
 
 
     @Override
+    //监听bn被卸载事件
     public void onDisable(){
         levelManager.dosaveSkyLandGeneratorSettings();
         levelManager.dosaveOceanGeneratorSettings();
@@ -269,6 +284,7 @@ public class Loader extends PluginBase implements Listener {
             httpServer.stop(0);
         }
         engineMap.clear();
+        Server.getInstance().getScheduler().cancelTask(this);
         System.gc();
     }
 
@@ -285,7 +301,7 @@ public class Loader extends PluginBase implements Listener {
             }else {
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + name+"! 缺少python依赖库");
-                    getlogger().warning("请到https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                    getlogger().warning("请到 https://tools.blocklynukkit.com/PyBN.jar 下载依赖插件");
                 }
                 else{
                     getlogger().warning("cannot load BN plugin:" + name+" python libs not found!");
@@ -295,7 +311,24 @@ public class Loader extends PluginBase implements Listener {
         }else if(js.contains("--pragma Lua")||js.contains("--pragma lua")||js.contains("--pragma LUA")
                 ||js.contains("-- pragma Lua")||js.contains("-- pragma lua")||js.contains("-- pragma LUA")){
             new LuaScriptLoader(plugin).putLuaEngine(name, js);
-        }else {
+        }else if(js.contains("//pragma php")||js.contains("//pragma PHP")||js.contains("// pragma php")||js.contains("// pragma PHP")||
+                js.contains("/*pragma php")||js.contains("/*pragma PHP")||js.contains("/* pragma php")||js.contains("/* pragma PHP")||
+                js.contains("/*\npragma php")||js.contains("/*\npragma PHP")||js.contains("/*\n pragma php")||js.contains("/*\n pragma PHP")||
+                js.contains("/*\n  pragma php")||js.contains("/*\n  pragma PHP")||js.contains("/*\n    pragma php")||js.contains("/*\n    pragma PHP")){
+            if(plugins.containsKey("PHPBN")){
+                new PHPLoader(plugin).putPHPEngine(name, js);
+            }else {
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning("无法加载:" + name+"! 缺少php依赖库");
+                    getlogger().warning("请到 https://tools.blocklynukkit.com/PHPBN.jar 下载依赖插件");
+                }
+                else{
+                    getlogger().warning("cannot load BN plugin:" + name+" PHP libs not found!");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
+                }
+            }
+        }
+        else {
             new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
         }
     }
@@ -609,6 +642,10 @@ public class Loader extends PluginBase implements Listener {
         return plugin.getLogger();
     }
 
+    public static FunctionManager getFunctionManager(){
+        return plugin.functionManager;
+    }
+
     /*
     * 下面是注册命令
     * 并没有大用处
@@ -632,56 +669,15 @@ public class Loader extends PluginBase implements Listener {
                     sender.sendMessage("只有控制台才能执行此命令");
                 return false;
             }
-            entityManager.recycleAllFloatingText();
-            Loader.plugin.getServer().getScheduler().cancelAllTasks();
-            Loader.bnCrafting.craftEntryMap = new HashMap<>();
-            Config config = new Config(Loader.plugin.getDataFolder() + "/update.yml", Config.YAML);
-            if (!config.exists("mods")) {
-                config.set("mods", Arrays.asList("first.js"));
-                config.save();
-            }
-            List<String> list = (List<String>) config.get("mods");
-            for (String a : list) {
-                Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/" + a, new File(Loader.plugin.getDataFolder() + "/" + a));
-            }
-
-            getDataFolder().mkdir();
-            new File(getDataFolder() + "/skin").mkdir();
-
-
-            for (File file : Objects.requireNonNull(Loader.plugin.getDataFolder().listFiles())) {
-                if (file.isDirectory()) continue;
-                if (file.getName().endsWith(".js") && !file.getName().contains("bak")) {
-                    try (final Reader reader = new InputStreamReader(new FileInputStream(file), "UTF-8")) {
-                        engineMap.put(file.getName(), new ScriptEngineManager().getEngineByName("nashorn"));
-                        if (engineMap.get(file.getName()) == null) {
-                            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                getLogger().error("JavaScript引擎加载出错！");
-                            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                                getLogger().error("JavaScript interpreter crashed!");
-                            return false;
-                        }
-                        if (!(engineMap.get(file.getName()) instanceof Invocable)) {
-                            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                getLogger().error("JavaScript引擎版本过低！");
-                            if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                                getLogger().error("JavaScript interpreter's version is too low!");
-                            return false;
-                        }
-                        putBaseObject(file.getName());
-                        engineMap.get(file.getName()).eval(reader);
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().warning("加载BN插件: " + file.getName());
-                        else
-                            getLogger().warning("loading BN plugin: " + file.getName());
-                    } catch (final Exception e) {
-                        if (Server.getInstance().getLanguage().getName().contains("中文"))
-                            getLogger().error("无法加载： " + file.getName(), e);
-                        else
-                            getLogger().error("cannot load:" + file.getName(), e);
-                    }
+            Server.getInstance().getPluginManager().disablePlugin(plugin);
+            String path = new String(plugin.getFile().getAbsolutePath().toCharArray());
+            Server.getInstance().reload();
+            Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
+                @Override
+                public void onRun(int i) {
+                    Server.getInstance().getPluginManager().loadPlugin(path);
                 }
-            }
+            },60);
             return false;
         }
     }
@@ -770,5 +766,40 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-
+    public class ExportDevJarCommand extends Command{
+        public ExportDevJarCommand() {
+            super("exportdevjar","导出bn插件为开发用jar包","exportdevjar <BNPluginName>");
+            this.setPermission("blocklynukkit.opall");
+        }
+        @Override
+        public boolean execute(CommandSender sender, String s, String[] args) {
+            if(!sender.isOp()){
+                sender.sendMessage(TextFormat.RED+"This command can only be called by ops!");
+            }
+            if(args.length!=1){
+                return true;
+            }
+            if(Loader.bnClasses.get(args[0])==null){
+                sender.sendMessage(TextFormat.RED+"Plugin Not Found");
+                return true;
+            }
+            try{
+                File jarfile = new File("./plugins/BlocklyNukkit/devJars/"+args[0]+".jar");
+                jarfile.mkdirs();
+                if(jarfile.exists())jarfile.delete();
+                if(!jarfile.exists())jarfile.createNewFile();
+                byte[] clazz = Loader.bnClasses.get(args[0]).toBytecode();
+                JarOutputStream jops = new JarOutputStream(new FileOutputStream(jarfile));
+                jops.putNextEntry(new JarEntry(args[0].split("\\.")[0]+"/"+args[0].split("\\.")[1]+".class"));
+                jops.write(clazz);
+                jops.flush();jops.close();
+                sender.sendMessage(TextFormat.YELLOW+"Finish.");
+            } catch (CannotCompileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+    }
 }

@@ -138,6 +138,9 @@ public class InventoryManager {
     }
     public Inventory getPlayerInv(Player player) {
         DoubleChestFakeInventory inv = new DoubleChestFakeInventory();
+        if(player==null)return null;
+        if(player.getInventory()==null)return null;
+        if(player.getInventory().getContents()==null)return null;
         inv.setContents(player.getInventory().getContents());
         inv.addListener(EventLoader::onSlotChange);
         return inv;

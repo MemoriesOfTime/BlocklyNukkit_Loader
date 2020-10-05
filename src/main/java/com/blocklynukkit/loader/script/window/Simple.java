@@ -44,6 +44,14 @@ public class Simple {
         }
         return this;
     }
+    public Simple showToPlayer(Player p,String callback,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(callback,true);
+            }
+        }
+        return this.showToPlayer(p, callback);
+    }
     @Deprecated
     public Simple showToPlayerCallLambda(Player p,ScriptObjectMirror mirror){
         synchronized (Loader.scriptObjectMirrorCallback){
@@ -57,6 +65,15 @@ public class Simple {
             p.showFormWindow(window,id);
         }
         return this;
+    }
+    @Deprecated
+    public Simple showToPlayerCallLambda(Player p,ScriptObjectMirror mirror,boolean acceptClose){
+        if(acceptClose){
+            synchronized (Loader.acceptCloseCallback){
+                Loader.acceptCloseCallback.put(mirror.toString(),true);
+            }
+        }
+        return this.showToPlayerCallLambda(p, mirror);
     }
     @Override
     public String toString() {FormWindowSimple window=new FormWindowSimple(title,context);

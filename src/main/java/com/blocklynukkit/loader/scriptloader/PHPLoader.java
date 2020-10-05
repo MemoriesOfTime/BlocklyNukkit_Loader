@@ -5,6 +5,7 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNPHPScriptEngine;
 import com.sun.istack.internal.NotNull;
+import static com.blocklynukkit.loader.Loader.engineMap;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
@@ -17,8 +18,7 @@ public class PHPLoader {
         this.plugin=plugin;
     }
     public void loadplugins(){
-        File php = new File(plugin.getDataFolder()+"/lib/pythonForBN.jar");
-        if(php.exists()){
+        if(Loader.plugins.containsKey("PHPBN")){
             try{
                 for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
                     if(file.isDirectory()) continue;
@@ -43,7 +43,7 @@ public class PHPLoader {
         }
     }
     public void putPHPEngine(String name,String PHP){
-        plugin.engineMap.put(name,new BNPHPScriptEngine());
+        engineMap.put(name,new BNPHPScriptEngine());
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("PHP引擎加载出错！");

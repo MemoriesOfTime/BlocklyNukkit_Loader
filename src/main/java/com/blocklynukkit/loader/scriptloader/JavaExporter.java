@@ -34,7 +34,6 @@ public class JavaExporter {
                     String src = "public static java.lang.Object "+entry.getKey()+"("+announctionArgs+"){\n" +
                             "        return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction("+usageArgs+");\n" +
                             "    }";
-                    System.out.println(src);
                     CtMethod ctMethod = CtMethod.make(src,bnClass);
                     bnClass.addMethod(ctMethod);
                 }

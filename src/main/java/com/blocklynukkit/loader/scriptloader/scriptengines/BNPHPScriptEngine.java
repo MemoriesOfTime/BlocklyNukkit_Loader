@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.scriptloader.scriptengines;
 
+import cn.nukkit.Server;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.script.window.Simple;
 import com.caucho.quercus.QuercusContext;
@@ -9,6 +10,8 @@ import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.*;
 import com.caucho.quercus.lib.curl.CurlModule;
 import com.caucho.quercus.lib.date.DateModule;
+import com.caucho.quercus.lib.db.MysqliModule;
+import com.caucho.quercus.lib.db.PDOModule;
 import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.quercus.lib.file.SocketModule;
 import com.caucho.quercus.lib.file.StreamModule;
@@ -101,6 +104,8 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             _quercus.addInitModule(new XMLWriterModule());
             _quercus.addInitModule(new ZipModule());
             _quercus.addInitModule(new ZlibModule());
+            _quercus.addInitModule(new MysqliModule());
+            _quercus.addInitModule(new PDOModule());
             _quercus.init();
             _quercus.start();
             return _quercus;
@@ -191,6 +196,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             QuercusPage page = new InterpretedPage(program);
             env = new Env(quercus, page, (WriteStream)out, (QuercusHttpServletRequest)null, (QuercusHttpServletResponse)null);
             env.setScriptContext(cxt);
+            env.setIni("__DIR__", Server.getInstance().getFilePath());
             env.start();
             Value result = null;
 

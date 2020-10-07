@@ -762,6 +762,7 @@ public class Loader extends PluginBase implements Listener {
                     previousException.printStackTrace();
                 }
             }
+            //com.blocklynukkit.loader.Loader.functionManager.callFunction("bn插件名::函数名");
             return false;
         }
     }

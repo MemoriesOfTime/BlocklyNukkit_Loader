@@ -9,10 +9,13 @@ public class JavaAPI {
     public DatabaseManager database = Loader.databaseManager;
     public EntityManager entity = Loader.entityManager;
     public FunctionManager function = Loader.functionManager;
+    public FunctionManager manager = Loader.functionManager;
     public GameManager gameapi = Loader.gameManager;
     public InventoryManager inventory = Loader.inventoryManager;
     public LevelManager world = Loader.levelManager;
     public NotemusicManager notemusic = Loader.notemusicManager;
     public ParticleManager particle = Loader.particleManager;
     public WindowManager window = Loader.windowManager;
+    public JavaAPI(){
+    }
 }

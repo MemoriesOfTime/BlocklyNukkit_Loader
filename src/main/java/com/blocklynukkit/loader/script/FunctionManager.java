@@ -1,5 +1,4 @@
 package com.blocklynukkit.loader.script;
-import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
@@ -25,13 +24,13 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.MetricsLite;
 import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.scriptloader.*;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -46,9 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
@@ -79,6 +76,9 @@ public class FunctionManager {
             nodejs = new NodeJSNotFoundLoader();
         }
     }
+    public List getOnlinePlayers(){
+        return Arrays.asList(Server.getInstance().getOnlinePlayers().values());
+    }
     //here 9/17
     public void newPlugin(String path){
         File file = new File(path);
@@ -100,7 +100,25 @@ public class FunctionManager {
         if(!name.endsWith(".lua")){
             name+=".lua";
         }
-        new LuaScriptLoader(Loader.plugin).putLuaEngine(name,code);
+        new LuaLoader(Loader.plugin).putLuaEngine(name,code);
+    }
+    public void newPHPPlugin(String name,String code){
+        if(!name.endsWith(".php")){
+            name+=".php";
+        }
+        new PHPLoader(Loader.plugin).putPHPEngine(name,code);
+    }
+    //here 10/13
+    public String getResource(String name){
+        if(name.startsWith("http")){
+            return Utils.sendGet(name,null);
+        }
+        name = name.replaceFirst("\\./","");
+        File tmp = new File("./plugins/BlocklyNukkit/"+name);
+        if(tmp.exists()){
+            return Utils.readToString("./plugins/BlocklyNukkit/"+name);
+        }
+        return null;
     }
     //here 8/21
     public void setNukkitCodeVersion(String string){
@@ -295,10 +313,10 @@ public class FunctionManager {
             }
         },pluginid);
     }
-    //here 5/8
+    //here 10/11
     //用于测试
-    public void callObject(ScriptObjectMirror scriptObjectMirror){
-        scriptObjectMirror.call(Loader.functionManager);
+    public void testClass(Object object){
+        Loader.getlogger().info(object.getClass().getName());
     }
 
     public Vector3 buildvec3(double x,double y,double z){

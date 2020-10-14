@@ -1,7 +1,7 @@
 package com.blocklynukkit.loader.other.debug;
 
 import com.blocklynukkit.loader.Loader;
-import com.carrotsearch.sizeof.RamUsageEstimator;
+import com.alibaba.fastjson.JSON;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.runtime.JSType;
 
@@ -34,8 +34,8 @@ public class VarsViewer {
         pluginsList.setSelectedIndex(0);
         pluginsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         pluginsPane = new JScrollPane(pluginsList);
-        varInfoPane = new JScrollPane(makeTable(false?//出现bug
-                new Object[][]{{"","","",""}}:new Object[][]{{"","",""}}));
+        //出现bug
+        varInfoPane = new JScrollPane(makeTable(new Object[][]{{"","",""}}));
         varsPane = new JSplitPane();
         varsPane.setContinuousLayout(false);
         //填充左右分割组件
@@ -52,8 +52,7 @@ public class VarsViewer {
             ListModel<String> listModel = pluginsList.getModel();
             String pluginName = listModel.getElementAt(indices[0]);
             if(!pluginName.contains(".")){
-                varInfoPane = new JScrollPane(makeTable(RamUsageEstimator.isSupportedJVM()?
-                        new Object[][]{{"预编译jar包无法解析","","",""}}:new Object[][]{{"预编译jar包无法解析","",""}}));
+                varInfoPane = new JScrollPane(makeTable(new Object[][]{{"预编译jar包无法解析","",""}}));
                 varsPane.setRightComponent(varInfoPane);
                 return;
             }
@@ -79,29 +78,15 @@ public class VarsViewer {
                 }
                 copy.add(each);
             }
-            //if(RamUsageEstimator.isSupportedJVM()){
-            if(false){//出现bug
-                Object[][] datas = new Object[copy.size()][4];
-                int it = 0;
-                for(Map.Entry<String,Object> entry:copy){
-                    if(entry.getKey()==null||entry.getValue()==null)continue;
-                    datas[it] = new Object[]{entry.getKey(),entry.getValue().getClass().getSimpleName(),
-                            RamUsageEstimator.humanSizeOf(entry.getValue()),transToStr(entry.getValue())};
-                    it++;
-                }
-                varInfoPane = new JScrollPane(makeTable(datas));
-                varsPane.setRightComponent(varInfoPane);
-            }else {
-                Object[][] datas = new Object[copy.size()][3];
-                int it = 0;
-                for(Map.Entry<String,Object> entry:copy){
-                    if(entry.getKey()==null||entry.getValue()==null)continue;
-                    datas[it] = new Object[]{entry.getKey(),entry.getValue().getClass().getSimpleName(),transToStr(entry.getValue())};
-                    it++;
-                }
-                varInfoPane = new JScrollPane(makeTable(datas));
-                varsPane.setRightComponent(varInfoPane);
+            Object[][] datas = new Object[copy.size()][3];
+            int it = 0;
+            for(Map.Entry<String,Object> entry:copy){
+                if(entry.getKey()==null||entry.getValue()==null)continue;
+                datas[it] = new Object[]{entry.getKey(),entry.getValue().getClass().getSimpleName(),transToStr(entry.getValue())};
+                it++;
             }
+            varInfoPane = new JScrollPane(makeTable(datas));
+            varsPane.setRightComponent(varInfoPane);
             dialog.dispose();
             lastUpdated = System.currentTimeMillis();
         });

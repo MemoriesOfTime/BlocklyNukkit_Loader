@@ -29,6 +29,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.network.protocol.StartGamePacket;
+import cn.nukkit.network.protocol.MovePlayerPacket;
 import cn.nukkit.raknet.protocol.Packet;
 import cn.nukkit.scheduler.Task;
 import com.blocklynukkit.loader.other.Entities.BNNPC;

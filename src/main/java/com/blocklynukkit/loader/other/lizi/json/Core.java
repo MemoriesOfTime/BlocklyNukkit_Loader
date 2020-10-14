@@ -1,6 +1,10 @@
 package com.blocklynukkit.loader.other.lizi.json;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 核心操作类
@@ -20,14 +24,14 @@ public class Core {
      * @param req		撤回消息用
      */
     public static void sendPrivateMessages(long selfQQ,long fromQQ,String msg,long random,long req){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 101);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
         json.put("msg", msg);
         json.put("random", random);
         json.put("req", req);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 发送好友Json消息
@@ -38,14 +42,14 @@ public class Core {
      * @param req		撤回消息用
      */
     public static void sendPrivateMessagesJson(long selfQQ,long fromQQ,String msg,long random,int req){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 102);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
         json.put("msg", msg);
         json.put("random", random);
         json.put("req", req);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 发送图文消息
@@ -56,14 +60,14 @@ public class Core {
      * @param req
      */
     public static void sendPrivateMessagesPicText(long selfQQ,long fromQQ,String msg,long random,long req){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 103);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
         json.put("msg", msg);
         json.put("random", random);
         json.put("req", req);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 处理好友验证事件
@@ -73,13 +77,13 @@ public class Core {
      * @param status	是否同意 1同意 2拒绝
      */
     public static void handlePrivateEvent(long selfQQ,long fromQQ,long seq,int status){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 104);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
         json.put("seq", seq);
         json.put("status", status);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * QQ点赞
@@ -87,12 +91,12 @@ public class Core {
      * @param fromQQ	好友QQ
      */
     public static void callPraise(long selfQQ,long fromQQ,long number){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 105);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
         json.put("number", number);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 发送好友红包
@@ -104,7 +108,7 @@ public class Core {
      * @param payPwd	支付密码
      */
     public static void pushRedPacket(long selfQQ,long fromQQ,long number,long balance,String msg,String payPwd){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 106);
         json.put("selfQQ", selfQQ);
         json.put("fromQQ", fromQQ);
@@ -112,7 +116,7 @@ public class Core {
         json.put("balance", balance);
         json.put("payPwd", payPwd);
         json.put("msg", msg);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -123,13 +127,13 @@ public class Core {
      * @param anonymous	是否匿名 0否 1是
      */
     public static void sendGroupMessages(long selfQQ,long fromGroup,String msg,int anonymous){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 201);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("msg", msg);
         json.put("anonymous", anonymous);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 发送群聊消息
@@ -139,12 +143,12 @@ public class Core {
      * @param anonymous	是否匿名 0否 1是
      */
     public static void sendGroupMessagesJson(long selfQQ,long fromGroup,String msg,int anonymous){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 202);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("anonymous", anonymous);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 发送群图文消息
@@ -154,13 +158,13 @@ public class Core {
      * @param anonymous
      */
     public static void sendGroupMessagesPicText(long selfQQ,long fromGroup,String msg,int anonymous){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 203);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("msg", msg);
         json.put("anonymous", anonymous);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -173,7 +177,7 @@ public class Core {
      * @param fromType	3某人申请加群 1我被邀请加入群
      */
     public static void handleGroupEvent(long selfQQ,long fromGroup,long fromQQ,long seq,int status,int fromType){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 204);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
@@ -181,7 +185,7 @@ public class Core {
         json.put("seq", seq);
         json.put("status", status);
         json.put("fromType", fromType);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -192,13 +196,13 @@ public class Core {
      * @param cardName	群名片
      */
     public static void setGroupCardName(long selfQQ,long fromGroup,long fromQQ,String cardName){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 205);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("fromQQ", fromQQ);
         json.put("cardName", cardName);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 删除群成员
@@ -208,13 +212,13 @@ public class Core {
      * @param refuse	拒绝加群申请 0否 1是
      */
     public static void delGroupMember(long selfQQ,long fromGroup,long fromQQ,int refuse){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 206);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("fromQQ", fromQQ);
         json.put("refuse", refuse);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -225,13 +229,13 @@ public class Core {
      * @param second	时间 秒
      */
     public static void prohibitSpeak(long selfQQ,long fromGroup,long fromQQ,int second){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 207);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("fromQQ", fromQQ);
         json.put("second", second);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
     /**
      * 撤回群消息
@@ -241,13 +245,13 @@ public class Core {
      * @param req		消息附带的req
      */
     public static void withdrawGroupMessages(long selfQQ,long fromGroup,long random,long req){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 208);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
         json.put("random", random);
         json.put("req", req);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -260,7 +264,7 @@ public class Core {
      * @param seq		撤回消息用
      */
     public static void sendGroupTempMessages(long selfQQ,long fromGroup,long fromQQ,String msg,long random,long seq){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 209);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
@@ -268,7 +272,7 @@ public class Core {
         json.put("msg", msg);
         json.put("random", random);
         json.put("seq", seq);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 
     /**
@@ -281,7 +285,7 @@ public class Core {
      * @param payPwd	支付密码
      */
     public static void pushRedPacketGroup(long selfQQ,long fromGroup,long number,long balance,String msg,String payPwd){
-        JSONObject json = new JSONObject();
+        Map<String,Object> json = new HashMap<>();
         json.put("type", 210);
         json.put("selfQQ", selfQQ);
         json.put("fromGroup", fromGroup);
@@ -289,6 +293,6 @@ public class Core {
         json.put("balance", balance);
         json.put("payPwd", payPwd);
         json.put("msg", msg);
-        Main.clientTest.sendMsg(json.toJSONString());
+        Main.clientTest.sendMsg(new GsonBuilder().create().toJson(json));
     }
 }

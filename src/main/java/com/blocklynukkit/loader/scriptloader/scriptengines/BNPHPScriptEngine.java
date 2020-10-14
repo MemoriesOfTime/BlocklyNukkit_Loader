@@ -1,10 +1,7 @@
 package com.blocklynukkit.loader.scriptloader.scriptengines;
 
 import cn.nukkit.Server;
-import com.blocklynukkit.loader.Utils;
-import com.blocklynukkit.loader.script.window.Simple;
 import com.caucho.quercus.QuercusContext;
-import com.caucho.quercus.QuercusEngine;
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.*;
@@ -54,6 +51,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
 
     public BNPHPScriptEngine(){
         super(new QuercusScriptEngineFactory(),true);
+        this.getContext().setWriter(new PrintWriter(System.out));
     }
 
     @Override
@@ -137,6 +135,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
 
     @Override
     public Object get(String key){
+        if(env==null)return null;
         Value value = env.getValue((StringValue)StringValue.create(key));
         if(value.isEmpty()){
             value = env.findFunction((StringValue)StringValue.create(key));
@@ -171,30 +170,24 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             }
 
             Writer writer = cxt.getWriter();
-            Object out;
-            if (writer != null) {
-                WriterStreamImpl s = new WriterStreamImpl();
-                s.setWriter(writer);
-                WriteStream os = new WriteStream(s);
-                os.setNewlineString("\n");
-                String outputEncoding = quercus.getOutputEncoding();
-                if (outputEncoding == null) {
-                    outputEncoding = "utf-8";
-                }
-
-                try {
-                    os.setEncoding(outputEncoding);
-                } catch (Exception var20) {
-                    Logger.getLogger(QuercusScriptEngine.class.getName()).log(Level.FINE, var20.getMessage(), var20);
-                }
-
-                out = os;
-            } else {
-                out = new NullWriteStream();
+            WriterStreamImpl s = new WriterStreamImpl();
+            s.setWriter(writer);
+            WriteStream os = new WriteStream(s);
+            os.setNewlineString("\n");
+            String outputEncoding = quercus.getOutputEncoding();
+            if (outputEncoding == null) {
+                outputEncoding = "utf-8";
             }
 
+            try {
+                os.setEncoding(outputEncoding);
+            } catch (Exception var20) {
+                Logger.getLogger(QuercusScriptEngine.class.getName()).log(Level.FINE, var20.getMessage(), var20);
+            }
+
+
             QuercusPage page = new InterpretedPage(program);
-            env = new Env(quercus, page, (WriteStream)out, (QuercusHttpServletRequest)null, (QuercusHttpServletResponse)null);
+            env = new Env(quercus, page, os, (QuercusHttpServletRequest)null, (QuercusHttpServletResponse)null);
             env.setScriptContext(cxt);
             env.setIni("__DIR__", Server.getInstance().getFilePath());
             env.start();
@@ -208,8 +201,8 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             } catch (QuercusExitException var19) {
             }
 
-            ((WriteStream)out).flushBuffer();
-            ((WriteStream)out).free();
+            os.flushBuffer();
+            os.free();
             writer.flush();
             value = result;
         } catch (RuntimeException var21) {
@@ -222,61 +215,5 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
 
         return value;
     }
-//    @Override
-//    public Object eval(String code) throws ScriptException{
-//        env = new Env(this.getQuercus());
-//        env.setRuntimeEncoding("utf-8");
-//        env.addInitModule("ApcModule",new ApcModule());
-//        env.addInitModule("ArrayModule",new ArrayModule());
-//        env.addInitModule("Array2Module",new Array2Module());
-//        env.addInitModule("BcmathModule",new BcmathModule());
-//        env.addInitModule("ClassesModule",new ClassesModule());
-//        env.addInitModule("CoreModule",new CoreModule());
-//        env.addInitModule("CtypeModule",new CtypeModule());
-//        env.addInitModule("ExifModule",new ExifModule());
-//        env.addInitModule("FunctionModule",new FunctionModule());
-//        env.addInitModule("HashModule",new HashModule());
-//        env.addInitModule("JavaModule",new JavaModule());
-//        env.addInitModule("MathModule",new MathModule());
-//        env.addInitModule("MhashModule",new MhashModule());
-//        env.addInitModule("MiscModule",new MiscModule());
-//        env.addInitModule("NetworkModule",new NetworkModule());
-//        env.addInitModule("OptionsModule",new OptionsModule());
-//        env.addInitModule("OutputModule",new OutputModule());
-//        env.addInitModule("QuercusModule",new QuercusModule());
-//        env.addInitModule("TokenModule",new TokenModule());
-//        env.addInitModule("UrlModule",new UrlModule());
-//        env.addInitModule("VariableModule",new VariableModule());
-//        env.addInitModule("CurlModule",new CurlModule());
-//        env.addInitModule("DateModule",new DateModule());
-//        env.addInitModule("FileModule",new FileModule());
-//        env.addInitModule("SocketModule",new SocketModule());
-//        env.addInitModule("StreamModule",new StreamModule());
-//        env.addInitModule("FilterModule",new FilterModule());
-//        env.addInitModule("GettextModule",new GettextModule());
-//        env.addInitModule("MbstringModule",new MbstringModule());
-//        env.addInitModule("ImageModule",new ImageModule());
-//        env.addInitModule("JMSModule",new JMSModule());
-//        env.addInitModule("JsonModule",new JsonModule());
-//        env.addInitModule("McryptModule",new McryptModule());
-//        env.addInitModule("PDFModule",new PDFModule());
-//        env.addInitModule("RegexpModule",new RegexpModule());
-//        env.addInitModule("SessionModule",new SessionModule());
-//        env.addInitModule("SimpleXMLModule",new SimpleXMLModule());
-//        env.addInitModule("StringModule",new StringModule());
-//        env.addInitModule("XmlModule",new XmlModule());
-//        env.addInitModule("XMLWriterModule",new XMLWriterModule());
-//        env.addInitModule("ZipModule",new ZipModule());
-//        env.addInitModule("ZlibModule",new ZlibModule());
-//        env.getModuleContext().init();
-//        env.setScriptContext(this.getContext());
-//        env.start();
-//        try {
-//            return env.evalCode((StringValue)StringValue.create(Utils.replaceLast(code,"?>","").replaceFirst("<\\?php","")));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
 
 }

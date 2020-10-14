@@ -16,7 +16,12 @@ import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+
 import com.blocklynukkit.loader.other.BNLogger;
+import com.blocklynukkit.loader.other.cmd.BNPluginsListCommand;
+import com.blocklynukkit.loader.other.cmd.DebugerCommand;
+import com.blocklynukkit.loader.other.cmd.ExportDevJarCommand;
+import com.blocklynukkit.loader.other.cmd.showStackTrace;
 import com.blocklynukkit.loader.other.debug.Debuger;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
@@ -26,15 +31,18 @@ import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
-import com.blocklynukkit.loader.scriptloader.LuaScriptLoader;
+import com.blocklynukkit.loader.scriptloader.LuaLoader;
 import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
-import com.sun.net.httpserver.HttpServer;
-import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.other.card.CardMaker;
+
+import com.sun.net.httpserver.HttpServer;
+import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
+
 import javassist.CannotCompileException;
 import javassist.CtClass;
+
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.*;
@@ -85,14 +93,15 @@ public class Loader extends PluginBase implements Listener {
     public static InventoryManager inventoryManager;
     public static LevelManager levelManager;
     public static DatabaseManager databaseManager;
-    public static CardMaker cardMaker;
+    //public static CardMaker cardMaker;
     public static NotemusicManager notemusicManager;
     public static ParticleManager particleManager;
     public static GameManager gameManager;
     public static Map<String, Plugin> plugins;
     public static Map<String, CommandInfo> plugincmdsmap = new HashMap<>();
     public static Map<String,CtClass> bnClasses = new HashMap<>();
-
+    public static boolean enablePython = false;
+    public static boolean enablePHP = false;
 
     @Override
     public void onEnable() {
@@ -147,13 +156,14 @@ public class Loader extends PluginBase implements Listener {
         //这里没有database因为后面要检查依赖库是否存在再创建
         functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
         algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
-        databaseManager=null;cardMaker=new CardMaker();notemusicManager=new NotemusicManager();particleManager=new ParticleManager();databaseManager=new DatabaseManager();
+        databaseManager=null;notemusicManager=new NotemusicManager();particleManager=new ParticleManager();databaseManager=new DatabaseManager();
         noteBlockPlayerMain.onEnable();if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //检测nk版本
-        if (Server.getInstance().getLanguage().getName().contains("中文"))
-            getLogger().warning("请注意：如果出现NoClassDefFoundError，说明您应该换新的NukkitX / PowerNukkit 版本了 ");
-        else
-            getLogger().warning("Please note: if NoClassDefFoundError appears, you should change to a new version of NukkitX or PowerNukkit ");
+        //10/10add: 现在已经不用了
+//        if (Server.getInstance().getLanguage().getName().contains("中文"))
+//            getLogger().warning("请注意：如果出现NoClassDefFoundError，说明您应该换新的NukkitX / PowerNukkit 版本了 ");
+//        else
+//            getLogger().warning("Please note: if NoClassDefFoundError appears, you should change to a new version of NukkitX or PowerNukkit ");
         //修改路径类加载器，使得脚本可以调用其他插件
         ClassLoader cl = plugin.getClass().getClassLoader();
         Thread.currentThread().setContextClassLoader(cl);
@@ -193,20 +203,28 @@ public class Loader extends PluginBase implements Listener {
         new File(getDataFolder()+"/lib").mkdir();
 
         //加载javascript
-        new JavaScriptLoader(plugin).loadplugins();
-
+        try{
+            new JavaScriptLoader(plugin).loadplugins();
+        }catch (NoClassDefFoundError e){
+            if (Server.getInstance().getLanguage().getName().contains("中文"))
+                getLogger().warning("java运行时环境不完整，无法加载.js插件，请安装java8SE-java14SE的完整版本！");
+            else
+                getLogger().warning("java runtime isn;t");
+        }
         //加载python
         if(plugins.containsKey("PyBN")){
             new PythonLoader(plugin).loadplugins();
+            enablePython=true;
         }
 
         //加载PHP
         if(plugins.containsKey("PHPBN")){
             new PHPLoader(plugin).loadplugins();
+            enablePHP=false;
         }
 
         //加载Lua
-        new LuaScriptLoader(plugin).loadplugins();
+        new LuaLoader(plugin).loadplugins();
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -310,7 +328,7 @@ public class Loader extends PluginBase implements Listener {
             }
         }else if(js.contains("--pragma Lua")||js.contains("--pragma lua")||js.contains("--pragma LUA")
                 ||js.contains("-- pragma Lua")||js.contains("-- pragma lua")||js.contains("-- pragma LUA")){
-            new LuaScriptLoader(plugin).putLuaEngine(name, js);
+            new LuaLoader(plugin).putLuaEngine(name, js);
         }else if(js.contains("//pragma php")||js.contains("//pragma PHP")||js.contains("// pragma php")||js.contains("// pragma PHP")||
                 js.contains("/*pragma php")||js.contains("/*pragma PHP")||js.contains("/* pragma php")||js.contains("/* pragma PHP")||
                 js.contains("/*\npragma php")||js.contains("/*\npragma PHP")||js.contains("/*\n pragma php")||js.contains("/*\n pragma PHP")||
@@ -682,25 +700,6 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public class BNPluginsListCommand extends Command{
-        public BNPluginsListCommand() {
-            super("bnplugins","查看所有安装的blocklynukkit插件");
-            this.setPermission("blocklynukkit.opall");
-        }
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args){
-            if(sender.isPlayer()){
-                if(!sender.isOp())return false;
-            }
-            String out = TextFormat.GREEN+"BlocklyNukkit插件("+bnpluginset.size()+"): ";
-            for(String a:bnpluginset){
-                out+=a+", ";
-            }
-            sender.sendMessage(out);
-            return false;
-        }
-    }
-
     public class InstallCommand extends Command{
         public InstallCommand() {
             super("bninstall","安装一个新的bn依赖模块");
@@ -721,85 +720,12 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public class DebugerCommand extends Command{
-        public DebugerCommand() {
-            super("bndebug","打开bn调试器");
-            this.setPermission("blocklynukkit.opall");
-        }
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args){
-            if(sender.isPlayer()){
-                sender.sendMessage(TextFormat.RED+"This command can only be called from console!");
-                return false;
-            }
-            new Debuger().display();
-            return false;
-        }
-    }
-
     public class GenTestWorldCommand extends Command{
         public GenTestWorldCommand() {
             super("gentestworld","生成测试世界");
         }
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-            return false;
-        }
-    }
-
-    public class showStackTrace extends Command{
-        public showStackTrace() {
-            super("showstacktrace","display previous error stacktrace");
-            this.setPermission("blocklynukkit.opall");
-        }
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args){
-            if(sender.isPlayer()){
-                sender.sendMessage(TextFormat.RED+"This command can only be called from console!");
-                return false;
-            }else {
-                if(previousException!=null){
-                    previousException.printStackTrace();
-                }
-            }
-            //com.blocklynukkit.loader.Loader.functionManager.callFunction("bn插件名::函数名");
-            return false;
-        }
-    }
-
-    public class ExportDevJarCommand extends Command{
-        public ExportDevJarCommand() {
-            super("exportdevjar","导出bn插件为开发用jar包","exportdevjar <BNPluginName>");
-            this.setPermission("blocklynukkit.opall");
-        }
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args) {
-            if(!sender.isOp()){
-                sender.sendMessage(TextFormat.RED+"This command can only be called by ops!");
-            }
-            if(args.length!=1){
-                return true;
-            }
-            if(Loader.bnClasses.get(args[0])==null){
-                sender.sendMessage(TextFormat.RED+"Plugin Not Found");
-                return true;
-            }
-            try{
-                File jarfile = new File("./plugins/BlocklyNukkit/devJars/"+args[0]+".jar");
-                jarfile.mkdirs();
-                if(jarfile.exists())jarfile.delete();
-                if(!jarfile.exists())jarfile.createNewFile();
-                byte[] clazz = Loader.bnClasses.get(args[0]).toBytecode();
-                JarOutputStream jops = new JarOutputStream(new FileOutputStream(jarfile));
-                jops.putNextEntry(new JarEntry(args[0].split("\\.")[0]+"/"+args[0].split("\\.")[1]+".class"));
-                jops.write(clazz);
-                jops.flush();jops.close();
-                sender.sendMessage(TextFormat.YELLOW+"Finish.");
-            } catch (CannotCompileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             return false;
         }
     }

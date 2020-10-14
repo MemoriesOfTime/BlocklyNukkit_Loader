@@ -8,8 +8,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
-import com.alibaba.fastjson.JSONObject;
-
 public class StringUtils {
 
     public static byte[] readFile(String fileName){

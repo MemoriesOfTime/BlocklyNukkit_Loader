@@ -3,19 +3,30 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
+import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
+import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNPHPScriptEngine;
+import com.google.gson.GsonBuilder;
 import com.sun.istack.internal.NotNull;
+import javassist.CtClass;
+
+import static com.blocklynukkit.loader.Loader.bnClasses;
 import static com.blocklynukkit.loader.Loader.engineMap;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class PHPLoader {
+public class PHPLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
     public Loader plugin;
     public PHPLoader(@NotNull Loader plugin){
-        this.plugin=plugin;
+        super(plugin);
     }
     public void loadplugins(){
         if(Loader.plugins.containsKey("PHPBN")){
@@ -42,7 +53,12 @@ public class PHPLoader {
             }
         }
     }
+    @Override
+    public void putEngine(String name,String code){
+        this.putPHPEngine(name, code);
+    }
     public void putPHPEngine(String name,String PHP){
+        PHP = formatExportPHP(name, PHP);
         engineMap.put(name,new BNPHPScriptEngine());
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -65,5 +81,45 @@ public class PHPLoader {
             e.printStackTrace();
         }
         plugin.bnpluginset.add(name);
+    }
+    public String formatExportPHP(String name,String code){
+        String[] lines = code.split("\n");
+        String output = "";String tmp;
+        Map<String,String[]> exportFunctions = new HashMap<>();
+        for(String line:lines){
+            tmp = line.trim();
+            if(tmp.startsWith("static function")){
+                output+=(line.replaceFirst("static ","")+"\n");
+                tmp = tmp.replaceFirst("static function ","");
+                String funName = tmp.split("\\(")[0].trim();
+                String[] funArgs = tmp.split("\\(")[1].split("\\)")[0]
+                        .trim().split(",");
+                for(int i=0;i<funArgs.length;i++){
+                    funArgs[i]=funArgs[i].replaceFirst("\\$","").trim();
+                }
+                exportFunctions.put(funName,funArgs);
+            }else {
+                output+=(line+"\n");
+            }
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z_$]+[A-Za-z_$.\\d]+$");
+        Matcher matcher = pattern.matcher(name);
+        if(matcher.matches()){
+            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
+            if(bn!=null) bnClasses.put(name,bn);
+        }
+        return output;
+    }
+    @Override
+    public String toString(Object var){
+        if(var.toString().equals(getClass().getName() + "@" + Integer.toHexString(hashCode()))){
+            return new GsonBuilder().setPrettyPrinting().create().toJson(var);
+        }else {
+            return var.toString();
+        }
+    }
+    @Override
+    public boolean isThisLanguage(Object var){
+        return var instanceof com.caucho.quercus.env.Value;
     }
 }

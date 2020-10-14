@@ -3,11 +3,12 @@ package com.blocklynukkit.loader.other.lizi.json;
 import java.io.IOException;
 import java.util.Base64;
 
-import com.alibaba.fastjson.JSONObject;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.event.QQFriendMessageEvent;
 import com.blocklynukkit.loader.script.event.QQGroupMessageEvent;
 import com.blocklynukkit.loader.script.event.QQOtherEvent;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Main {
 
@@ -36,14 +37,14 @@ public class Main {
      * @param data
      */
     public static void receivePrivateMessages(String data){
-        JSONObject json = JSONObject.parseObject(data);
-        long selfQQ = json.getInteger("selfQQ");//框架QQ
+        JsonObject json = new JsonParser().parse(data).getAsJsonObject();
+        long selfQQ = json.getAsJsonPrimitive("selfQQ").getAsLong();//框架QQ
         if(selfQQ<0)selfQQ=4294967296l+selfQQ;
-        long fromQQ = json.getInteger("fromQQ");//对方QQ
+        long fromQQ = json.getAsJsonPrimitive("fromQQ").getAsLong();//对方QQ
         if(fromQQ<0)fromQQ=4294967296l+fromQQ;
-        long random = json.getInteger("random");//撤回消息用
-        long req = json.getInteger("req");//撤回消息用
-        String msg = json.getString("msg");//消息内容
+        long random = json.getAsJsonPrimitive("random").getAsLong();//撤回消息用
+        long req = json.getAsJsonPrimitive("req").getAsLong();//撤回消息用
+        String msg = json.getAsJsonPrimitive("msg").getAsString();//消息内容
         Loader.callEventHandler(new QQFriendMessageEvent(selfQQ,fromQQ,random,req,msg),"QQFriendMessageEvent","QQFriendMessageEvent");
 //        if(msg.equals("点赞")){
 //            Core.callpPraise(selfQQ,fromQQ,10);
@@ -64,14 +65,14 @@ public class Main {
      * @param data
      */
     public static void receiveGroupMessages(String data){
-        JSONObject json = JSONObject.parseObject(data);
-        long selfQQ = json.getInteger("selfQQ");//框架QQ
+        JsonObject json = new JsonParser().parse(data).getAsJsonObject();
+        long selfQQ = json.getAsJsonPrimitive("selfQQ").getAsLong();//框架QQ
         if(selfQQ<0)selfQQ=4294967296l+selfQQ;
-        long fromGroup = json.getInteger("fromGroup");//群号
+        long fromGroup = json.getAsJsonPrimitive("fromGroup").getAsLong();//群号
         if(fromGroup<0)fromGroup=4294967296l+fromGroup;
-        long fromQQ = json.getInteger("fromQQ");//对方QQ
+        long fromQQ = json.getAsJsonPrimitive("fromQQ").getAsLong();//对方QQ
         if(fromQQ<0)fromQQ=4294967296l+fromQQ;
-        String msg = json.getString("msg");//消息内容
+        String msg = json.getAsJsonPrimitive("msg").getAsString();//消息内容
         Loader.callEventHandler(new QQGroupMessageEvent(selfQQ,fromGroup,fromQQ,msg),"QQGroupMessageEvent","QQGroupMessageEvent");
         //这里我写了3个指令用于测试  改名片、踢出群员、禁言群员
 //        if(msg.contains("改名片")){//默认改自己的 如  改名片404
@@ -97,16 +98,16 @@ public class Main {
     }
 
     public static void receiveEventMessages(String data){
-        JSONObject json = JSONObject.parseObject(data);
-        long selfQQ = json.getInteger("selfQQ");//框架QQ
+        JsonObject json = new JsonParser().parse(data).getAsJsonObject();
+        long selfQQ = json.getAsJsonPrimitive("selfQQ").getAsLong();//框架QQ
         if(selfQQ<0)selfQQ=4294967296l+selfQQ;
-        long fromGroup = json.getInteger("fromGroup");//群号
+        long fromGroup = json.getAsJsonPrimitive("fromGroup").getAsLong();//群号
         if(fromGroup<0)fromGroup=4294967296l+fromGroup;
-        int msgType = json.getInteger("msgType");//类型
-        long triggerQQ = json.getInteger("triggerQQ");//对方QQ
+        int msgType = json.getAsJsonPrimitive("msgType").getAsInt();//类型
+        long triggerQQ = json.getAsJsonPrimitive("triggerQQ").getAsLong();//对方QQ
         if(triggerQQ<0)triggerQQ=triggerQQ+4294967296l;
         //String triggerQQName = json.getString("triggerQQName");//对方昵称
-        long seq = json.getLongValue("seq");//操作用
+        long seq = json.getAsJsonPrimitive("seq").getAsLong();//操作用
         Loader.callEventHandler(new QQOtherEvent(selfQQ,fromGroup,msgType,triggerQQ,seq),"QQOtherEvent","QQOtherEvent");
         //32表示QQ上线
         //17表示好友更改昵称

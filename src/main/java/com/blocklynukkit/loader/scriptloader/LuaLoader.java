@@ -3,23 +3,31 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
+import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
+import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNLuaScriptEngine;
+import com.google.gson.GsonBuilder;
 import com.sun.istack.internal.NotNull;
+import javassist.CtClass;
+import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
-import org.luaj.vm2.lib.jse.CoerceJavaToLua;
-import org.luaj.vm2.script.LuaScriptEngineFactory;
 
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class LuaScriptLoader {
+import static com.blocklynukkit.loader.Loader.bnClasses;
+
+public class LuaLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
     public Loader plugin;
-    public LuaScriptLoader(@NotNull Loader plugin){
-        this.plugin=plugin;
+    public LuaLoader(@NotNull Loader plugin){
+        super(plugin);
     }
     public void loadplugins(){
         try{
@@ -44,7 +52,12 @@ public class LuaScriptLoader {
             e.printStackTrace();
         }
     }
+    @Override
+    public void putEngine(String name,String code){
+        this.putLuaEngine(name, code);
+    }
     public void putLuaEngine(String name,String Lua){
+        Lua = formatExportLua(name, Lua);
         plugin.engineMap.put(name, new BNLuaScriptEngine());
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -149,5 +162,45 @@ public class LuaScriptLoader {
             e.printStackTrace();
         }
         plugin.bnpluginset.add(name);
+    }
+    public String formatExportLua(String name,String code){
+        String[] lines = code.split("\n");
+        String output = "";String tmp;
+        Map<String,String[]> exportFunctions = new HashMap<>();
+        for(String line:lines){
+            tmp = line.trim();
+            if(tmp.endsWith("-->export")){
+                output+=(line.replaceFirst("-->export ","")+"\n");
+                tmp = tmp.replaceFirst("function ","");
+                String funName = tmp.split("\\(")[0].trim();
+                String[] funArgs = tmp.split("\\(")[1].split("\\)")[0]
+                        .trim().split(",");
+                for(int i=0;i<funArgs.length;i++){
+                    funArgs[i]=funArgs[i].trim();
+                }
+                exportFunctions.put(funName,funArgs);
+            }else {
+                output+=(line+"\n");
+            }
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z_$]+[A-Za-z_$.\\d]+$");
+        Matcher matcher = pattern.matcher(name);
+        if(matcher.matches()){
+            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".lua")?name:(name+".lua"),exportFunctions);
+            if(bn!=null) bnClasses.put(name,bn);
+        }
+        return output;
+    }
+    @Override
+    public String toString(Object var){
+        if(var.toString().equals(getClass().getName() + "@" + Integer.toHexString(hashCode()))){
+            return new GsonBuilder().setPrettyPrinting().create().toJson(var);
+        }else {
+            return var.toString();
+        }
+    }
+    @Override
+    public boolean isThisLanguage(Object var){
+        return var instanceof LuaValue;
     }
 }

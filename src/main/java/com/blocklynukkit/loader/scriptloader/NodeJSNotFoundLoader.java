@@ -3,8 +3,15 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 
 public class NodeJSNotFoundLoader extends ExtendScriptLoader {
+    public NodeJSNotFoundLoader(Loader loader){
+        super(loader);
+    }
+    public NodeJSNotFoundLoader(){
+        super(Loader.plugin);
+    }
     public void eval(String str,boolean isPath){
         mkwarn();
     }

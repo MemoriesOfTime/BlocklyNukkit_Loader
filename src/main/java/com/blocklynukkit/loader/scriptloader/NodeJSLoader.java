@@ -2,13 +2,19 @@ package com.blocklynukkit.loader.scriptloader;
 
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.eclipsesource.v8.*;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class NodeJSLoader extends ExtendScriptLoader {
+    public NodeJSLoader(Loader loader){
+        super(loader);
+    }
+    public NodeJSLoader(){
+        super(Loader.plugin);
+    }
     public HashMap<String, NodeJS> NodeDockers = new HashMap<>();
     public HashMap<String, HashMap<String,V8Object>> Globals = new HashMap<>();
     public HashMap<String, JavaCallback> Exports = new HashMap<>();

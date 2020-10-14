@@ -399,7 +399,10 @@ public class Utils {
         String result = "NULL";
         BufferedReader in = null;
         try {
-            String urlNameString = url + "?" + param;
+            String urlNameString = url;
+            if(!(param.length()==0||param==null)){
+                urlNameString = url + "?" + param;
+            }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
@@ -714,6 +717,14 @@ public class Utils {
 
     public static Object invoke(final Object obj, final String methodName) {
         return invoke(obj, methodName, new Class[] {}, new Object[] {});
+    }
+    public static java.awt.Color hex2rgb (String hex) {
+        // 用Integer转为十六进制的rgb值
+        hex = hex.replace("#","0x");
+        int rgb = Integer.parseInt(hex.substring(2),16);
+        // 实例化java.awt.Color,获取对应的r、g、b值
+        java.awt.Color color = new java.awt.Color(rgb);
+        return color;
     }
 }
 

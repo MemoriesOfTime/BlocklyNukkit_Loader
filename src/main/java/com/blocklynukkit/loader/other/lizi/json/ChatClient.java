@@ -6,7 +6,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.alibaba.fastjson.JSONObject;
+import com.google.gson.*;
+
 /**
  * 通信类
  * @author zhaoqk
@@ -65,15 +66,15 @@ public class ChatClient extends Thread{
         }
         data = StringUtils.getURLDecoderString(data);
         try{
-            JSONObject json = JSONObject.parseObject(data);
-            if(json.getInteger("type") == 0){//连接成功
+            JsonObject gson = new JsonParser().parse(data).getAsJsonObject();
+            if(gson.getAsJsonPrimitive("type").getAsInt() == 0){//连接成功
                 System.out.println("[连接成功]");
-            }else if(json.getInteger("type") == 1){//好友消息
-                Main.receivePrivateMessages(json.toJSONString());
-            }else if(json.getInteger("type") == 2){//群聊消息
-                Main.receiveGroupMessages(json.toJSONString());
-            }else if(json.getInteger("type") == 3){//事件消息
-                Main.receiveEventMessages(json.toJSONString());
+            }else if(gson.getAsJsonPrimitive("type").getAsInt() == 1){//好友消息
+                Main.receivePrivateMessages(new Gson().toJson((JsonElement)gson));
+            }else if(gson.getAsJsonPrimitive("type").getAsInt() == 2){//群聊消息
+                Main.receiveGroupMessages(new Gson().toJson((JsonElement)gson));
+            }else if(gson.getAsJsonPrimitive("type").getAsInt() == 3){//事件消息
+                Main.receiveEventMessages(new Gson().toJson((JsonElement)gson));
             }
         }catch (Exception e) {
             System.out.println("错误数据" + data);

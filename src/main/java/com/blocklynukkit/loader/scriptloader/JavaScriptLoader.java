@@ -3,12 +3,16 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
+import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
+import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
+import com.google.gson.GsonBuilder;
 import com.sun.istack.internal.NotNull;
 import javassist.*;
+import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.api.scripting.ScriptUtils;
-import jdk.nashorn.internal.objects.NativeFunction;
 
 import javax.script.Compilable;
 import javax.script.Invocable;
@@ -16,7 +20,6 @@ import javax.script.ScriptException;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -24,10 +27,10 @@ import java.util.regex.Pattern;
 
 import static com.blocklynukkit.loader.Loader.*;
 
-public class JavaScriptLoader {
+public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
     public Loader plugin;
     public JavaScriptLoader(@NotNull Loader plugin){
-        this.plugin=plugin;
+        super(plugin);
     }
     public void loadplugins(){
         //加载js
@@ -43,14 +46,27 @@ public class JavaScriptLoader {
             }else if(file.getName().endsWith(".py")&&!file.getName().contains("bak") && !plugins.containsKey("PyBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + file.getName()+"! 缺少python依赖库");
-                    getlogger().warning("请到https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                    getlogger().warning("请到 https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
                 }
                 else{
                     getlogger().warning("cannot load BN plugin:" + file.getName()+" python libs not found!");
                     getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
                 }
+            }else if(file.getName().endsWith(".php")&&!file.getName().contains("bak") && !plugins.containsKey("PHPBN")){
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning("无法加载:" + file.getName()+"! 缺少PHP依赖库");
+                    getlogger().warning("请到 https://tools.blocklynukkit.com/PHPBN.jar下载依赖插件");
+                }
+                else{
+                    getlogger().warning("cannot load BN plugin:" + file.getName()+" PHP libs not found!");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
+                }
             }
         }
+    }
+    @Override
+    public void putEngine(String name,String code){
+        this.putJavaScriptEngine(name, code);
     }
     public void putJavaScriptEngine(String name,String js){
         js = formatExportJavaSript(name,js);
@@ -100,6 +116,9 @@ public class JavaScriptLoader {
                 String funName = tmp.split("\\(")[0].trim();
                 String[] funArgs = tmp.split("\\(")[1].split("\\)")[0]
                         .trim().split(",");
+                for(int i=0;i<funArgs.length;i++){
+                    funArgs[i]=funArgs[i].trim();
+                }
                 exportFunctions.put(funName,funArgs);
             }else {
                 output+=(line+"\n");
@@ -112,5 +131,34 @@ public class JavaScriptLoader {
             if(bn!=null) bnClasses.put(name,bn);
         }
         return output;
+    }
+    @Override
+    public String toString(Object var){
+        if(var instanceof ScriptObjectMirror){
+            ScriptObjectMirror js = (ScriptObjectMirror)var;
+            if(js.isArray()){
+                String out = "[";
+                for(int i=0;i<js.size();i++){
+                    out += (","+js.getSlot(i).toString());
+                }
+                return out.replaceFirst(",","")+"]";
+            }else if(js.toString().startsWith("[object ")){
+                Map<String,String> out = new HashMap<>();
+                for(String each:js.getOwnKeys(true)){
+                    out.put(each,js.getMember(each).toString());
+                }
+                return new GsonBuilder().setPrettyPrinting().create().toJson(out);
+            }else {
+                return js.toString();
+            }
+        }else if(var.toString().equals(getClass().getName() + "@" + Integer.toHexString(hashCode()))){
+            return new GsonBuilder().setPrettyPrinting().create().toJson(var);
+        }else {
+            return var.toString();
+        }
+    }
+    @Override
+    public boolean isThisLanguage(Object var){
+        return var instanceof JSObject;
     }
 }

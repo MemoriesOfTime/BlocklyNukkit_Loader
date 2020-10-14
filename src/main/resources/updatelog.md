@@ -1,10 +1,58 @@
 ## 1.2.9.0
 
+new
+
+重构代码加载器代码，重构了bnqqbot代码，增强稳定性，精简解释器
+
 PHP
 
 更新了基于quercusPHP6引擎的php插件编写支持
 quercus提供的运行环境请看http://quercus.caucho.com/quercus-3.1/doc/quercus.xtp
 兼容全部的java类、nukkit的api和bn的基对象，调用bn的api记得前面加$
+
+export
+
+可以通过导出标记将bn插件中的函数导出到全局环境中，然后即可使用java类
+命令exportdevjar <BN插件名>将可以导出bn插件中的函数头到一个jar包里面便于开发
+
+javascript:
+```javascript
+export function MyFun(arg1,arg2,arg3){}
+```
+
+python:
+```python
+@export
+def MyFun(arg1,arg2,arg3):
+    pass
+```
+
+lua:
+```lua
+function BlockPlaceEvent(ent)-->export
+
+end
+```
+
+php:
+```php
+static function PlayerJoinEvent($event){
+    
+}
+```
+
+logger
+
+- 强化了logger的功能，现在可以将对象以json格式输出
+
+manager
+
+- Array<Player> getOnlinePlayers()
+- String getResource(String name) -- 读取资源
+
+window
+
+- void setPlayerBossBar的第二个text参数中若以#XXXXXX或者rgb(x,x,x)开头将会为boss血条设置自定义颜色
 
 WindowBuilders
 

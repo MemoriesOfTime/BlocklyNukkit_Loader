@@ -12,6 +12,7 @@ import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.DummyBossBar;
+import com.blocklynukkit.loader.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
@@ -21,6 +22,7 @@ import com.blocklynukkit.loader.script.window.Custom;
 import com.blocklynukkit.loader.script.window.Modal;
 import com.blocklynukkit.loader.script.window.Simple;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -174,7 +176,17 @@ public class WindowManager {
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
-        player.createBossBar(new DummyBossBar.Builder(player).text(text).length(len).build());
+        if(text.startsWith("#")){
+            String hex = text.substring(0,7);
+            Color color = Utils.hex2rgb(hex);
+            player.createBossBar(new DummyBossBar.Builder(player).text(text.replaceFirst(hex,"")).color(color.getRed(),color.getGreen(),color.getBlue()).length(len).build());
+        }else if (text.startsWith("rgb(")){
+            String[] rgb = text.split("\\)",2)[0].replaceFirst("rgb\\(","").split(",");
+            player.createBossBar(new DummyBossBar.Builder(player).text(text.split("\\)",2)[1]).length(len)
+                    .color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2])).build());
+        }else {
+            player.createBossBar(new DummyBossBar.Builder(player).text(text).length(len).build());
+        }
     }
     public void removePlayerBossBar(Player player){
         for(long bar:player.getDummyBossBars().keySet()){

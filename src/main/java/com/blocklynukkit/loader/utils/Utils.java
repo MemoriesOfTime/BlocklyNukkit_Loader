@@ -1,8 +1,9 @@
-package com.blocklynukkit.loader;
+package com.blocklynukkit.loader.utils;
 
 import cn.nukkit.Server;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.utils.TextFormat;
+import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.MyHttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import com.blocklynukkit.loader.other.MyCustomHandler;
@@ -16,7 +17,6 @@ import java.net.*;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.Map;
-import java.util.Timer;
 import java.util.concurrent.Executors;
 
 
@@ -211,9 +211,9 @@ public class Utils {
             return null;
         }
     }
-    public static void writeWithString(File file,String string) {
+    public static void writeWithString(File file,String string,String charSet) {
         try {
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),charSet));
             writer.write(string);
             writer.flush();
             writer.close();
@@ -222,6 +222,9 @@ public class Utils {
         } catch (IOException e2) {
             e2.printStackTrace();
         }
+    }
+    public static void writeWithString(File file,String string){
+        writeWithString(file, string, "UTF-8");
     }
     public static boolean check(File file1, File file2) {
         boolean isSame = false;

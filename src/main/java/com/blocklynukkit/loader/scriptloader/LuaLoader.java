@@ -2,15 +2,12 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
-import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNLuaScriptEngine;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.NotNull;
 import javassist.CtClass;
-import org.luaj.vm2.LuaClosure;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
@@ -24,14 +21,13 @@ import java.util.regex.Pattern;
 
 import static com.blocklynukkit.loader.Loader.bnClasses;
 
-public class LuaLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
-    public Loader plugin;
-    public LuaLoader(@NotNull Loader plugin){
+public class LuaLoader extends ExtendScriptLoader implements Interpreter {
+    public LuaLoader(Loader plugin){
         super(plugin);
     }
     public void loadplugins(){
         try{
-            for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
+            for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
                 if(file.isDirectory()) continue;
                 if(file.getName().endsWith(".lua")&&!file.getName().contains("bak")){
                     try {

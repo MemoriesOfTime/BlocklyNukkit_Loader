@@ -2,16 +2,12 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
-import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.NotNull;
 import javassist.CtClass;
 import org.python.core.Py;
-import org.python.core.PyFunction;
-import org.python.core.PyList;
 import org.python.core.PyObject;
 import org.python.jsr223.PyScriptEngineFactory;
 import org.python.util.PythonInterpreter;
@@ -28,15 +24,14 @@ import java.util.regex.Pattern;
 
 import static com.blocklynukkit.loader.Loader.bnClasses;
 
-public class PythonLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
-    public Loader plugin;
-    public PythonLoader(@NotNull Loader plugin){
+public class PythonLoader extends ExtendScriptLoader implements Interpreter {
+    public PythonLoader(Loader plugin){
         super(plugin);
     }
     public void loadplugins(){
         if(plugin.plugins.containsKey("PyBN")){
             try{
-                for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
+                for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
                     if(file.isDirectory()) continue;
                     if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
                         try (final InputStreamReader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
@@ -67,8 +62,8 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter, Sin
                             ip.execfile(new FileInputStream(file));
                             plugin.bnpluginset.add(file.getName());
                         } catch (final Exception e) {
-                            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                plugin.getLogger().error("无法加载： " + file.getName(), e);
+                            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                                plugin.getLogger().error("无法加载： " + file.getName(), e);}
                             else
                                 plugin.getLogger().error("cannot load:" + file.getName(), e);
                         }

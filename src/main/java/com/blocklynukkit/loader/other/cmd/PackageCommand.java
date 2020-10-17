@@ -4,9 +4,8 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.BNPackageLoader;
-import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.google.gson.*;
 
 import java.io.*;
@@ -53,16 +52,20 @@ public class PackageCommand extends Command {
                     sender.sendMessage(TextFormat.RED+"Field \"name\" must ba a string!");
                     return false;
                 }
-                if(json.getAsJsonPrimitive("plugins")==null){
+                if(json.getAsJsonArray("plugins")==null){
                     sender.sendMessage(TextFormat.RED+"Cannot find field \"plugins\" in build config!");
                     return false;
                 }
-                if(!json.getAsJsonPrimitive("name").isJsonArray()){
-                    sender.sendMessage(TextFormat.RED+"Field \"name\" must ba an array of paths!");
-                    return false;
-                }
                 String name = json.getAsJsonPrimitive("name").getAsString();
-                JsonArray array = json.getAsJsonPrimitive("plugins").getAsJsonArray();
+                JsonArray array = json.getAsJsonArray("plugins");
+                boolean compressed = json.has("compress");
+                if(compressed){
+                    if(!json.getAsJsonPrimitive("compress").isBoolean()){
+                        sender.sendMessage(TextFormat.RED+"Field \"compress\" must ba a boolean!");
+                        return false;
+                    }
+                    compressed = json.getAsJsonPrimitive("compress").getAsBoolean();
+                }
                 LinkedHashMap<String,String> bnpackage = new LinkedHashMap<>();
                 for(JsonElement path:array){
                     File each = new File(path.getAsString());
@@ -71,21 +74,29 @@ public class PackageCommand extends Command {
                         sender.sendMessage(TextFormat.RED+path.getAsString()+"will not be packed into "+name+".bnp!");
                         continue;
                     }
-                    bnpackage.put(each.getName(), Utils.readToString(each.getPath()));
+                    if(each.getName().endsWith(".js")||each.getName().endsWith(".py")||each.getName().endsWith(".lua")||each.getName().endsWith(".php")){
+                        bnpackage.put(each.getName(), Utils.readToString(each.getPath()));
+                    }else {
+                        bnpackage.put(each.getPath(), Utils.readToString(each.getPath()));
+                    }
                 }
-                byte[] fileContent = new BNPackageLoader(Loader.plugin).pack(bnpackage);
-                try {
-                    FileOutputStream fileOutputStream = new FileOutputStream(new File(Loader.plugin.getDataFolder().getPath()+"/"+(name.endsWith(".bnp")?name:(name+".bnp"))));
-                    fileOutputStream.write(fileContent);
-                    fileOutputStream.flush();
-                    fileOutputStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                File bnpf = new File(Loader.plugin.getDataFolder().getPath()+"/"+(compressed?(name.endsWith(".bnpx")?name:(name+".bnpx")):(name.endsWith(".bnp")?name:(name+".bnp"))));
+                if(bnpf.exists())bnpf.delete();
+                if(!compressed){
+                    Utils.writeWithString(bnpf,new BNPackageLoader(Loader.plugin).pack2String(bnpackage));
+                }else {
+                    try {
+                        FileOutputStream fileOutputStream = new FileOutputStream(bnpf);
+                        fileOutputStream.write(new BNPackageLoader(Loader.plugin).pack2Byte(bnpackage));
+                        fileOutputStream.flush();fileOutputStream.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 sender.sendMessage(TextFormat.YELLOW+"Build completed in "+(System.currentTimeMillis()-start)+"ms");
-                sender.sendMessage(TextFormat.YELLOW+"Output path: "+Loader.plugin.getDataFolder().getAbsolutePath()+"/"+name+".bnp");
+                sender.sendMessage(TextFormat.YELLOW+"Output path: "+Loader.plugin.getDataFolder().getAbsolutePath()+"/"+name+(compressed?".bnpx":".bnp"));
             }else if(args[0].equals("load")){
                 File bnp = new File(args[1]);
                 if(!bnp.exists()){

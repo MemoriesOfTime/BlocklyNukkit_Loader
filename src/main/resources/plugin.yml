@@ -6,7 +6,7 @@ authors:
   - 超神的冰凉
   - 企鹅队长
 api: ["1.0.8"]
-description: BN插件加载器(BlocklyNukkit_JS_Plugin_Loader)
+description: BN插件加载器(BlocklyNukkit_Plugin_Loader)
 load: POSTWORLD
 softdepend:
   - PlaceholderAPI

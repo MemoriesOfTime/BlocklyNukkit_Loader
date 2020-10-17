@@ -2,13 +2,12 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.other.BNLogger;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
-import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNPHPScriptEngine;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.NotNull;
 import javassist.CtClass;
 
 import static com.blocklynukkit.loader.Loader.bnClasses;
@@ -23,15 +22,14 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PHPLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
-    public Loader plugin;
-    public PHPLoader(@NotNull Loader plugin){
+public class PHPLoader extends ExtendScriptLoader implements Interpreter {
+    public PHPLoader(Loader plugin){
         super(plugin);
     }
     public void loadplugins(){
         if(Loader.plugins.containsKey("PHPBN")){
             try{
-                for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
+                for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
                     if(file.isDirectory()) continue;
                     if(file.getName().endsWith(".php")&&!file.getName().contains("bak")){
                         try {
@@ -59,7 +57,7 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter, Single
     }
     public void putPHPEngine(String name,String PHP){
         PHP = formatExportPHP(name, PHP);
-        engineMap.put(name,new BNPHPScriptEngine());
+        engineMap.put(name,new BNPHPScriptEngine(new BNLogger(name)));
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("PHP引擎加载出错！");
@@ -70,7 +68,7 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter, Single
         if (!(plugin.engineMap.get(name) instanceof Invocable)) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("PHP引擎不支持过程调用！");
-            if (!Server.getInstance().getLanguage().getName().contains("中文"))
+            else
                 plugin.getlogger().error("PHP interpreter's version is too low!");
             return;
         }
@@ -108,6 +106,8 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter, Single
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
         }
+        output = output.replaceAll("(?<!\\/)(?<!['\"])echo (.*?);(?![ ]*\")","\\$logger->info($1);");
+        output = output.replaceAll("(?<!\\/)(?<!['\"])print (.*?);(?![ ]*\")","\\$logger->info($1);");
         return output;
     }
     @Override

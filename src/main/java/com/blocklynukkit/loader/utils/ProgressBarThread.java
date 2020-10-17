@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader;
+package com.blocklynukkit.loader.utils;
 
 import java.util.ArrayList;
 

@@ -16,17 +16,13 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.metadata.MetadataValue;
-import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.Tag;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.*;
 
 public class BlockItemManager {

@@ -18,11 +18,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import com.blocklynukkit.loader.other.BNLogger;
-import com.blocklynukkit.loader.other.cmd.BNPluginsListCommand;
-import com.blocklynukkit.loader.other.cmd.DebugerCommand;
-import com.blocklynukkit.loader.other.cmd.ExportDevJarCommand;
-import com.blocklynukkit.loader.other.cmd.showStackTrace;
-import com.blocklynukkit.loader.other.debug.Debuger;
+import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
@@ -30,17 +26,14 @@ import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
-import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
-import com.blocklynukkit.loader.scriptloader.LuaLoader;
-import com.blocklynukkit.loader.scriptloader.PHPLoader;
-import com.blocklynukkit.loader.scriptloader.PythonLoader;
+import com.blocklynukkit.loader.scriptloader.*;
 import com.blocklynukkit.loader.other.BNCrafting;
-import com.blocklynukkit.loader.other.card.CardMaker;
 
+import com.blocklynukkit.loader.utils.MetricsLite;
+import com.blocklynukkit.loader.utils.Utils;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 
-import javassist.CannotCompileException;
 import javassist.CtClass;
 
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -51,12 +44,11 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 
 public class Loader extends PluginBase implements Listener {
 
     public static Loader plugin;
+    public static File pluginFile;
 
     public static Map<String, ScriptEngine> engineMap = new HashMap<>();
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
@@ -106,6 +98,7 @@ public class Loader extends PluginBase implements Listener {
     @Override
     public void onEnable() {
         plugin=this;
+        pluginFile=this.getFile();
         plugins=this.getServer().getPluginManager().getPlugins();
         if (!plugins.containsKey("EconomyAPI")){
             try {
@@ -197,11 +190,14 @@ public class Loader extends PluginBase implements Listener {
             Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
         }
         //创建二级文件夹
+        getDataFolder().isDirectory();
         getDataFolder().mkdir();
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
         new File(getDataFolder()+"/lib").mkdir();
 
+        //加载bn插件包
+        new BNPackageLoader(this).loadplugins();
         //加载javascript
         try{
             new JavaScriptLoader(plugin).loadplugins();
@@ -257,6 +253,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
         plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
         plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
+        plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);

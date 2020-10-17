@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader;
+package com.blocklynukkit.loader.utils;
 
 import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;

@@ -24,7 +24,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
@@ -41,9 +41,7 @@ import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
 import javax.script.ScriptEngine;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -52,6 +50,7 @@ import java.util.*;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,6 +77,28 @@ public class FunctionManager {
     }
     public List getOnlinePlayers(){
         return Arrays.asList(Server.getInstance().getOnlinePlayers().values());
+    }
+    //here 10/15
+    public void runCMD(String cmd){
+        String cmdStr = cmd;
+        Runtime run = Runtime.getRuntime();
+        try {
+            Process process = run.exec(cmdStr);
+            process.waitFor(6, TimeUnit.SECONDS);
+            InputStream in = process.getInputStream();
+            InputStreamReader reader = new InputStreamReader(in);
+            BufferedReader br = new BufferedReader(reader);
+            StringBuffer sb = new StringBuffer();
+            String message;
+            while((message = br.readLine()) != null) {
+                sb.append(message);
+            }
+            System.out.println(sb);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     //here 9/17
     public void newPlugin(String path){

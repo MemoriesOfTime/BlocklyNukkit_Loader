@@ -11,6 +11,11 @@ public class JavaExporter {
     public static CtClass makeExportJava(String name,Map<String,String[]> exportFunctions){
         if(!exportFunctions.isEmpty()){
             ClassPool classPool = ClassPool.getDefault();
+            try {
+                classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
             classPool.insertClassPath(new ClassClassPath(Loader.class));
             classPool.importPackage("com.blocklynukkit.loader");
             CtClass bnClass = classPool.makeClass(name);

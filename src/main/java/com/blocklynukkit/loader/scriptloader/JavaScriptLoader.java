@@ -2,17 +2,14 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
-import com.blocklynukkit.loader.scriptloader.bases.SingleRunner;
 import com.google.gson.GsonBuilder;
-import com.sun.istack.internal.NotNull;
 import javassist.*;
 import jdk.nashorn.api.scripting.JSObject;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.api.scripting.ScriptUtils;
 
 import javax.script.Compilable;
 import javax.script.Invocable;
@@ -27,14 +24,13 @@ import java.util.regex.Pattern;
 
 import static com.blocklynukkit.loader.Loader.*;
 
-public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter, SingleRunner {
-    public Loader plugin;
-    public JavaScriptLoader(@NotNull Loader plugin){
+public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter {
+    public JavaScriptLoader(Loader plugin){
         super(plugin);
     }
     public void loadplugins(){
         //加载js
-        for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
+        for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                 if (Server.getInstance().getLanguage().getName().contains("中文"))

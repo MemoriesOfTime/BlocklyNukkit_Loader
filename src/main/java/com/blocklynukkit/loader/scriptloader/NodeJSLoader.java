@@ -1,7 +1,7 @@
 package com.blocklynukkit.loader.scriptloader;
 
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.eclipsesource.v8.*;
 

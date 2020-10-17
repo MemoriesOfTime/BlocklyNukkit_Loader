@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader;
+package com.blocklynukkit.loader.utils;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.sql.Connection;

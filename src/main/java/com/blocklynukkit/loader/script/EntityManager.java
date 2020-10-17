@@ -7,6 +7,10 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.item.EntityPrimedTNT;
+import cn.nukkit.entity.projectile.EntityArrow;
+import cn.nukkit.entity.projectile.EntityProjectile;
+import cn.nukkit.event.entity.EntityShootBowEvent;
+import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -268,5 +272,39 @@ public class EntityManager {
     //单独播放声音
     public void makeSoundToPlayer(Player player,String sound){
         player.getLevel().addSound(player, Sound.valueOf(sound));
+    }
+    //发射箭矢
+    public void shootArrow(Position from,Position to){
+        this.shootArrow(from, to, true, 1.0d);
+    }
+    public void shootArrow(Position from,Position to,double multiply){
+        this.shootArrow(from, to, true, multiply);
+    }
+    public void shootArrow(Position from,Position to,boolean canPickUp){
+        this.shootArrow(from, to, canPickUp, 1.0d);
+    }
+    public void shootArrow(Position from,Position to,boolean canPickUp,double multiply){
+        Entity k = Entity.createEntity("Arrow", from, this);
+        if (!(k instanceof EntityArrow)) {
+            return;
+        }
+        EntityArrow arrow = (EntityArrow) k;
+        arrow.setMotion(to.add(-from.x,-from.y,-from.z).multiply(multiply));
+        EntityShootBowEvent ev = new EntityShootBowEvent(null, Item.get(Item.ARROW, 0, 1), arrow, multiply);
+        Server.getInstance().getPluginManager().callEvent(ev);
+        EntityProjectile projectile = ev.getProjectile();
+        if (ev.isCancelled()) {
+            projectile.close();
+        } else {
+            ProjectileLaunchEvent launch = new ProjectileLaunchEvent(projectile);
+            Server.getInstance().getPluginManager().callEvent(launch);
+            if (launch.isCancelled()) {
+                projectile.close();
+            } else {
+                projectile.spawnToAll();
+                ((EntityArrow) projectile).setPickupMode(canPickUp?EntityArrow.PICKUP_ANY:EntityArrow.PICKUP_NONE);
+                from.level.addSound(from, Sound.RANDOM_BOW);
+            }
+        }
     }
 }

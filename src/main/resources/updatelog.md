@@ -3,6 +3,12 @@
 new
 
 重构代码加载器代码，重构了bnqqbot代码，增强稳定性，精简解释器
+添加bn插件包功能，.bnp(bn插件集合包)和.bnpx(bn插件复合压缩包)可以放到blocklynukkit文件夹里面直接运行
+使用bnp命令可以操作包，bnp build <makefile路径>即可构建一个bn插件包
+makefile是一个json格式的包配置文件，由name,compress,plugins三个字段组成
+name为打包的插件包的名字(字符串)，compress为是否打出压缩插件包(boolean)，
+plugins是一个字符串数组，里面标注要打进包中的bn插件的路径，加载时从上到下加载，
+也可以打进去json yml xml txt格式的资源文件，资源文件将会被按顺序解压到打包时与nk核心的相对位置解压。
 
 PHP
 
@@ -49,6 +55,14 @@ manager
 
 - Array<Player> getOnlinePlayers()
 - String getResource(String name) -- 读取资源
+- void runCMD(String cmd) --执行命令行程序
+
+entity
+
+- void shootArrow(Position from,Position to,boolean canPickUp,double multiply)
+- void shootArrow(Position from,Position to,double multiply)
+- void shootArrow(Position from,Position to,boolean canPickUp)
+- void shootArrow(Position from,Position to)
 
 window
 

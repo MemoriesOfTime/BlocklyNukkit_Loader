@@ -1,6 +1,5 @@
 package com.blocklynukkit.loader.other.lizi;
 
-import com.blocklynukkit.loader.Utils;
 import com.blocklynukkit.loader.other.lizi.json.Core;
 import com.blocklynukkit.loader.other.lizi.json.Main;
 import com.blocklynukkit.loader.other.lizi.json.StringUtils;

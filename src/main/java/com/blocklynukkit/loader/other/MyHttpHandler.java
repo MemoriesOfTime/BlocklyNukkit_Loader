@@ -1,11 +1,10 @@
 package com.blocklynukkit.loader.other;
 
-import cn.nukkit.Server;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.Utils;
+import com.blocklynukkit.loader.utils.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;

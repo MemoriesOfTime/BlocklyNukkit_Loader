@@ -1,6 +1,7 @@
 package com.blocklynukkit.loader.scriptloader.scriptengines;
 
 import cn.nukkit.Server;
+import com.blocklynukkit.loader.other.BNLogger;
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.*;
@@ -9,6 +10,7 @@ import com.caucho.quercus.lib.curl.CurlModule;
 import com.caucho.quercus.lib.date.DateModule;
 import com.caucho.quercus.lib.db.MysqliModule;
 import com.caucho.quercus.lib.db.PDOModule;
+import com.caucho.quercus.lib.dom.QuercusDOMModule;
 import com.caucho.quercus.lib.file.FileModule;
 import com.caucho.quercus.lib.file.SocketModule;
 import com.caucho.quercus.lib.file.StreamModule;
@@ -41,6 +43,7 @@ import com.caucho.vfs.*;
 
 import javax.script.*;
 import java.io.*;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,10 +51,13 @@ import java.util.logging.Logger;
 public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable {
     public Env env;
     public QuercusContext quercus;
+    public BNLogger logger;
+    public StringWriter outputWriter = new StringWriter();
 
-    public BNPHPScriptEngine(){
+    public BNPHPScriptEngine(BNLogger logger){
         super(new QuercusScriptEngineFactory(),true);
         this.getContext().setWriter(new PrintWriter(System.out));
+        this.logger=logger;
     }
 
     @Override
@@ -104,6 +110,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             _quercus.addInitModule(new ZlibModule());
             _quercus.addInitModule(new MysqliModule());
             _quercus.addInitModule(new PDOModule());
+            _quercus.addInitModule(new QuercusDOMModule());
             _quercus.init();
             _quercus.start();
             return _quercus;
@@ -169,7 +176,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
                 program = QuercusParser.parse(quercus, (Path)null, rs);
             }
 
-            Writer writer = cxt.getWriter();
+            Writer writer = outputWriter;
             WriterStreamImpl s = new WriterStreamImpl();
             s.setWriter(writer);
             WriteStream os = new WriteStream(s);
@@ -200,7 +207,9 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
                 }
             } catch (QuercusExitException var19) {
             }
-
+            String tmp = outputWriter.toString();
+            if(tmp.trim().length()>0)
+                logger.info(tmp);
             os.flushBuffer();
             os.free();
             writer.flush();

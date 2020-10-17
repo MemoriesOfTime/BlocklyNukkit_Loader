@@ -1,6 +1,6 @@
 package com.blocklynukkit.loader.script;
 
-import com.blocklynukkit.loader.C3P0Utils;
+import com.blocklynukkit.loader.utils.C3P0Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

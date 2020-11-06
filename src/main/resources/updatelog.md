@@ -56,9 +56,17 @@ logger
 
 manager
 
-- Array<Player> getOnlinePlayers()
+- Player[] getOnlinePlayers()
 - String getResource(String name) -- 读取资源
 - void runCMD(String cmd) --执行命令行程序
+- boolean isPathExists(String path)
+- String[] getFolderFiles(String path)
+- int getFileSize(String path)
+- void deleteFile(String path)
+- void doPathCreate(String path)
+- boolean isPathReadable(String path)
+- boolean isPathWritable(String path)
+- void copyFile(String fromPath,String toPath)
 
 entity
 

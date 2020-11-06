@@ -47,6 +47,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.*;
 import java.net.DatagramSocket;
 import java.net.DatagramPacket;
@@ -81,6 +82,49 @@ public class FunctionManager extends BaseManager {
     public Player[] getOnlinePlayers(){
         return (Player[]) Server.getInstance().getOnlinePlayers().values().toArray();
     }
+    //here 11/6
+    public boolean isPathExists(String path){
+        return new File(path).exists();
+    }
+    public String[] getFolderFiles(String path){
+        File file = new File(path);
+        return (file.exists()?(file.isDirectory()?(file.list()):null):null);
+    }
+    public long getFileSize(String path){
+        File file = new File(path);
+        return file.exists()?(file.isFile()?(file.length()):-1):-1;
+    }
+    public void deleteFile(String path){
+        File file = new File(path);
+        if(file.exists())file.delete();
+    }
+    public void doPathCreate(String path){
+        File file = new File(path);
+        if(file.exists())file.delete();
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public boolean isPathReadable(String path){
+        return new File(path).canRead();
+    }
+    public boolean isPathWritable(String path){
+        return new File(path).canWrite();
+    }
+    public void copyFile(String fromPath,String toPath){
+        File from = new File(fromPath);File to = new File(toPath);
+        if(to.exists())to.delete();
+        if(from.exists()&&from.canRead()&&to.canWrite()){
+            try {
+                Files.copy(from.toPath(),to.toPath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     //here 10/15
     public void runCMD(String cmd){
         String cmdStr = cmd;

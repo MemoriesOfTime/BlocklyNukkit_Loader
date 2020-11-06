@@ -8,6 +8,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityLevelChangeEvent;
+import cn.nukkit.event.level.LevelUnloadEvent;
 import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.item.Item;
@@ -32,6 +33,11 @@ public class FloatingItemManager implements Listener {
         String levelName = event.getPlayer().getLevel().getName();
         for(Map.Entry<Position,Item> each:displayMap.keySet()){
             if(levelName.equals(each.getKey().getLevel().getName())){
+                if(each==null)continue;
+                if(each.getKey()==null)continue;
+                if(each.getValue()==null)continue;
+                if(each.getKey().getLevel()==null)continue;
+                if(each.getKey().getLevel().getName()==null)continue;
                 forceAddFloatingItem(event.getPlayer(),each);
             }
         }
@@ -57,6 +63,10 @@ public class FloatingItemManager implements Listener {
                 }
             }
         }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onLevelDelete(LevelUnloadEvent event){
+        displayMap.entrySet().removeIf(entryLongEntry -> entryLongEntry.getKey().getKey().getLevel().getName().equals(event.getLevel().getName()));
     }
     public void forceAddFloatingItem(Player player,Map.Entry<Position,Item> BN){
         long superice666 = displayMap.get(BN);

@@ -7,6 +7,7 @@ import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNPHPScriptEngine;
+import com.caucho.quercus.env.Closure;
 import com.google.gson.GsonBuilder;
 import javassist.CtClass;
 
@@ -106,8 +107,8 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
         }
-        output = output.replaceAll("(?<!\\/)(?<!['\"])echo (.*?);(?![ ]*\")","\\$logger->info($1);");
-        output = output.replaceAll("(?<!\\/)(?<!['\"])print (.*?);(?![ ]*\")","\\$logger->info($1);");
+        output = output.replaceAll("(?<!\\/)(?<!['\"])echo (.*?);(?![ ]*\")","global \\$logger;\\$logger->info($1);");
+        output = output.replaceAll("(?<!\\/)(?<!['\"])print (.*?);(?![ ]*\")","global \\$logger;\\$logger->info($1);");
         return output;
     }
     @Override
@@ -122,4 +123,5 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
     public boolean isThisLanguage(Object var){
         return var instanceof com.caucho.quercus.env.Value;
     }
+
 }

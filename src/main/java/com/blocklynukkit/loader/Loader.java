@@ -10,6 +10,7 @@ import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
+import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
@@ -18,24 +19,26 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import com.blocklynukkit.loader.other.BNLogger;
+import com.blocklynukkit.loader.other.Babel;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
+import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.scriptloader.*;
 import com.blocklynukkit.loader.other.BNCrafting;
-
+import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.utils.MetricsLite;
 import com.blocklynukkit.loader.utils.Utils;
+
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
-
+import de.theamychan.scoreboard.network.Scoreboard;
 import javassist.CtClass;
-
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.*;
@@ -77,23 +80,24 @@ public class Loader extends PluginBase implements Listener {
     public static EventLoader eventLoader;
     public static FloatingItemManager floatingItemManager = new FloatingItemManager();
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
-    public static FunctionManager functionManager;
-    public static WindowManager windowManager;
-    public static AlgorithmManager algorithmManager;
-    public static BlockItemManager blockItemManager;
-    public static EntityManager entityManager;
-    public static InventoryManager inventoryManager;
-    public static LevelManager levelManager;
-    public static DatabaseManager databaseManager;
-    //public static CardMaker cardMaker;
-    public static NotemusicManager notemusicManager;
-    public static ParticleManager particleManager;
-    public static GameManager gameManager;
     public static Map<String, Plugin> plugins;
     public static Map<String, CommandInfo> plugincmdsmap = new HashMap<>();
     public static Map<String,CtClass> bnClasses = new HashMap<>();
     public static boolean enablePython = false;
     public static boolean enablePHP = false;
+    public static Map<String,List<Integer>> pluginTasksMap = new HashMap<>();
+    //es2020->es5翻译器
+    public static Babel babel = null;
+    //windowManager变量
+    public static Map<String, Scoreboard> boards = new HashMap<>();
+    public static Map<String,String> tipsVar = new HashMap<>();
+    //levelManager变量
+    public static Map<String,Object> skylandoptions = new HashMap<>();
+    public static int OceanSeaLevel = 64;
+    //functionManager变量
+    public static bnqqbot qq = new bnqqbot();
+    public static String fakeNukkitCodeVersion = "";
+    public static ExtendScriptLoader nodejs = null;
 
     @Override
     public void onEnable() {
@@ -140,23 +144,18 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("GameAPI")){
             try {
-                Utils.downloadPlugin("https://tools.blocklynukkit.com/BNGameAPI.jar");
+                if (Server.getInstance().getLanguage().getName().contains("中文"))
+                    Loader.getlogger().warning(TextFormat.RED+"您没有安装BNGameAPI,虽然不是必须安装，但它是部分bn插件的必要依赖，建议您安装，下载地址：https://tools.blocklynukkit.com/BNGameAPI.jar");
+                if (!Server.getInstance().getLanguage().getName().contains("中文"))
+                    Loader.getlogger().warning(TextFormat.RED+"You haven't installed bngameapi,although it's not necessary,but PlaceHolderAPI is needed by the gameapi module,we suggest you to install,download link: https://tools.blocklynukkit.com/BNGameAPI.jar");
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
         //创建各种基对象
         //这里没有database因为后面要检查依赖库是否存在再创建
-        functionManager=new FunctionManager(plugin);windowManager=new WindowManager();blockItemManager=new BlockItemManager();
-        algorithmManager=new AlgorithmManager();inventoryManager=new InventoryManager();levelManager=new LevelManager();entityManager=new EntityManager();
-        databaseManager=null;notemusicManager=new NotemusicManager();particleManager=new ParticleManager();databaseManager=new DatabaseManager();
-        noteBlockPlayerMain.onEnable();if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
-        //检测nk版本
-        //10/10add: 现在已经不用了
-//        if (Server.getInstance().getLanguage().getName().contains("中文"))
-//            getLogger().warning("请注意：如果出现NoClassDefFoundError，说明您应该换新的NukkitX / PowerNukkit 版本了 ");
-//        else
-//            getLogger().warning("Please note: if NoClassDefFoundError appears, you should change to a new version of NukkitX or PowerNukkit ");
+        //10/25add 现在创建多个基对象
+        noteBlockPlayerMain.onEnable();//if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //修改路径类加载器，使得脚本可以调用其他插件
         ClassLoader cl = plugin.getClass().getClassLoader();
         Thread.currentThread().setContextClassLoader(cl);
@@ -172,8 +171,8 @@ public class Loader extends PluginBase implements Listener {
         //加载统计器类
         MetricsLite metricsLite=new MetricsLite(this,6769);
         //世界生成器初始化
-        levelManager.doreloadSkyLandGeneratorSettings();
-        levelManager.doreloadOceanGeneratorSettings();
+        LevelManager.doreloadSkyLandGeneratorSettings();
+        LevelManager.doreloadOceanGeneratorSettings();
         //bn高级合成台模块监听
         this.getServer().getPluginManager().registerEvents(bnCrafting,this);
         //bn浮空物品模块监听
@@ -245,7 +244,7 @@ public class Loader extends PluginBase implements Listener {
         Entity.registerEntity("BNFloatingText", FloatingText.class);
         Entity.registerEntity("BNNPC", BNNPC.class);
         //注册bn命令
-        functionManager.createPermission("blocklynukkit.opall","blocklynukkit插件op权限","OP");
+        plugin.getServer().getPluginManager().addPermission(new Permission("blocklynukkit.opall","blocklynukkit插件op权限","op"));
         //plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
@@ -291,10 +290,10 @@ public class Loader extends PluginBase implements Listener {
     @Override
     //监听bn被卸载事件
     public void onDisable(){
-        levelManager.dosaveSkyLandGeneratorSettings();
-        levelManager.dosaveOceanGeneratorSettings();
-        entityManager.recycleAllFloatingText();
-        entityManager.recycleAllBNNPC();
+        LevelManager.dosaveSkyLandGeneratorSettings();
+        LevelManager.dosaveOceanGeneratorSettings();
+        EntityManager.recycleAllFloatingText();
+        EntityManager.recycleAllBNNPC();
         if(httpServer!=null){
             httpServer.stop(0);
         }
@@ -342,6 +341,9 @@ public class Loader extends PluginBase implements Listener {
                     getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
                 }
             }
+        }else if(js.startsWith("bnp")){
+            BNPackageLoader bnPackageLoader = new BNPackageLoader(plugin);
+            bnPackageLoader.runPlugins(bnPackageLoader.unpack(js));
         }
         else {
             new JavaScriptLoader(plugin).putJavaScriptEngine(name, js);
@@ -350,21 +352,22 @@ public class Loader extends PluginBase implements Listener {
 
 
     public static void putBaseObject(String name){
-        engineMap.get(name).put("server", plugin.getServer());
-        engineMap.get(name).put("plugin", plugin);
-        engineMap.get(name).put("manager", Loader.functionManager);
-        engineMap.get(name).put("logger", new BNLogger(name));
-        engineMap.get(name).put("window", Loader.windowManager);
-        engineMap.get(name).put("blockitem",Loader.blockItemManager);
-        engineMap.get(name).put("algorithm",Loader.algorithmManager);
-        engineMap.get(name).put("inventory",Loader.inventoryManager);
-        engineMap.get(name).put("world",Loader.levelManager);
-        engineMap.get(name).put("entity",Loader.entityManager);
-        engineMap.get(name).put("database",Loader.databaseManager);
-        engineMap.get(name).put("notemusic",Loader.notemusicManager);
-        engineMap.get(name).put("particle",Loader.particleManager);
-        engineMap.get(name).put("gameapi",Loader.gameManager);
-        engineMap.get(name).put("__NAME__",name);
+        ScriptEngine engine = engineMap.get(name);
+        engine.put("server", plugin.getServer());
+        engine.put("plugin", plugin);
+        engine.put("manager", new FunctionManager(engine));
+        engine.put("logger", new BNLogger(name));
+        engine.put("window", new WindowManager(engine));
+        engine.put("blockitem",new BlockItemManager(engine));
+        engine.put("algorithm",new AlgorithmManager(engine));
+        engine.put("inventory",new InventoryManager(engine));
+        engine.put("world",new LevelManager(engine));
+        engine.put("entity",new EntityManager(engine));
+        engine.put("database",new DatabaseManager(engine));
+        engine.put("notemusic",new NotemusicManager(engine));
+        engine.put("particle",new ParticleManager(engine));
+        engine.put("gameapi",plugins.containsKey("GameAPI")?new GameManager(engine):null);
+        engine.put("__NAME__",name);
     }
 
     public static synchronized void callEventHandler(final Event e, final String functionName) {
@@ -658,7 +661,7 @@ public class Loader extends PluginBase implements Listener {
     }
 
     public static FunctionManager getFunctionManager(){
-        return plugin.functionManager;
+        return new FunctionManager(null);
     }
 
     /*

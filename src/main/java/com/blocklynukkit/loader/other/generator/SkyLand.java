@@ -19,6 +19,7 @@ import cn.nukkit.math.MathHelper;
 import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.LevelManager;
 
 import java.util.*;
 
@@ -78,16 +79,16 @@ public class SkyLand extends Generator {
     }
 
     public SkyLand(Map<String, Object> options) {
-        this.option = Loader.levelManager.skylandoptions;
+        this.option = Loader.skylandoptions;
         if(this.option.keySet().size()<2){
-            Loader.plugin.levelManager.setSkyLandGenerator(64,0,true,
+            LevelManager.setSkyLandGeneratorStatic(64,0,true,
                     20,17,0,128,20,9,0,64,
                     8,8,0,16,1,7,0,10,
                     2,9,0,32,1,8,0,16,
                     10,33,0,128,8,33,0,128,
                     10,33,0,80,10,33,0,80,
                     10,33,0,80,true,true,false);
-            this.option=Loader.levelManager.skylandoptions;
+            this.option=Loader.skylandoptions;
         }
         movey = (int) option.get("movey");
         seaHeight = (int) option.get("seaHeight");

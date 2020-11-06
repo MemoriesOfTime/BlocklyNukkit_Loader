@@ -130,14 +130,18 @@ public class EventLoader implements Listener {
                 }
                 if(Loader.scriptObjectMirrorCallback.keySet().contains((Integer) event.getFormID())){
                     int a = event.getFormID();
-                    Loader.scriptObjectMirrorCallback.get(a).call(Loader.windowManager,event);
+                    Loader.scriptObjectMirrorCallback.get(a).call(Loader.scriptObjectMirrorCallback.get(a),event);
                 }
             }else {
                 synchronized (Loader.acceptCloseCallback){
-                    String fun = Loader.functioncallback.get(event.getFormID());
-                    if(Loader.acceptCloseCallback.get(fun)!=null||Loader.acceptCloseCallback.get(fun)){
-                        Loader.callEventHandler(event,fun);
+                    if(Loader.functioncallback.containsKey((Integer) event.getFormID())){
+                        String fun = Loader.functioncallback.get(event.getFormID());
+                        if(fun==null)return;
+                        if(Loader.acceptCloseCallback.get(fun)!=null&&Loader.acceptCloseCallback.get(fun)){
+                            Loader.callEventHandler(event,fun);
+                        }
                     }
+
                 }
             }
         }
@@ -176,7 +180,7 @@ public class EventLoader implements Listener {
             Player sender = event.getPlayer();
             sender.sendMessage(new TranslationContainer("nukkit.server.info.extended", sender.getServer().getName(),
                     sender.getServer().getNukkitVersion(),
-                    Loader.functionManager.fakeNukkitCodeVersion,
+                    Loader.fakeNukkitCodeVersion,
                     sender.getServer().getApiVersion(),
                     sender.getServer().getVersion(),
                     String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));
@@ -215,7 +219,7 @@ public class EventLoader implements Listener {
             CommandSender sender = event.getSender();
             sender.sendMessage(new TranslationContainer("nukkit.server.info.extended", sender.getServer().getName(),
                     sender.getServer().getNukkitVersion(),
-                    Loader.functionManager.fakeNukkitCodeVersion,
+                    Loader.fakeNukkitCodeVersion,
                     sender.getServer().getApiVersion(),
                     sender.getServer().getVersion(),
                     String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));

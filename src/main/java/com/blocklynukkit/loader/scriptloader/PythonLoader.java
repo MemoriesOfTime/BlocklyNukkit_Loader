@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.scriptloader.scriptengines.BNPyScriptEngine;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
@@ -39,28 +40,29 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                                 plugin.getLogger().warning("加载BN插件: " + file.getName());
                             else
                                 plugin.getLogger().warning("loading BN plugin: " + file.getName());
-                            plugin.engineMap.put(file.getName(),new PyScriptEngineFactory().getScriptEngine());
-                            if (plugin.engineMap.get(file.getName()) == null) {
-                                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                    plugin.getLogger().error("Python引擎加载出错！");
-                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                                    plugin.getLogger().error("Python interpreter crashed!");
-                                return;
-                            }
-                            if (!(plugin.engineMap.get(file.getName()) instanceof Invocable)) {
-                                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                                    plugin.getLogger().error("Python引擎版本过低！");
-                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                                    plugin.getLogger().error("Python interpreter's version is too low!");
-                                return;
-                            }
-                            plugin.putBaseObject(file.getName());
-                            PythonInterpreter ip = (PythonInterpreter) Utils.getPrivateField(plugin.engineMap.get(file.getName()),"interp");
-                            ip.setIn(System.in);
-                            ip.setOut(System.out);
-                            ip.setErr(System.out);
-                            ip.execfile(new FileInputStream(file));
-                            plugin.bnpluginset.add(file.getName());
+//                            plugin.engineMap.put(file.getName(),new PyScriptEngineFactory().getScriptEngine());
+//                            if (plugin.engineMap.get(file.getName()) == null) {
+//                                if (Server.getInstance().getLanguage().getName().contains("中文"))
+//                                    plugin.getLogger().error("Python引擎加载出错！");
+//                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
+//                                    plugin.getLogger().error("Python interpreter crashed!");
+//                                return;
+//                            }
+//                            if (!(plugin.engineMap.get(file.getName()) instanceof Invocable)) {
+//                                if (Server.getInstance().getLanguage().getName().contains("中文"))
+//                                    plugin.getLogger().error("Python引擎版本过低！");
+//                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
+//                                    plugin.getLogger().error("Python interpreter's version is too low!");
+//                                return;
+//                            }
+                            putPythonEngine(file.getName(),Utils.readToString(file));
+//                            plugin.putBaseObject(file.getName());
+//                            PythonInterpreter ip = (PythonInterpreter) Utils.getPrivateField(plugin.engineMap.get(file.getName()),"interp");
+//                            ip.setIn(System.in);
+//                            ip.setOut(System.out);
+//                            ip.setErr(System.out);
+//                            ip.execfile(new FileInputStream(file));
+//                            plugin.bnpluginset.add(file.getName());
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文")){
                                 plugin.getLogger().error("无法加载： " + file.getName(), e);}
@@ -81,15 +83,16 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
 
     public void putPythonEngine(String name,String py){
         py = formatExportPython(name, py);
-        plugin.engineMap.put(name,new PyScriptEngineFactory().getScriptEngine());
-        if (plugin.engineMap.get(name) == null) {
+        plugin.engineMap.put(name,new BNPyScriptEngine(new PyScriptEngineFactory()));
+        BNPyScriptEngine engine = (BNPyScriptEngine) plugin.engineMap.get(name);
+        if (engine == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("Python引擎加载出错！");
             if (!Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("Python interpreter crashed!");
             return;
         }
-        if (!(plugin.engineMap.get(name) instanceof Invocable)) {
+        if (!(engine instanceof Invocable)) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("Python引擎版本过低！");
             if (!Server.getInstance().getLanguage().getName().contains("中文"))
@@ -97,14 +100,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
             return;
         }
         plugin.putBaseObject(name);
-        PythonInterpreter ip = null;
-        try {
-            ip = (PythonInterpreter) Utils.getPrivateField(plugin.engineMap.get(name),"interp");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        PythonInterpreter ip = engine.interp;
         ip.setIn(System.in);
         ip.setOut(System.out);
         ip.setErr(System.out);

@@ -4,12 +4,18 @@ import cn.nukkit.Player;
 import cn.nukkit.level.Location;
 import cn.nukkit.level.Position;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.xxmicloxx.NoteBlockAPI.*;
 
+import javax.script.ScriptEngine;
 import java.io.File;
 import java.util.List;
 
-public class NotemusicManager {
+public class NotemusicManager extends BaseManager {
+    public NotemusicManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";

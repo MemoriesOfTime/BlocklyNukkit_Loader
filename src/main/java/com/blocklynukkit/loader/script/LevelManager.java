@@ -24,21 +24,25 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.OceanGenerator;
 import com.blocklynukkit.loader.other.generator.SkyLand;
 import com.blocklynukkit.loader.other.generator.VoidGenerator;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 
+import javax.script.ScriptEngine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LevelManager {
+import static com.blocklynukkit.loader.Loader.OceanSeaLevel;
+import static com.blocklynukkit.loader.Loader.skylandoptions;
+
+public class LevelManager extends BaseManager {
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
     }
-    public Map<String,Object> skylandoptions = new HashMap<>();
-    public int OceanSeaLevel = 64;
-    public LevelManager(){
+    public LevelManager(ScriptEngine engine){
+        super(engine);
         Generator.addGenerator(VoidGenerator.class,"void_bn2",Generator.TYPE_INFINITE);
         Generator.addGenerator(SkyLand.class,"skyland_bn3",Generator.TYPE_INFINITE);
         Generator.addGenerator(OceanGenerator.class,"ocean_bn4",Generator.TYPE_INFINITE);
@@ -76,7 +80,7 @@ public class LevelManager {
                 Server.getInstance().generateLevel(name,seed, Generator.getGenerator("ocean_bn4"));
                 Level l3 = Server.getInstance().getLevelByName(name);
                 Position pos3 = l3.getSafeSpawn();
-                pos3.y=OceanSeaLevel;
+                pos3.y= OceanSeaLevel;
                 l3.setBlock(pos3.add(0,1,0), Block.get(BlockID.BEDROCK));
                 break;
             case "NORMAL":
@@ -86,8 +90,23 @@ public class LevelManager {
         }
 
     }
+    public void setSkyLandGenerator(int seaHeight,int movey,boolean enableOre,
+                                    int coalcount,int coalsize,int coalmin,int coalmax,
+                                    int ironcount,int ironsize,int ironmin,int ironmax,
+                                    int redstonecount,int redstonesize,int redstonemin,int redstonemax,
+                                    int lapiscount,int lapissize,int lapismin,int lapismax,
+                                    int goldcount,int goldsize,int goldmin,int goldmax,
+                                    int diamondcount,int diamondsize,int diamondmin,int diamondmax,
+                                    int dirtcount,int dirtsize,int dirtmin,int dirtmax,
+                                    int gravelcount,int gravelsize,int gravelmin,int gravelmax,
+                                    int granitecount,int granitesize,int granitemin,int granitemax,
+                                    int dioritecount,int dioritesize,int dioritemin,int dioritemax,
+                                    int andesitecount,int andesitesize,int andesitemin,int andesitemax,
+                                    boolean enableCave,boolean enableBiome,boolean enableOcean){
+        setSkyLandGeneratorStatic(seaHeight, movey, enableOre, coalcount, coalsize, coalmin, coalmax, ironcount, ironsize, ironmin, ironmax, redstonecount, redstonesize, redstonemin, redstonemax, lapiscount, lapissize, lapismin, lapismax, goldcount, goldsize, goldmin, goldmax, diamondcount, diamondsize, diamondmin, diamondmax, dirtcount, dirtsize, dirtmin, dirtmax, gravelcount, gravelsize, gravelmin, gravelmax, granitecount, granitesize, granitemin, granitemax, dioritecount, dioritesize, dioritemin, dioritemax, andesitecount, andesitesize, andesitemin, andesitemax, enableCave, enableBiome, enableOcean);
+    }
     //here 4/29
-    public void setSkyLandGenerator(
+    public static void setSkyLandGeneratorStatic(
         int seaHeight,int movey,boolean enableOre,
         int coalcount,int coalsize,int coalmin,int coalmax,
         int ironcount,int ironsize,int ironmin,int ironmax,
@@ -156,9 +175,9 @@ public class LevelManager {
         skylandoptions=map;
     }
     public void setOceanGenerator(int seaLevel){
-        this.OceanSeaLevel=seaLevel;
+        OceanSeaLevel=seaLevel;
     }
-    public void dosaveSkyLandGeneratorSettings(){
+    public static void dosaveSkyLandGeneratorSettings(){
         File folder=new File(Loader.plugin.getDataFolder()+"/GeneratorSettings");
         folder.mkdirs();
         Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/SkyLandGeneratorSettings.yml");
@@ -167,7 +186,7 @@ public class LevelManager {
         }
         config.save();
     }
-    public void doreloadSkyLandGeneratorSettings(){
+    public static void doreloadSkyLandGeneratorSettings(){
         if(new File(Loader.plugin.getDataFolder()+"/GeneratorSettings/SkyLandGeneratorSettings.yml").exists()){
             Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/SkyLandGeneratorSettings.yml");
             for(String each:config.getKeys()){
@@ -175,14 +194,14 @@ public class LevelManager {
             }
         }
     }
-    public void dosaveOceanGeneratorSettings(){
+    public static void dosaveOceanGeneratorSettings(){
         File folder=new File(Loader.plugin.getDataFolder()+"/GeneratorSettings");
         folder.mkdirs();
         Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml");
-        config.set("OceanSeaLevel",OceanSeaLevel);
+        config.set("OceanSeaLevel", OceanSeaLevel);
         config.save();
     }
-    public void doreloadOceanGeneratorSettings(){
+    public static void doreloadOceanGeneratorSettings(){
         if(new File(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml").exists()){
             Config config = new Config(Loader.plugin.getDataFolder()+"/GeneratorSettings/OceanGeneratorSettings.yml");
             OceanSeaLevel = config.getInt("OceanSeaLevel");

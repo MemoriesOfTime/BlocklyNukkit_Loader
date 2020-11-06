@@ -9,11 +9,17 @@ import com.blocklynukkit.gameAPI.Language.Multiline;
 import com.blocklynukkit.gameAPI.Menu.Form.FormMenu;
 import com.blocklynukkit.gameAPI.Menu.Inventory.InventoryMenu;
 import com.blocklynukkit.gameAPI.Scoreboard.Scoreboard;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 
+import javax.script.ScriptEngine;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class GameManager {
+public class GameManager extends BaseManager {
+    public GameManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";

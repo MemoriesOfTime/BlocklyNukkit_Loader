@@ -2,20 +2,22 @@ package com.blocklynukkit;
 
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.*;
+import com.sun.istack.internal.Nullable;
 
 public class JavaAPI {
-    public AlgorithmManager algorithm = Loader.algorithmManager;
-    public BlockItemManager blockitem = Loader.blockItemManager;
-    public DatabaseManager database = Loader.databaseManager;
-    public EntityManager entity = Loader.entityManager;
-    public FunctionManager function = Loader.functionManager;
-    public FunctionManager manager = Loader.functionManager;
-    public GameManager gameapi = Loader.gameManager;
-    public InventoryManager inventory = Loader.inventoryManager;
-    public LevelManager world = Loader.levelManager;
-    public NotemusicManager notemusic = Loader.notemusicManager;
-    public ParticleManager particle = Loader.particleManager;
-    public WindowManager window = Loader.windowManager;
+    public AlgorithmManager algorithm = new AlgorithmManager(null);
+    public BlockItemManager blockitem = new BlockItemManager(null);
+    public DatabaseManager database = new DatabaseManager(null);
+    public EntityManager entity = new EntityManager(null);
+    public FunctionManager function = new FunctionManager(null);
+    public FunctionManager manager = function;
+    @Nullable
+    public GameManager gameapi = Loader.plugins.containsKey("GameAPI")?new GameManager(null):null;
+    public InventoryManager inventory = new InventoryManager(null);
+    public LevelManager world = new LevelManager(null);
+    public NotemusicManager notemusic = new NotemusicManager(null);
+    public ParticleManager particle = new ParticleManager(null);
+    public WindowManager window = new WindowManager(null);
     public JavaAPI(){
     }
 }

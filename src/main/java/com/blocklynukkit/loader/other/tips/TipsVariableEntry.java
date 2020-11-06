@@ -16,7 +16,7 @@ public class TipsVariableEntry extends BaseVariable {
 
     @Override
     public void strReplace() {
-        for(Map.Entry<String,String> entry: Loader.windowManager.tipsVar.entrySet()){
+        for(Map.Entry<String,String> entry: Loader.tipsVar.entrySet()){
             if(entry.getValue().startsWith("function->")){
                 String to = Loader.plugin.callbackString(entry.getValue().replaceFirst("function->",""),this.player);
                 this.addStrReplaceString(entry.getKey(),to);

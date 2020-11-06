@@ -9,6 +9,7 @@ import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
@@ -27,8 +28,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BNNPC extends EntityHuman {
+    public BNNPC bnnpc;
+
     public Vector3 dvec = new Vector3(0,0,0);
     public WalkerRouteFinder routeFinder = null;
+
+    public List<Item> extraDropItems = new ArrayList<>();
+    public boolean dropHand = false;
+    public boolean dropOffhand = false;
+    public List<Integer> dropSlot = new ArrayList<>();
 
     public boolean enableAttack = false;
     public boolean enableHurt = false;
@@ -59,7 +67,7 @@ public class BNNPC extends EntityHuman {
         this.setNameTag(name);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
-        //this.dataProperties.putString()
+        bnnpc=this;
     }
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes,int calltick, String callback){
         this(chunk, nbt, name, clothes);
@@ -252,6 +260,69 @@ public class BNNPC extends EntityHuman {
             return true;
         }
     }
+    @Override
+    public void close(){
+        List<Item> tmp = new ArrayList<>();tmp.addAll(extraDropItems);
+        if(dropHand)tmp.add(this.getInventory().getItemInHand());
+        if(dropOffhand)tmp.add(this.getOffhandInventory().getItem(0));
+        dropSlot.forEach(each->tmp.add(this.getInventory().getItem(each)));
+        tmp.forEach(each->bnnpc.getLevel().dropItem(bnnpc,each));
+    }
+    public void addExtraDropItem(Item item){
+        this.extraDropItems.add(item);
+    }
+    public boolean hasDropItem(Item item){
+        if(dropHand && this.getInventory().getItemInHand().equals(item,true,true)){
+            return true;
+        } else if (dropOffhand && this.getOffhandInventory().getItem(0).equals(item, true, true)) {
+            return true;
+        }else {
+            for(Item i : this.extraDropItems){
+                if(item.equals(i,true,true)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public void removeExtraDropItem(Item item){
+        this.extraDropItems.remove(item);
+    }
+    public Item[] getExtraDropItems(){
+        return this.extraDropItems.toArray(new Item[this.extraDropItems.size()]);
+    }
+    public Item[] getDropItems(){
+        List<Item> tmp = new ArrayList<>();tmp.addAll(extraDropItems);
+        if(dropHand)tmp.add(this.getInventory().getItemInHand());
+        if(dropOffhand)tmp.add(this.getOffhandInventory().getItem(0));
+        dropSlot.forEach(each->tmp.add(this.getInventory().getItem(each)));
+        return tmp.toArray(new Item[tmp.size()]);
+    }
+    public void setDropHand(boolean drop){
+        this.dropHand = drop;
+    }
+    public void setDropHand(){
+        this.setDropHand(true);
+    }
+    public void setDropOffhand(boolean drop){
+        this.dropOffhand = drop;
+    }
+    public void setDropOffhand(){
+        this.setDropOffhand(true);
+    }
+    public void addDropSlot(int slot){
+        this.dropSlot.add(slot);
+    }
+    public int[] getDropSlots(){
+        int[] tmp = new int[dropSlot.size()];int pos=0;
+        for(int x:dropSlot){
+            tmp[pos] = x;pos++;
+        }
+        return tmp;
+    }
+    public void removeDropSlot(int slot){
+        this.dropSlot.remove(slot);
+    }
     public void turnRound(double yaw){
         this.yaw+=yaw;
     }
@@ -442,7 +513,7 @@ public class BNNPC extends EntityHuman {
     }
     public Player getRidingPlayer(){
         for(Entity entity:this.getPassengers()){
-            if(Loader.entityManager.isPlayer(entity)){
+            if(entity instanceof Player){
                 return (Player)entity;
             }
         }

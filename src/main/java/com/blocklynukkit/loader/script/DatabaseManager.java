@@ -1,7 +1,9 @@
 package com.blocklynukkit.loader.script;
 
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.C3P0Utils;
 
+import javax.script.ScriptEngine;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,7 +11,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseManager {
+public class DatabaseManager extends BaseManager {
+    public DatabaseManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";

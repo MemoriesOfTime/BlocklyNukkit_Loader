@@ -9,8 +9,15 @@ import com.blocklynukkit.loader.other.McFunction;
 import com.blocklynukkit.loader.other.particle.CircleFlat;
 import com.blocklynukkit.loader.other.particle.FireworkRocket;
 import com.blocklynukkit.loader.other.particle.LineFlat;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 
-public class ParticleManager {
+import javax.script.ScriptEngine;
+
+public class ParticleManager extends BaseManager {
+    public ParticleManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";

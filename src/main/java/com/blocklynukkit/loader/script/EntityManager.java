@@ -26,13 +26,19 @@ import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.other.Entities.NoFallBlock;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 
+import javax.script.ScriptEngine;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-public class EntityManager {
+public class EntityManager extends BaseManager {
+    public EntityManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
@@ -159,26 +165,31 @@ public class EntityManager {
         entity.spawnToAll();
     }
     //获取指定世界的所有浮空字
-    public List<FloatingText> getLevelFloatingText(Level level){
+    public FloatingText[] getLevelFloatingText(Level level){
         List<FloatingText> list=new ArrayList<>();
         for(Entity e:level.getEntities()){
             if(e.getNetworkId()==61&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
                 list.add((FloatingText)e);
             }
         }
-        return list;
+        return list.toArray(new FloatingText[list.size()]);
     }
     //回收所有浮空字(不对外暴露)
-    public void recycleAllFloatingText(){
+    public static void recycleAllFloatingText(){
         for(Level l:Server.getInstance().getLevels().values()){
-            for(Entity entity:getLevelFloatingText(l)){
+            List<FloatingText> list=new ArrayList<>();
+            for(Entity e:l.getEntities()){
+                if(e.getNetworkId()==61&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
+                    list.add((FloatingText)e);
+                }
+            }
+            for(Entity entity:list){
                 entity.close();
-
             }
         }
     }
     //回收所有BNNPC(不对外暴露)
-    public void recycleAllBNNPC(){
+    public static void recycleAllBNNPC(){
         for (Level l:Server.getInstance().getLevels().values()){
             for(Entity entity:l.getEntities()){
                 if(entity.getName().equals("BNNPC")){
@@ -189,9 +200,9 @@ public class EntityManager {
     }
     //here 5/2
     //获取实体所有的药水效果
-    public List<Effect> getEntityEffect(Entity entity){
+    public Effect[] getEntityEffect(Entity entity){
         List<Effect> list = new ArrayList<>(entity.getEffects().values());
-        return list;
+        return list.toArray(new Effect[list.size()]);
     }
     //获取药水效果等级
     public int getEffectLevel(Effect effect){

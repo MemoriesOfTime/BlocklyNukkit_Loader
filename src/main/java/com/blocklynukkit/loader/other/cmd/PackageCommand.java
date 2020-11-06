@@ -4,6 +4,7 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.Babel;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.BNPackageLoader;
 import com.google.gson.*;
@@ -114,6 +115,34 @@ public class PackageCommand extends Command {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }else if(args[0].equals("transformjs")||args[0].equals("transformJS")||args[0].equals("transjs")||args[0].equals("transJS")||args[0].equals("tjs")){
+                File input = new File(args[1]);
+                if(!input.exists()){
+                    sender.sendMessage(TextFormat.RED+"Input file not found!");
+                    return false;
+                }
+                if(Loader.babel==null){
+                    sender.sendMessage(TextFormat.WHITE+"JavaScript translator initializing...");
+                    Loader.babel=new Babel();
+                }
+                String out = Loader.babel.transform(Utils.readToString(input));
+                File output = new File(Utils.replaceLast(args[1],".js",".es5.js"));
+                try {
+                    if(output.exists())output.delete();
+                    output.createNewFile();
+                    Utils.writeWithString(output,"//  ____  _            _    _       _   _       _    _    _ _   \n" +
+                            "// |  _ \\| |          | |  | |     | \\ | |     | |  | |  (_) |  \n" +
+                            "// | |_) | | ___   ___| | _| |_   _|  \\| |_   _| | _| | ___| |_ \n" +
+                            "// |  _ <| |/ _ \\ / __| |/ / | | | | . ` | | | | |/ / |/ / | __|\n" +
+                            "// | |_) | | (_) | (__|   <| | |_| | |\\  | |_| |   <|   <| | |_ \n" +
+                            "// |____/|_|\\___/ \\___|_|\\_\\_|\\__, |_| \\_|\\__,_|_|\\_\\_|\\_\\_|\\__|\n" +
+                            "//                             __/ |                            \n" +
+                            "//                            |___/                             \n\n// pragma Polyfill\n\n" + out);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                sender.sendMessage(TextFormat.YELLOW+"Transform completed in "+(System.currentTimeMillis()-start)+"ms");
+                sender.sendMessage(TextFormat.YELLOW+"Output path: "+output.getAbsolutePath());
             }
         }
         return false;

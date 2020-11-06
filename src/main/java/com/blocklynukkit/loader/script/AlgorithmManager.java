@@ -7,9 +7,16 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 
-public class AlgorithmManager {
-    public void forEachBlockInArea(Position a, Position b,boolean isair,String callback){
+import javax.script.ScriptEngine;
+
+public class AlgorithmManager extends BaseManager {
+    public AlgorithmManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
+    public void forEachBlockInArea(Position a, Position b, boolean isair, String callback){
         Level level = a.level;
         for (int i=(int)a.x;i<(int)b.x;i++){
             for (int j=(int)a.y;i<(int)b.y;j++){

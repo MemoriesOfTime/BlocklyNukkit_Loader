@@ -8,6 +8,7 @@ import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
 import com.blocklynukkit.loader.scriptloader.scriptengines.BNLuaScriptEngine;
 import com.google.gson.GsonBuilder;
 import javassist.CtClass;
+import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaTable;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
@@ -70,8 +71,9 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
             return;
         }
         plugin.putBaseObject(name);
+        BNLuaScriptEngine engine = (BNLuaScriptEngine) plugin.engineMap.get(name);
         //asTable函数实现
-        plugin.engineMap.get(name).put("asTable", new OneArgFunction() {
+        engine.put("asTable", new OneArgFunction() {
             @Override
             public LuaValue call(LuaValue luaValue) {
                 Object value = BNLuaScriptEngine.toJava(luaValue);
@@ -112,7 +114,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
                 return BNLuaScriptEngine.toLua(value);
             }
         });
-        plugin.engineMap.get(name).put("asMap", new OneArgFunction(){
+        engine.put("asMap", new OneArgFunction(){
             @Override
             public LuaValue call(LuaValue luaValue) {
                 Object value = BNLuaScriptEngine.toJava(luaValue);
@@ -132,7 +134,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
                 return BNLuaScriptEngine.toLua(object);
             }
         });
-        plugin.engineMap.get(name).put("asList", new OneArgFunction(){
+        engine.put("asList", new OneArgFunction(){
             @Override
             public LuaValue call(LuaValue luaValue) {
                 Object value = BNLuaScriptEngine.toJava(luaValue);
@@ -152,8 +154,19 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
                 return BNLuaScriptEngine.toLua(object);
             }
         });
+        engine.put("F", new OneArgFunction(){
+            @Override
+            public LuaValue call(LuaValue luaValue) {
+                if(luaValue.isfunction()){
+                    engine.lambdaCountPP();
+                    engine.lambdaHashMap.put("Lambda_"+engine.lambdaCount,(LuaFunction)luaValue);
+                    return BNLuaScriptEngine.toLua("Lambda_"+engine.lambdaCount);
+                }
+                return LuaValue.NIL;
+            }
+        });
         try {
-            plugin.engineMap.get(name).eval(Lua);
+            engine.eval(Lua);
         } catch (ScriptException e) {
             e.printStackTrace();
         }

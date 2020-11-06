@@ -24,6 +24,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
 import com.blocklynukkit.loader.other.Clothes;
@@ -54,8 +55,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.blocklynukkit.loader.Loader.nodejs;
+import static com.blocklynukkit.loader.Loader.fakeNukkitCodeVersion;
 
-public class FunctionManager {
+public class FunctionManager extends BaseManager {
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
@@ -63,20 +66,20 @@ public class FunctionManager {
 
     private Loader plugin;
 
-    public bnqqbot qq = new bnqqbot();
-    public String fakeNukkitCodeVersion = "";
-    public ExtendScriptLoader nodejs = null;
-    
-    public FunctionManager(Loader plugin){
-        this.plugin = plugin;
+    public bnqqbot qq = Loader.qq;
+
+
+    public FunctionManager(ScriptEngine engine){
+        super(engine);
+        this.plugin = Loader.plugin;
         if(Loader.plugins.keySet().contains("NodeBN_Windows_64")||Loader.plugins.keySet().contains("NodeBN_Linux_64")){
             nodejs = new NodeJSLoader();
         }else {
             nodejs = new NodeJSNotFoundLoader();
         }
     }
-    public List getOnlinePlayers(){
-        return Arrays.asList(Server.getInstance().getOnlinePlayers().values());
+    public Player[] getOnlinePlayers(){
+        return (Player[]) Server.getInstance().getOnlinePlayers().values().toArray();
     }
     //here 10/15
     public void runCMD(String cmd){
@@ -155,14 +158,14 @@ public class FunctionManager {
     public int getPlayerDeviceOS(Player player){
         return player.getLoginChainData().getDeviceOS();
     }
-    public List<String> getEventFunctions(Event event){
+    public String[] getEventFunctions(Event event){
         List<String> list = new ArrayList<>();
         for(Method method:event.getClass().getMethods()){
             if(fiterMethod(method.getName())){
                 list.add(method.getName());
             }
         }
-        return list;
+        return list.toArray(new String[list.size()]);
     }
     //here 8/5
     public double getCPULoad(){
@@ -511,8 +514,8 @@ public class FunctionManager {
         return (Block)Loader.easytmpmap.get(string);
     }
     //configAPI
-    public List getAllKeyInConfig(Config config){
-        return new ArrayList<>(config.getKeys());
+    public String[] getAllKeyInConfig(Config config){
+        return config.getKeys().toArray(new String[config.getKeys().size()]);
     }
     //金钱API
     public double getMoney(Player player){
@@ -703,11 +706,13 @@ public class FunctionManager {
     }
     public void newCommand(String name, String description, ScriptObjectMirror scriptObjectMirror,String per){
         plugin.getServer().getCommandMap().register(name,new LambdaCommand(name,description,scriptObjectMirror,per));
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
     }
     //end here
 
     public TaskHandler createTask(String functionName, int delay ,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new ModTask(functionName,args), delay);
+        TaskHandler handler = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new ModTask(functionName,args), delay);
+        return handler;
     }
     //here 5/9
     public int setTimeout(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
@@ -810,7 +815,7 @@ public class FunctionManager {
 
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
-            callback.call(Loader.functionManager,sender,args);
+            callback.call(callback,sender,args);
             return false;
         }
 
@@ -891,7 +896,7 @@ public class FunctionManager {
 
         @Override
         public void onRun(int i) {
-            callback.call(Loader.functionManager,Args);
+            callback.call(callback,Args);
         }
     }
 

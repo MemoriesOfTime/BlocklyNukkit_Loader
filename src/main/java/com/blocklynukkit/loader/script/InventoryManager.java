@@ -16,16 +16,22 @@ import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.EventLoader;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.nukkitx.fakeinventories.inventory.ChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.DoubleChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.FakeInventory;
 
+import javax.script.ScriptEngine;
 import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Map;
 
-public class InventoryManager {
+public class InventoryManager extends BaseManager {
+    public InventoryManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";

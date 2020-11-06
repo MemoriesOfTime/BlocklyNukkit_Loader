@@ -30,6 +30,7 @@ import com.caucho.quercus.lib.xml.XMLWriterModule;
 import com.caucho.quercus.lib.xml.XmlModule;
 import com.caucho.quercus.lib.zip.ZipModule;
 import com.caucho.quercus.lib.zlib.ZlibModule;
+import com.caucho.quercus.module.AbstractQuercusModule;
 import com.caucho.quercus.page.InterpretedPage;
 import com.caucho.quercus.page.QuercusPage;
 import com.caucho.quercus.parser.QuercusParser;
@@ -53,6 +54,8 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
     public QuercusContext quercus;
     public BNLogger logger;
     public StringWriter outputWriter = new StringWriter();
+    public HashMap<String,Closure> closureHashMap = new HashMap<>();
+    public int closureCount = -1;
 
     public BNPHPScriptEngine(BNLogger logger){
         super(new QuercusScriptEngineFactory(),true);
@@ -111,6 +114,14 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             _quercus.addInitModule(new MysqliModule());
             _quercus.addInitModule(new PDOModule());
             _quercus.addInitModule(new QuercusDOMModule());
+            _quercus.addInitModule(new AbstractQuercusModule(){
+                public String F(Env env, Closure closure)
+                {
+                    closureCount++;
+                    closureHashMap.put("Lambda_"+closureCount,closure);
+                    return "Lambda_"+closureCount;
+                }
+            });
             _quercus.init();
             _quercus.start();
             return _quercus;
@@ -126,23 +137,35 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
     @Override
     public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
         env.setScriptContext(this.getContext());
-        if(args.length==0){
-            env.findFunction((StringValue)StringValue.create(name)).call(env);
-        }else {
-            Value[] values = new Value[args.length];
-            for(int i=0;i<args.length;i++){
-                values[i] = env.wrapJava(args[i]);
+        if(closureHashMap.containsKey(name)){
+            if(args.length==0){
+                return closureHashMap.get(name).call(this.env);
+            }else {
+                Value[] values = new Value[args.length];
+                for(int i=0;i<args.length;i++){
+                    values[i] = env.wrapJava(args[i]);
+                }
+                return closureHashMap.get(name).call(this.env,values);
             }
-            return env.findFunction(
-                    (StringValue)StringValue.create(name)).call(
-                            env, values);
+        }else {
+            if(args.length==0){
+                return env.findFunction((StringValue)StringValue.create(name)).call(env);
+            }else {
+                Value[] values = new Value[args.length];
+                for(int i=0;i<args.length;i++){
+                    values[i] = env.wrapJava(args[i]);
+                }
+                return env.findFunction(
+                        (StringValue)StringValue.create(name)).call(
+                        env, values);
+            }
         }
-        return null;
     }
 
     @Override
     public Object get(String key){
         if(env==null)return null;
+        if(closureHashMap.containsKey(key))return closureHashMap.get(key);
         Value value = env.getValue((StringValue)StringValue.create(key));
         if(value.isEmpty()){
             value = env.findFunction((StringValue)StringValue.create(key));

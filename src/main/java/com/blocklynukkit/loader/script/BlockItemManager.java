@@ -19,13 +19,19 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 import org.jetbrains.annotations.NotNull;
 
+import javax.script.ScriptEngine;
 import java.util.*;
 
-public class BlockItemManager {
+public class BlockItemManager extends BaseManager {
+    public BlockItemManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
@@ -131,31 +137,31 @@ public class BlockItemManager {
         }
     }
     //获取世界掉落物
-    public List getDropItems(Position position){
+    public EntityItem[] getDropItems(Position position){
         ArrayList<EntityItem> list = new ArrayList();
         for (Entity entity:position.getLevel().getEntities()){
             if(entity.getNetworkId()==64){
                 list.add((EntityItem)entity);
             }
         }
-        return list;
+        return list.toArray(new EntityItem[list.size()]);
     }
-    public List getDropItems(Level level){
+    public EntityItem[] getDropItems(Level level){
         ArrayList<EntityItem> list = new ArrayList();
         for (Entity entity:level.getEntities()){
             if(entity.getNetworkId()==64){
                 list.add((EntityItem)entity);
             }
         }
-        return list;
+        return list.toArray(new EntityItem[list.size()]);
     }
     //获取世界生物
-    public List getEntities(Position position){
+    public Entity[] getEntities(Position position){
         ArrayList<Entity> list = new ArrayList();
         for (Entity entity:position.getLevel().getEntities()){
             list.add(entity);
         }
-        return list;
+        return list.toArray(new Entity[list.size()]);
     }
     //获取世界名称
     public String getLevelName(Level level){
@@ -163,7 +169,9 @@ public class BlockItemManager {
     }
     //here 4/23
     public void PositionMove(Position position,double x,double y,double z){
-        position = position.add(x, y, z);
+        position.x += x;
+        position.y += y;
+        position.z += z;
     }
     /********************************* 纯方块物品方法 *************************************/
     //-构建方块
@@ -272,7 +280,7 @@ public class BlockItemManager {
         for (String a:shape){
             for (char b:a.toCharArray()){
                 if(b!=' ')
-                map.put(b,new FunctionManager(Loader.plugin).getEasyItem(b+""));
+                map.put(b,(Item)Loader.easytmpmap.get(b+""));
             }
         }
         LinkedList<Item> linkedList = new LinkedList<>();
@@ -293,8 +301,8 @@ public class BlockItemManager {
         addEnchantment(item,level,enchantment);
     }
     //获取附魔
-    public List getItemEnchant(Item item){
-        return Arrays.asList(item.getEnchantments());
+    public Enchantment[] getItemEnchant(Item item){
+        return item.getEnchantments();
     }
     public int getEnchantID(Enchantment enchantment){
         return enchantment.getId();

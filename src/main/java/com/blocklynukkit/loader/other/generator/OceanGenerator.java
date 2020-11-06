@@ -24,7 +24,7 @@ public class OceanGenerator extends cn.nukkit.level.generator.Generator {
     }
     public OceanGenerator(Map<String, Object> options) {
         this.options = options;
-        seaLevel= Loader.levelManager.OceanSeaLevel;
+        seaLevel= Loader.OceanSeaLevel;
     }
     @Override
     public int getId() {

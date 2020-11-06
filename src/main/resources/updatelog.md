@@ -9,6 +9,9 @@ makefile是一个json格式的包配置文件，由name,compress,plugins三个�
 name为打包的插件包的名字(字符串)，compress为是否打出压缩插件包(boolean)，
 plugins是一个字符串数组，里面标注要打进包中的bn插件的路径，加载时从上到下加载，
 也可以打进去json yml xml txt格式的资源文件，资源文件将会被按顺序解压到打包时与nk核心的相对位置解压。
+js中可以使用console了
+现在js插件报错会显示正确的文件名了
+F(Closure function)函数用于包装闭包
 
 PHP
 
@@ -72,6 +75,19 @@ WindowBuilders
 
 - void showToPlayer(Player p,String callback,boolean acceptClose)
     - acceptClose用于指定是否在窗口关闭的时候调用一次回调函数
+    
+BNNPC
+
+- void addExtraDropItem(Item item)
+- boolean hasDropItem(Item item)
+- void removeExtraDropItem(Item item)
+- Item[] getExtraDropItems()
+- Item[] getDropItems()
+- void setDropHand(boolean drop/void) --参数不填时默认为true
+- void setDropOffhand(boolean drop/void) --参数不填时默认为true
+- void addDropSlot(int slot) --指定背包槽位死亡掉落
+- int[] getDropSlots()
+- void removeDropSlot(int slot)
 
 
 ## 1.2.8.4

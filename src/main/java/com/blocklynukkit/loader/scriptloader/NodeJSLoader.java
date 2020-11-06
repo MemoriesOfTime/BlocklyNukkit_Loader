@@ -31,7 +31,7 @@ public class NodeJSLoader extends ExtendScriptLoader {
         if(isPath){
             eval(new File(str));
         }else {
-            Loader.functionManager.writeFile("./plugins/BlocklyNukkit/NodeJS/tmp.js",str);
+            Utils.writeWithString(new File("./plugins/BlocklyNukkit/NodeJS/tmp.js"),str);
             eval(new File("./plugins/BlocklyNukkit/NodeJS/tmp.js"));
         }
     }
@@ -58,7 +58,7 @@ public class NodeJSLoader extends ExtendScriptLoader {
         if(isPath){
             newDocker(dockerName,new File(str));
         }else {
-            Loader.functionManager.writeFile("./plugins/BlocklyNukkit/NodeJS/"+dockerName+"_tmp.js",str);
+            Utils.writeWithString(new File("./plugins/BlocklyNukkit/NodeJS/"+dockerName+"_tmp.js"),str);
             newDocker(dockerName,new File("./plugins/BlocklyNukkit/NodeJS/"+dockerName+"_tmp.js"));
         }
     }

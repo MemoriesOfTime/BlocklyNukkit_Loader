@@ -12,6 +12,7 @@ import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.utils.DummyBossBar;
+import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
@@ -22,19 +23,24 @@ import com.blocklynukkit.loader.script.window.Custom;
 import com.blocklynukkit.loader.script.window.Modal;
 import com.blocklynukkit.loader.script.window.Simple;
 
+import javax.script.ScriptEngine;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.blocklynukkit.loader.Loader.boards;
+import static com.blocklynukkit.loader.Loader.tipsVar;
 
-public class WindowManager {
+public class WindowManager extends BaseManager {
+    public WindowManager(ScriptEngine scriptEngine) {
+        super(scriptEngine);
+    }
+
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
     }
-    public Map<String,Scoreboard> boards = new HashMap<>();
-    public Map<String,String> tipsVar = new HashMap<>();
 
     public void updateAllScoreBoard(String title,String text){
         for (Player p: Server.getInstance().getOnlinePlayers().values()){

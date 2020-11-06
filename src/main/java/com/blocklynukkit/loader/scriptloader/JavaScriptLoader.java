@@ -8,6 +8,7 @@ import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
 import com.google.gson.GsonBuilder;
 import javassist.*;
 import jdk.nashorn.api.scripting.JSObject;
+import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -15,7 +16,7 @@ import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
-import java.io.File;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 import static com.blocklynukkit.loader.Loader.*;
 
 public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter {
+    public String polyfilljs = null;
     public JavaScriptLoader(Loader plugin){
         super(plugin);
     }
@@ -81,9 +83,18 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 getlogger().error("JavaScript interpreter's version is too low!");
             return;
         }
-        putBaseObject(name);
         try {
-            ((Compilable)engineMap.get(name)).compile(js).eval();
+            if(js.contains("//pragma es9")||js.contains("//pragma es8")||js.contains("//pragma es7")||js.contains("//pragma es6")||js.contains("//pragma es2015")||
+                    js.contains("// pragma es9")||js.contains("// pragma es8")||js.contains("// pragma es7")||js.contains("// pragma es6")||js.contains("// pragma es2015")||
+                    js.contains("//pragma polyfill")||js.contains("//pragma babel")||js.contains("//pragma Polyfill")||js.contains("//pragma Babel")||
+                    js.contains("// pragma polyfill")||js.contains("// pragma babel")||js.contains("// pragma Polyfill")||js.contains("// pragma Babel")){
+                engineMap.get(name).put("javax.script.filename","babel-polyfill");
+                engineMap.get(name).eval(getPolyfilljs());
+            }
+            putBaseObject(name);
+            engineMap.get(name).put("javax.script.filename",name);
+            engineMap.get(name).put("console",engineMap.get(name).get("logger"));
+            ((NashornScriptEngine)engineMap.get(name)).compile(new StringReader(js)).eval();
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -156,5 +167,19 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
     @Override
     public boolean isThisLanguage(Object var){
         return var instanceof JSObject;
+    }
+    public String getPolyfilljs(){
+        if(polyfilljs==null){
+            polyfilljs="";
+            InputStream is2=this.getClass().getResourceAsStream("/polyfill.js");
+            BufferedReader br2=new BufferedReader(new InputStreamReader(is2));
+            String s2="";
+            try{
+                while((s2=br2.readLine())!=null)polyfilljs+=s2;
+            }catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return polyfilljs;
     }
 }

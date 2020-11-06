@@ -4,6 +4,7 @@ import org.luaj.vm2.Lua;
 import org.luaj.vm2.script.LuaScriptEngineFactory;
 import org.luaj.vm2.script.LuajContext;
 import java.io.*;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +31,9 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
     private static final String __FILENAME__         = "?";
 
     private static final ScriptEngineFactory myFactory = new LuaScriptEngineFactory();
+
+    public HashMap<String,LuaFunction> lambdaHashMap = new HashMap<>();
+    public int lambdaCount = -1;
 
     private LuajContext context;
 
@@ -106,6 +110,14 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
     @Override
     public ScriptEngineFactory getFactory() {
         return myFactory;
+    }
+
+    @Override
+    public Object get(String key){
+        if(lambdaHashMap.containsKey(key)){
+            return lambdaHashMap.get(key);
+        }
+        return super.get(key);
     }
 
 
@@ -247,6 +259,17 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
 
     @Override
     public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
+        if(lambdaHashMap.containsKey(name)){
+            if(args.length==0){
+                return toJava(lambdaHashMap.get(name).invoke());
+            }else {
+                LuaValue[] luaArgs = new LuaValue[args.length];
+                for(int i=0;i<luaArgs.length;i++){
+                    luaArgs[i] = toLua(args[i]);
+                }
+                return toJava(lambdaHashMap.get(name).invoke(luaArgs));
+            }
+        }
         LuaValue fun = context.globals.get(LuaValue.valueOf(name));
         if(fun.isfunction()){
             try{
@@ -291,5 +314,9 @@ public class BNLuaScriptEngine extends AbstractScriptEngine implements ScriptEng
     public <T> T getInterface(Object thiz, Class<T> clasz) {
         //TODO: tm劳资又不用这个方法写个毛线
         return null;
+    }
+
+    public void lambdaCountPP(){
+        lambdaCount++;
     }
 }

@@ -54,7 +54,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
         this.putLuaEngine(name, code);
     }
     public void putLuaEngine(String name,String Lua){
-        Lua = formatExportLua(name, Lua);
+        Lua = formatExportLua(name, Lua);String engineName = name;
         plugin.engineMap.put(name, new BNLuaScriptEngine());
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -159,8 +159,8 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
             public LuaValue call(LuaValue luaValue) {
                 if(luaValue.isfunction()){
                     engine.lambdaCountPP();
-                    engine.lambdaHashMap.put("Lambda_"+engine.lambdaCount,(LuaFunction)luaValue);
-                    return BNLuaScriptEngine.toLua("Lambda_"+engine.lambdaCount);
+                    engine.lambdaHashMap.put("Lambda_"+Utils.getMD5(engineName.getBytes())+"_"+engine.lambdaCount,(LuaFunction)luaValue);
+                    return BNLuaScriptEngine.toLua("Lambda_"+Utils.getMD5(engineName.getBytes())+"_"+engine.lambdaCount);
                 }
                 return LuaValue.NIL;
             }

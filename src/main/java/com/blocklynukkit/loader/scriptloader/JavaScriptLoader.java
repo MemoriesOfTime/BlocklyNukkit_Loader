@@ -12,7 +12,6 @@ import jdk.nashorn.api.scripting.NashornScriptEngine;
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
-import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
@@ -91,10 +90,13 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 engineMap.get(name).put("javax.script.filename","babel-polyfill");
                 engineMap.get(name).eval(getPolyfilljs());
             }
+            engineMap.get(name).put("lambdaCount",-1);
+            engineMap.get(name).put("baseInterpreterBNJavaScriptEngine",engineMap.get(name));
+            ((NashornScriptEngine)engineMap.get(name)).compile("function F(f){lambdaCount++;baseInterpreterBNJavaScriptEngine.put('Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount,f);return 'Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount;}").eval();
             putBaseObject(name);
             engineMap.get(name).put("javax.script.filename",name);
             engineMap.get(name).put("console",engineMap.get(name).get("logger"));
-            ((NashornScriptEngine)engineMap.get(name)).compile(new StringReader(js)).eval();
+            ((NashornScriptEngine)engineMap.get(name)).compile(js).eval();
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){

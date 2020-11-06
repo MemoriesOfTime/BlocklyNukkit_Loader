@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.scriptloader.scriptengines;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.other.BNLogger;
+import com.blocklynukkit.loader.utils.Utils;
 import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.*;
@@ -118,8 +119,8 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
                 public String F(Env env, Closure closure)
                 {
                     closureCount++;
-                    closureHashMap.put("Lambda_"+closureCount,closure);
-                    return "Lambda_"+closureCount;
+                    closureHashMap.put("Lambda_"+ Utils.getMD5(logger.getName().getBytes())+"_"+closureCount,closure);
+                    return "Lambda_"+ Utils.getMD5(logger.getName().getBytes())+"_"+closureCount;
                 }
             });
             _quercus.init();

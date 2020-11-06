@@ -204,7 +204,7 @@ public class Loader extends PluginBase implements Listener {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 getLogger().warning("java运行时环境不完整，无法加载.js插件，请安装java8SE-java14SE的完整版本！");
             else
-                getLogger().warning("java runtime isn;t");
+                getLogger().warning("java runtime is incomplete!");
         }
         //加载python
         if(plugins.containsKey("PyBN")){
@@ -237,7 +237,7 @@ public class Loader extends PluginBase implements Listener {
             if (Server.getInstance().getLanguage().getName().contains("中文")){
                 getlogger().warning(TextFormat.RED+"Nukkit版本太低！这可能导致一些问题。");
             }else {
-            getlogger().warning(TextFormat.RED+"Nukkit version is too low! This may cause problems.");
+                getlogger().warning(TextFormat.RED+"Nukkit version is too low! This may cause problems.");
             }
         }
         //注册bn的生物实体

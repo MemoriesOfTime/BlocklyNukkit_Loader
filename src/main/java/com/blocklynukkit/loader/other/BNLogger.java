@@ -219,4 +219,8 @@ public class BNLogger {
         warn(mes1, mes2, mes3, mes4, mes5, mes6, mes7, mes8);
         for(Object mes:meses)warn(mes);
     }
+
+    public String getName(){
+        return this.name;
+    }
 }

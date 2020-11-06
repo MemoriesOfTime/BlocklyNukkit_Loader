@@ -40,29 +40,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                                 plugin.getLogger().warning("加载BN插件: " + file.getName());
                             else
                                 plugin.getLogger().warning("loading BN plugin: " + file.getName());
-//                            plugin.engineMap.put(file.getName(),new PyScriptEngineFactory().getScriptEngine());
-//                            if (plugin.engineMap.get(file.getName()) == null) {
-//                                if (Server.getInstance().getLanguage().getName().contains("中文"))
-//                                    plugin.getLogger().error("Python引擎加载出错！");
-//                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-//                                    plugin.getLogger().error("Python interpreter crashed!");
-//                                return;
-//                            }
-//                            if (!(plugin.engineMap.get(file.getName()) instanceof Invocable)) {
-//                                if (Server.getInstance().getLanguage().getName().contains("中文"))
-//                                    plugin.getLogger().error("Python引擎版本过低！");
-//                                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-//                                    plugin.getLogger().error("Python interpreter's version is too low!");
-//                                return;
-//                            }
                             putPythonEngine(file.getName(),Utils.readToString(file));
-//                            plugin.putBaseObject(file.getName());
-//                            PythonInterpreter ip = (PythonInterpreter) Utils.getPrivateField(plugin.engineMap.get(file.getName()),"interp");
-//                            ip.setIn(System.in);
-//                            ip.setOut(System.out);
-//                            ip.setErr(System.out);
-//                            ip.execfile(new FileInputStream(file));
-//                            plugin.bnpluginset.add(file.getName());
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文")){
                                 plugin.getLogger().error("无法加载： " + file.getName(), e);}
@@ -100,6 +78,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
             return;
         }
         plugin.putBaseObject(name);
+        engine.put("javax.script.filename",name);
         PythonInterpreter ip = engine.interp;
         ip.setIn(System.in);
         ip.setOut(System.out);

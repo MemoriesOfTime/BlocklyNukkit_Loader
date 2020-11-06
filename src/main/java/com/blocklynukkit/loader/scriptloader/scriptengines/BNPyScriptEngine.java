@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.scriptloader.scriptengines;
 
+import com.blocklynukkit.loader.utils.Utils;
 import org.python.core.*;
 import org.python.jsr223.PyScriptEngineScope;
 import org.python.util.PythonInterpreter;
@@ -109,7 +110,7 @@ public class BNPyScriptEngine extends AbstractScriptEngine implements Compilable
 
     public String newLambda(PyFunction fun){
         lambdaCount++;
-        String lambdaName = "Lambda_"+lambdaCount;
+        String lambdaName = "Lambda_"+ Utils.getMD5(((String)this.get("javax.script.filename")).getBytes()) +"_"+lambdaCount;
         this.lambdaHashMap.put(lambdaName,fun);
         return lambdaName;
     }

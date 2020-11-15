@@ -3,6 +3,9 @@ package com.xxmicloxx.NoteBlockAPI;
 import cn.nukkit.Player;
 import cn.nukkit.level.Location;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class HornSongPlayer extends SongPlayer {
 
     private Location targetLocation;

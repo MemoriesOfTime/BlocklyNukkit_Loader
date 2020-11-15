@@ -1,5 +1,8 @@
 package com.xxmicloxx.NoteBlockAPI;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public enum NotePitch {
 
     NOTE_0(0, 0.5F),

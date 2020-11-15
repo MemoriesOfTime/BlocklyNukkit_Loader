@@ -50,9 +50,9 @@ public class WindowManager extends BaseManager {
                 text = PlaceholderAPI.getInstance().translateString(text,p);
             Scoreboard sb = ScoreboardAPI.createScoreboard();
             ScoreboardDisplay sbd = sb.addDisplay(DisplaySlot.SIDEBAR, "dumy", title);
-            String[] l = text.split(";");
+            String[] l = text.split("(?<!\\\\);");
             for(int i = 0; i < l.length; ++i) {
-                sbd.addLine(l[i], i);
+                sbd.addLine(l[i].replaceAll("\\\\;",";"), i);
             }
             if(boards.containsKey(p.getName())){
                 boards.get(p.getName()).hideFor(p);
@@ -71,10 +71,10 @@ public class WindowManager extends BaseManager {
             text = PlaceholderAPI.getInstance().translateString(text,p);
         Scoreboard sb = ScoreboardAPI.createScoreboard();
         ScoreboardDisplay sbd = sb.addDisplay(DisplaySlot.SIDEBAR, "dumy", title);
-        String[] l = text.split(";");
+        String[] l = text.split("(?<!\\\\);");
 
         for(int i = 0; i < l.length; ++i) {
-            sbd.addLine(l[i], i);
+            sbd.addLine(l[i].replaceAll("\\\\;",";"), i);
         }
         if(boards.containsKey(p.getName())){
             boards.get(p.getName()).hideFor(p);
@@ -178,38 +178,55 @@ public class WindowManager extends BaseManager {
             return "NULL";
         }
     }
-    public void setPlayerBossBar(Player player,String text,float len){
+    public long[] setPlayerBossBar(Player player,String text,float len){
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
-        if(text.startsWith("#")){
-            String hex = text.substring(0,7);
-            Color color = Utils.hex2rgb(hex);
-            player.createBossBar(new DummyBossBar.Builder(player).text(text.replaceFirst(hex,"")).color(color.getRed(),color.getGreen(),color.getBlue()).length(len).build());
-        }else if (text.startsWith("rgb(")){
-            String[] rgb = text.split("\\)",2)[0].replaceFirst("rgb\\(","").split(",");
-            player.createBossBar(new DummyBossBar.Builder(player).text(text.split("\\)",2)[1]).length(len)
-                    .color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2])).build());
-        }else {
-            player.createBossBar(new DummyBossBar.Builder(player).text(text).length(len).build());
+        String[] bossbars = text.split("(?<!\\\\);");
+        long[] ids = new long[bossbars.length];
+        for(int i=0;i<bossbars.length;i++){
+            String each = bossbars[i].replaceAll("\\\\;",";");
+            if(each.startsWith("#")){
+                String hex = each.substring(0,7);
+                Color color = Utils.hex2rgb(hex);
+                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each.replaceFirst(hex,"")).color(color.getRed(),color.getGreen(),color.getBlue()).length(len).build());
+            }else if (text.startsWith("rgb(")){
+                String[] rgb = each.split("\\)",2)[0].replaceFirst("rgb\\(","").split(",");
+                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each.split("\\)",2)[1]).length(len)
+                        .color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2])).build());
+            }else {
+                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each).length(len).build());
+            }
         }
+        return ids;
     }
     public void removePlayerBossBar(Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
     }
+    public void removePlayerBossBar(Player player,long id){
+        player.removeBossBar(id);
+    }
     public double getLengthOfPlayerBossBar(Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             return player.getDummyBossBar(bar).getLength();
         }
-        return 0.0d;
+        return -1.0d;
+    }
+    public double getLengthOfPlayerBossBar(Player player,long id){
+        DummyBossBar bar = player.getDummyBossBar(id);
+        if(bar==null)return -1.0d;else return bar.getLength();
     }
     public String getTextOfPlayerBossBar(Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             return player.getDummyBossBar(bar).getText();
         }
         return "NULL";
+    }
+    public String getTextOfPlayerBossBar(Player player,long id){
+        DummyBossBar bar = player.getDummyBossBar(id);
+        if(bar==null)return "NULL";else return bar.getText();
     }
     //here 6/26
     public void setBelowName(Player player,String str){
@@ -230,7 +247,8 @@ public class WindowManager extends BaseManager {
     //here 8/18
     public void setPauseScreenList(String list){
         Map p = Server.getInstance().getOnlinePlayers();
-        for(String each:list.split(";")){
+        for(String each:list.split("(?<!\\\\);")){
+            each = each.replaceAll("\\\\;",";");
             if(p.keySet().contains(each)){
                 Player player = Server.getInstance().getPlayer(each);
                 Server.getInstance().updatePlayerListData(UUID.randomUUID(), Entity.entityCount++,each,player.getSkin(),player.getLoginChainData().getXUID());

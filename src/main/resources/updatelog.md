@@ -12,6 +12,8 @@ plugins是一个字符串数组，里面标注要打进包中的bn插件的路�
 js中可以使用console了
 现在js插件报错会显示正确的文件名了
 F(Closure function)函数用于包装闭包
+bnAPI中的;换行现在支持使用\\;来转义
+修复了php中F(闭包)函数返回类型错误的问题
 
 PHP
 
@@ -74,10 +76,16 @@ entity
 - void shootArrow(Position from,Position to,double multiply)
 - void shootArrow(Position from,Position to,boolean canPickUp)
 - void shootArrow(Position from,Position to)
+- void lookAt(Entity e,Position pos)
 
 window
 
-- void setPlayerBossBar的第二个text参数中若以#XXXXXX或者rgb(x,x,x)开头将会为boss血条设置自定义颜色
+- int[] setPlayerBossBar的第二个text参数中若以#XXXXXX或者rgb(x,x,x)开头将会为boss血条设置自定义颜色
+- int[] setPlayerBossBar现在可以在text参数中使用;来添加多个bossbar
+- int[] setPlayerBossBar(Player player,String text,float len) --现在返回数组，包含每个创建的bossbar的id
+- void removePlayerBossBar(Player player,long id) --相关api现在支持指定bossbar的id操作
+- double getLengthOfPlayerBossBar(Player player,long id)
+- String getTextOfPlayerBossBar(Player player,long id)
 
 WindowBuilders
 
@@ -96,6 +104,13 @@ BNNPC
 - void addDropSlot(int slot) --指定背包槽位死亡掉落
 - int[] getDropSlots()
 - void removeDropSlot(int slot)
+- void doEmote(String action/void) --让npc执行指定的表情动作
+    - action可以是 Wave Punch Clap OverThere Hammer Fall Diamond Pickaxe
+    - 也可以填写对应的中文 挥手 拳击 鼓掌 在那 锤子 摔倒 钻石
+    - 不填的话将上面的五个动作中任选一个
+    - 至于为什么只有8个: 因为剩下的要氪金购买之后才能获取uuid，冰凉没钱
+    - 欢迎大家贡献uuid
+- boolean directMove(Position to) --直线移动到某处
 
 
 ## 1.2.8.4

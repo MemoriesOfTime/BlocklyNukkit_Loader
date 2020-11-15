@@ -19,6 +19,8 @@ import java.util.Arrays;
  *          <p/>
  *          <font size="-1" color="#336699">Copyright 2002 MBARI.<br>
  *          MBARI Proprietary Information. All rights reserved.</font><br><hr><br>
+ *
+ * @author xxmicloxx @ NoteBlockAPI
  */
 public class Interpolator {
 

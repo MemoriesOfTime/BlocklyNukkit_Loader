@@ -7,6 +7,8 @@ import com.blocklynukkit.loader.scriptloader.LuaLoader;
 import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
 
+import java.util.Arrays;
+
 public class BNLogger {
     private String name;
     public BNLogger(String name){
@@ -41,6 +43,10 @@ public class BNLogger {
             output = lua.toString(mes);
             Server.getInstance().getLogger().info("["+name+"] "+output);
             return;
+        }
+        if(mes!=null&&mes.getClass().isArray()){
+            output = Arrays.toString((Object[]) mes);
+            Server.getInstance().getLogger().info("["+name+"] "+output);
         }
         Server.getInstance().getLogger().info("["+name+"] "+output);
     }

@@ -26,10 +26,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.network.protocol.DataPacket;
-import cn.nukkit.network.protocol.ProtocolInfo;
-import cn.nukkit.network.protocol.StartGamePacket;
-import cn.nukkit.network.protocol.MovePlayerPacket;
+import cn.nukkit.network.protocol.*;
 import cn.nukkit.raknet.protocol.Packet;
 import cn.nukkit.scheduler.Task;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
@@ -253,6 +250,7 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
+        if(event.getEntity().getName().equals("BNNPC"))event.setAttackCooldown(0);
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -416,6 +414,20 @@ public class EventLoader implements Listener {
     public void onDataPacketReceive(DataPacketReceiveEvent event){
         if(event.getPacket().pid()== ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET){
             plugin.callEventHandler(event,"PlayerLocallyInitializedEvent");
+        }else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
+            System.out.println("玩家"+event.getPlayer().getName()+"携带的表情动作uuid列表:");
+            ((EmoteListPacket)event.getPacket()).pieceIds.forEach(e->{
+                if(!(e.equals("4c8ae710-df2e-47cd-814d-cc7bf21a3d67")||
+                        e.equals("42fde774-37d4-4422-b374-89ff13a6535a")||
+                        e.equals("9a469a61-c83b-4ba9-b507-bdbe64430582")||
+                        e.equals("ce5c0300-7f03-455d-aaf1-352e4927b54d")||
+                        e.equals("d7519b5a-45ec-4d27-997c-89d402c6b57f")||
+                        e.equals("86b34976-8f41-475b-a386-385080dc6e83")||
+                        e.equals("6d9f24c0-6246-4c92-8169-4648d1981cbb")||
+                        e.equals("7cec98d8-55cc-44fe-b0ae-2672b0b2bd37"))){
+                    System.out.println(e);
+                }
+            });
         }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }

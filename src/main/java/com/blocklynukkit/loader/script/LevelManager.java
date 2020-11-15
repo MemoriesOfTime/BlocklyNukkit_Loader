@@ -10,6 +10,8 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.biome.Biome;
 import cn.nukkit.level.format.anvil.Chunk;
+import cn.nukkit.level.format.generic.BaseChunk;
+import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.generator.Flat;
 import cn.nukkit.level.generator.Generator;
 import cn.nukkit.level.generator.Nether;
@@ -274,7 +276,14 @@ public class LevelManager extends BaseManager {
         }, 4+loadScreenTick);
 
     }
-    public void clearChunk(Position pos){
+    public void regenerateChunk(Position pos){
         pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4, Chunk.getEmptyChunk((int)pos.x>>4,(int)pos.z>>4));
+    }
+    public void clearChunk(Position pos){
+        BaseFullChunk chunk = pos.level.getChunk((int)pos.x>>4,(int)pos.z>>4);
+        for(int x=0;x<16;x++) for(int y=0;y<256;y++) for(int z=0;z<16;z++){
+            chunk.setBlockAt(x,y,z,0,0);
+        }
+        pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4,chunk);
     }
 }

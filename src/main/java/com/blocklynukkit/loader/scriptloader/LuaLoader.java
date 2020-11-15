@@ -72,6 +72,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
         }
         plugin.putBaseObject(name);
         BNLuaScriptEngine engine = (BNLuaScriptEngine) plugin.engineMap.get(name);
+        engine.put("javax.script.filename",name);
         //asTable函数实现
         engine.put("asTable", new OneArgFunction() {
             @Override

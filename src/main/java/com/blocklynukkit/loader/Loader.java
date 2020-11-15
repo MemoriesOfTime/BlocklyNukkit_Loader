@@ -86,6 +86,7 @@ public class Loader extends PluginBase implements Listener {
     public static boolean enablePython = false;
     public static boolean enablePHP = false;
     public static Map<String,List<Integer>> pluginTasksMap = new HashMap<>();
+    public static Random mainRandom = new Random(System.currentTimeMillis());
     //es2020->es5翻译器
     public static Babel babel = null;
     //windowManager变量
@@ -245,6 +246,7 @@ public class Loader extends PluginBase implements Listener {
         Entity.registerEntity("BNNPC", BNNPC.class);
         //注册bn命令
         plugin.getServer().getPluginManager().addPermission(new Permission("blocklynukkit.opall","blocklynukkit插件op权限","op"));
+        //hotreloadjs命令被bnreload替代
         //plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
@@ -253,6 +255,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
         plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
         plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());
+        plugin.getServer().getCommandMap().register("bnreload",new BNReloadCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);

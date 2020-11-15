@@ -17,21 +17,26 @@ import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.network.protocol.EmotePacket;
 import cn.nukkit.network.protocol.EntityEventPacket;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
-import com.mobplugin.route.WalkerRouteFinder;
+import com.blocklynukkit.route.RouteFinder;
+import com.blocklynukkit.route.SimpleRouteFinder;
+import com.blocklynukkit.route.WalkerRouteFinder;
 
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.blocklynukkit.route.WalkerRouteFinder.canPassThroughBlock;
+
 public class BNNPC extends EntityHuman {
     public BNNPC bnnpc;
 
     public Vector3 dvec = new Vector3(0,0,0);
-    public WalkerRouteFinder routeFinder = null;
+    public RouteFinder routeFinder = null;
 
     public List<Item> extraDropItems = new ArrayList<>();
     public boolean dropHand = false;
@@ -105,13 +110,21 @@ public class BNNPC extends EntityHuman {
             if (motion.y > base) {
                 motion.y = base;
             }
+            int times = (int)motion.length();int curr = times;
+            if(times==0){
+                if(!canPassThroughBlock(this.add(motion).getLevelBlock()))return;
+            } else while (--curr>0){
+                if(!canPassThroughBlock(this.add(motion.multiply(curr/times)).getLevelBlock())){
+                    this.dvec.x+=(motion.x*(curr-1/times));this.dvec.y+=(motion.y*(curr-1/times));this.dvec.z+=(motion.z*(curr-1/times));return;
+                }
+            }
             this.dvec.x+=motion.x;this.dvec.y+=motion.y;this.dvec.z+=motion.z;
         }
     }
     @Override
     public boolean onUpdate(int currentTick){
         //调用玩家自定义函数
-        if(currentTick%calltimetick==0){
+        if(currentTick%calltimetick==0 && this.isAlive()){
             Loader.plugin.call(callbackfunction,this,currentTick);
         }
         //计算并执行线性重力
@@ -480,6 +493,24 @@ public class BNNPC extends EntityHuman {
             return false;
         }
     }
+
+    public boolean directMove(Position to){
+        if(isonRoute){
+            return false;
+        }
+        routeFinder = new SimpleRouteFinder(this);
+        routeFinder.setDestination(to);
+        routeFinder.setSearchLimit(routeMax);
+        boolean out = routeFinder.search();
+        if(out){
+            isonRoute = true;
+            previousTo = to;
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public void stopMove(){
         this.isonRoute = false;
         this.actioinVec = new Vector3();
@@ -518,5 +549,46 @@ public class BNNPC extends EntityHuman {
             }
         }
         return null;
+    }
+    public void doEmote(String action){
+        EmotePacket packet = new EmotePacket();
+        packet.runtimeId = this.getId();
+        packet.flags=0;
+        switch (action){
+            case "Wave": case "挥手": case "wave":
+                packet.emoteID="4c8ae710-df2e-47cd-814d-cc7bf21a3d67";break;
+            case "The Woodpunch": case "打击": case "拳击": case "punch": case "beat": case "Punch":
+                packet.emoteID="42fde774-37d4-4422-b374-89ff13a6535a";break;
+            case "Simple Clap": case "Clap": case "clap": case "鼓掌":
+                packet.emoteID="9a469a61-c83b-4ba9-b507-bdbe64430582";break;
+            case "OverThere": case "overthere": case "There": case "那里": case "指方向":
+                packet.emoteID="ce5c0300-7f03-455d-aaf1-352e4927b54d";break;
+            case "锤子": case "Hammer": case "hammer":
+                packet.emoteID="7cec98d8-55cc-44fe-b0ae-2672b0b2bd37";break;
+            case "FacePlant": case "faceplant": case "摔倒": case "Plant": case "Fall": case "plant": case "fall": case "绊倒":
+                packet.emoteID="6d9f24c0-6246-4c92-8169-4648d1981cbb";break;
+            case "DiamondsToYou": case "DiamondsForYou": case "GiveYouDiamonds": case "GiveDiamondsToYou":
+            case "Diamond!": case "Diamond": case "diamond": case "给你钻石": case "钻石":
+                packet.emoteID="86b34976-8f41-475b-a386-385080dc6e83";break;
+            case "The Pickaxe": case "Pickaxe": case "pickaxe": case "挖矿":
+                packet.emoteID="d7519b5a-45ec-4d27-997c-89d402c6b57f";break;
+            default:
+                packet.emoteID=action;
+        }
+        System.out.println("BNNPC(ID:"+this.getId()+") 正在执行: "+packet.emoteID);
+        this.level.getPlayers().values().forEach(e->e.dataPacket(packet));
+    }
+    public void doEmote(){
+        String[] emotions = new String[]{
+                "Wave",
+                "Punch",
+                "Clap",
+                "OverThere",
+                "Hammer",
+                "Fall",
+                "Diamond",
+                "Pickaxe"
+        };
+        doEmote(emotions[Loader.mainRandom.nextInt(emotions.length)]);
     }
 }

@@ -1,5 +1,8 @@
 package com.xxmicloxx.NoteBlockAPI;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class Note {
 
     private byte instrument;

@@ -2,14 +2,668 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/MANIFEST.MF" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/maven/com.carrotsearch/java-sizeof/pom.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/maven/com.carrotsearch/java-sizeof/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/services/javax.script.ScriptEngineFactory" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/SuppressWarnings.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/charsequence.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/conditionprofile.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/execute-invoke-new-no-arity.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/factory.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/foreignAccessSend.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/nolambdas.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/removeMRLanguage.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/sourcebuilder.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/sourcesection.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/upgrade/truffle.api.dsl.Specialization.hint" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/versions/9/com/formdev/flatlaf/util/MultiResolutionImageSupport$MappedMultiResolutionImage.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/versions/9/com/formdev/flatlaf/util/MultiResolutionImageSupport.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/versions/9/module-info.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ByteArrayClassPath$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ByteArrayClassPath$BytecodeURLConnection.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ByteArrayClassPath$BytecodeURLStreamHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ByteArrayClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CannotCompileException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassMap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassPathList.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassPool.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/ClassPoolTail.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CodeConverter$ArrayAccessReplacementMethodNames.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CodeConverter$DefaultArrayAccessReplacementMethodNames.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CodeConverter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtArray.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtBehavior.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClass$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClass$DelayedFileOutputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClassType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtConstructor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$ArrayInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$CodeInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$CodeInitializer0.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$DoubleInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$FloatInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$Initializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$IntInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$LongInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$MethodInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$MultiArrayInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$NewInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$ParamInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$PtreeInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField$StringInitializer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtField.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMember$Cache.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMember.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMethod$ConstParameter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMethod$IntConstParameter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMethod$LongConstParameter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMethod$StringConstParameter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtNewClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtNewConstructor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtNewMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtNewWrappedConstructor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtNewWrappedMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtPrimitiveType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/DirClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/FieldInitLink.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/JarClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/JarDirClassPath$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/JarDirClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/Loader$Simple.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/Loader.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/LoaderClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/Modifier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/NotFoundException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/SerialVersionUID$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/SerialVersionUID$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/SerialVersionUID$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/SerialVersionUID.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/Translator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/URLClassPath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AccessFlag.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationDefaultAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationsAttribute$Copier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationsAttribute$Parser.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationsAttribute$Renamer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationsAttribute$Walker.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AnnotationsAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/AttributeInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/BadBytecode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/BootstrapMethodsAttribute$BootstrapMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/BootstrapMethodsAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ByteArray.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ByteStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ByteVector.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Bytecode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFile.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFilePrinter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFileWriter$AttributeWriter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFileWriter$ConstPoolWriter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFileWriter$FieldWriter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFileWriter$MethodWriter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassFileWriter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ClassInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeAnalyzer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeAttribute$LdcEntry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeAttribute$RuntimeCopyException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$AlignmentException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Branch.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Branch16.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Gap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$If16.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Jump16.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Jump32.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$LdcW.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Lookup.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Pointers.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Switcher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator$Table.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/CodeIterator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ConstInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ConstInfoPadding.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ConstPool.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ConstantAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/DeprecatedAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Descriptor$Iterator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Descriptor$PrettyPrinter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Descriptor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/DoubleInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/DuplicateMemberException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/DynamicInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/EnclosingMethodAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ExceptionTable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ExceptionTableEntry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ExceptionsAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/FieldInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/FieldrefInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/FloatInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/InnerClassesAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/InstructionPrinter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/IntegerInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/InterfaceMethodrefInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/InvokeDynamicInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LineNumberAttribute$Pc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LineNumberAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LocalVariableAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LocalVariableTypeAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LongInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LongVector.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MemberrefInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodHandleInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodParametersAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodTypeInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodrefInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Mnemonic.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ModuleInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/NameAndTypeInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/NestHostAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/NestMembersAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Opcode.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/PackageInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/ParameterAnnotationsAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$ArrayType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$BaseType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$ClassSignature.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$ClassType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$Cursor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$MethodSignature.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$NestedClassType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$ObjectType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$Type.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$TypeArgument.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$TypeParameter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute$TypeVariable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SignatureAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SourceFileAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$Copier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$InsertLocal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$NewRemover.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$Printer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$Shifter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$SimpleCopy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$SwitchShifter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$Walker.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap$Writer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Copier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$InsertLocal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$NewRemover.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$OffsetShifter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Printer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$RuntimeCopyException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Shifter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SimpleCopy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SwitchShifter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Walker.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Writer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StringInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/SyntheticAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute$Copier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute$Renamer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute$SubCopier.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute$SubWalker.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute$TAWalker.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/TypeAnnotationsAttribute.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/Utf8Info.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/ControlFlow$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/ControlFlow.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/Executor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/MultiType.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/SubroutineScanner.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformAccessArrayField.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformAfter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformBefore.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformCall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformCallToStatic.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformFieldAccess.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformNew.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformNewClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformReadField.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/TransformWriteField.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/convert/Transformer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Cast$ProceedForCast.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Cast.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/ConstructorCall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Expr.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/ExprEditor$LoopContext.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/ExprEditor$NewOp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/ExprEditor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/FieldAccess$ProceedForRead.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/FieldAccess$ProceedForWrite.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/FieldAccess.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Handler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Instanceof$ProceedForInstanceof.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/Instanceof.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/MethodCall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/NewArray$ProceedForArray.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/NewArray.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/NewExpr$ProceedForNew.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/expr/NewExpr.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/Cflow$Depth.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/Cflow.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/Desc$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/Desc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/DotClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/runtime/Inner.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/Callback.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/Dump.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/framedump.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/CannotCreateException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/CannotInvokeException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/CannotReflectException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/ClassMetaobject.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/CompiledClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Compiler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Loader.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Metalevel.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Metaobject.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Reflection.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/reflect/Sample.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/AppletServer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/ExportedObject.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/ObjectImporter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/ObjectNotFoundException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/Proxy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/RemoteException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/RemoteRef.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/Sample.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/rmi/StubGenerator.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/web/BadHttpRequest.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/web/ServiceThread.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/web/Viewer.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/tools/web/Webserver.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/HotSwapAgent.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/HotSwapper$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/HotSwapper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/Trigger.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$Helper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$Java11.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$Java7.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$Java9$ReferencedUnsafe.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$Java9.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper$JavaOther.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefineClassHelper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper$Helper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper$Java7.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper$Java9.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper$JavaOther.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/DefinePackageHelper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/FactoryHelper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/MethodFilter.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/MethodHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/Proxy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$ClassLoaderProvider.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$Find2MethodsArgs.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$ProxyDetails.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory$UniqueName.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyFactory.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyObject.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyObjectInputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/ProxyObjectOutputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/RuntimeSupport$DefaultMethodHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/RuntimeSupport.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$3.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$4.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$5.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$6.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$7.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$8.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions$TheUnsafe.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SecurityActions.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SerializedProxy$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/util/proxy/SerializedProxy.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/Globals$AbstractBufferedStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/Globals$BufferedStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/Globals$Compiler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/Lua.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaString.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaTable$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaTable$LinkSlot.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaTable$NormalEntry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaThread$State.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/LuaThread.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/Upvaldesc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Block.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Chunk.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$AnonFuncDef.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$BinopExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$Constant.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$FieldExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$FuncCall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$IndexExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$MethodCall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$NameExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$ParensExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$PrimaryExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$UnopExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$VarExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp$VarargsExp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Exp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/FuncArgs.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/FuncBody.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/FuncName.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Name.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/NameResolver.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/NameScope.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/ParList.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$Assign.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$Break.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$FuncCallStat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$FuncDef.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$GenericFor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$Goto.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$IfThenElse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$Label.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$LocalAssign.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$LocalFuncDef.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$NumericFor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$RepeatUntil.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$Return.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat$WhileDo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Stat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Str.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/SyntaxElement.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/TableConstructor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/TableField.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Variable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/ast/Visitor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/Constants.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/DumpState.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/FuncState$BlockCnt.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/FuncState.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/InstructionPtr.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/IntPtr.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$ConsControl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$Dyndata.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$LHS_assign.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$Labeldesc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$Priority.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$SemInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$Token.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$Vardesc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$expdesc$U.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState$expdesc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LexState.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LuaC$CompileState.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/compiler/LuaC.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$StringInputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$_assert.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$collectgarbage.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$dofile.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$error.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$getmetatable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$inext.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$ipairs.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$load.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$loadfile.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$next.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$pairs.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$pcall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$print.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$rawequal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$rawget.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$rawlen.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$rawset.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$select.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$setmetatable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$tonumber.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$tostring.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$type.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib$xpcall.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/BaseLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/Bit32Lib$Bit32Lib2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/Bit32Lib$Bit32LibV.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/Bit32Lib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$create.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$resume.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$running.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$status.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$wrap.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$wrapper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib$yield.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/CoroutineLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$CallFrame.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$CallStack.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$DebugInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$NameWhat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$debug.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$gethook.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getinfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getlocal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getmetatable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getregistry.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getupvalue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$getuservalue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$sethook.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$setlocal.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$setmetatable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$setupvalue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$setuservalue.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$traceback.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$upvalueid.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib$upvaluejoin.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/DebugLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/IoLib$File.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/IoLib$IoLibV.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/IoLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/LibFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$BinaryOp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$UnaryOp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$abs.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$ceil.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$cos.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$deg.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$exp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$floor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$fmod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$frexp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$ldexp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$max.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$min.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$modf.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$pow.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$rad.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$random.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$randomseed.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$sin.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$sqrt.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib$tan.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/MathLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/OneArgFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/OsLib$OsLibFunc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/OsLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$java_searcher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$loadlib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$lua_searcher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$preload_searcher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$require.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib$searchpath.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/PackageLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/ResourceFinder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$FormatDesc.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$GMatchAux.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$MatchState.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$byte_.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$char_.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$dump.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$find.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$format.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$gmatch.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$gsub.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$len.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$lower.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$match.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$rep.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$reverse.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$sub.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib$upper.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/StringLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$TableLibFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$concat.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$insert.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$pack.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$remove.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$sort.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib$unpack.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TableLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/ThreeArgFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/TwoArgFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/VarArgFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/ZeroArgFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$ArrayCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$BoolCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$BytesCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$CharCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$ClassCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$Coercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$DoubleCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$InstanceCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$IntCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$LuaCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua$StringCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceJavaToLua.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$ArrayCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$BoolCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$Coercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$NumericCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$ObjectCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava$StringCoercion.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/CoerceLuaToJava.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaArray$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaArray$LenFunction.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaArray.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaClass.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaConstructor$Overload.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaConstructor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaInstance.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaMember.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaMethod$Overload.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JavaMethod.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseBaseLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseIoLib$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseIoLib$FileImpl.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseIoLib$StdinFile.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseIoLib$StdoutFile.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseIoLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$acos.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$asin.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$atan.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$atan2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$cosh.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$exp.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$log.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$pow.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$sinh.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib$tanh.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseMathLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseOsLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JsePlatform.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseProcess$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseProcess$CopyThread.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/JseProcess.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/LuajavaLib$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/LuajavaLib$ProxyInvocationHandler.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/lib/jse/LuajavaLib.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock$AllocAndXRefVisitor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock$BranchVisitor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock$CountPrevNextVistor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock$MarkAndMergeVisitor.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/BasicBlock.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/JavaBuilder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/JavaGen.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/JavaLoader.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/LuaJC.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/ProtoInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/UpvalInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/VarInfo$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/VarInfo$NilVarInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/VarInfo$ParamVarInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/VarInfo$PhiVarInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/luajc/VarInfo.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParser$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParser$JJCalls.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParser$LookaheadSuccess.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParser.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParserConstants.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/LuaParserTokenManager.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/ParseException.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/SimpleCharStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/Token.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/parser/TokenMgrError.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$BindingsMetatable$1.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$BindingsMetatable$2.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$BindingsMetatable.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$LuajCompiledScript.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine$Utf8Encoder.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngine.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuaScriptEngineFactory.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuajContext$ReaderInputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuajContext$WriterOutputStream.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/script/LuajContext.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/server/DefaultLauncher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/server/Launcher.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/libs/org/luaj/vm2/server/LuajClassLoader.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/WindowCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/debug/data/CommandInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/debug/data/CommandInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/bases/BaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/bases/BaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/LuaLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/LuaLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PythonLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PythonLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mobplugin/route/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mobplugin/route/RouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/RouteFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mobplugin/route/SimpleRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/SimpleRouteFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mobplugin/route/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/mobplugin/route/WalkerRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/FadeType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/FadeType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/HornSongPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/HornSongPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Instrument.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Instrument.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Interpolator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Interpolator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Layer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Layer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NBSDecoder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NBSDecoder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Note.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NoteBlockPlayerMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NoteBlockPlayerMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NotePitch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NotePitch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/RadioSongPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/RadioSongPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Song.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongDestroyingEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongDestroyingEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongEndEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongEndEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongStoppedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongStoppedEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -25,111 +679,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NoteBlockPlayerMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="424">
-              <caret line="93" column="93" selection-start-line="93" selection-start-column="93" selection-end-line="93" selection-end-column="93" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="132">
+              <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NotePitch.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="704">
-              <caret line="75" column="35" selection-start-line="75" selection-start-column="35" selection-end-line="75" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PythonLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="80" column="41" selection-start-line="80" selection-start-column="20" selection-end-line="80" selection-end-column="41" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="88">
+              <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="503" column="59" selection-start-line="503" selection-start-column="59" selection-end-line="503" selection-end-column="59" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="600">
+              <caret line="280" column="5" lean-forward="true" selection-start-line="280" selection-start-column="5" selection-end-line="280" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/SkyLand.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="112" column="90" selection-start-line="112" selection-start-column="90" selection-end-line="112" selection-end-column="90" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#12792#12793#0" expanded="true" />
-                <element signature="e#12822#12823#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="704">
-              <caret line="122" column="96" selection-start-line="122" selection-start-column="96" selection-end-line="122" selection-end-column="96" />
-              <folding>
-                <element signature="e#5532#5827#0" expanded="true" />
-                <element signature="e#5826#5827#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="732">
-              <caret line="219" column="10" selection-start-line="219" selection-start-column="10" selection-end-line="219" selection-end-column="11" />
-              <folding>
-                <element signature="e#8187#8188#0" expanded="true" />
-                <element signature="e#8214#8215#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNLuaScriptEngine.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5214">
-              <caret line="267" column="32" selection-start-line="267" selection-start-column="32" selection-end-line="267" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/LuaLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="489">
-              <caret line="162" column="84" selection-start-line="162" selection-start-column="84" selection-end-line="162" selection-end-column="84" />
-              <folding>
-                <element signature="e#6925#7368#0" expanded="true" />
-                <element signature="e#7367#7368#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-7436">
+              <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -145,18 +725,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>data</find>
-      <find>from</find>
-      <find>sendGet</find>
-      <find>.addInitModule</find>
-      <find>this.getQuercus().</find>
-      <find>getModuleContext().addModule</find>
-      <find>strcmp</find>
-      <find>form</find>
-      <find>Door</find>
-      <find>CraftItemEvent</find>
-      <find>64</find>
-      <find>biomeWeights</find>
       <find>Init</find>
       <find>PlayerLocallyInitializedEvent</find>
       <find>Inte</find>
@@ -175,6 +743,18 @@
       <find>make</find>
       <find>put</find>
       <find>drop</find>
+      <find>name</find>
+      <find>force</find>
+      <find>getO</find>
+      <find>javax.script.filename</find>
+      <find>(String) scriptEngine.get(&quot;javax.script.filename&quot;)</find>
+      <find>canPassThrough</find>
+      <find>canPassThrough(</find>
+      <find>.canPassThrough(</find>
+      <find>dam</find>
+      <find>player</find>
+      <find>playerj</find>
+      <find>data</find>
     </findStrings>
     <replaceStrings>
       <replace>Loader</replace>
@@ -194,6 +774,7 @@
       <replace>new Gson().toJson(json)</replace>
       <replace>getAsJsonObject</replace>
       <replace>new GsonBuilder().create()</replace>
+      <replace>getScriptName()</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -205,57 +786,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/Packager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/MutiRunner.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/ExportDevJarCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/DebugerCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/showStackTrace.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNPluginsListCommand.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/ExtendScriptLoader.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/SingleRunner.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/NodeJSNotFoundLoader.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/StringPackager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/BytePackager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Utils.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/GZIPUtils.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/BNPackageLoader.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/AlgorithmManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/DatabaseManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/GameManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/InventoryManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/NotemusicManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/ParticleManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/OceanGenerator.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/NodeJSLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/SkyLand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/JavaAPI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/bases/BaseManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/TransformJSCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/PackageCommand.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Babel.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNLuaScriptEngine.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingItemManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngineScope.java" />
-        <option value="$PROJECT_DIR$/src/main/resources/updatelog.md" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PythonLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/WindowCallback.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/LuaLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/debug/data/CommandInfo.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/bases/BaseManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/plugin.yml" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/mobplugin/route/WalkerRouteFinder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/RouteFinder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/SimpleRouteFinder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" />
+        <option value="$PROJECT_DIR$/src/main/resources/updatelog.md" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/FadeType.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/HornSongPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Instrument.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Interpolator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Layer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NBSDecoder.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Note.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NoteBlockPlayerMain.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NotePitch.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/RadioSongPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Song.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongDestroyingEvent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongEndEvent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongPlayer.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongStoppedEvent.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" />
       </list>
     </option>
   </component>
@@ -295,8 +876,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -314,6 +893,21 @@
               <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
               <item name="nukkit" type="462c0819:PsiDirectoryNode" />
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="PyLibs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="PyLibs" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
@@ -410,7 +1004,58 @@
               <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
               <item name="loader" type="462c0819:PsiDirectoryNode" />
               <item name="other" type="462c0819:PsiDirectoryNode" />
+              <item name="debug" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="loader" type="462c0819:PsiDirectoryNode" />
+              <item name="other" type="462c0819:PsiDirectoryNode" />
+              <item name="debug" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+              <item name="CommandInfo.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="loader" type="462c0819:PsiDirectoryNode" />
+              <item name="other" type="462c0819:PsiDirectoryNode" />
               <item name="Entities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="loader" type="462c0819:PsiDirectoryNode" />
+              <item name="other" type="462c0819:PsiDirectoryNode" />
+              <item name="generator" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="loader" type="462c0819:PsiDirectoryNode" />
+              <item name="other" type="462c0819:PsiDirectoryNode" />
+              <item name="tips" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
@@ -512,7 +1157,17 @@
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="blocklynukkit" type="462c0819:PsiDirectoryNode" />
               <item name="route" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="NoteBlockAPI" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
@@ -525,6 +1180,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -570,20 +1227,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
-    </task>
-    <task id="LOCAL-00005" summary="修复bug">
-      <created>1585127148464</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1585127148464</updated>
-    </task>
-    <task id="LOCAL-00006" summary="修复bug">
-      <created>1585148912555</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1585148912555</updated>
     </task>
     <task id="LOCAL-00007" summary="添加容器manager类">
       <created>1585205248427</created>
@@ -914,14 +1557,28 @@
       <option name="project" value="LOCAL" />
       <updated>1604639908364</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="在javascript上实现F()语法糖并修复语法糖函数重名混淆问题">
+      <created>1604658602460</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1604658602461</updated>
+    </task>
+    <task id="LOCAL-00055" summary="添加了一堆文件操作函数，顺便提交上一些库">
+      <created>1604660439201</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1604660439202</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1742" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2505938" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26840854" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -953,8 +1610,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="更新n多功能（速建官网，数据库，图片处理类，算法类等等" />
-    <MESSAGE value="修复完善http" />
     <MESSAGE value="添加第三方api功能" />
     <MESSAGE value="红石音乐api" />
     <MESSAGE value="更新" />
@@ -978,278 +1633,285 @@
     <MESSAGE value="重构bnqqbot，完善managerAPI，添加bn插件包功能" />
     <MESSAGE value="修复bn插件包功能，php可echo输出" />
     <MESSAGE value="代码更新至1290-beta-r16" />
-    <option name="LAST_COMMIT_MESSAGE" value="代码更新至1290-beta-r16" />
+    <MESSAGE value="在javascript上实现F()语法糖并修复语法糖函数重名混淆问题" />
+    <MESSAGE value="添加了一堆文件操作函数，顺便提交上一些库" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加了一堆文件操作函数，顺便提交上一些库" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java">
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/quercus.jar!/com/caucho/quercus/lib/xml/XmlModule.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3432">
+          <caret line="109" column="23" lean-forward="true" selection-start-line="109" selection-start-column="23" selection-end-line="109" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/StringBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="75" column="19" selection-start-line="75" selection-start-column="19" selection-end-line="75" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4774">
+          <caret line="228" column="18" selection-start-line="228" selection-start-column="18" selection-end-line="228" selection-end-column="18" />
+          <folding>
+            <element signature="e#8395#8396#0" expanded="true" />
+            <element signature="e#8427#8428#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1235">
+          <caret line="841" selection-start-line="841" selection-end-line="841" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#29311#29312#0" expanded="true" />
+            <element signature="e#29375#29376#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/javassist.jar!/javassist/ClassPool.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="181" column="19" selection-start-line="181" selection-start-column="19" selection-end-line="181" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/babel.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/polyfill.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/bases/BaseManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="48" column="17" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="61" column="22" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="21" column="36" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/plugin.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="58" column="17" lean-forward="true" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Utils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="812">
+          <caret line="67" selection-start-line="67" selection-end-line="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/BlockGlass.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
-          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+          <caret line="10" column="44" lean-forward="true" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Simple.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/BlockTransparent.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="26" column="5" selection-start-line="26" selection-start-column="5" selection-end-line="26" selection-end-column="5" />
+        <state relative-caret-position="132">
+          <caret line="9" column="22" selection-start-line="9" selection-start-column="22" selection-end-line="9" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/entity/EntityHumanType.class">
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/Block.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2596">
-          <caret line="149" column="26" selection-start-line="149" selection-start-column="18" selection-end-line="149" selection-end-column="26" />
+        <state relative-caret-position="322">
+          <caret line="463" column="19" selection-start-line="463" selection-start-column="19" selection-end-line="463" selection-end-column="19" />
+          <folding>
+            <element signature="e#17472#17473#0" expanded="true" />
+            <element signature="e#17500#17501#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/lang/Override.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="594">
-          <caret line="50" column="18" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+        <state relative-caret-position="380">
+          <caret line="180" column="71" selection-start-line="180" selection-start-column="11" selection-end-line="180" selection-end-column="71" />
         </state>
       </provider>
     </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/entity/Entity.class">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="630">
+          <caret line="1314" column="36" lean-forward="true" selection-start-line="1314" selection-start-column="36" selection-end-line="1314" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="31" column="52" selection-start-line="31" selection-start-column="52" selection-end-line="31" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/level/Level.class">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="322">
-          <caret line="2148" column="16" selection-start-line="2148" selection-start-column="16" selection-end-line="2148" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/entity/EntityHuman.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="712">
-          <caret line="344" column="21" lean-forward="true" selection-start-line="344" selection-start-column="21" selection-end-line="344" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/entity/item/EntityItem.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-330">
-          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+          <caret line="2356" column="29" selection-start-line="2356" selection-start-column="29" selection-end-line="2356" selection-end-column="29" />
           <folding>
-            <element signature="e#9226#9227#0" expanded="true" />
-            <element signature="e#9259#9260#0" expanded="true" />
+            <element signature="e#99518#99519#0" expanded="true" />
+            <element signature="e#99553#99554#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/javax/script/Compilable.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Random.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="69" column="26" selection-start-line="69" selection-start-column="26" selection-end-line="69" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/MyFileHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/babel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret column="1824" selection-start-column="1824" selection-end-column="1824" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/showStackTrace.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BuildJarCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="11" column="28" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
+        <state relative-caret-position="-800">
+          <caret line="327" column="15" selection-start-line="327" selection-start-column="15" selection-end-line="327" selection-end-column="15" />
           <folding>
-            <element signature="e#325#326#0" expanded="true" />
-            <element signature="e#421#422#0" expanded="true" />
+            <element signature="e#11985#11986#0" expanded="true" />
+            <element signature="e#12016#12017#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/com/google/common/io/Resources.class">
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/network/protocol/EmotePacket.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
-          <caret line="22" column="19" selection-start-line="22" selection-start-column="19" selection-end-line="22" selection-end-column="19" />
+          <caret line="11" column="22" lean-forward="true" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/MetricsLite.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2024">
-          <caret line="133" column="60" selection-start-line="133" selection-start-column="60" selection-end-line="133" selection-end-column="60" />
-          <folding>
-            <element signature="e#1093#1094#0" expanded="true" />
-            <element signature="e#1128#1129#0" expanded="true" />
-          </folding>
+        <state>
+          <caret column="38" selection-start-column="8" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/TransformJSCommand.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+        <state relative-caret-position="534">
+          <caret line="162" column="41" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="41" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#201#202#0" expanded="true" />
-            <element signature="e#286#287#0" expanded="true" />
+            <element signature="e#5500#5501#0" expanded="true" />
+            <element signature="e#5534#5535#0" expanded="true" />
+            <element signature="e#5579#5580#0" expanded="true" />
+            <element signature="e#5619#5620#0" expanded="true" />
+            <element signature="e#12472#12473#0" expanded="true" />
+            <element signature="e#12534#12535#0" expanded="true" />
+            <element signature="e#12829#12830#0" expanded="true" />
+            <element signature="e#12892#12893#0" expanded="true" />
+            <element signature="e#12950#12951#0" expanded="true" />
+            <element signature="e#13023#13024#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/bases/ExtendScriptLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/debug/Debuger.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/pythonForBN.jar!/org/python/core/PyFunction.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="193" column="18" selection-start-line="193" selection-start-column="18" selection-end-line="193" selection-end-column="18" />
-          <folding>
-            <element signature="e#6893#6894#0" expanded="true" />
-            <element signature="e#6929#6930#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/pythonForBN.jar!/org/python/core/PyObject.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="147" column="18" selection-start-line="147" selection-start-column="18" selection-end-line="147" selection-end-column="18" />
-          <folding>
-            <element signature="e#5020#5021#0" expanded="true" />
-            <element signature="e#5065#5066#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/PackageCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2266">
-          <caret line="113" column="28" selection-start-line="113" selection-start-column="28" selection-end-line="113" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Babel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="25" column="72" selection-start-line="25" selection-start-column="72" selection-end-line="25" selection-end-column="72" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/function/Consumer.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="418">
-          <caret line="48" column="9" selection-start-line="48" selection-start-column="9" selection-end-line="48" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="32" column="9" selection-start-line="32" selection-start-column="9" selection-end-line="32" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/quercus.jar!/com/caucho/quercus/env/Callback.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/quercus.jar!/com/caucho/quercus/env/Closure.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="9" column="42" lean-forward="true" selection-start-line="9" selection-start-column="42" selection-end-line="9" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/javax/script/ScriptEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="227" column="18" selection-start-line="227" selection-start-column="18" selection-end-line="227" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/javax/script/AbstractScriptEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="322">
-          <caret line="179" column="18" selection-start-line="179" selection-start-column="18" selection-end-line="179" selection-end-column="18" />
+          <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="73" column="21" selection-start-line="73" selection-start-column="21" selection-end-line="73" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/pythonForBN.jar!/org/python/jsr223/PyScriptEngineFactory.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1760">
-          <caret line="95" column="24" selection-start-line="95" selection-start-column="24" selection-end-line="95" selection-end-column="24" />
+        <state relative-caret-position="326">
+          <caret line="411" selection-start-line="411" selection-end-line="411" />
           <folding>
-            <element signature="e#2922#2923#0" expanded="true" />
-            <element signature="e#2969#2970#0" expanded="true" />
+            <element signature="e#4531#4532#0" expanded="true" />
+            <element signature="e#4611#4612#0" expanded="true" />
+            <element signature="e#11575#11576#0" expanded="true" />
+            <element signature="e#11655#11656#0" expanded="true" />
+            <element signature="e#19114#19115#0" expanded="true" />
+            <element signature="e#19194#19195#0" expanded="true" />
+            <element signature="e#20476#20477#0" expanded="true" />
+            <element signature="e#20556#20557#0" expanded="true" />
+            <element signature="e#20850#20851#0" expanded="true" />
+            <element signature="e#20930#20931#0" expanded="true" />
+            <element signature="e#25524#25525#0" expanded="true" />
+            <element signature="e#25604#25605#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/jre/lib/ext/nashorn.jar!/jdk/nashorn/api/scripting/NashornScriptEngineFactory.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/SimpleRouteFinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1826">
-          <caret line="197" column="31" selection-start-line="197" selection-start-column="31" selection-end-line="197" selection-end-column="31" />
+        <state relative-caret-position="528">
+          <caret line="26" column="9" selection-start-line="26" selection-start-column="9" selection-end-line="26" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/pythonForBN.jar!/org/python/jsr223/PyScriptEngine.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="35" column="4" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="4" />
+        <state relative-caret-position="556">
+          <caret line="322" column="45" selection-start-line="322" selection-start-column="10" selection-end-line="322" selection-end-column="45" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngineScope.java" />
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/pythonForBN.jar!/org/python/jsr223/PyScriptEngineScope.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="38" column="19" selection-start-line="38" selection-start-column="19" selection-end-line="38" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/InventoryManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="59" column="39" selection-start-line="59" selection-start-column="39" selection-end-line="59" selection-end-column="39" />
+    <entry file="file://$PROJECT_DIR$/src/main/resources/updatelog.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="FIRST">
+          <first_editor relative-caret-position="88">
+            <caret line="70" column="46" lean-forward="true" selection-start-line="70" selection-start-column="46" selection-end-line="70" selection-end-column="46" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8492">
-          <caret line="481" column="5" selection-start-line="481" selection-start-column="5" selection-end-line="481" selection-end-column="5" />
+        <state relative-caret-position="160">
+          <caret line="541" column="37" lean-forward="true" selection-start-line="541" selection-start-column="37" selection-end-line="541" selection-end-column="37" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="e#11480#11481#0" expanded="true" />
             <element signature="e#11528#11529#0" expanded="true" />
             <element signature="e#11567#11568#0" expanded="true" />
@@ -1268,153 +1930,143 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/BNPackageLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/RouteFinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2772">
-          <caret line="142" column="86" selection-start-line="142" selection-start-column="70" selection-end-line="142" selection-end-column="86" />
+        <state relative-caret-position="110">
+          <caret line="11" column="30" lean-forward="true" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/updatelog.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="FIRST">
-          <first_editor relative-caret-position="264">
-            <caret line="12" selection-start-line="12" selection-end-line="12" selection-end-column="18" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Node.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="6" selection-start-line="6" selection-end-line="8" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingItemManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/FadeType.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2024">
-          <caret line="114" column="41" selection-start-line="114" selection-start-column="41" selection-end-line="114" selection-end-column="41" />
+        <state relative-caret-position="44">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="4" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/HornSongPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="484">
-          <caret line="197" column="42" selection-start-line="197" selection-start-column="42" selection-end-line="197" selection-end-column="42" />
+        <state relative-caret-position="88">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/jre/lib/ext/nashorn.jar!/jdk/nashorn/api/scripting/NashornScriptEngine.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Instrument.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-506">
-          <caret line="7" column="7" lean-forward="true" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Interpolator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="982">
-          <caret line="795" column="19" selection-start-line="795" selection-start-column="19" selection-end-line="795" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="462">
+          <caret line="21" column="2" selection-start-line="21" selection-start-column="2" selection-end-line="21" selection-end-column="2" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNLuaScriptEngine.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Layer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5214">
-          <caret line="267" column="32" selection-start-line="267" selection-start-column="32" selection-end-line="267" selection-end-column="32" />
+        <state relative-caret-position="132">
+          <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PythonLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NBSDecoder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="80" column="41" selection-start-line="80" selection-start-column="20" selection-end-line="80" selection-end-column="41" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/PHPLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Note.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="75" column="35" selection-start-line="75" selection-start-column="35" selection-end-line="75" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="88">
+          <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/BNLogger.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NoteBlockPlayerMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="732">
-          <caret line="219" column="10" selection-start-line="219" selection-start-column="10" selection-end-line="219" selection-end-column="11" />
-          <folding>
-            <element signature="e#8187#8188#0" expanded="true" />
-            <element signature="e#8214#8215#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPHPScriptEngine.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/NotePitch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
-          <caret line="122" column="96" selection-start-line="122" selection-start-column="96" selection-end-line="122" selection-end-column="96" />
-          <folding>
-            <element signature="e#5532#5827#0" expanded="true" />
-            <element signature="e#5826#5827#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="88">
+          <caret line="4" column="3" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/scriptengines/BNPyScriptEngine.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/RadioSongPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="112" column="90" selection-start-line="112" selection-start-column="90" selection-end-line="112" selection-end-column="90" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#12792#12793#0" expanded="true" />
-            <element signature="e#12822#12823#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/Song.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="424">
-          <caret line="93" column="93" selection-start-line="93" selection-start-column="93" selection-end-line="93" selection-end-column="93" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/luaj-jse-3.0.1.jar!/org/luaj/vm2/lib/LibFunction.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongDestroyingEvent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        <state relative-caret-position="132">
+          <caret line="8" column="3" selection-start-line="8" selection-start-column="3" selection-end-line="8" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/LuaLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongEndEvent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="162" column="84" selection-start-line="162" selection-start-column="84" selection-end-line="162" selection-end-column="84" />
-          <folding>
-            <element signature="e#6925#7368#0" expanded="true" />
-            <element signature="e#7367#7368#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="503" column="59" selection-start-line="503" selection-start-column="59" selection-end-line="503" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="132">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/xxmicloxx/NoteBlockAPI/SongStoppedEvent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="10" column="54" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/level/format/anvil/Chunk.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="9812">
+          <caret line="497" column="24" selection-start-line="497" selection-start-column="24" selection-end-line="497" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/SkyLand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7436">
+          <caret line="25" column="13" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="280" column="5" lean-forward="true" selection-start-line="280" selection-start-column="5" selection-end-line="280" selection-end-column="5" />
         </state>
       </provider>
     </entry>

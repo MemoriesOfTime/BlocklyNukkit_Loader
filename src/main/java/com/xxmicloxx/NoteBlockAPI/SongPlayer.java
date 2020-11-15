@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public abstract class SongPlayer {
 
     protected Song song;

@@ -2,6 +2,9 @@ package com.xxmicloxx.NoteBlockAPI;
 
 import cn.nukkit.level.Sound;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class Instrument {
 
     public static Sound getInstrument(byte instrument) {

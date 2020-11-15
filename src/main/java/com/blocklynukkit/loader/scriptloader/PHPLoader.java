@@ -58,7 +58,7 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
     }
     public void putPHPEngine(String name,String PHP){
         PHP = formatExportPHP(name, PHP);
-        engineMap.put(name,new BNPHPScriptEngine(new BNLogger(name)));
+        engineMap.put(name,new BNPHPScriptEngine(new BNLogger(name),name));
         if (plugin.engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 plugin.getlogger().error("PHP引擎加载出错！");

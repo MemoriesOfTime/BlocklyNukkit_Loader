@@ -3,6 +3,9 @@ package com.xxmicloxx.NoteBlockAPI;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.HandlerList;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class SongStoppedEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();

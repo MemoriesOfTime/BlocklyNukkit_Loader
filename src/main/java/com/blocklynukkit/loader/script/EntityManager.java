@@ -15,6 +15,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
@@ -317,5 +318,19 @@ public class EntityManager extends BaseManager {
                 from.level.addSound(from, Sound.RANDOM_BOW);
             }
         }
+    }
+    //转视角
+    public void lookAt(Entity e,Position pos){
+        double xdiff = pos.x - e.x;
+        double zdiff = pos.z - e.z;
+        double angle = Math.atan2(zdiff, xdiff);
+        double yaw = ((angle * 180) / Math.PI) - 90;
+        double ydiff = pos.y - e.y;
+        Vector2 v = new Vector2(e.x, e.z);
+        double dist = v.distance(pos.x, pos.z);
+        angle = Math.atan2(dist, ydiff);
+        double pitch = ((angle * 180) / Math.PI) - 90;
+        e.yaw = yaw;
+        e.pitch = pitch;
     }
 }

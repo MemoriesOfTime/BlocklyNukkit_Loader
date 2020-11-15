@@ -4,6 +4,9 @@ import cn.nukkit.Player;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class RadioSongPlayer extends SongPlayer {
 
     public RadioSongPlayer(Song song) {

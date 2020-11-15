@@ -3,6 +3,9 @@ package com.xxmicloxx.NoteBlockAPI;
 import java.io.*;
 import java.util.HashMap;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class NBSDecoder {
 
     public static Song parse(File decodeFile) {

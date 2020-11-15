@@ -57,11 +57,13 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
     public StringWriter outputWriter = new StringWriter();
     public HashMap<String,Closure> closureHashMap = new HashMap<>();
     public int closureCount = -1;
+    private String engineName;
 
-    public BNPHPScriptEngine(BNLogger logger){
+    public BNPHPScriptEngine(BNLogger logger,String engineName){
         super(new QuercusScriptEngineFactory(),true);
         this.getContext().setWriter(new PrintWriter(System.out));
         this.logger=logger;
+        this.engineName = engineName;
     }
 
     @Override
@@ -116,7 +118,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             _quercus.addInitModule(new PDOModule());
             _quercus.addInitModule(new QuercusDOMModule());
             _quercus.addInitModule(new AbstractQuercusModule(){
-                public String F(Env env, Closure closure)
+                public String F(Env e, Closure closure)
                 {
                     closureCount++;
                     closureHashMap.put("Lambda_"+ Utils.getMD5(logger.getName().getBytes())+"_"+closureCount,closure);

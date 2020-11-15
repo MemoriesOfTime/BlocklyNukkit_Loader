@@ -7,6 +7,9 @@ import com.blocklynukkit.loader.Loader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class NoteBlockPlayerMain{
 
     public static NoteBlockPlayerMain plugin;

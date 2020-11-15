@@ -2,6 +2,9 @@ package com.xxmicloxx.NoteBlockAPI;
 
 import java.util.HashMap;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class Layer {
 
     private HashMap<Integer, Note> hashMap = new HashMap<Integer, Note>();

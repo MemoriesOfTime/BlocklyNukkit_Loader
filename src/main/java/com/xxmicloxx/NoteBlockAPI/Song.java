@@ -3,6 +3,9 @@ package com.xxmicloxx.NoteBlockAPI;
 import java.io.File;
 import java.util.HashMap;
 
+/**
+ * @author xxmicloxx @ NoteBlockAPI
+ */
 public class Song {
 
     private HashMap<Integer, Layer> layerHashMap = new HashMap<Integer, Layer>();

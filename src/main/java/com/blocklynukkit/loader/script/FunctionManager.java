@@ -31,7 +31,6 @@ import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.scriptloader.*;
-import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -737,41 +736,72 @@ public class FunctionManager extends BaseManager {
     }
     public void createCommand(String name, String description, String functionName){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName));
-        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
     }
     public void createCommand(String name, String description, String functionName, String per){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName, per));
-        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
     }
     //here 5/8
     public void newCommand(String name, String description, ScriptObjectMirror scriptObjectMirror){
         plugin.getServer().getCommandMap().register(name,new LambdaCommand(name,description,scriptObjectMirror));
-        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
     }
     public void newCommand(String name, String description, ScriptObjectMirror scriptObjectMirror,String per){
         plugin.getServer().getCommandMap().register(name,new LambdaCommand(name,description,scriptObjectMirror,per));
-        Loader.plugincmdsmap.put(name,new CommandInfo(name,description));//debug记录器
+        Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
     }
     //end here
 
     public TaskHandler createTask(String functionName, int delay ,Object... args){
         TaskHandler handler = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new ModTask(functionName,args), delay);
+        List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
+        if(tmp==null){
+            tmp = new ArrayList<>();tmp.add(handler.getTaskId());
+            plugin.pluginTasksMap.put(getScriptName(),tmp);
+        }else {
+            tmp.add(handler.getTaskId());
+        }
         return handler;
     }
     //here 5/9
     public int setTimeout(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
+        int id = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
+        List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
+        if(tmp==null){
+            tmp = new ArrayList<>();tmp.add(id);
+            plugin.pluginTasksMap.put(getScriptName(),tmp);
+        }else {
+            tmp.add(id);
+        }
+        return id;
     }
     public void clearTimeout(int id){
         plugin.getServer().getScheduler().cancelTask(id);
     }
     //end here
     public TaskHandler createLoopTask(String functionName, int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new ModTask(functionName,args), 20, delay);
+        TaskHandler handler = plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new ModTask(functionName,args), 20, delay);
+        List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
+        if(tmp==null){
+            tmp = new ArrayList<>();tmp.add(handler.getTaskId());
+            plugin.pluginTasksMap.put(getScriptName(),tmp);
+        }else {
+            tmp.add(handler.getTaskId());
+        }
+        return handler;
     }
     //here 5/9
     public int setInterval(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
-        return plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay,delay).getTaskId();
+        int id = plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay,delay).getTaskId();
+        List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
+        if(tmp==null){
+            tmp = new ArrayList<>();tmp.add(id);
+            plugin.pluginTasksMap.put(getScriptName(),tmp);
+        }else {
+            tmp.add(id);
+        }
+        return id;
     }
     public void clearInterval(int id){
         plugin.getServer().getScheduler().cancelTask(id);
@@ -820,9 +850,14 @@ public class FunctionManager extends BaseManager {
         return plugin;
     }
 
-    public class EntryCommand extends Command{
+    public interface stopAbleCommand{
+        void stop();
+    }
+
+    public class EntryCommand extends Command implements stopAbleCommand{
 
         private String functionName;
+        private boolean stop = false;
 
         public EntryCommand(String name, String description, String functionName) {
             super(name, description);
@@ -837,14 +872,21 @@ public class FunctionManager extends BaseManager {
 
         @Override
         public boolean execute(CommandSender sender, String s, String[] args) {
+            if(!stop)
             plugin.callCommand(this.getName(),sender, args, functionName);
             return false;
         }
+
+        @Override
+        public void stop() {
+            this.stop=true;
+        }
     }
 
-    public class LambdaCommand extends Command{
+    public class LambdaCommand extends Command implements stopAbleCommand{
 
         private ScriptObjectMirror callback;
+        private boolean stop = false;
 
         public LambdaCommand(String name, String description, ScriptObjectMirror objectMirror) {
             super(name, description);
@@ -863,7 +905,10 @@ public class FunctionManager extends BaseManager {
             return false;
         }
 
-
+        @Override
+        public void stop() {
+            this.stop=true;
+        }
     }
     
     public class MotdThread extends Thread

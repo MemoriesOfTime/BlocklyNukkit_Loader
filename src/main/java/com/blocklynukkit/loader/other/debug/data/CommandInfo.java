@@ -9,9 +9,14 @@ public class CommandInfo {
     public String commandDescription;
     public Stack<CallInfo> callInfos = new Stack<>();
     public StringBuilder completer = new StringBuilder();
+    public String fromPlugin;
     public CommandInfo(String commandName,String commandDescription){
         this.commandName=commandName;
         this.commandDescription=commandDescription;
+    }
+    public CommandInfo(String commandName,String commandDescription,String plugin){
+        this(commandName, commandDescription);
+        this.fromPlugin=plugin;
     }
     public void newCall(long lastTime,String startTime,String callFromPlugin,String callFromFunction,String senderName,String[] commnadArgs){
         callInfos.push(new CallInfo(this,lastTime,startTime,callFromPlugin,callFromFunction,senderName,commnadArgs));
@@ -24,6 +29,12 @@ public class CommandInfo {
             return "此命令尚未被调用过";
         }
         return callInfos.peek().toString();
+    }
+    public boolean canIdentityPlugin(){
+        return fromPlugin==null;
+    }
+    public String getPlugin(){
+        return fromPlugin;
     }
     public Map<String,String> getCallsTime(int times){
         Map<String, String> out = new LinkedHashMap<>();

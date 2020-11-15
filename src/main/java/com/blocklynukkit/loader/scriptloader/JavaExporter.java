@@ -11,14 +11,16 @@ public class JavaExporter {
     public static CtClass makeExportJava(String name,Map<String,String[]> exportFunctions){
         if(!exportFunctions.isEmpty()){
             ClassPool classPool = ClassPool.getDefault();
+            CtClass bnClass = null;
             try {
                 classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+                classPool.insertClassPath(new ClassClassPath(Loader.class));
+                classPool.importPackage("com.blocklynukkit.loader");
+                if(classPool.getOrNull(name)!=null)return classPool.getCtClass(name);
+                bnClass = classPool.makeClass(name);
             } catch (NotFoundException e) {
                 e.printStackTrace();
             }
-            classPool.insertClassPath(new ClassClassPath(Loader.class));
-            classPool.importPackage("com.blocklynukkit.loader");
-            CtClass bnClass = classPool.makeClass(name);
             try {
                 //添加默认构造函数
                 CtConstructor constructor = new CtConstructor(new CtClass[]{},bnClass);
@@ -27,7 +29,7 @@ public class JavaExporter {
                 //循环添加导出方法
                 for(Map.Entry<String,String[]> entry:exportFunctions.entrySet()){Object[] a = new java.lang.Object[]{};
                     String announctionArgs = "";
-                    String usageArgs = "new java.lang.Object[]{";//",\""+entry.getKey()+"\"";
+                    String usageArgs = "new java.lang.Object[]{";
                     for(String each:entry.getValue()){
                         if(each.trim().length()==0)continue;
                         announctionArgs+=(",java.lang.Object "+each);
@@ -44,6 +46,7 @@ public class JavaExporter {
                 }
                 //导入到jvm中
                 bnClass.toClass();
+                bnClass.defrost();
             } catch (CannotCompileException e) {
                 e.printStackTrace();
                 if (Server.getInstance().getLanguage().getName().contains("中文")){

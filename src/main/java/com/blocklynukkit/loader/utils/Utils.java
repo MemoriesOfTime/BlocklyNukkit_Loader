@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.net.*;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
@@ -728,6 +729,13 @@ public class Utils {
         // 实例化java.awt.Color,获取对应的r、g、b值
         java.awt.Color color = new java.awt.Color(rgb);
         return color;
+    }
+
+    public static <K, V> Map.Entry<K, V> getTailByReflection(LinkedHashMap<K, V> map)
+            throws NoSuchFieldException, IllegalAccessException {
+        Field tail = map.getClass().getDeclaredField("tail");
+        tail.setAccessible(true);
+        return (Map.Entry<K, V>) tail.get(map);
     }
 }
 

@@ -2,8 +2,6 @@ package com.blocklynukkit.loader;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockPiston;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
@@ -27,16 +25,12 @@ import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.*;
-import cn.nukkit.raknet.protocol.Packet;
 import cn.nukkit.scheduler.Task;
-import com.blocklynukkit.loader.other.Entities.BNNPC;
-import com.blocklynukkit.loader.other.packets.EducationSettingsPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
-import org.python.antlr.op.Load;
 
 import java.util.Map;
 
@@ -140,6 +134,11 @@ public class EventLoader implements Listener {
                     }
 
                 }
+            }
+        }
+        synchronized (Loader.windowCallbackMap){
+            if(Loader.windowCallbackMap.containsKey(event.getFormID())){
+                Loader.windowCallbackMap.get(event.getFormID()).call(event);
             }
         }
         plugin.callEventHandler(event,event.getClass().getSimpleName());

@@ -11,7 +11,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 public class Custom {
     public LinkedList<Element> elements = new LinkedList<>();
-    public int id = (int) Math.floor(Math.random()*1000000);
+    public int id = (int) Math.floor(Math.random()*10000000);
     public String title="";
     public Custom setTitle(String title){
         this.title=title;

@@ -9,7 +9,7 @@ import com.blocklynukkit.loader.Loader;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 public class Modal {
-    public int id = (int) Math.floor(Math.random()*1000000);
+    public int id = (int) Math.floor(Math.random()*10000000);
     public String title="";
     public String context="";
     public String btn1="";

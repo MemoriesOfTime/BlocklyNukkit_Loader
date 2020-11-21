@@ -29,6 +29,7 @@ import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
+import com.blocklynukkit.loader.script.window.windowCallbacks.WindowCallback;
 import com.blocklynukkit.loader.scriptloader.*;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
@@ -69,10 +70,6 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, String> playergeonamemap = new HashMap<>();
     public static Map<String, String> playergeojsonmap = new HashMap<>();
     public static Map<String, String[]>mcfunctionmap = new HashMap<>();
-    public static ConcurrentHashMap<Integer, String> functioncallback = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<Integer, ScriptObjectMirror> scriptObjectMirrorCallback = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, String> serverSettingCallback = new ConcurrentHashMap<>();
-    public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
@@ -90,6 +87,11 @@ public class Loader extends PluginBase implements Listener {
     //es2020->es5翻译器
     public static Babel babel = null;
     //windowManager变量
+    public static ConcurrentHashMap<Integer, String> functioncallback = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Integer, WindowCallback> windowCallbackMap = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Integer, ScriptObjectMirror> scriptObjectMirrorCallback = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, String> serverSettingCallback = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Scoreboard> boards = new HashMap<>();
     public static Map<String,String> tipsVar = new HashMap<>();
     //levelManager变量

@@ -86,6 +86,7 @@ window
 - void removePlayerBossBar(Player player,long id) --相关api现在支持指定bossbar的id操作
 - double getLengthOfPlayerBossBar(Player player,long id)
 - String getTextOfPlayerBossBar(Player player,long id)
+- void sendPlayerXboxInfo(Player from,Player to) --向to玩家展示from玩家的xbox信息
 
 WindowBuilders
 

@@ -11,7 +11,10 @@ import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
+import cn.nukkit.network.protocol.ShowCreditsPacket;
+import cn.nukkit.network.protocol.ShowProfilePacket;
 import cn.nukkit.utils.DummyBossBar;
+import com.blocklynukkit.loader.other.packets.ShowStoreOfferPacket;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
@@ -256,5 +259,11 @@ public class WindowManager extends BaseManager {
                 Server.getInstance().updatePlayerListData(UUID.randomUUID(), Entity.entityCount++,each,new Skin());
             }
         }
+    }
+    //here 11/21
+    public void sendPlayerXboxInfo(Player from,Player to){
+        ShowProfilePacket profilePacket = new ShowProfilePacket();
+        profilePacket.xuid = from.getLoginChainData().getXUID();
+        to.dataPacket(profilePacket);
     }
 }

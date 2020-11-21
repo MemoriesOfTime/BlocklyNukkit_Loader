@@ -266,4 +266,11 @@ public class WindowManager extends BaseManager {
         profilePacket.xuid = from.getLoginChainData().getXUID();
         to.dataPacket(profilePacket);
     }
+
+    public void startEndPoem(Player player){
+        ShowCreditsPacket creditsPacket = new ShowCreditsPacket();
+        creditsPacket.eid = player.getId();
+        creditsPacket.status = ShowCreditsPacket.STATUS_START_CREDITS;
+        player.dataPacket(creditsPacket);
+    }
 }

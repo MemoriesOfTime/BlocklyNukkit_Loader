@@ -776,6 +776,9 @@ public class FunctionManager extends BaseManager {
         }
         return id;
     }
+    public int setTimeout(String callback,int delay,Object... args){
+        return createTask(callback, delay, args).getTaskId();
+    }
     public void clearTimeout(int id){
         plugin.getServer().getScheduler().cancelTask(id);
     }
@@ -802,6 +805,9 @@ public class FunctionManager extends BaseManager {
             tmp.add(id);
         }
         return id;
+    }
+    public int setInterval(String callback,int delay,Object... args){
+        return createLoopTask(callback, delay, args).getTaskId();
     }
     public void clearInterval(int id){
         plugin.getServer().getScheduler().cancelTask(id);

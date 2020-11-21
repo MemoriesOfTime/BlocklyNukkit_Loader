@@ -437,6 +437,7 @@ public class EventLoader implements Listener {
         if(tmp.pid()==ProtocolInfo.START_GAME_PACKET){
             StartGamePacket packet = (StartGamePacket)tmp;
             packet.eduEditionOffer = 1;
+            packet.hasEduFeaturesEnabled = true;
         }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }

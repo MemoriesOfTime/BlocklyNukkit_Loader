@@ -74,8 +74,9 @@ public class Simple {
             int index = 0;
             for(Map.Entry<ElementButton,String> each:buttonsMap.entrySet()){
                 if(each.getValue()!=null){
-                    windowCallback.addActionCallback(index++,each.getValue());
+                    windowCallback.addActionCallback(index,each.getValue());
                 }
+                index++;
                 window.addButton(each.getKey());
             }
             if(callback!=null){

@@ -119,21 +119,6 @@ public class EventLoader implements Listener {
                     int a = event.getFormID();
                     Loader.callEventHandler(event, Loader.functioncallback.get(a));
                 }
-                if(Loader.scriptObjectMirrorCallback.keySet().contains((Integer) event.getFormID())){
-                    int a = event.getFormID();
-                    Loader.scriptObjectMirrorCallback.get(a).call(Loader.scriptObjectMirrorCallback.get(a),event);
-                }
-            }else {
-                synchronized (Loader.acceptCloseCallback){
-                    if(Loader.functioncallback.containsKey((Integer) event.getFormID())){
-                        String fun = Loader.functioncallback.get(event.getFormID());
-                        if(fun==null)return;
-                        if(Loader.acceptCloseCallback.get(fun)!=null&&Loader.acceptCloseCallback.get(fun)){
-                            Loader.callEventHandler(event,fun);
-                        }
-                    }
-
-                }
             }
         }
         synchronized (Loader.windowCallbackMap){

@@ -87,11 +87,32 @@ window
 - double getLengthOfPlayerBossBar(Player player,long id)
 - String getTextOfPlayerBossBar(Player player,long id)
 - void sendPlayerXboxInfo(Player from,Player to) --向to玩家展示from玩家的xbox信息
+- void startEndPoem(Player player) --让玩家屏幕上开始展示终末之诗
 
 WindowBuilders
 
 - void showToPlayer(Player p,String callback,boolean acceptClose)
     - acceptClose用于指定是否在窗口关闭的时候调用一次回调函数
+    
+SimpleWindowBuilder
+
+-  buildButton(String text,String img)
+-  button(String text,String img)
+-  button(String text)
+-  setAction(String actionFunctionName/F function)
+-  action(String actionFunctionName/F function)
+-  setTitle(String title)
+-  title(String title)
+-  setContext(String context)
+-  context(String context)
+-  showToPlayer(Player p)
+-  showToPlayer(Player p,boolean acceptClose)
+-  showToPlayer(Player p,String callbackFunctionName/F function)
+-  showToPlayer(Player p,String callbackFunctionName/F function,boolean acceptClose)
+-  show(Player p)
+-  show(Player p,boolean accpetClose)
+-  show(Player p,String callbackFunctionName/F function)
+-  show(Player p,String callbackFunctionName/F function,boolean acceptClose)
     
 BNNPC
 

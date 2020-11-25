@@ -25,6 +25,7 @@ import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
+import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.script.*;
@@ -97,6 +98,7 @@ public class Loader extends PluginBase implements Listener {
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;
+    public static List<BaseRender> levelRenderList = new ArrayList<>();
     //functionManager变量
     public static bnqqbot qq = new bnqqbot();
     public static String fakeNukkitCodeVersion = "";

@@ -26,6 +26,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.scheduler.Task;
+import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
@@ -583,7 +584,14 @@ public class EventLoader implements Listener {
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onChunkPopulateEvent(ChunkPopulateEvent event){
+    public void onChunkPopulateEvent(ChunkPopulateEvent event) {
+        BaseRender render;
+        for(int i=0;i<Loader.levelRenderList.size();i++){
+             render = Loader.levelRenderList.get(i);
+             if(render.canRend(event.getLevel())){
+                 render.rend(event.getLevel(),event.getChunk());
+             }
+        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
     @EventHandler(priority = EventPriority.HIGHEST)

@@ -26,14 +26,12 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.OceanGenerator;
 import com.blocklynukkit.loader.other.generator.SkyLand;
 import com.blocklynukkit.loader.other.generator.VoidGenerator;
+import com.blocklynukkit.loader.other.generator.render.LevelNameRender;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 
 import javax.script.ScriptEngine;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.blocklynukkit.loader.Loader.OceanSeaLevel;
 import static com.blocklynukkit.loader.Loader.skylandoptions;
@@ -285,5 +283,14 @@ public class LevelManager extends BaseManager {
             chunk.setBlockAt(x,y,z,0,0);
         }
         pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4,chunk);
+    }
+
+    public void defineChunkRenderByName(String forLevel,String callback){
+        Loader.levelRenderList.add(new LevelNameRender(forLevel,callback));
+        Collections.sort(Loader.levelRenderList);
+    }
+    public void defineChunkRenderByName(String forLevel,String callback,int priority){
+        Loader.levelRenderList.add(new LevelNameRender(forLevel,callback,priority));
+        Collections.sort(Loader.levelRenderList);
     }
 }

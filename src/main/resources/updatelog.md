@@ -113,6 +113,71 @@ SimpleWindowBuilder
 -  show(Player p,boolean accpetClose)
 -  show(Player p,String callbackFunctionName/F function)
 -  show(Player p,String callbackFunctionName/F function,boolean acceptClose)
+
+ModalWindowBuilder
+
+-  setTitle(String title)
+-  title(String title)
+-  setContext(String context)
+-  context(String context)
+-  setButton1(String text)
+-  setButton2(String text)
+-  button1(String text)
+-  button2(String text)
+-  setAction(String callbackFunctionName/F function)
+-  action(String callbackFunctionName/F function)
+-  showToPlayer(Player p)
+-  showToPlayer(Player p,boolean acceptClose)
+-  showToPlayer(Player p,String callbackFunctionName/F function)
+-  showToPlayer(Player p,String callbackFunctionName/F function,boolean acceptClose)
+-  show(Player p)
+-  show(Player p,boolean accpetClose)
+-  show(Player p,String callbackFunctionName/F function)
+-  show(Player p,String callbackFunctionName/F function,boolean acceptClose)
+
+CustomWindowBuilder
+
+-  setTitle(String title)
+-  showToPlayer(Player p)
+-  showToPlayer(Player p,boolean acceptClose)
+-  showToPlayer(Player p,String callbackFunctionName/F function)
+-  show(Player p)
+-  show(Player p,boolean accpetClose)
+-  show(Player p,String callbackFunctionName/F function)
+-  show(Player p,String callbackFunctionName/F function,boolean acceptClose)
+-  showToPlayer(Player p,String callbackFunctionName/F function,boolean acceptClose)
+-  showAsSetting(Player p, String callbackFunctionName/F function)
+-  showAsSetting(Player p, String imageURL, String callbackFunctionName/F function)
+-  buildLabel(String text)
+-  label(String text)
+-  buildInput(String title,String placeholder)
+-  input(String title,String placeholder)
+-  buildInput(String title,String placeholder,String defaulttext)
+-  input(String title,String placeholder,String defaulttext)
+-  buildToggle(String title)
+-  toggle(String title)
+-  buildToggle(String title,boolean open)
+-  toggle(String title,boolean open)
+-  buildDropdown(String title,String inner)
+-  dropdown(String title,String inner)
+-  buildDropdown(String title,String inner,int index)
+-  dropdown(String title,String inner,int index)
+-  buildSlider(String title,double min,double max,int step,double defaultvalue)
+-  slider(String title,double min,double max,int step,double defaultvalue)
+-  buildSlider(String title,double min,double max,int step)
+-  slider(String title,double min,double max,int step)
+-  buildSlider(String title,double min,double max)
+-  slider(String title,double min,double max)
+-  buildStepSlider(String title,String options)
+-  stepSlider(String title,String options)
+-  stepslider(String title,String options)
+-  buildStepSlider(String title,String options,int index)
+-  stepSlider(String title,String options,int index)
+-  stepslider(String title,String options,int index)
+-  setAction(String callbackFunctionName/F function)
+-  action(String callbackFunctionName/F function)
+
+
     
 BNNPC
 
@@ -133,6 +198,12 @@ BNNPC
     - 至于为什么只有8个: 因为剩下的要氪金购买之后才能获取uuid，冰凉没钱
     - 欢迎大家贡献uuid
 - boolean directMove(Position to) --直线移动到某处
+
+world
+
+- void regenerateChunk(Position pos)
+- void defineChunkRenderByName(String forLevel,String callback)
+- void defineChunkRenderByName(String forLevel,String callback,int priority)
 
 
 ## 1.2.8.4

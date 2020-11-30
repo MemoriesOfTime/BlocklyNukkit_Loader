@@ -1,8 +1,10 @@
 package com.blocklynukkit.loader.script;
 
+import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
+import cn.nukkit.block.BlockUnknown;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.event.block.BlockUpdateEvent;
@@ -22,9 +24,11 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import io.netty.util.collection.CharObjectHashMap;
+import javassist.*;
 import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
+import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class BlockItemManager extends BaseManager {
@@ -383,5 +387,88 @@ public class BlockItemManager extends BaseManager {
         CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
         compoundTag.putBoolean("Unbreakable",unbreakable);
         item.setCompoundTag(compoundTag);
+    }
+    //不对外暴露: 注册新方块
+    public void registerBlock(int id, Class<? extends Block> clazz) {
+        Item.list[id] = clazz;
+        Block.list[id] = clazz;
+        Block block;
+        try {
+            block = clazz.newInstance();
+            try {
+                Constructor constructor = clazz.getDeclaredConstructor(int.class);
+                constructor.setAccessible(true);
+                for (int data = 0; data < 16; ++data) {
+                    Block.fullList[(id << 4) | data] = (Block) constructor.newInstance(data);
+                }
+                Block.hasMeta[id] = true;
+            } catch (NoSuchMethodException ignore) {
+                for (int data = 0; data < 16; ++data) {
+                    Block.fullList[(id << 4) | data] = block;
+                }
+            }
+        } catch (Exception e) {
+            Loader.getlogger().alert("Error while registering " + clazz.getName(), e);
+            for (int data = 0; data < 16; ++data) {
+                Block.fullList[(id << 4) | data] = new BlockUnknown(id, data);
+            }
+            return;
+        }
+        Block.solid[id] = block.isSolid();
+        Block.transparent[id] = block.isTransparent();
+        Block.hardness[id] = block.getHardness();
+        Block.light[id] = block.getLightLevel();
+        if (block.isSolid()) {
+            if (block.isTransparent()) {
+                Block.lightFilter[id] = 1;
+            } else {
+                Block.lightFilter[id] = 15;
+            }
+        } else {
+            Block.lightFilter[id] = 1;
+        }
+    }
+    //动态生成类并注册新方块
+    public void registerSolidBlock(int id,String name,double hardness,double resistance,int toolType
+            ,boolean isSilkTouchable,int dropMinExp,int dropMaxExp,int mineTier){
+        try {
+            //获取类加载器并导入类路径
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass blockClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            //创建继承固体方块的类
+            blockClass = classPool.makeClass("Block_ID_"+id+"_"+Loader.registerBlocks++,classPool.getCtClass("com.blocklynukkit.loader.other.Blocks.BaseSolidBlock"));
+            //添加构造函数
+            CtConstructor constructor = new CtConstructor(new CtClass[]{},blockClass);
+            constructor.setBody("{}");
+            blockClass.addConstructor(constructor);
+            //添加public int getId()方法
+            blockClass.addMethod(CtMethod.make("public int getId(){return "+id+";}",blockClass));
+            //添加public String getName()
+            blockClass.addMethod(CtMethod.make("public String getName(){return \""+name+"\";}",blockClass));
+            //添加public double getHardness()
+            blockClass.addMethod(CtMethod.make("public double getHardness(){return "+hardness+";}",blockClass));
+            //添加public double getResistance()
+            blockClass.addMethod(CtMethod.make("public double getResistance(){return "+resistance+";}",blockClass));
+            //添加public int getToolType()
+            blockClass.addMethod(CtMethod.make("public int getToolType(){return "+toolType+";}",blockClass));
+            //添加public int getDropExp()
+            blockClass.addMethod(CtMethod.make("public int getDropExp(){return new cn.nukkit.math.NukkitRandom().nextRange("+dropMinExp+","+dropMaxExp+");}",blockClass));
+            //添加public boolean canHarvestWithHand()
+            blockClass.addMethod(CtMethod.make("public boolean canHarvestWithHand(){return false;}",blockClass));
+            //添加public boolean canSilkTouch()
+            blockClass.addMethod(CtMethod.make("public boolean canSilkTouch(){return "+isSilkTouchable+";}",blockClass));
+            //添加public int getTier()
+            blockClass.addMethod(CtMethod.make("public int getTier(){return "+mineTier+";}",blockClass));
+            //编译到jvm中
+            registerBlock(id, (Class<? extends Block>) blockClass.toClass());
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
     }
 }

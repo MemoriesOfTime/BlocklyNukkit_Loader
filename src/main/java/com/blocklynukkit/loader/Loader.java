@@ -14,12 +14,14 @@ import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
+import cn.nukkit.resourcepacks.ResourcePack;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.other.chemistry.EnableChemistryBlocks;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
@@ -28,11 +30,11 @@ import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.other.tips.TipsUtil;
+import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.script.window.windowCallbacks.WindowCallback;
 import com.blocklynukkit.loader.scriptloader.*;
-import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.utils.MetricsLite;
 import com.blocklynukkit.loader.utils.Utils;
@@ -40,6 +42,7 @@ import com.blocklynukkit.loader.utils.Utils;
 import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import de.theamychan.scoreboard.network.Scoreboard;
+
 import javassist.CtClass;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -95,6 +98,7 @@ public class Loader extends PluginBase implements Listener {
     public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Scoreboard> boards = new HashMap<>();
     public static Map<String,String> tipsVar = new HashMap<>();
+    public static short registerBlocks = 0;
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;
@@ -159,7 +163,18 @@ public class Loader extends PluginBase implements Listener {
         }
         //创建各种基对象
         //这里没有database因为后面要检查依赖库是否存在再创建
-        //10/25add 现在创建多个基对象
+        //10/25add 现在创建多个基对象，动态创建，无需在插件启动时创建
+        //如果没有显式使用bn拓展材质，则启用化学资源包，防止客户端暴毙
+        boolean haveBNResourceExtend = false;
+        for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
+            if(pack.getPackName().contains("BNExtend")){
+                haveBNResourceExtend = true;break;
+            }
+        }
+        if(!haveBNResourceExtend){
+            EnableChemistryBlocks.enable();
+        }
+        //创建红石音乐插件主线程
         noteBlockPlayerMain.onEnable();//if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //修改路径类加载器，使得脚本可以调用其他插件
         ClassLoader cl = plugin.getClass().getClassLoader();

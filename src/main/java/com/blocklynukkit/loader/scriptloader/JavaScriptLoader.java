@@ -170,6 +170,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
     public boolean isThisLanguage(Object var){
         return var instanceof JSObject;
     }
+
     public String getPolyfilljs(){
         if(polyfilljs==null){
             polyfilljs="";

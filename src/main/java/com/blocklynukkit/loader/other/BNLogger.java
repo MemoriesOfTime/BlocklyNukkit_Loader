@@ -6,6 +6,7 @@ import com.blocklynukkit.loader.scriptloader.JavaScriptLoader;
 import com.blocklynukkit.loader.scriptloader.LuaLoader;
 import com.blocklynukkit.loader.scriptloader.PHPLoader;
 import com.blocklynukkit.loader.scriptloader.PythonLoader;
+import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
 
@@ -15,6 +16,9 @@ public class BNLogger {
         this.name=name.replaceFirst("\\.js","").replaceFirst("\\.py","").replaceFirst("\\.lua","").replaceFirst("\\.php","");
     }
     public void info(Object mes){
+        if(mes==null){
+            Server.getInstance().getLogger().info("["+name+"] null");
+        }
         String output = mes.toString();
         JavaScriptLoader js = new JavaScriptLoader(Loader.plugin);
         if(js.isThisLanguage(mes)){
@@ -124,6 +128,9 @@ public class BNLogger {
     //发送警告
 
     public void warning(Object mes){
+        if(mes==null){
+            Server.getInstance().getLogger().info("["+name+"] null");
+        }
         String output = mes.toString();
         JavaScriptLoader js = new JavaScriptLoader(Loader.plugin);
         if(js.isThisLanguage(mes)){
@@ -152,6 +159,17 @@ public class BNLogger {
             output = lua.toString(mes);
             Server.getInstance().getLogger().warning("["+name+"] "+output);
             return;
+        }
+        if(mes!=null&&mes.getClass().isArray()){
+            output = Arrays.toString((Object[]) mes);
+            Server.getInstance().getLogger().info("["+name+"] "+output);
+        }
+        if(output.startsWith(mes.getClass().getName()+"@")){
+            try{
+                output = new GsonBuilder().setPrettyPrinting().create().toJson(mes);
+            }catch (Throwable e){
+                //ignore
+            }
         }
         Server.getInstance().getLogger().warning("["+name+"] "+output);
     }

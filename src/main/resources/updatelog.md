@@ -14,6 +14,7 @@ js中可以使用console了
 F(Closure function)函数用于包装闭包
 bnAPI中的;换行现在支持使用\\;来转义
 修复了php中F(闭包)函数返回类型错误的问题
+修复了logger(console)输出null或nil报错的问题
 
 PHP
 
@@ -202,8 +203,18 @@ BNNPC
 world
 
 - void regenerateChunk(Position pos)
-- void defineChunkRenderByName(String forLevel,String callback)
-- void defineChunkRenderByName(String forLevel,String callback,int priority)
+- void defineChunkRenderByName(String forLevel,String callback,int priority / void)
+    - forLevel是渲染器能够渲染的指定世界名称
+    - callback是渲染器回调函数
+    - priority是优先级，优先级越大先调用，不填默认为0
+    
+blockitem
+
+- void registerSolidBlock(int id,String name,double hardness,double resistance,int toolType,boolean isSilkTouchable,int dropMinExp,int dropMaxExp,int mineTier)
+    - 注册固体方块，参数分别为方块id(可覆写原版方块)，方块名称，方块硬度，方块抗爆炸度，挖掘工具，是否受精准采集影响，最小掉落经验，最大掉落经验，挖掘等级
+    - 方块硬度越大挖掘时间越长，抗爆炸度越高越不容易被炸
+    - 挖掘工具0-无,1-剑,2-铲,3-镐,4-斧,5-剪刀
+    - 挖掘等级0-空手,1-木,2-金,3-石,4-铁,5-钻石
 
 
 ## 1.2.8.4

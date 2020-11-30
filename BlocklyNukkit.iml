@@ -13,7 +13,6 @@
     <orderEntry type="library" name="pythonForBN" level="project" />
     <orderEntry type="library" name="phpForBN-core" level="project" />
     <orderEntry type="library" name="graaljs" level="project" />
-    <orderEntry type="library" name="Tips_v1.7.8" level="project" />
     <orderEntry type="library" name="GameAPI-1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="fastjson-1.2.62" level="project" />
     <orderEntry type="library" name="flatlaf-0.41" level="project" />
@@ -67,5 +66,6 @@
     <orderEntry type="library" name="Maven: com.eclipsesource.j2v8:j2v8_linux_x86_64:4.5.0" level="project" />
     <orderEntry type="library" name="Maven: org.luaj:luaj-jse:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.carrotsearch:java-sizeof:0.0.5" level="project" />
+    <orderEntry type="library" name="Tips_v1.8.3" level="project" />
   </component>
 </module>

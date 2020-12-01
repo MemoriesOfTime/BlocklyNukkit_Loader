@@ -96,7 +96,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             putBaseObject(name);
             engineMap.get(name).put("javax.script.filename",name);
             engineMap.get(name).put("console",engineMap.get(name).get("logger"));
-            ((NashornScriptEngine)engineMap.get(name)).compile(js).eval();
+            engineMap.get(name).eval(js);
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){

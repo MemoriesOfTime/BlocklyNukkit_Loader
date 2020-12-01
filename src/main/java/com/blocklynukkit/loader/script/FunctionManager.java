@@ -766,17 +766,21 @@ public class FunctionManager extends BaseManager {
     }
     //here 5/9
     public int setTimeout(ScriptObjectMirror scriptObjectMirror,int delay,Object... args){
-        int id = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
-        List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
-        if(tmp==null){
-            tmp = new ArrayList<>();tmp.add(id);
-            plugin.pluginTasksMap.put(getScriptName(),tmp);
+        if(scriptObjectMirror.isFunction()||scriptObjectMirror.isStrictFunction()){
+            int id = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new LambdaTask(scriptObjectMirror,args),delay).getTaskId();
+            List<Integer> tmp = plugin.pluginTasksMap.get(getScriptName());
+            if(tmp==null){
+                tmp = new ArrayList<>();tmp.add(id);
+                plugin.pluginTasksMap.put(getScriptName(),tmp);
+            }else {
+                tmp.add(id);
+            }
+            return id;
         }else {
-            tmp.add(id);
+            return __setTimeoutInner(scriptObjectMirror.toString(),delay, args);
         }
-        return id;
     }
-    public int setTimeout(String callback,int delay,Object... args){
+    public int __setTimeoutInner(String callback,int delay,Object... args){
         return createTask(callback, delay, args).getTaskId();
     }
     public void clearTimeout(int id){
@@ -806,7 +810,7 @@ public class FunctionManager extends BaseManager {
         }
         return id;
     }
-    public int setInterval(String callback,int delay,Object... args){
+    public int __setIntervalInner(String callback,int delay,Object... args){
         return createLoopTask(callback, delay, args).getTaskId();
     }
     public void clearInterval(int id){

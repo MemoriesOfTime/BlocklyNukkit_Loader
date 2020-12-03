@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 
 public class PackageCommand extends Command {
     public PackageCommand() {
-        super("bnpackage","display previous error stacktrace","bnpackage <build/load> <args>",new String[]{"bnp","bnpack"});
+        super("bnpackage","display previous error stacktrace","bnpackage <build/load> <args>",new String[]{"bnp","bnpack","bnpm"});
         this.setPermission("blocklynukkit.opall");
     }
     @Override

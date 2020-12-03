@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -20,45 +20,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11418">
-              <caret line="590" column="50" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4354#4355#0" expanded="true" />
-                <element signature="e#4434#4435#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
-              <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsUtil.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4862">
-              <caret line="274" column="31" selection-start-line="274" selection-start-column="31" selection-end-line="274" selection-end-column="31" />
+            <state relative-caret-position="842">
+              <caret line="556" column="16" selection-start-line="556" selection-start-column="16" selection-end-line="556" selection-end-column="16" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -69,29 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="779" column="80" selection-start-line="779" selection-start-column="80" selection-end-line="779" selection-end-column="80" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="490">
-              <caret line="103" column="26" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7986">
-              <caret line="432" column="80" selection-start-line="431" selection-start-column="11" selection-end-line="432" selection-end-column="80" />
+            <state relative-caret-position="13134">
+              <caret line="755" column="23" selection-start-line="755" selection-start-column="23" selection-end-line="755" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -121,6 +65,51 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/TransformJSCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BuildJarCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-836">
+              <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNPluginsListCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="88">
+              <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/PackageCommand.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="666">
+              <caret line="129" column="21" lean-forward="true" selection-start-line="129" selection-start-column="21" selection-end-line="129" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/Block.class">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="6402">
@@ -140,8 +129,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getDrops</find>
-      <find>make</find>
       <find>put</find>
       <find>drop</find>
       <find>name</find>
@@ -170,6 +157,8 @@
       <find>BlockBr</find>
       <find>canHarvestWithHand</find>
       <find>Popu</find>
+      <find>pick</find>
+      <find>itemsp</find>
     </findStrings>
     <replaceStrings>
       <replace>Loader</replace>
@@ -229,7 +218,6 @@
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/event/CustomWindowEvent.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/CustomCallback.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Simple.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/populator/BasePopulator.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/populator/BaseRender.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/render/BaseRender.java" />
@@ -248,10 +236,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Blocks/BaseSolidBlock.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" />
         <option value="$PROJECT_DIR$/src/main/resources/updatelog.md" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java" />
       </list>
     </option>
   </component>
@@ -291,6 +280,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -323,6 +314,51 @@
               <item name="plugins" type="462c0819:PsiDirectoryNode" />
               <item name="PyLibs" type="462c0819:PsiDirectoryNode" />
               <item name="org" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="Tips_v1.8.3.jar" type="ab9368bb:PsiFileNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="Tips_v1.8.3.jar" type="ab9368bb:PsiFileNode" />
+              <item name="tip" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="Tips_v1.8.3.jar" type="ab9368bb:PsiFileNode" />
+              <item name="tip" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="Tips_v1.8.3.jar" type="ab9368bb:PsiFileNode" />
+              <item name="tip" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+              <item name="variables" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
+              <item name="BlocklyNukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="nukkit" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
+              <item name="Tips_v1.8.3.jar" type="ab9368bb:PsiFileNode" />
+              <item name="tip" type="462c0819:PsiDirectoryNode" />
+              <item name="utils" type="462c0819:PsiDirectoryNode" />
+              <item name="variables" type="462c0819:PsiDirectoryNode" />
+              <item name="defaults" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="BlocklyNukkit" type="b2602c69:ProjectViewProjectNode" />
@@ -598,8 +634,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -646,13 +680,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
-    </task>
-    <task id="LOCAL-00016" summary="更新冲突">
-      <created>1585660733350</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1585660733350</updated>
     </task>
     <task id="LOCAL-00017" summary="更新世界">
       <created>1585710787315</created>
@@ -990,14 +1017,21 @@
       <option name="project" value="LOCAL" />
       <updated>1606728644350</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <task id="LOCAL-00065" summary="修复api兼容问题">
+      <created>1606832724927</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1606832724928</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1742" height="1126" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.29453683" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.30581948" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -1016,7 +1050,7 @@
       <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.4994062" weight="0.32997987" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50059384" side_tool="true" weight="0.32997987" />
       <window_info anchor="bottom" id="SOQL Query" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4976247" visible="true" weight="0.32997987" />
+      <window_info anchor="bottom" id="Messages" order="12" sideWeight="0.4976247" weight="0.32997987" />
       <window_info anchor="bottom" id="Anonymous Apex" order="13" weight="0.32997987" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -1029,7 +1063,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="临时同步一下" />
     <MESSAGE value="添加新函数int getEventResponseIndex" />
     <MESSAGE value="漂亮的报错" />
     <MESSAGE value="修复manager函数丢失" />
@@ -1054,107 +1087,10 @@
     <MESSAGE value="实现CustomWindowBuilder链式调用" />
     <MESSAGE value="初步实现地图渲染器功能" />
     <MESSAGE value="实现自定义固体方块，修复tips兼容" />
-    <option name="LAST_COMMIT_MESSAGE" value="实现自定义固体方块，修复tips兼容" />
+    <MESSAGE value="修复api兼容问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复api兼容问题" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/event/level/ChunkPopulateEvent.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="1" column="2" lean-forward="true" selection-start-line="1" selection-start-column="2" selection-end-line="1" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/CustomCallback.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <element signature="e#820#821#0" expanded="true" />
-            <element signature="e#864#865#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/level/format/FullChunk.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-308">
-          <caret line="15" column="8" selection-start-line="15" selection-start-column="8" selection-end-line="15" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/render/BaseRender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="11" column="60" selection-start-line="11" selection-start-column="60" selection-end-line="11" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#266#267#0" expanded="true" />
-            <element signature="e#306#307#0" expanded="true" />
-            <element signature="e#479#480#0" expanded="true" />
-            <element signature="e#531#532#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/java/util/Collections.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1320">
-          <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
-          <folding>
-            <element signature="e#5644#5645#0" expanded="true" />
-            <element signature="e#5675#5676#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/render/LevelNameRender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="18" column="5" selection-start-line="18" selection-start-column="5" selection-end-line="18" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/CompatibleEventLoader.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2046">
-          <caret line="129" column="23" selection-start-line="129" selection-start-column="23" selection-end-line="129" selection-end-column="23" />
-          <folding>
-            <element signature="method#loadScreenTP#2;class#LevelManager#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/generator/SkyLand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="25" column="33" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Modal.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="47" selection-start-column="47" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/SimpleCallback.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="704">
@@ -1201,20 +1137,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/plugin/PluginLoader.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/plugin/PluginBase.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="740">
-          <caret line="229" column="18" selection-start-line="229" selection-start-column="18" selection-end-line="229" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="622">
@@ -1251,16 +1173,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
           <caret line="5" column="39" selection-start-line="5" selection-start-column="39" selection-end-line="5" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="32" column="21" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1364,13 +1276,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.8.3.jar!/tip/utils/variables/BaseVariable.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/org/luaj/luaj-jse/3.0.1/luaj-jse-3.0.1.jar!/org/luaj/vm2/luajc/JavaGen.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-9218">
@@ -1399,8 +1304,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11418">
-          <caret line="590" column="50" selection-start-line="590" selection-start-column="50" selection-end-line="590" selection-end-column="50" />
+        <state relative-caret-position="4598">
+          <caret line="262" column="55" selection-start-line="262" selection-start-column="55" selection-end-line="262" selection-end-column="55" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#4354#4355#0" expanded="true" />
@@ -1409,27 +1314,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaExporter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
+        <state relative-caret-position="462">
+          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="36" selection-start-line="5" selection-start-column="36" selection-end-line="5" selection-end-column="36" />
+        <state relative-caret-position="682">
+          <caret line="56" column="17" selection-start-line="56" selection-start-column="17" selection-end-line="56" selection-end-column="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4862">
-          <caret line="274" column="31" selection-start-line="274" selection-start-column="31" selection-end-line="274" selection-end-column="31" />
+        <state relative-caret-position="1034">
+          <caret line="73" column="53" selection-start-line="73" selection-start-column="53" selection-end-line="73" selection-end-column="53" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1443,10 +1348,115 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/plugin/PluginLoader.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/plugin/PluginBase.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="748">
+          <caret line="229" column="20" lean-forward="true" selection-start-line="229" selection-start-column="20" selection-end-line="229" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.8.3.jar!/tip/utils/variables/BaseVariable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.8.3.jar!/tip/utils/variables/defaults/PluginVariables.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="43" column="37" lean-forward="true" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.8.3.jar!/tip/utils/Api.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_131/src.zip!/javax/script/Invocable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="73" column="19" selection-start-line="73" selection-start-column="19" selection-end-line="73" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Simple.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="572">
+          <caret line="40" column="9" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+          <folding>
+            <element signature="e#1602#1603#0" expanded="true" />
+            <element signature="e#1642#1643#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsVariableEntry.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="20" column="50" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/nukkit/plugins/Tips_v1.8.3.jar!/tip/utils/variables/VariableManager.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="24" column="50" selection-start-line="24" selection-start-column="50" selection-end-line="24" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tips/TipsUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" column="37" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
+          <folding>
+            <element signature="e#130#131#0" expanded="true" />
+            <element signature="e#208#209#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="13134">
+          <caret line="755" column="23" selection-start-line="755" selection-start-column="23" selection-end-line="755" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Blocks/BaseSolidBlock.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
           <caret line="12" column="23" selection-start-line="12" selection-start-column="23" selection-end-line="12" selection-end-column="23" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/Block.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6402">
+          <caret line="314" column="57" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="842">
+          <caret line="556" column="16" selection-start-line="556" selection-start-column="16" selection-end-line="556" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1463,27 +1473,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/block/Block.class">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/TransformJSCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6402">
-          <caret line="314" column="57" selection-start-line="314" selection-start-column="44" selection-end-line="314" selection-end-column="57" />
+        <state relative-caret-position="88">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="779" column="80" selection-start-line="779" selection-start-column="80" selection-end-line="779" selection-end-column="80" />
+        <state relative-caret-position="88">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BuildJarCommand.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="490">
-          <caret line="103" column="26" selection-start-line="103" selection-start-column="26" selection-end-line="103" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="-836">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNPluginsListCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="7" column="13" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/PackageCommand.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="666">
+          <caret line="129" column="21" lean-forward="true" selection-start-line="129" selection-start-column="21" selection-end-line="129" selection-end-column="21" />
         </state>
       </provider>
     </entry>

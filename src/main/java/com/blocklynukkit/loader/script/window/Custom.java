@@ -49,7 +49,7 @@ public class Custom {
     public Custom showToPlayer(Player p,String callback,boolean acceptClose){
         synchronized (Loader.windowCallbackMap){
             CustomCallback windowCallback = new CustomCallback(acceptClose);
-            FormWindowCustom window=new FormWindowCustom(title,new ArrayList<>(elementMap.keySet()));
+            FormWindowCustom window=new FormWindowCustom(title);
             int index = 0;
             for(Map.Entry<Element,String> each:elementMap.entrySet()){
                 if(each.getValue()!=null){

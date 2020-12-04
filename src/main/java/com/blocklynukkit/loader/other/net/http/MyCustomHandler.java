@@ -1,20 +1,18 @@
-package com.blocklynukkit.loader.other;
+package com.blocklynukkit.loader.other.net.http;
 
+import com.blocklynukkit.loader.Loader;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.utils.Utils;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MyHttpHandler implements HttpHandler {
+public class MyCustomHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange httpExchange) {
         try {
@@ -22,27 +20,14 @@ public class MyHttpHandler implements HttpHandler {
 //            responseText.append("请求方法：").append(httpExchange.getRequestMethod()).append("<br/>");
 //            responseText.append("请求参数：").append(getRequestParam(httpExchange)).append("<br/>");
 //            responseText.append("请求头：<br/>").append(getRequestHeader(httpExchange));
-            String url = Loader.plugin.getDataFolder()+ "/index.html";
-            File f = new File(url);
-            if (f.exists())    //判断请求的文件是否存在
-            {
-                String html = Utils.readToString(new File(url));
-                if(html.length()<=3)html="<p>404_error</p>";
-
-                for (Map.Entry<String,String> entry:Loader.htmlholdermap.entrySet()){
-                    html = html.replaceAll(entry.getKey(),entry.getValue());
-                }
-//                if(Server.getInstance().getPluginManager().getPlugins().keySet().contains("PlaceholderAPI") && Class.forName("com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI")!=null){
-//                    html = PlaceholderAPI.getInstance().translateString(html);
-//
-//                }
-                html = html.replaceAll("%random_developer%", Utils.randomDeveloper());
-
-                html = html.replaceAll("##","%");
-                responseText.append(html);
-            }else {
-                responseText.append("<h1>哦！网页被"+Utils.randomDeveloper()+"偷走了！</h1>");
+            String url = httpExchange.getRequestURI().getPath();
+            String call = url.substring(url.lastIndexOf("/")+1);
+            String[] spl = call.split("&");
+            Object[] arg = new String[spl.length-1];
+            for(int i=1;i<spl.length;i++){
+                arg[i-1]=spl[i];
             }
+            responseText.append(Loader.plugin.callbackString(spl[0],arg));
             handleResponse(httpExchange, responseText.toString());
         } catch (Exception ex) {
             ex.printStackTrace();

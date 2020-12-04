@@ -4,10 +4,10 @@ import cn.nukkit.Server;
 import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.other.MyHttpHandler;
+import com.blocklynukkit.loader.other.net.http.MyHttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import com.blocklynukkit.loader.other.MyCustomHandler;
-import com.blocklynukkit.loader.other.MyFileHandler;
+import com.blocklynukkit.loader.other.net.http.MyCustomHandler;
+import com.blocklynukkit.loader.other.net.http.MyFileHandler;
 
 import java.io.*;
 import java.lang.reflect.Field;

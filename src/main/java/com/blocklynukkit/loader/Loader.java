@@ -29,7 +29,6 @@ import com.blocklynukkit.loader.other.Entities.FloatingText;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
-import com.blocklynukkit.loader.other.tips.TipsUtil;
 import com.blocklynukkit.loader.other.BNCrafting;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
@@ -288,24 +287,6 @@ public class Loader extends PluginBase implements Listener {
         portconfig.save();
         Utils.makeHttpServer(portto);
 
-        //检测并注册Tips插件变量
-        if(plugins.containsKey("Tips")){
-            boolean isTipsVersion = false;
-            try {
-                isTipsVersion = (null != Class.forName("tip.utils.variables.BaseVariable"));
-            } catch (Throwable t) {
-                isTipsVersion = false;
-            }
-            if(isTipsVersion){
-                TipsUtil.registerTips();
-            }else {
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    getlogger().warning(TextFormat.RED+"Tips版本太低！");
-                }else {
-                    getlogger().warning(TextFormat.RED+"Tips plugin's version is too low");
-                }
-            }
-        }
     }
 
 

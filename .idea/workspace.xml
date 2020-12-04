@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/MyCustomHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/http/MyCustomHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/MyFileHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/http/MyFileHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/MyHttpHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/http/MyHttpHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -99,7 +95,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/http/MyCustomHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
+            <state relative-caret-position="-572">
               <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
             </state>
           </provider>
@@ -677,13 +673,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00018" summary="更新n多功能（速建官网，数据库，图片处理类，算法类等等">
-      <created>1586253814472</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1586253814472</updated>
-    </task>
     <task id="LOCAL-00019" summary="修复完善http">
       <created>1586269176412</created>
       <option name="number" value="00019" />
@@ -1020,7 +1009,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607005769913</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="将httpHandler移动到net.http下">
+      <created>1607061358379</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1607061358381</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1059,7 +1055,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="漂亮的报错" />
     <MESSAGE value="修复manager函数丢失" />
     <MESSAGE value="添加新的物品函数，完善gameapi" />
     <MESSAGE value="推送更新" />
@@ -1084,7 +1079,8 @@
     <MESSAGE value="实现自定义固体方块，修复tips兼容" />
     <MESSAGE value="修复api兼容问题" />
     <MESSAGE value="bnp别名bnpm" />
-    <option name="LAST_COMMIT_MESSAGE" value="bnp别名bnpm" />
+    <MESSAGE value="将httpHandler移动到net.http下" />
+    <option name="LAST_COMMIT_MESSAGE" value="将httpHandler移动到net.http下" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://$MAVEN_REPOSITORY$/cn/nukkit/nukkit/1.0-SNAPSHOT/nukkit-1.0-20200902.213456-858.jar!/cn/nukkit/event/entity/ProjectileLaunchEvent.class">
@@ -1488,7 +1484,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/http/MyCustomHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
+        <state relative-caret-position="-572">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
         </state>
       </provider>

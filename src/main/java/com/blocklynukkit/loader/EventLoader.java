@@ -24,15 +24,31 @@ import cn.nukkit.item.Item;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.scheduler.Task;
+import cn.nukkit.utils.BinaryStream;
+import com.blocklynukkit.loader.other.Items.ItemComponentEntry;
+import com.blocklynukkit.loader.other.Items.ItemData;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
+import com.blocklynukkit.loader.other.packets.ItemComponentPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 public class EventLoader implements Listener {
@@ -398,22 +414,33 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketReceive(DataPacketReceiveEvent event){
         if(event.getPacket().pid()== ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET){
+            ItemComponentPacket packet = new ItemComponentPacket();
+            for(int data:Loader.registerItemIds){
+                packet.entries.add(new ItemComponentEntry(
+                        "blocklynukkit:"+Item.get(data).getName(),
+                        new CompoundTag("components")
+                                .putString("minecraft:icon",Item.get(data).getName())
+                                .putString("minecraft:render_offsets","miscellaneous")
+                ));
+            }
+            event.getPlayer().dataPacket(packet);
             plugin.callEventHandler(event,"PlayerLocallyInitializedEvent");
-        }else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
-            System.out.println("玩家"+event.getPlayer().getName()+"携带的表情动作uuid列表:");
-            ((EmoteListPacket)event.getPacket()).pieceIds.forEach(e->{
-                if(!(e.equals("4c8ae710-df2e-47cd-814d-cc7bf21a3d67")||
-                        e.equals("42fde774-37d4-4422-b374-89ff13a6535a")||
-                        e.equals("9a469a61-c83b-4ba9-b507-bdbe64430582")||
-                        e.equals("ce5c0300-7f03-455d-aaf1-352e4927b54d")||
-                        e.equals("d7519b5a-45ec-4d27-997c-89d402c6b57f")||
-                        e.equals("86b34976-8f41-475b-a386-385080dc6e83")||
-                        e.equals("6d9f24c0-6246-4c92-8169-4648d1981cbb")||
-                        e.equals("7cec98d8-55cc-44fe-b0ae-2672b0b2bd37"))){
-                    System.out.println(e);
-                }
-            });
         }
+//        else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
+//            System.out.println("玩家"+event.getPlayer().getName()+"携带的表情动作uuid列表:");
+//            ((EmoteListPacket)event.getPacket()).pieceIds.forEach(e->{
+//                if(!(e.equals("4c8ae710-df2e-47cd-814d-cc7bf21a3d67")||
+//                        e.equals("42fde774-37d4-4422-b374-89ff13a6535a")||
+//                        e.equals("9a469a61-c83b-4ba9-b507-bdbe64430582")||
+//                        e.equals("ce5c0300-7f03-455d-aaf1-352e4927b54d")||
+//                        e.equals("d7519b5a-45ec-4d27-997c-89d402c6b57f")||
+//                        e.equals("86b34976-8f41-475b-a386-385080dc6e83")||
+//                        e.equals("6d9f24c0-6246-4c92-8169-4648d1981cbb")||
+//                        e.equals("7cec98d8-55cc-44fe-b0ae-2672b0b2bd37"))){
+//                    System.out.println(e);
+//                }
+//            });
+//        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
@@ -424,6 +451,105 @@ public class EventLoader implements Listener {
             StartGamePacket packet = (StartGamePacket)tmp;
             packet.eduEditionOffer = 1;
             packet.hasEduFeaturesEnabled = true;
+            //获取原版物品元数据
+            InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");
+            if (stream == null) {
+                throw new AssertionError("Unable to locate RuntimeID table");
+            } else {
+                Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+                Gson gson = new Gson();
+                Type collectionType = (new TypeToken<Collection<ItemData>>(){}).getType();
+                Collection<ItemData> entries = gson.fromJson(reader, collectionType);
+                BinaryStream paletteBuffer = new BinaryStream();
+                paletteBuffer.putUnsignedVarInt((long)(entries.size()+Loader.registerItemIds.size()));
+                for(int data:Loader.registerItemIds){
+                    paletteBuffer.putString("blocklynukkit:"+Item.get(data).getName());
+                    paletteBuffer.putLShort(data);
+                    if(ProtocolInfo.CURRENT_PROTOCOL>408)
+                        paletteBuffer.putBoolean(true);
+                }
+                for (ItemData data : entries) {
+                    paletteBuffer.putString(data.name);
+                    paletteBuffer.putLShort(data.id);
+                    if(ProtocolInfo.CURRENT_PROTOCOL>408)
+                        paletteBuffer.putBoolean(false);
+                }
+                byte[] itemData = paletteBuffer.getBuffer();
+                    try {
+                        //修改运行时物品元数据
+                        Field objXField = tmp.getClass().getDeclaredField("ITEM_DATA_PALETTE");
+                        objXField.setAccessible(true);
+                        Field modifiers = objXField.getClass().getDeclaredField("modifiers");
+                        modifiers.setAccessible(true);
+                        modifiers.setInt(objXField, objXField.getModifiers() & ~Modifier.FINAL);
+                        objXField.set(tmp, itemData);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (NoSuchFieldException e) {
+                        {
+                            packet.reset();
+                            packet.putEntityUniqueId(packet.entityUniqueId);
+                            packet.putEntityRuntimeId(packet.entityRuntimeId);
+                            packet.putVarInt(packet.playerGamemode);
+                            packet.putVector3f(packet.x, packet.y, packet.z);
+                            packet.putLFloat(packet.yaw);
+                            packet.putLFloat(packet.pitch);
+                            packet.putVarInt(packet.seed);
+                            packet.putLShort(0x00); // SpawnBiomeType - Default
+                            packet.putString("plains"); // UserDefinedBiomeName
+                            packet.putVarInt(packet.dimension);
+                            packet.putVarInt(packet.generator);
+                            packet.putVarInt(packet.worldGamemode);
+                            packet.putVarInt(packet.difficulty);
+                            packet.putBlockVector3(packet.spawnX, packet.spawnY, packet.spawnZ);
+                            packet.putBoolean(packet.hasAchievementsDisabled);
+                            packet.putVarInt(packet.dayCycleStopTime);
+                            packet.putVarInt(packet.eduEditionOffer);
+                            packet.putBoolean(packet.hasEduFeaturesEnabled);
+                            packet.putString(""); // Education Edition Product ID
+                            packet.putLFloat(packet.rainLevel);
+                            packet.putLFloat(packet.lightningLevel);
+                            packet.putBoolean(packet.hasConfirmedPlatformLockedContent);
+                            packet.putBoolean(packet.multiplayerGame);
+                            packet.putBoolean(packet.broadcastToLAN);
+                            packet.putVarInt(packet.xblBroadcastIntent);
+                            packet.putVarInt(packet.platformBroadcastIntent);
+                            packet.putBoolean(packet.commandsEnabled);
+                            packet.putBoolean(packet.isTexturePacksRequired);
+                            packet.putGameRules(packet.gameRules);
+                            packet.putLInt(0); // Experiment count
+                            packet.putBoolean(false); // Were experiments previously toggled
+                            packet.putBoolean(packet.bonusChest);
+                            packet.putBoolean(packet.hasStartWithMapEnabled);
+                            packet.putVarInt(packet.permissionLevel);
+                            packet.putLInt(packet.serverChunkTickRange);
+                            packet.putBoolean(packet.hasLockedBehaviorPack);
+                            packet.putBoolean(packet.hasLockedResourcePack);
+                            packet.putBoolean(packet.isFromLockedWorldTemplate);
+                            packet.putBoolean(packet.isUsingMsaGamertagsOnly);
+                            packet.putBoolean(packet.isFromWorldTemplate);
+                            packet.putBoolean(packet.isWorldTemplateOptionLocked);
+                            packet.putBoolean(packet.isOnlySpawningV1Villagers);
+                            packet.putString(packet.vanillaVersion);
+                            packet.putLInt(16); // Limited world width
+                            packet.putLInt(16); // Limited world height
+                            packet.putBoolean(false); // Nether type
+                            packet.putBoolean(false); // Experimental Gameplay
+                            packet.putString(packet.levelId);
+                            packet.putString(packet.worldName);
+                            packet.putString(packet.premiumWorldTemplateId);
+                            packet.putBoolean(packet.isTrial);
+                            packet.putVarInt(packet.isMovementServerAuthoritative ? 1 : 0); // 2 - rewind
+                            packet.putLLong(packet.currentTick);
+                            packet.putVarInt(packet.enchantmentSeed);
+                            packet.putUnsignedVarInt(0); // Custom blocks
+                            packet.put(itemData);
+                            packet.putString(packet.multiplayerCorrelationId);
+                            packet.putBoolean(packet.isInventoryServerAuthoritative);
+                        }
+                    }
+            }
+
         }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }

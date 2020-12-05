@@ -428,7 +428,7 @@ public class BlockItemManager extends BaseManager {
             Block.lightFilter[id] = 1;
         }
     }
-    //动态生成类并注册新方块
+    //动态生成类并注册新的固体方块
     public void registerSolidBlock(int id,String name,double hardness,double resistance,int toolType
             ,boolean isSilkTouchable,int dropMinExp,int dropMaxExp,int mineTier){
         try {
@@ -465,6 +465,37 @@ public class BlockItemManager extends BaseManager {
             blockClass.addMethod(CtMethod.make("public int getTier(){return "+mineTier+";}",blockClass));
             //编译到jvm中
             registerBlock(id, (Class<? extends Block>) blockClass.toClass());
+        } catch (NotFoundException e) {
+            e.printStackTrace();
+        } catch (CannotCompileException e) {
+            e.printStackTrace();
+        }
+    }
+    //动态生成类并注册新的简单物品
+    public void registerSimpleItem(int id,String name){
+        try{
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass itemClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.Item"));
+            CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            itemClass.addConstructor(twoConstructor);
+            CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            itemClass.addConstructor(oneConstructor);
+            CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            itemClass.addConstructor(voidConstructor);
+            Item.list[id] = itemClass.toClass();
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                Loader.registerItemIds.add(id);
+            }
         } catch (NotFoundException e) {
             e.printStackTrace();
         } catch (CannotCompileException e) {

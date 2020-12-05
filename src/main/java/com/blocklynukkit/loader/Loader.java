@@ -97,7 +97,10 @@ public class Loader extends PluginBase implements Listener {
     public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Scoreboard> boards = new HashMap<>();
     public static Map<String,String> tipsVar = new HashMap<>();
+    //blockitemManager变量
     public static short registerBlocks = 0;
+    public static short registerItems = 0;
+    public static List<Integer> registerItemIds = new ArrayList<>();
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;

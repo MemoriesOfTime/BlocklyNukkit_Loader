@@ -193,6 +193,8 @@ public class EntityManager extends BaseManager {
     public static void recycleAllBNNPC(){
         for (Level l:Server.getInstance().getLevels().values()){
             for(Entity entity:l.getEntities()){
+                if(entity!=null)
+                if(entity.getName()!=null)
                 if(entity.getName().equals("BNNPC")){
                     entity.close();
                 }

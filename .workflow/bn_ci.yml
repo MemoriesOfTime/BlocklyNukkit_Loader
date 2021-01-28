@@ -21,6 +21,6 @@ stages:
             goals: 'mvn package'
             uploadArtifact: true
             uploadArtifactOptions:
-              artifactPath: './target'
+              artifactPath: './target/BlocklyNukkit-1.0-SNAPSHOT.jar'
               artifactRepository: 'BlocklyNukkitLoader'
               artifactName: 'BlocklyNukkit.jar'

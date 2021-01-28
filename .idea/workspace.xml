@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再尝试修复CI文件">
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再再尝试修复CI文件">
+      <change afterPath="$PROJECT_DIR$/nukkit/nukkit.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.workflow/bn_ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.workflow/bn_ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -644,13 +646,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00025" summary="更新">
-      <created>1587995442060</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1587995442060</updated>
-    </task>
     <task id="LOCAL-00026" summary="更新">
       <created>1587999165504</created>
       <option name="number" value="00026" />
@@ -987,7 +982,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611819896761</updated>
     </task>
-    <option name="localTasksCounter" value="74" />
+    <task id="LOCAL-00074" summary="再再再尝试修复CI文件">
+      <created>1611820524928</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1611820524928</updated>
+    </task>
+    <option name="localTasksCounter" value="75" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1039,7 +1041,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="代码更新到1290 beta-r6" />
     <MESSAGE value="代码更新到1290 beta-r7" />
     <MESSAGE value="重构bnqqbot，完善managerAPI，添加bn插件包功能" />
     <MESSAGE value="修复bn插件包功能，php可echo输出" />
@@ -1064,7 +1065,8 @@
     <MESSAGE value="尝试修复CI文件" />
     <MESSAGE value="再尝试修复CI文件" />
     <MESSAGE value="再再尝试修复CI文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="再再尝试修复CI文件" />
+    <MESSAGE value="再再再尝试修复CI文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="再再再尝试修复CI文件" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

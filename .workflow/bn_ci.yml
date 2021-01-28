@@ -9,7 +9,7 @@ stages:
   - stage:
       name: maven-build-stage
       displayName: 'build jar'
-      failFast: true
+      failFast: false
       steps:
         - step: mavenbuild@1
           name: maven-build

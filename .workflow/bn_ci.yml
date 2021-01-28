@@ -1,5 +1,5 @@
-name: BlocklyNukkit-1.x
-displayName: 'BlocklyNukkit自动构建'
+name: BlocklyNukkit-Release
+displayName: 'BlocklyNukkit'
 triggers:
   push:
     - matchType: PRECISE
@@ -8,12 +8,12 @@ commitMessage: ''
 stages:
   - stage:
       name: maven-build-stage
-      displayName: 'BlocklyNukkit构建'
+      displayName: 'build jar'
       failFast: true
       steps:
         - step: mavenbuild@1
           name: maven-build
-          displayName: 'Maven构建'
+          displayName: 'build with Maven'
           inputs:
             jdkVersion: 8
             mavenVersion: 3.6

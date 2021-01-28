@@ -22,5 +22,5 @@ stages:
             uploadArtifact: true
             uploadArtifactOptions:
               artifactPath: './target'
-              artifactRepository: 'BlocklyNukkit-1.x'
-              artifactName: 'BlocklyNukkit_Loader'
+              artifactRepository: 'BlocklyNukkitLoader'
+              artifactName: 'BlocklyNukkit.jar'

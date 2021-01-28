@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再再再再再尝试修复CI文件">
-      <change beforePath="$PROJECT_DIR$/.workflow/bn_ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.workflow/bn_ci.yml" afterDir="false" />
-    </list>
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再再再再再再再尝试修复CI文件" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -643,20 +641,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00029" summary="更新">
-      <created>1588639458358</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1588639458358</updated>
-    </task>
-    <task id="LOCAL-00030" summary="更新">
-      <created>1588745773842</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1588745773842</updated>
-    </task>
     <task id="LOCAL-00031" summary="更新">
       <created>1588929111451</created>
       <option name="number" value="00031" />
@@ -986,7 +970,21 @@
       <option name="project" value="LOCAL" />
       <updated>1611823586566</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="再再再再再再再尝试修复CI文件">
+      <created>1611823981638</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1611823981638</updated>
+    </task>
+    <task id="LOCAL-00079" summary="再再再再再再再再尝试修复CI文件">
+      <created>1611824059575</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1611824059575</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1038,8 +1036,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="代码更新至1290-beta-r16" />
-    <MESSAGE value="在javascript上实现F()语法糖并修复语法糖函数重名混淆问题" />
     <MESSAGE value="添加了一堆文件操作函数，顺便提交上一些库" />
     <MESSAGE value="重构代码，更新到beta-21" />
     <MESSAGE value="重构SimpleWindowBuilder，更新api" />
@@ -1063,7 +1059,9 @@
     <MESSAGE value="再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再尝试修复CI文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="再再再再再再尝试修复CI文件" />
+    <MESSAGE value="再再再再再再再尝试修复CI文件" />
+    <MESSAGE value="再再再再再再再再尝试修复CI文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="再再再再再再再再尝试修复CI文件" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

@@ -1,11 +1,11 @@
 ﻿name: BlocklyNukkit
 main: com.blocklynukkit.loader.Loader
-version: "1.2.8.9"
+version: "1.2.9.0"
 author: BlocklyNukkit开发组-超神的冰凉发起(BlocklyNukkit_Developers)
 authors:
   - 超神的冰凉
   - 企鹅队长
-api: ["1.0.8"]
+api: ["1.0.11"]
 description: BN插件加载器(BlocklyNukkit_Plugin_Loader)
 load: POSTWORLD
 softdepend:

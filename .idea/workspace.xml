@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="提交丢失的依赖库文件">
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="修复wasm加载器版本不对问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -643,13 +645,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00035" summary="1.2.8.3 r1版">
-      <created>1596426351225</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1596426351226</updated>
-    </task>
     <task id="LOCAL-00036" summary="添加javadoc">
       <created>1596431617924</created>
       <option name="number" value="00036" />
@@ -986,7 +981,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611825506662</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="修复wasm加载器版本不对问题">
+      <created>1611826916805</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1611826916805</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1038,7 +1040,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加展示xbox信息函数" />
     <MESSAGE value="setTimeout和setInterval支持全语言" />
     <MESSAGE value="添加展示终末之诗函数" />
     <MESSAGE value="实现CustomWindowBuilder链式调用" />
@@ -1063,7 +1064,8 @@
     <MESSAGE value="再再再再再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再再再再再尝试修复CI文件" />
     <MESSAGE value="提交丢失的依赖库文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="提交丢失的依赖库文件" />
+    <MESSAGE value="修复wasm加载器版本不对问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复wasm加载器版本不对问题" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

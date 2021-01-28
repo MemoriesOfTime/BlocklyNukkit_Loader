@@ -10,6 +10,7 @@ import cn.nukkit.event.Event;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.item.Item;
+import cn.nukkit.network.protocol.ProtocolInfo;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
@@ -115,6 +116,16 @@ public class Loader extends PluginBase implements Listener {
 
     @Override
     public void onEnable() {
+        if(ProtocolInfo.CURRENT_PROTOCOL < 422){
+            if (Server.getInstance().getLanguage().getName().contains("中文")){
+                this.getLogger().warning("您的服务器版本过低！BlocklyNukkit仅支持1.16.100及以上版本的服务端。");
+                this.getLogger().warning("BlocklyNukkit即将关闭，如需使用，请升级服务器或降低bn版本。");
+            } else{
+                this.getLogger().warning("Your server version is too low! Blockylnukkit only supports 1.16.100 and above server.");
+                this.getLogger().warning("Blockynukkit will be closed soon. If you need to use it, please upgrade the server or reduce the BN version.");
+            }
+            return;
+        }
         plugin=this;
         pluginFile=this.getFile();
         plugins=this.getServer().getPluginManager().getPlugins();

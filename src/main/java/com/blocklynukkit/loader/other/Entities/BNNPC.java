@@ -280,6 +280,7 @@ public class BNNPC extends EntityHuman {
         if(dropOffhand)tmp.add(this.getOffhandInventory().getItem(0));
         dropSlot.forEach(each->tmp.add(this.getInventory().getItem(each)));
         tmp.forEach(each->bnnpc.getLevel().dropItem(bnnpc,each));
+        super.close();
     }
     public void addExtraDropItem(Item item){
         this.extraDropItems.add(item);

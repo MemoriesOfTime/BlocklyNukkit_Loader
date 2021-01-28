@@ -173,6 +173,8 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        if(event.isCancelled())return;
         if(event.getMessage().equals("/version")||event.getMessage().equals("version")||
                 event.getMessage().equals("/version ")||event.getMessage().equals("version ")){
             Player sender = event.getPlayer();
@@ -184,7 +186,6 @@ public class EventLoader implements Listener {
                     String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));
             event.setCancelled();
         }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -212,6 +213,8 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerCommand(ServerCommandEvent event){
+        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        if(event.isCancelled())return;
         if(event.getCommand().equals("/version")||event.getCommand().equals("version")||
         event.getCommand().equals("/version ")||event.getCommand().equals("version ")){
             CommandSender sender = event.getSender();
@@ -223,7 +226,6 @@ public class EventLoader implements Listener {
                     String.valueOf(ProtocolInfo.CURRENT_PROTOCOL)));
             event.setCancelled();
         }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -252,7 +254,7 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
         if(event.getEntity().getName().equals("BNNPC"))event.setAttackCooldown(0);
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDamageByEntityEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -269,6 +271,7 @@ public class EventLoader implements Listener {
     public void onEntityTeleport(EntityTeleportEvent event){
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
+
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemDespawnEvent(ItemDespawnEvent event){
@@ -414,16 +417,6 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketReceive(DataPacketReceiveEvent event){
         if(event.getPacket().pid()== ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET){
-            ItemComponentPacket packet = new ItemComponentPacket();
-            for(int data:Loader.registerItemIds){
-                packet.entries.add(new ItemComponentEntry(
-                        "blocklynukkit:"+Item.get(data).getName(),
-                        new CompoundTag("components")
-                                .putString("minecraft:icon",Item.get(data).getName())
-                                .putString("minecraft:render_offsets","miscellaneous")
-                ));
-            }
-            event.getPlayer().dataPacket(packet);
             plugin.callEventHandler(event,"PlayerLocallyInitializedEvent");
         }
 //        else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
@@ -446,111 +439,97 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketSend(DataPacketSendEvent event){
-        DataPacket tmp = event.getPacket();
-        if(tmp.pid()==ProtocolInfo.START_GAME_PACKET){
-            StartGamePacket packet = (StartGamePacket)tmp;
-            packet.eduEditionOffer = 1;
-            packet.hasEduFeaturesEnabled = true;
-            //获取原版物品元数据
-            InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");
-            if (stream == null) {
-                throw new AssertionError("Unable to locate RuntimeID table");
-            } else {
-                Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-                Gson gson = new Gson();
-                Type collectionType = (new TypeToken<Collection<ItemData>>(){}).getType();
-                Collection<ItemData> entries = gson.fromJson(reader, collectionType);
-                BinaryStream paletteBuffer = new BinaryStream();
-                paletteBuffer.putUnsignedVarInt((long)(entries.size()+Loader.registerItemIds.size()));
-                for(int data:Loader.registerItemIds){
-                    paletteBuffer.putString("blocklynukkit:"+Item.get(data).getName());
-                    paletteBuffer.putLShort(data);
-                    if(ProtocolInfo.CURRENT_PROTOCOL>408)
-                        paletteBuffer.putBoolean(true);
-                }
-                for (ItemData data : entries) {
-                    paletteBuffer.putString(data.name);
-                    paletteBuffer.putLShort(data.id);
-                    if(ProtocolInfo.CURRENT_PROTOCOL>408)
-                        paletteBuffer.putBoolean(false);
-                }
-                byte[] itemData = paletteBuffer.getBuffer();
-                    try {
-                        //修改运行时物品元数据
-                        Field objXField = tmp.getClass().getDeclaredField("ITEM_DATA_PALETTE");
-                        objXField.setAccessible(true);
-                        Field modifiers = objXField.getClass().getDeclaredField("modifiers");
-                        modifiers.setAccessible(true);
-                        modifiers.setInt(objXField, objXField.getModifiers() & ~Modifier.FINAL);
-                        objXField.set(tmp, itemData);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (NoSuchFieldException e) {
-                        {
-                            packet.reset();
-                            packet.putEntityUniqueId(packet.entityUniqueId);
-                            packet.putEntityRuntimeId(packet.entityRuntimeId);
-                            packet.putVarInt(packet.playerGamemode);
-                            packet.putVector3f(packet.x, packet.y, packet.z);
-                            packet.putLFloat(packet.yaw);
-                            packet.putLFloat(packet.pitch);
-                            packet.putVarInt(packet.seed);
-                            packet.putLShort(0x00); // SpawnBiomeType - Default
-                            packet.putString("plains"); // UserDefinedBiomeName
-                            packet.putVarInt(packet.dimension);
-                            packet.putVarInt(packet.generator);
-                            packet.putVarInt(packet.worldGamemode);
-                            packet.putVarInt(packet.difficulty);
-                            packet.putBlockVector3(packet.spawnX, packet.spawnY, packet.spawnZ);
-                            packet.putBoolean(packet.hasAchievementsDisabled);
-                            packet.putVarInt(packet.dayCycleStopTime);
-                            packet.putVarInt(packet.eduEditionOffer);
-                            packet.putBoolean(packet.hasEduFeaturesEnabled);
-                            packet.putString(""); // Education Edition Product ID
-                            packet.putLFloat(packet.rainLevel);
-                            packet.putLFloat(packet.lightningLevel);
-                            packet.putBoolean(packet.hasConfirmedPlatformLockedContent);
-                            packet.putBoolean(packet.multiplayerGame);
-                            packet.putBoolean(packet.broadcastToLAN);
-                            packet.putVarInt(packet.xblBroadcastIntent);
-                            packet.putVarInt(packet.platformBroadcastIntent);
-                            packet.putBoolean(packet.commandsEnabled);
-                            packet.putBoolean(packet.isTexturePacksRequired);
-                            packet.putGameRules(packet.gameRules);
-                            packet.putLInt(0); // Experiment count
-                            packet.putBoolean(false); // Were experiments previously toggled
-                            packet.putBoolean(packet.bonusChest);
-                            packet.putBoolean(packet.hasStartWithMapEnabled);
-                            packet.putVarInt(packet.permissionLevel);
-                            packet.putLInt(packet.serverChunkTickRange);
-                            packet.putBoolean(packet.hasLockedBehaviorPack);
-                            packet.putBoolean(packet.hasLockedResourcePack);
-                            packet.putBoolean(packet.isFromLockedWorldTemplate);
-                            packet.putBoolean(packet.isUsingMsaGamertagsOnly);
-                            packet.putBoolean(packet.isFromWorldTemplate);
-                            packet.putBoolean(packet.isWorldTemplateOptionLocked);
-                            packet.putBoolean(packet.isOnlySpawningV1Villagers);
-                            packet.putString(packet.vanillaVersion);
-                            packet.putLInt(16); // Limited world width
-                            packet.putLInt(16); // Limited world height
-                            packet.putBoolean(false); // Nether type
-                            packet.putBoolean(false); // Experimental Gameplay
-                            packet.putString(packet.levelId);
-                            packet.putString(packet.worldName);
-                            packet.putString(packet.premiumWorldTemplateId);
-                            packet.putBoolean(packet.isTrial);
-                            packet.putVarInt(packet.isMovementServerAuthoritative ? 1 : 0); // 2 - rewind
-                            packet.putLLong(packet.currentTick);
-                            packet.putVarInt(packet.enchantmentSeed);
-                            packet.putUnsignedVarInt(0); // Custom blocks
-                            packet.put(itemData);
-                            packet.putString(packet.multiplayerCorrelationId);
-                            packet.putBoolean(packet.isInventoryServerAuthoritative);
-                        }
-                    }
-            }
-
-        }
+//        DataPacket tmp = event.getPacket();
+//        if(tmp.pid()==ProtocolInfo.START_GAME_PACKET){
+//            event.setCancelled();
+//            StartGamePacket packet = (StartGamePacket)tmp;
+//            packet.eduEditionOffer = 1;
+//            packet.hasEduFeaturesEnabled = true;
+//            //获取原版物品元数据
+//            InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");
+//            if (stream == null) {
+//                throw new AssertionError("Unable to locate RuntimeID table");
+//            } else {
+//                Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+//                Gson gson = new Gson();
+//                Type collectionType = (new TypeToken<Collection<ItemData>>(){}).getType();
+//                Collection<ItemData> entries = gson.fromJson(reader, collectionType);
+//                BinaryStream paletteBuffer = new BinaryStream();
+//                paletteBuffer.putUnsignedVarInt((long)(entries.size()+Loader.registerItemIds.size()));
+//                for(int data:Loader.registerItemIds){
+//                    paletteBuffer.putString("blocklynukkit:"+Item.get(data).getName());
+//                    paletteBuffer.putLShort(data);
+//                    paletteBuffer.putBoolean(true);
+//                }
+//                for (ItemData data : entries) {
+//                    paletteBuffer.putString(data.name);
+//                    paletteBuffer.putLShort(data.id);
+//                    paletteBuffer.putBoolean(false);
+//                }
+//                byte[] itemData = paletteBuffer.getBuffer();
+//                packet.reset();
+//                packet.putEntityUniqueId(packet.entityUniqueId);
+//                packet.putEntityRuntimeId(packet.entityRuntimeId);
+//                packet.putVarInt(packet.playerGamemode);
+//                packet.putVector3f(packet.x, packet.y, packet.z);
+//                packet.putLFloat(packet.yaw);
+//                packet.putLFloat(packet.pitch);
+//                packet.putVarInt(packet.seed);
+//                packet.putLShort(0x00); // SpawnBiomeType - Default
+//                packet.putString("plains"); // UserDefinedBiomeName
+//                packet.putVarInt(packet.dimension);
+//                packet.putVarInt(packet.generator);
+//                packet.putVarInt(packet.worldGamemode);
+//                packet.putVarInt(packet.difficulty);
+//                packet.putBlockVector3(packet.spawnX, packet.spawnY, packet.spawnZ);
+//                packet.putBoolean(packet.hasAchievementsDisabled);
+//                packet.putVarInt(packet.dayCycleStopTime);
+//                packet.putVarInt(packet.eduEditionOffer);
+//                packet.putBoolean(packet.hasEduFeaturesEnabled);
+//                packet.putString(""); // Education Edition Product ID
+//                packet.putLFloat(packet.rainLevel);
+//                packet.putLFloat(packet.lightningLevel);
+//                packet.putBoolean(packet.hasConfirmedPlatformLockedContent);
+//                packet.putBoolean(packet.multiplayerGame);
+//                packet.putBoolean(packet.broadcastToLAN);
+//                packet.putVarInt(packet.xblBroadcastIntent);
+//                packet.putVarInt(packet.platformBroadcastIntent);
+//                packet.putBoolean(packet.commandsEnabled);
+//                packet.putBoolean(packet.isTexturePacksRequired);
+//                packet.putGameRules(packet.gameRules);
+//                packet.putLInt(0); // Experiment count
+//                packet.putBoolean(false); // Were experiments previously toggled
+//                packet.putBoolean(packet.bonusChest);
+//                packet.putBoolean(packet.hasStartWithMapEnabled);
+//                packet.putVarInt(packet.permissionLevel);
+//                packet.putLInt(packet.serverChunkTickRange);
+//                packet.putBoolean(packet.hasLockedBehaviorPack);
+//                packet.putBoolean(packet.hasLockedResourcePack);
+//                packet.putBoolean(packet.isFromLockedWorldTemplate);
+//                packet.putBoolean(packet.isUsingMsaGamertagsOnly);
+//                packet.putBoolean(packet.isFromWorldTemplate);
+//                packet.putBoolean(packet.isWorldTemplateOptionLocked);
+//                packet.putBoolean(packet.isOnlySpawningV1Villagers);
+//                packet.putString(packet.vanillaVersion);
+//                packet.putLInt(16); // Limited world width
+//                packet.putLInt(16); // Limited world height
+//                packet.putBoolean(false); // Nether type
+//                packet.putBoolean(false); // Experimental Gameplay
+//                packet.putString(packet.levelId);
+//                packet.putString(packet.worldName);
+//                packet.putString(packet.premiumWorldTemplateId);
+//                packet.putBoolean(packet.isTrial);
+//                packet.putVarInt(packet.isMovementServerAuthoritative ? 1 : 0); // 2 - rewind
+//                packet.putLLong(packet.currentTick);
+//                packet.putVarInt(packet.enchantmentSeed);
+//                packet.putUnsignedVarInt(0); // Custom blocks
+//                packet.put(itemData);
+//                packet.putString(packet.multiplayerCorrelationId);
+//                packet.putBoolean(packet.isInventoryServerAuthoritative);
+//                packet.encode();
+//            }
+//            event.getPlayer().dataPacket(packet);
+//        }
         plugin.callEventHandler(event, event.getClass().getSimpleName());
     }
 

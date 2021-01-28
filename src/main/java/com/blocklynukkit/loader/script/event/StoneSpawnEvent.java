@@ -1,6 +1,5 @@
 package com.blocklynukkit.loader.script.event;
 
-import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.event.Cancellable;

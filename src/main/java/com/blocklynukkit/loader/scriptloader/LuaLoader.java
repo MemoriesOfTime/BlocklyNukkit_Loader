@@ -32,11 +32,16 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
                 if(file.isDirectory()) continue;
                 if(file.getName().endsWith(".lua")&&!file.getName().contains("bak")){
                     try {
+                        String lua = Utils.readToString(file.getPath());
+                        List<String> pragmas= getPragma(lua);
+                        if(pragmas.contains("pragma autoload false")){
+                            return;
+                        }
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
                             plugin.getLogger().warning("加载BN插件: " + file.getName());
                         else
                             plugin.getLogger().warning("loading BN plugin: " + file.getName());
-                        putLuaEngine(file.getName(), Utils.readToString(file.getPath()));
+                        putLuaEngine(file.getName(), lua);
                     } catch (final Exception e) {
                         if (Server.getInstance().getLanguage().getName().contains("中文"))
                             plugin.getLogger().error("无法加载： " + file.getName(), e);
@@ -212,5 +217,24 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
     @Override
     public boolean isThisLanguage(Object var){
         return var instanceof LuaValue;
+    }
+
+    @Override
+    public List<String> getPragma(String code) {
+        List<String> pragma = new ArrayList<>();
+        String[] lines = code.split("\n");
+        for(String line:lines){
+            if(line.trim().startsWith("--")){
+                String toCheck = line.replaceFirst("--","").trim();
+                if(toCheck.startsWith("pragma")){
+                    toCheck = toCheck.replaceAll(" +","");
+                    if(toCheck.startsWith("pragma end")){
+                        break;
+                    }
+                    pragma.add(toCheck.toLowerCase());
+                }
+            }
+        }
+        return pragma;
     }
 }

@@ -223,6 +223,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             env = new Env(quercus, page, os, (QuercusHttpServletRequest)null, (QuercusHttpServletResponse)null);
             env.setScriptContext(cxt);
             env.setIni("__DIR__", Server.getInstance().getFilePath());
+            env.setTimeLimit(0L);
             env.start();
             Value result = null;
 

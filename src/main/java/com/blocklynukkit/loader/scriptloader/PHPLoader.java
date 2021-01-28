@@ -17,9 +17,7 @@ import static com.blocklynukkit.loader.Loader.engineMap;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,11 +32,16 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
                     if(file.isDirectory()) continue;
                     if(file.getName().endsWith(".php")&&!file.getName().contains("bak")){
                         try {
+                            String php = Utils.readToString(file.getPath());
+                            List<String> pragmas= getPragma(php);
+                            if(pragmas.contains("pragma autoload false")){
+                                return;
+                            }
                             if (Server.getInstance().getLanguage().getName().contains("中文"))
                                 plugin.getLogger().warning("加载BN插件: " + file.getName());
                             else
                                 plugin.getLogger().warning("loading BN plugin: " + file.getName());
-                            putPHPEngine(file.getName(), Utils.readToString(file.getPath()));
+                            putPHPEngine(file.getName(), php);
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文"))
                                 plugin.getLogger().error("无法加载： " + file.getName(), e);
@@ -122,6 +125,25 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
     @Override
     public boolean isThisLanguage(Object var){
         return var instanceof com.caucho.quercus.env.Value;
+    }
+
+    @Override
+    public List<String> getPragma(String code) {
+        List<String> pragma = new ArrayList<>();
+        String[] lines = code.split("\n");
+        for(String line:lines){
+            if(line.trim().startsWith("//")){
+                String toCheck = line.replaceFirst("//","").trim();
+                if(toCheck.startsWith("pragma")){
+                    toCheck = toCheck.replaceAll(" +","");
+                    if(toCheck.startsWith("pragma end")){
+                        break;
+                    }
+                    pragma.add(toCheck.toLowerCase());
+                }
+            }
+        }
+        return pragma;
     }
 
 }

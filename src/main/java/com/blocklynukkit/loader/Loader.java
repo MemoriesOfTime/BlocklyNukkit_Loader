@@ -14,18 +14,17 @@ import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
-import cn.nukkit.resourcepacks.ResourcePack;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Babel;
-import com.blocklynukkit.loader.other.chemistry.EnableChemistryBlocks;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
 import com.blocklynukkit.loader.other.Entities.FloatingText;
+import com.blocklynukkit.loader.other.data.MemoryStorage;
 import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
@@ -82,9 +81,10 @@ public class Loader extends PluginBase implements Listener {
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
     public static Map<String, Plugin> plugins;
     public static Map<String, CommandInfo> plugincmdsmap = new HashMap<>();
-    public static Map<String,CtClass> bnClasses = new HashMap<>();
+    public static Map<String, CtClass> bnClasses = new HashMap<>();
     public static boolean enablePython = false;
     public static boolean enablePHP = false;
+    public static boolean enableWasm = false;
     public static Map<String,List<Integer>> pluginTasksMap = new HashMap<>();
     public static Random mainRandom = new Random(System.currentTimeMillis());
     //es2020->es5翻译器
@@ -105,10 +105,13 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;
     public static List<BaseRender> levelRenderList = new ArrayList<>();
+    public static Map<String, BufferedImage> savedImgMap = new HashMap<>();
     //functionManager变量
     public static bnqqbot qq = new bnqqbot();
     public static String fakeNukkitCodeVersion = "";
     public static ExtendScriptLoader nodejs = null;
+    //databaseManager变量
+    public static MemoryStorage<Object,Object> memoryStorage = new MemoryStorage<>();
 
     @Override
     public void onEnable() {
@@ -166,16 +169,20 @@ public class Loader extends PluginBase implements Listener {
         //创建各种基对象
         //这里没有database因为后面要检查依赖库是否存在再创建
         //10/25add 现在创建多个基对象，动态创建，无需在插件启动时创建
+
         //如果没有显式使用bn拓展材质，则启用化学资源包，防止客户端暴毙
-        boolean haveBNResourceExtend = false;
-        for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
-            if(pack.getPackName().contains("BNExtend")){
-                haveBNResourceExtend = true;break;
-            }
-        }
-        if(!haveBNResourceExtend){
-            EnableChemistryBlocks.enable();
-        }
+        //1/25追加：powernukkit停止发送，因为bug未解决
+//        if(!Nukkit.CODENAME.equals("PowerNukkit")){
+//            boolean haveBNResourceExtend = false;
+//            for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
+//                if(pack.getPackName().contains("BNExtend")){
+//                    haveBNResourceExtend = true;break;
+//                }
+//            }
+//            if(!haveBNResourceExtend){
+//                EnableChemistryBlocks.enable();
+//            }
+//        }
         //创建红石音乐插件主线程
         noteBlockPlayerMain.onEnable();//if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //修改路径类加载器，使得脚本可以调用其他插件
@@ -237,11 +244,18 @@ public class Loader extends PluginBase implements Listener {
         //加载PHP
         if(plugins.containsKey("PHPBN")){
             new PHPLoader(plugin).loadplugins();
-            enablePHP=false;
+            enablePHP=true;
         }
 
         //加载Lua
         new LuaLoader(plugin).loadplugins();
+
+        //加载Wasm
+        if(plugins.containsKey("WebassemblyBN")){
+            new WasmLoader(plugin).loadplugins();
+            enableWasm=true;
+        }
+
 
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
@@ -277,6 +291,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
         plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());
         plugin.getServer().getCommandMap().register("bnreload",new BNReloadCommand());
+        plugin.getServer().getCommandMap().register("signature",new SignatureCommand());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
@@ -300,6 +315,11 @@ public class Loader extends PluginBase implements Listener {
         LevelManager.dosaveOceanGeneratorSettings();
         EntityManager.recycleAllFloatingText();
         EntityManager.recycleAllBNNPC();
+        try{
+            qq.stopBot();
+        }catch (NoClassDefFoundError e){
+            //ignore
+        }
         if(httpServer!=null){
             httpServer.stop(0);
         }
@@ -421,65 +441,76 @@ public class Loader extends PluginBase implements Listener {
     public static synchronized void callEventHandler(final Event e, final String functionName,String type) {
         for(Map.Entry<String,ScriptEngine> entry:engineMap.entrySet()){
             try {
-                if(type.equals("StoneSpawnEvent")){
-                    StoneSpawnEvent event = ((StoneSpawnEvent)e);
-                    if (entry.getValue().get(functionName) != null){
-                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(entry.getValue().get(a) != null){
-                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                switch (type) {
+                    case "StoneSpawnEvent": {
+                        StoneSpawnEvent event = ((StoneSpawnEvent) e);
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
                             }
                         }
+                        break;
                     }
-                }else if(type.equals("QQFriendMessageEvent")){
-                    QQFriendMessageEvent event = (QQFriendMessageEvent)e;
-                    if (entry.getValue().get(functionName) != null){
-                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(entry.getValue().get(a) != null){
-                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                    case "QQFriendMessageEvent": {
+                        QQFriendMessageEvent event = (QQFriendMessageEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
                             }
                         }
+                        break;
                     }
-                }else if(type.equals("QQGroupMessageEvent")){
-                    QQGroupMessageEvent event = (QQGroupMessageEvent)e;
-                    if (entry.getValue().get(functionName) != null){
-                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(entry.getValue().get(a) != null){
-                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                    case "QQGroupMessageEvent": {
+                        QQGroupMessageEvent event = (QQGroupMessageEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
                             }
                         }
+                        break;
                     }
-                }else if(type.equals("QQOtherEvent")){
-                    QQOtherEvent event = (QQOtherEvent)e;
-                    if (entry.getValue().get(functionName) != null){
-                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(entry.getValue().get(a) != null){
-                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                    case "QQOtherEvent": {
+                        QQOtherEvent event = (QQOtherEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
                             }
                         }
+                        break;
                     }
-                }else if(type.equals("FakeSlotChangeEvent")){
-                    FakeSlotChangeEvent event = (FakeSlotChangeEvent)e;
-                    if (entry.getValue().get(functionName) != null){
-                        ((Invocable) entry.getValue()).invokeFunction(functionName, event);
-                    }
-                    if(privatecalls.containsKey(functionName)){
-                        for(String a:privatecalls.get(functionName)){
-                            if(entry.getValue().get(a) != null){
-                                ((Invocable) entry.getValue()).invokeFunction(a, e);
+                    case "FakeSlotChangeEvent": {
+                        FakeSlotChangeEvent event = (FakeSlotChangeEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
                             }
                         }
+                        break;
                     }
                 }
             } catch (final Exception se) {
@@ -537,7 +568,7 @@ public class Loader extends PluginBase implements Listener {
         }
     }
 
-    public synchronized Object call(String functionName, Object... args){
+    public Object call(String functionName, Object... args){
         if(functionName.contains("::")) {
             String[] sp = functionName.split("::");
             if(engineMap.containsKey(sp[0])) {

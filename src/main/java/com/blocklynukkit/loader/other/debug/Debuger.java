@@ -25,7 +25,8 @@ public class Debuger {
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );
         }
-        JFrame.setDefaultLookAndFeelDecorated( true );
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
         jf = new JFrame("BlocklyNukkit调试器");
         jf.setMinimumSize(new Dimension(640,360));
         tab = new JTabbedPane(JTabbedPane.BOTTOM);

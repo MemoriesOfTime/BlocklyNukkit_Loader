@@ -195,7 +195,7 @@ public class EntityManager extends BaseManager {
             for(Entity entity:l.getEntities()){
                 if(entity!=null)
                 if(entity.getName()!=null)
-                if(entity.getName().equals("BNNPC")){
+                if(entity.getName().equals("BNNPC") || entity instanceof BNNPC){
                     entity.close();
                 }
             }
@@ -261,7 +261,7 @@ public class EntityManager extends BaseManager {
     }
     //是否是玩家
     public boolean isPlayer(Entity e){
-        if(e.getName().equals("BNNPC")||e.getName().toUpperCase().equals("NPC")){
+        if(e.getName().equals("BNNPC")|| e.getName().equalsIgnoreCase("NPC")){
             return false;//优先排除各种npc
         }else{
             return e instanceof Player;//因为要遍历堆栈，性能消耗最高，能不做就不做

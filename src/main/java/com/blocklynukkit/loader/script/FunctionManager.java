@@ -41,6 +41,7 @@ import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 
 import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
@@ -77,6 +78,28 @@ public class FunctionManager extends BaseManager {
         }else {
             nodejs = new NodeJSNotFoundLoader();
         }
+    }
+    public void requireMinVersion(String minVersion,String failMessage) throws ScriptException {
+        int check = Integer.parseInt(minVersion.replaceAll("\\.",""));
+        int nowVersion = Integer.parseInt(Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion().replaceAll("\\.",""));
+        if(nowVersion<check){
+            throw new ScriptException(failMessage);
+        }
+    }
+    public Thread runThread(String functionName,Object... args){
+        Thread thread = new Thread(() -> Loader.plugin.call(getScriptName()+"::"+functionName,args));
+        thread.start();
+        return thread;
+    }
+    public void downloadFromURL(String url,String saveDir,String saveName){
+        try {
+            Utils.downLoadFromUrl(url,saveName,saveDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void interrupt(String info) throws Throwable {
+        throw new ScriptException(info);
     }
     public Player[] getOnlinePlayers(){
         return (Player[]) Server.getInstance().getOnlinePlayers().values().toArray();

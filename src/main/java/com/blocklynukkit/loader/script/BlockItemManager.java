@@ -12,6 +12,8 @@ import cn.nukkit.inventory.FurnaceRecipe;
 import cn.nukkit.inventory.ShapedRecipe;
 import cn.nukkit.inventory.ShapelessRecipe;
 import cn.nukkit.item.Item;
+import cn.nukkit.item.RuntimeItemMapping;
+import cn.nukkit.item.RuntimeItems;
 import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -23,12 +25,14 @@ import cn.nukkit.nbt.tag.ListTag;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
+import com.sun.istack.internal.NotNull;
 import io.netty.util.collection.CharObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import javassist.*;
-import org.jetbrains.annotations.NotNull;
 
 import javax.script.ScriptEngine;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class BlockItemManager extends BaseManager {
@@ -391,6 +395,32 @@ public class BlockItemManager extends BaseManager {
     //不对外暴露: 注册新方块
     public void registerBlock(int id, Class<? extends Block> clazz) {
         Item.list[id] = clazz;
+        RuntimeItemMapping runtimeItemMapping = RuntimeItems.getRuntimeMapping();
+        Field legacyNetworkMap = null;
+        try {
+            legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        legacyNetworkMap.setAccessible(true);
+        Field networkLegacyMap = null;
+        try {
+            networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        networkLegacyMap.setAccessible(true);
+        try {
+            ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(RuntimeItems.getFullId(id,0), id << 1);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        try {
+            ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,RuntimeItems.getFullId(id,0));
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Loader.registerItemIds.add(id);
         Block.list[id] = clazz;
         Block block;
         try {
@@ -494,11 +524,15 @@ public class BlockItemManager extends BaseManager {
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
                     ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                RuntimeItemMapping runtimeItemMapping = RuntimeItems.getRuntimeMapping();
+                Field legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");legacyNetworkMap.setAccessible(true);
+                Field networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");networkLegacyMap.setAccessible(true);
+                int fullId = RuntimeItems.getFullId(id, 0);
+                ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(fullId, id << 1);
+                ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,fullId);
                 Loader.registerItemIds.add(id);
             }
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (CannotCompileException e) {
+        } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

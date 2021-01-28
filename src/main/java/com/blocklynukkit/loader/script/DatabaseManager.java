@@ -1,19 +1,27 @@
 package com.blocklynukkit.loader.script;
 
+import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.data.LocalStorage;
+import com.blocklynukkit.loader.other.data.MemoryStorage;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.C3P0Utils;
 
 import javax.script.ScriptEngine;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DatabaseManager extends BaseManager {
+    public LocalStorage localStorage;
+    public MemoryStorage<Object,Object> memoryStorage = Loader.memoryStorage;
     public DatabaseManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
+        localStorage = new LocalStorage(new File("./plugins/BlocklyNukkit/localStorage"),getScriptName());
     }
 
     @Override

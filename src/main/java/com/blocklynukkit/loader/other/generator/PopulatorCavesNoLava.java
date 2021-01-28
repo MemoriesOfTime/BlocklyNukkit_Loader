@@ -200,7 +200,7 @@ public class PopulatorCavesNoLava extends Populator {
                                         // If grass was just deleted, try to
                                         // move it down
                                         if (grassFound && (chunk.getBlockId(xx, yy - 1, zz) == Block.DIRT)) {
-                                            chunk.setBlock(xx, yy - 1, zz, ((CoveredBiome) biome).getSurfaceBlock(yy - 1));
+                                            chunk.setBlock(xx, yy - 1, zz, ((CoveredBiome) biome).getSurfaceId(xx,yy - 1,zz));
                                         }
                                     }
                                 }

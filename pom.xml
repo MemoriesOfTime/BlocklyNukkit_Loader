@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dls.icesight.blocklynukkit</groupId>
+    <groupId>com.blocklynukkit</groupId>
     <artifactId>BlocklyNukkit</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -27,8 +27,20 @@
                 <version>3.0.0</version>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/nukkit/plugins/libs</directory>
+                <includes>
+                    <include>**/*.*</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
     <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
         <repository>
             <id>nukkitx-repo</id>
             <url>http://repo.nukkitx.com/main/</url>
@@ -38,8 +50,10 @@
             <url>http://lucgameshd.de:8081/content/repositories/releases</url>
         </repository>
         <repository>
-            <id>jcenter</id>
-            <url>https://jcenter.bintray.com/</url>
+            <id>central</id>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <layout>default</layout>
         </repository>
     </repositories>
     <dependencies>
@@ -49,22 +63,10 @@
             <version>2.0.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!--https://bintray.com/him188moe/mirai/mirai-core-->
         <dependency>
-            <groupId>net.mamoe</groupId>
-            <artifactId>mirai-core</artifactId>
-            <version>0.39.5</version>
-            <optional>true</optional>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--https://bintray.com/him188moe/mirai/mirai-core-->
-        <dependency>
-            <groupId>net.mamoe</groupId>
-            <artifactId>mirai-core-qqandroid</artifactId>
-            <version>0.39.5</version>
-            <optional>true</optional>
-            <scope>provided</scope>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
         </dependency>
         <dependency>
             <groupId>cn.nukkit</groupId>
@@ -75,7 +77,7 @@
         <dependency>
             <groupId>com.creeperface.nukkit.placeholderapi</groupId>
             <artifactId>PlaceholderAPI</artifactId>
-            <version>1.4-SNAPSHOT</version>
+            <version>1.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -93,6 +95,11 @@
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.kawamuray.wasmtime</groupId>
+            <artifactId>wasmtime-java</artifactId>
+            <version>0.3.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -118,6 +125,44 @@
             <groupId>com.carrotsearch</groupId>
             <artifactId>java-sizeof</artifactId>
             <version>0.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.2.11</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/nukkit/plugins/flatlaf-0.41.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.blocklynukkit.gameAPI</groupId>
+            <artifactId>gameAPI</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/nukkit/plugins/GameAPI-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>Jython</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/nukkit/plugins/pythonForBN.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.caucho</groupId>
+            <artifactId>quercus</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/nukkit/plugins/quercus.jar</systemPath>
         </dependency>
     </dependencies>
 

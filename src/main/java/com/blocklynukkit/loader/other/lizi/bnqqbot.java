@@ -17,6 +17,9 @@ public class bnqqbot {
     public void startBot(){
         Main.start();
     }
+    public void stopBot(){
+        Main.stop();
+    }
     public void reDirectBot(String ip){
         Main.ip = ip.split(":")[0];
         if(ip.split(":").length>1){

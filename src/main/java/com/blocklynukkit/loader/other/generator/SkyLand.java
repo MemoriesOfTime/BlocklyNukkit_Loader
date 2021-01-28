@@ -213,8 +213,7 @@ public class SkyLand extends Generator {
         //PopulatorBedrock bedrock = new PopulatorBedrock();
         //this.generationPopulators.add(bedrock);
         if(enableOre){
-            PopulatorOre ores = new PopulatorOre();
-            ores.setOreTypes(new OreType[]{
+            PopulatorOre ores = new PopulatorOre(BlockID.STONE,new OreType[]{
                     new OreType(Block.get(BlockID.COAL_ORE), coal_option[0],coal_option[1],coal_option[2],coal_option[3]),
                     new OreType(Block.get(BlockID.IRON_ORE), iron_option[0], iron_option[1], iron_option[2], iron_option[3]),
                     new OreType(Block.get(BlockID.REDSTONE_ORE), redstone_option[0], redstone_option[1], redstone_option[2], redstone_option[3]),

@@ -18,6 +18,11 @@ import com.blocklynukkit.loader.other.packets.ShowStoreOfferPacket;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
@@ -27,7 +32,14 @@ import com.blocklynukkit.loader.script.window.Modal;
 import com.blocklynukkit.loader.script.window.Simple;
 
 import javax.script.ScriptEngine;
+import javax.swing.*;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.plaf.multi.MultiLookAndFeel;
+import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -272,5 +284,78 @@ public class WindowManager extends BaseManager {
         creditsPacket.eid = player.getId();
         creditsPacket.status = ShowCreditsPacket.STATUS_START_CREDITS;
         player.dataPacket(creditsPacket);
+    }
+
+    public void setSwingStyle(String style){
+        switch (style){
+            case "Darcula":
+                try {
+                    UIManager.setLookAndFeel(new FlatDarculaLaf());
+                } catch( Exception ex ) {
+                    System.err.println("Failed to initialize Darcula");
+                }
+                break;
+            case "Intellij":
+                try {
+                    UIManager.setLookAndFeel(new FlatIntelliJLaf());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize IntelliJ" );
+                }
+                break;
+            case "Metal":
+                try {
+                    UIManager.setLookAndFeel(new MetalLookAndFeel());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize Metal" );
+                }
+                break;
+            case "Motif":
+                try {
+                    UIManager.setLookAndFeel(new MotifLookAndFeel());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize Motif" );
+                }
+                break;
+            case "Multi":
+                try {
+                    UIManager.setLookAndFeel(new MultiLookAndFeel());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize Multi" );
+                }
+                break;
+            case "Nimbus":
+                try {
+                    UIManager.setLookAndFeel(new NimbusLookAndFeel());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize Multi" );
+                }
+                break;
+            case "OS":
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch( Exception ex ) {
+                    System.err.println( "Failed to initialize Multi" );
+                }
+                break;
+        }
+    }
+
+    public JFrame getStyledSwingWindow(String title,int width,int height,String iconPath){
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        JFrame jf = new JFrame(title);
+        jf.setMinimumSize(new Dimension(width,height));
+        jf.setSize(new Dimension(width, height));
+        
+        if(iconPath == null || iconPath.equals("")){
+            jf.setIconImage(Toolkit.getDefaultToolkit().getImage(com.blocklynukkit.loader.Loader.class.getResource("/BlocklyNukkit.png")));
+            return jf;
+        }
+        try {
+            jf.setIconImage(Toolkit.getDefaultToolkit().getImage(new File(iconPath).toURI().toURL()));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return jf;
     }
 }

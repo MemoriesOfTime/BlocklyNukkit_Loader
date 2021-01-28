@@ -9,6 +9,9 @@ import com.sun.net.httpserver.HttpServer;
 import com.blocklynukkit.loader.other.net.http.MyCustomHandler;
 import com.blocklynukkit.loader.other.net.http.MyFileHandler;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -19,9 +22,12 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Utils {
+    static Matcher urlMatcher = null;
     public static void makeHttpServer(int port){
         try {
             InetSocketAddress address = new InetSocketAddress(port);
@@ -403,9 +409,9 @@ public class Utils {
         String result = "NULL";
         BufferedReader in = null;
         try {
-            String urlNameString = url;
+            String urlNameString = urlEncodeChinese(url);
             if(!(param.length()==0||param==null)){
-                urlNameString = url + "?" + param;
+                urlNameString = url + "?" + URLEncoder.encode(param,"utf-8");
             }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
@@ -496,7 +502,7 @@ public class Utils {
         PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
-        URL realUrl = new URL(url);
+        URL realUrl = new URL(urlEncodeChinese(url));
         URLConnection conn = realUrl.openConnection();
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(15000);
@@ -529,6 +535,21 @@ public class Utils {
         return result;
     }
 
+    public static String urlEncodeChinese(String url) {
+        try {
+            if(urlMatcher == null){
+                urlMatcher = Pattern.compile("[\\u4e00-\\u9fa5]").matcher(url);
+            }
+            String tmp = "";
+            while (urlMatcher.find()) {
+                tmp = urlMatcher.group();
+                url = url.replaceAll(tmp, URLEncoder.encode(tmp, "UTF-8"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return url.replace(" ","%20");
+    }
 
     private static String getFilecharset(File sourceFile) {
         String charset = "UTF-8";
@@ -736,6 +757,57 @@ public class Utils {
         Field tail = map.getClass().getDeclaredField("tail");
         tail.setAccessible(true);
         return (Map.Entry<K, V>) tail.get(map);
+    }
+
+    public static BufferedImage toBufferedImage(Image image) {
+        if (image instanceof BufferedImage) {
+            return (BufferedImage)image;
+        }
+
+        // This code ensures that all the pixels in the image are loaded
+        image = new ImageIcon(image).getImage();
+
+        // Determine if the image has transparent pixels; for this method's
+        // implementation, see e661 Determining If an Image Has Transparent Pixels
+        //boolean hasAlpha = hasAlpha(image);
+
+        // Create a buffered image with a format that's compatible with the screen
+        BufferedImage bimage = null;
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        try {
+            // Determine the type of transparency of the new buffered image
+            int transparency = Transparency.OPAQUE;
+       /* if (hasAlpha) {
+         transparency = Transparency.BITMASK;
+         }*/
+
+            // Create the buffered image
+            GraphicsDevice gs = ge.getDefaultScreenDevice();
+            GraphicsConfiguration gc = gs.getDefaultConfiguration();
+            bimage = gc.createCompatibleImage(
+                    image.getWidth(null), image.getHeight(null), transparency);
+        } catch (HeadlessException e) {
+            // The system does not have a screen
+        }
+
+        if (bimage == null) {
+            // Create a buffered image using the default color model
+            int type = BufferedImage.TYPE_INT_RGB;
+            //int type = BufferedImage.TYPE_3BYTE_BGR;//by wang
+        /*if (hasAlpha) {
+         type = BufferedImage.TYPE_INT_ARGB;
+         }*/
+            bimage = new BufferedImage(image.getWidth(null), image.getHeight(null), type);
+        }
+
+        // Copy image to buffered image
+        Graphics g = bimage.createGraphics();
+
+        // Paint the image onto the buffered image
+        g.drawImage(image, 0, 0, null);
+        g.dispose();
+
+        return bimage;
     }
 }
 

@@ -20,7 +20,6 @@ public class showStackTrace extends Command {
                 Loader.previousException.printStackTrace();
             }
         }
-        //com.blocklynukkit.loader.Loader.functionManager.callFunction("bn插件名::函数名");
         return false;
     }
 }

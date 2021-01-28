@@ -16,9 +16,7 @@ import javax.script.Invocable;
 import javax.script.ScriptException;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,11 +32,15 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
+                String js = Utils.readToString(file);
+                List<String> pragmas= getPragma(js);
+                if(pragmas.contains("pragma autoload false")){
+                    return;
+                }
                 if (Server.getInstance().getLanguage().getName().contains("中文"))
                     getlogger().warning("加载BN插件: " + file.getName());
                 else
                     getlogger().warning("loading BN plugin: " + file.getName());
-                String js = Utils.readToString(file);
                 putJavaScriptEngine(file.getName(),js);
             }else if(file.getName().endsWith(".py")&&!file.getName().contains("bak") && !plugins.containsKey("PyBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -57,6 +59,15 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 else{
                     getlogger().warning("cannot load BN plugin:" + file.getName()+" PHP libs not found!");
                     getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
+                }
+            }else if(file.getName().endsWith(".wasm")&&!file.getName().contains("bak") && !plugins.containsKey("WebassemblyBN")){
+                if (Server.getInstance().getLanguage().getName().contains("中文")){
+                    getlogger().warning("无法加载:" + file.getName()+"! 缺少Webassembly依赖库");
+                    getlogger().warning("请到 https://tools.blocklynukkit.com/Webassembly.jar下载依赖插件");
+                }
+                else{
+                    getlogger().warning("cannot load BN plugin:" + file.getName()+" webassembly libs not found!");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/WebassemblyBN.jar");
                 }
             }
         }
@@ -184,5 +195,24 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             }
         }
         return polyfilljs;
+    }
+
+    @Override
+    public List<String> getPragma(String code){
+        List<String> pragma = new ArrayList<>();
+        String[] lines = code.split("\n");
+        for(String line:lines){
+            if(line.trim().startsWith("//")){
+                String toCheck = line.replaceFirst("//","").trim();
+                if(toCheck.startsWith("pragma")){
+                    toCheck = toCheck.replaceAll(" +","");
+                    if(toCheck.startsWith("pragma end")){
+                        break;
+                    }
+                    pragma.add(toCheck.toLowerCase());
+                }
+            }
+        }
+        return pragma;
     }
 }

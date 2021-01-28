@@ -4,7 +4,11 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockID;
+import cn.nukkit.block.BlockItemFrame;
+import cn.nukkit.blockentity.BlockEntity;
+import cn.nukkit.blockentity.BlockEntityItemFrame;
 import cn.nukkit.event.player.PlayerTeleportEvent;
+import cn.nukkit.item.ItemMap;
 import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -18,6 +22,7 @@ import cn.nukkit.level.generator.Nether;
 import cn.nukkit.level.generator.Normal;
 import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.ChangeDimensionPacket;
 import cn.nukkit.network.protocol.PlayStatusPacket;
 import cn.nukkit.scheduler.Task;
@@ -28,10 +33,16 @@ import com.blocklynukkit.loader.other.generator.SkyLand;
 import com.blocklynukkit.loader.other.generator.VoidGenerator;
 import com.blocklynukkit.loader.other.generator.render.LevelNameRender;
 import com.blocklynukkit.loader.script.bases.BaseManager;
+import com.blocklynukkit.loader.utils.Utils;
 
+import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
+import java.util.List;
 
 import static com.blocklynukkit.loader.Loader.OceanSeaLevel;
 import static com.blocklynukkit.loader.Loader.skylandoptions;
@@ -292,5 +303,56 @@ public class LevelManager extends BaseManager {
     public void defineChunkRenderByName(String forLevel,String callback,int priority){
         Loader.levelRenderList.add(new LevelNameRender(forLevel,callback,priority));
         Collections.sort(Loader.levelRenderList);
+    }
+
+    public void drawPic(Position pos1,Position pos2,String img,int faceData){
+        try {
+            Level level = pos1.getLevel();
+            int xl = (int)Math.abs(pos1.x-pos2.x) + 1;
+            int yl = (int)Math.abs(pos1.y-pos2.y) + 1;
+            int zl = (int)Math.abs(pos1.z-pos2.z) + 1;
+            BufferedImage image;
+            if(Loader.savedImgMap.get(xl+","+yl+","+zl+img)==null){
+                image = ImageIO.read(new File(img));
+                image = Utils.toBufferedImage(image.getScaledInstance(Math.max(xl,zl)*128,yl*128, Image.SCALE_DEFAULT));
+                Loader.savedImgMap.put(xl+","+yl+","+zl+img,image);
+            }else {
+                image = Loader.savedImgMap.get(xl+","+yl+","+zl+img);
+            }
+            for(int i=(int)Math.min(pos1.x,pos2.x);i<xl+(int)Math.min(pos1.x,pos2.x);i++){
+                for(int j=(int)Math.min(pos1.y,pos2.y);j<yl+(int)Math.min(pos1.y,pos2.y);j++){
+                    for(int k=(int)Math.min(pos1.z,pos2.z);k<zl+(int)Math.min(pos1.z,pos2.z);k++){
+                        ItemMap itemMap = new ItemMap();
+                        itemMap.setImage(image.getSubimage(
+                                ((int)Math.max(i-Math.min(pos1.x,pos2.x),k-Math.min(pos1.z,pos2.z)))*128,
+                                (yl-1-(j-(int)Math.min(pos1.y,pos2.y)))*128,
+                                128,128));
+                        if(level.getBlock(i,j,k).getId()==BlockID.ITEM_FRAME_BLOCK){
+                            BlockEntity blockEntity = level.getBlockEntity(new Vector3(i,j,k));
+                            if(blockEntity instanceof BlockEntityItemFrame){
+                                BlockEntityItemFrame blockEntityItemFrame = (BlockEntityItemFrame) blockEntity;
+                                blockEntityItemFrame.setItem(itemMap,true);
+                                continue;
+                            }else {
+                                level.removeBlockEntity(blockEntity);
+                                level.setBlock(new Vector3(i,j,k),Block.get(0));
+                            }
+                        }else {
+                            BlockItemFrame frame = new BlockItemFrame(faceData);
+                            level.setBlock(new Vector3(i,j,k),frame);
+                        }
+                        CompoundTag nbt = (new CompoundTag()).putString("id", "ItemFrame").putInt("x", i).putInt("y", j).putInt("z", k);
+                        level.getPlayers().values().forEach(itemMap::sendImage);
+                        BlockEntityItemFrame blockEntityItemFrame = new BlockEntityItemFrame(Position.fromObject(new Vector3(i,j,k),level).getChunk(),nbt);
+                        blockEntityItemFrame.setItem(itemMap);
+                        level.addBlockEntity(blockEntityItemFrame);
+                        blockEntityItemFrame.scheduleUpdate();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

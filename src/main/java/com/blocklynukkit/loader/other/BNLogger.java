@@ -13,13 +13,14 @@ import java.util.Arrays;
 public class BNLogger {
     private String name;
     public BNLogger(String name){
-        this.name=name.replaceFirst("\\.js","").replaceFirst("\\.py","").replaceFirst("\\.lua","").replaceFirst("\\.php","");
+        this.name=name.replaceFirst("\\.js","").replaceFirst("\\.py","").replaceFirst("\\.lua","").replaceFirst("\\.php","").replaceFirst("\\.wasm","");
     }
     public void info(Object mes){
         if(mes==null){
             Server.getInstance().getLogger().info("["+name+"] null");
+            return;
         }
-        String output = mes.toString();
+        String output = mes+"";
         JavaScriptLoader js = new JavaScriptLoader(Loader.plugin);
         if(js.isThisLanguage(mes)){
             output = js.toString(mes);
@@ -130,8 +131,9 @@ public class BNLogger {
     public void warning(Object mes){
         if(mes==null){
             Server.getInstance().getLogger().info("["+name+"] null");
+            return;
         }
-        String output = mes.toString();
+        String output = mes+"";
         JavaScriptLoader js = new JavaScriptLoader(Loader.plugin);
         if(js.isThisLanguage(mes)){
             output = js.toString(mes);

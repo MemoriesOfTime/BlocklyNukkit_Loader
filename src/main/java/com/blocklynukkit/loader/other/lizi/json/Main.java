@@ -32,6 +32,18 @@ public class Main {
         clientTest.start();
     }
 
+    public static void stop(){
+        if(clientTest!=null){
+            try {
+                clientTest.socket.close();
+                clientTest.interrupt();
+                clientTest = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     /**
      * 收到好友消息
      * @param data

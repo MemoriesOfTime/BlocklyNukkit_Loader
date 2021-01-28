@@ -17,9 +17,7 @@ import javax.script.Invocable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,12 +33,17 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                 for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
                     if(file.isDirectory()) continue;
                     if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
-                        try (final InputStreamReader reader = new InputStreamReader(new FileInputStream(file),"UTF-8")) {
+                        try {
+                            String py = Utils.readToString(file);
+                            List<String> pragmas= getPragma(py);
+                            if(pragmas.contains("pragma autoload false")){
+                                return;
+                            }
                             if (Server.getInstance().getLanguage().getName().contains("中文"))
                                 plugin.getLogger().warning("加载BN插件: " + file.getName());
                             else
                                 plugin.getLogger().warning("loading BN plugin: " + file.getName());
-                            putPythonEngine(file.getName(),Utils.readToString(file));
+                            putPythonEngine(file.getName(),py);
                         } catch (final Exception e) {
                             if (Server.getInstance().getLanguage().getName().contains("中文")){
                                 plugin.getLogger().error("无法加载： " + file.getName(), e);}
@@ -132,6 +135,25 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
     @Override
     public boolean isThisLanguage(Object var){
         return var instanceof PyObject;
+    }
+
+    @Override
+    public List<String> getPragma(String code) {
+        List<String> pragma = new ArrayList<>();
+        String[] lines = code.split("\n");
+        for(String line:lines){
+            if(line.trim().startsWith("#")){
+                String toCheck = line.replaceFirst("#","").trim();
+                if(toCheck.startsWith("pragma")){
+                    toCheck = toCheck.replaceAll(" +","");
+                    if(toCheck.startsWith("pragma end")){
+                        break;
+                    }
+                    pragma.add(toCheck.toLowerCase());
+                }
+            }
+        }
+        return pragma;
     }
 
 }

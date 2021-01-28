@@ -15,12 +15,21 @@ F(Closure function)函数用于包装闭包
 bnAPI中的;换行现在支持使用\\;来转义
 修复了php中F(闭包)函数返回类型错误的问题
 修复了logger(console)输出null或nil报错的问题
+修复了无法监听修改version命令的问题
+新增预处理语句pragma autoload false/true，是否让bn解释器自动加载此插件，默认true
+修复了射箭不会触发EntityDamageByEntityEvent问题
+修复了http处理时url无法自动编码问题
 
 PHP
 
 更新了基于quercusPHP6引擎的php插件编写支持
 quercus提供的运行环境请看http://quercus.caucho.com/quercus-3.1/doc/quercus.xtp
 兼容全部的java类、nukkit的api和bn的基对象，调用bn的api记得前面加$
+
+C/C++
+
+更新了基于webassembly技术栈的C/C++插件编写支持
+可以直接调用java并于java进行交互，一次编译，处处运行，支持windows linux macos
 
 export
 
@@ -57,6 +66,22 @@ logger
 
 - 强化了logger的功能，现在可以将对象以json格式输出
 
+database
+
+- localStorage: 本地存储管理器
+- void localStorage.cacheAll() --从本地读取数据并缓存，增加运行时获取数据速度
+- String localStorage.cache(String key) --从本地读取指定数据并缓存
+- void localStorage.setItem(String key,String item) --设置指定key对应的数据为item
+- String localStorage.getItem(String key) --获取指定key对应的数据
+- void localStorage.removeItem(String key) --移除指定key对应的数据
+- String[] localStorage.getKeys() --获取所有的key
+- void localStorage.save() --强制立即保存数据，bn会每3秒检查并保存一次数据
+- memoryStorage: 内存共享存储管理器
+- void memoryStorage.setItem(Object key,Object item) --设置指定key对应的数据为item
+- String memoryStorage.getItem(Object key) --获取指定key对应的数据
+- void memoryStorage.removeItem(Object key) --移除指定key对应的数据
+- Object[] localStorage.getKeys() --获取所有的key
+
 manager
 
 - Player[] getOnlinePlayers()
@@ -70,6 +95,11 @@ manager
 - boolean isPathReadable(String path)
 - boolean isPathWritable(String path)
 - void copyFile(String fromPath,String toPath)
+- void qq.stopBot()
+- void interrupt(String info) --强制中断当前函数运行
+- void downloadFromURL(String url,String saveDir,String saveName)
+- Thread runThread(String functionName,Object... args) --在新线程中执行函数并同步返回这个线程
+- void requireMinVersion(String minVersion,String failMessage) --检查bn解释器版本，如果太低停止运行并发出failMessage
 
 entity
 
@@ -89,6 +119,10 @@ window
 - String getTextOfPlayerBossBar(Player player,long id)
 - void sendPlayerXboxInfo(Player from,Player to) --向to玩家展示from玩家的xbox信息
 - void startEndPoem(Player player) --让玩家屏幕上开始展示终末之诗
+- void setSwingStyle(String style) --设置swing的样式
+  - 目前有：Darcula Intellij Metal Motif Multi Nimbus OS(系统样式)
+- JFrame getStyledSwingWindow(String title,int width,int height,String iconPath)
+  - 根据之前设置的样式获取Swing窗口对象，iconPath为null或""将使用bnLOGO替代
 
 WindowBuilders
 
@@ -207,16 +241,18 @@ world
     - forLevel是渲染器能够渲染的指定世界名称
     - callback是渲染器回调函数
     - priority是优先级，优先级越大先调用，不填默认为0
+- void drawPic(Position pos1,Position pos2,String img,int faceData)
+    - 从pos1到pos2绘制img路径上的图片，faceData指定物品展示框的朝向，pos1和pos2必须在同一垂直面上
     
 blockitem
 
 - void registerSolidBlock(int id,String name,double hardness,double resistance,int toolType,boolean isSilkTouchable,int dropMinExp,int dropMaxExp,int mineTier)
-    - 注册固体方块，参数分别为方块id(可覆写原版方块)，方块名称，方块硬度，方块抗爆炸度，挖掘工具，是否受精准采集影响，最小掉落经验，最大掉落经验，挖掘等级
+    - 注册固体方块，参数分别为方块id(只能覆写教育版方块)，方块名称，方块硬度，方块抗爆炸度，挖掘工具，是否受精准采集影响，最小掉落经验，最大掉落经验，挖掘等级
     - 方块硬度越大挖掘时间越长，抗爆炸度越高越不容易被炸
     - 挖掘工具0-无,1-剑,2-铲,3-镐,4-斧,5-剪刀
     - 挖掘等级0-空手,1-木,2-金,3-石,4-铁,5-钻石
 - void registerSimpleItem(int id,String name)
-    - 注册简单的物品堆，但是现在无法显示材质，只能在覆写教育版物品时显示材质
+    - 注册简单的物品堆，只能覆写教育版物品
 
 
 ## 1.2.8.4
@@ -357,8 +393,8 @@ Bugs Fixed
 
 manager
 
-- <E> callFunction(String functionname,Object... args) --callFunction会返回函数的返回值了
-- <E> getVariableFrom(String scriptName,String varName) --根据bn插件名和变量名获取变量内容
+- \<E\> callFunction(String functionname,Object... args) --callFunction会返回函数的返回值了
+- \<E\> getVariableFrom(String scriptName,String varName) --根据bn插件名和变量名获取变量内容
 - void putVariableTo(String scriptName,String varName,<E> var) --把变量值以指定变量名放到指定bn插件中
 - double getCPULoad()
 - int getCPUCores()

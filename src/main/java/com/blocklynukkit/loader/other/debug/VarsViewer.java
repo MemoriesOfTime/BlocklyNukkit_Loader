@@ -1,7 +1,6 @@
 package com.blocklynukkit.loader.other.debug;
 
 import com.blocklynukkit.loader.Loader;
-import com.alibaba.fastjson.JSON;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.runtime.JSType;
 

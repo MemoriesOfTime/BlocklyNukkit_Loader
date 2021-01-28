@@ -119,7 +119,9 @@
         <dependency>
             <groupId>io.github.kawamuray.wasmtime</groupId>
             <artifactId>wasmtime-java</artifactId>
-            <version>0.4.0</version>
+            <version>0.3.0</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/nukkit/plugins/wasmtime-java-0.3.0-fixed.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

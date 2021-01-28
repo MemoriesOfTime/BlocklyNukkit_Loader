@@ -20,7 +20,7 @@ stages:
             mavenPomFile: 'pom.xml'
             goals: 'mvn package'
             uploadArtifact: true
-              uploadArtifactOptions:
-                artifactPath: './target'
-                artifactRepository: 'BlocklyNukkit-1.x'
-                artifactName: 'BlocklyNukkit_Loader'
+            uploadArtifactOptions:
+              artifactPath: './target'
+              artifactRepository: 'BlocklyNukkit-1.x'
+              artifactName: 'BlocklyNukkit_Loader'

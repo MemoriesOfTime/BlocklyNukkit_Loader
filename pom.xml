@@ -19,6 +19,9 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <compilerArguments>
+                        <bootclasspath>${java.home}\lib\rt.jar;${java.home}\lib\jce.jar</bootclasspath>
+                    </compilerArguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -113,7 +116,7 @@
         <dependency>
             <groupId>io.github.kawamuray.wasmtime</groupId>
             <artifactId>wasmtime-java</artifactId>
-            <version>0.3.0</version>
+            <version>0.4.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>

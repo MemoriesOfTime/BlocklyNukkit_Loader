@@ -84,6 +84,8 @@
             <groupId>de.theamychan</groupId>
             <artifactId>ScoreboardAPI</artifactId>
             <version>1.3</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/nukkit/plugins/ScoreboardAPI-1.3-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.nukkitx</groupId>
@@ -141,28 +143,28 @@
             <artifactId>flatlaf</artifactId>
             <version>1</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/nukkit/plugins/flatlaf-0.41.jar</systemPath>
+            <systemPath>${pom.basedir}/nukkit/plugins/flatlaf-0.41.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.blocklynukkit.gameAPI</groupId>
             <artifactId>gameAPI</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/nukkit/plugins/GameAPI-1.0-SNAPSHOT.jar</systemPath>
+            <systemPath>${pom.basedir}/nukkit/plugins/GameAPI-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.python</groupId>
             <artifactId>Jython</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/nukkit/plugins/pythonForBN.jar</systemPath>
+            <systemPath>${pom.basedir}/nukkit/plugins/pythonForBN.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.caucho</groupId>
             <artifactId>quercus</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/nukkit/plugins/quercus.jar</systemPath>
+            <systemPath>${pom.basedir}/nukkit/plugins/quercus.jar</systemPath>
         </dependency>
     </dependencies>
 

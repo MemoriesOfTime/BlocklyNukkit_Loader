@@ -2,7 +2,6 @@ package com.blocklynukkit;
 
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.*;
-import com.sun.istack.internal.Nullable;
 
 public class JavaAPI {
     public AlgorithmManager algorithm = new AlgorithmManager(null);
@@ -11,7 +10,6 @@ public class JavaAPI {
     public EntityManager entity = new EntityManager(null);
     public FunctionManager function = new FunctionManager(null);
     public FunctionManager manager = function;
-    @Nullable
     public GameManager gameapi = Loader.plugins.containsKey("GameAPI")?new GameManager(null):null;
     public InventoryManager inventory = new InventoryManager(null);
     public LevelManager world = new LevelManager(null);

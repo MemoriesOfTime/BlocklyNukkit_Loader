@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再再再尝试修复CI文件">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="再再再再再尝试修复CI文件">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -644,13 +643,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00027" summary="更新">
-      <created>1588210128038</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1588210128038</updated>
-    </task>
     <task id="LOCAL-00028" summary="更新">
       <created>1588411612183</created>
       <option name="number" value="00028" />
@@ -987,7 +979,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611821718608</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="再再再再再尝试修复CI文件">
+      <created>1611822867638</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1611822867638</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1039,7 +1038,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="重构bnqqbot，完善managerAPI，添加bn插件包功能" />
     <MESSAGE value="修复bn插件包功能，php可echo输出" />
     <MESSAGE value="代码更新至1290-beta-r16" />
     <MESSAGE value="在javascript上实现F()语法糖并修复语法糖函数重名混淆问题" />
@@ -1064,7 +1062,8 @@
     <MESSAGE value="再再尝试修复CI文件" />
     <MESSAGE value="再再再尝试修复CI文件" />
     <MESSAGE value="再再再再尝试修复CI文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="再再再再尝试修复CI文件" />
+    <MESSAGE value="再再再再再尝试修复CI文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="再再再再再尝试修复CI文件" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

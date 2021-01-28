@@ -2,7 +2,6 @@ package com.blocklynukkit.loader.other.Items;
 
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
 
@@ -13,7 +12,6 @@ public class ItemComponentEntry {
         this.name=name;
         this.nbt=nbt;
     }
-    @Nullable
     public byte[] toBytes(){
         try {
             return NBTIO.write(nbt);

@@ -25,7 +25,6 @@ import cn.nukkit.nbt.tag.ListTag;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
-import com.sun.istack.internal.NotNull;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import javassist.*;
@@ -203,7 +202,8 @@ public class BlockItemManager extends BaseManager {
     //-获取物品数据值*
     //-获取物品名称*
     //-物品不可破坏*
-    public void setItemProperty(@NotNull Item item, Integer data, Integer count, Boolean unbreakable, String name, String lore, String nbt) {
+    @Deprecated
+    public void setItemProperty(Item item, Integer data, Integer count, Boolean unbreakable, String name, String lore, String nbt) {
 
     }
     //未完成-获取工具种类*

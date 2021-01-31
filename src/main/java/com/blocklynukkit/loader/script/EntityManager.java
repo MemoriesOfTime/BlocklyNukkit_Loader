@@ -273,7 +273,7 @@ public class EntityManager extends BaseManager {
         CompoundTag tag = new CompoundTag().putList(new ListTag("Pos").add(new DoubleTag("", pos.x)).add(new DoubleTag("", pos.y)).add(new DoubleTag("", pos.z)))
                 .putList(new ListTag("Motion").add(new DoubleTag("", 0)).add(new DoubleTag("", 0)).add(new DoubleTag("", 0)))
                 .putList(new ListTag("Rotation").add(new FloatTag("", 0)).add(new FloatTag("", 0)))
-                .putInt("TileID", block.getId())
+                .putInt("TileID", block.getId()).putInt("Tile", block.getId())
                 .putByte("Data", block.getDamage());
         if(enableGravity){
             EntityFallingBlock fallingBlock = new EntityFallingBlock(pos.getChunk(),tag);
@@ -284,7 +284,6 @@ public class EntityManager extends BaseManager {
             nofallBlock.spawnToAll();
             return nofallBlock;
         }
-
     }
     //单独播放声音
     public void makeSoundToPlayer(Player player,String sound){

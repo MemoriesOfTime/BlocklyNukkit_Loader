@@ -4,12 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="生成坠落方块返回实体">
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Climbable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Fallable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Hostile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/Node.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/SimpleRouteFinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1290-beta-r6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1290.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1291-beta-r1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/NoFallBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/NoFallBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -647,13 +654,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00040" summary="漂亮的报错">
-      <created>1597076271483</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1597076271483</updated>
-    </task>
     <task id="LOCAL-00041" summary="修复manager函数丢失">
       <created>1597157575033</created>
       <option name="number" value="00041" />
@@ -990,7 +990,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612087326577</updated>
     </task>
-    <option name="localTasksCounter" value="89" />
+    <task id="LOCAL-00089" summary="尝试修复方块实体无法不坠落">
+      <created>1612092275830</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1612092275830</updated>
+    </task>
+    <option name="localTasksCounter" value="90" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1042,7 +1049,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="实现自定义固体方块，修复tips兼容" />
     <MESSAGE value="修复api兼容问题" />
     <MESSAGE value="bnp别名bnpm" />
     <MESSAGE value="将httpHandler移动到net.http下" />
@@ -1067,7 +1073,8 @@
     <MESSAGE value="修复射箭函数" />
     <MESSAGE value="修复射箭函数中参数依赖问题" />
     <MESSAGE value="生成坠落方块返回实体" />
-    <option name="LAST_COMMIT_MESSAGE" value="生成坠落方块返回实体" />
+    <MESSAGE value="尝试修复方块实体无法不坠落" />
+    <option name="LAST_COMMIT_MESSAGE" value="尝试修复方块实体无法不坠落" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

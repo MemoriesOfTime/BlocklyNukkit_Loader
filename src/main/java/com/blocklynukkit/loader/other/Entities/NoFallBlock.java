@@ -15,6 +15,7 @@ public class NoFallBlock extends EntityFallingBlock {
     public NoFallBlock(FullChunk chunk,CompoundTag nbt,boolean canplace){
         super(chunk, nbt);
         this.canplace=canplace;
+        this.setImmobile();
     }
     @Override
     public float getGravity(){

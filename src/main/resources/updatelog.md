@@ -1,3 +1,10 @@
+## 1.2.9.1
+
+entity
+
+- Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced)
+
+
 ## 1.2.9.0
 
 new

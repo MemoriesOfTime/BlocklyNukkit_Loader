@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MobPlugin-1.18.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/nukkit/plugins/MobPlugin-1.18.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

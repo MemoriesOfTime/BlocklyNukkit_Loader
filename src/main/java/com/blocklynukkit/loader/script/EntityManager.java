@@ -269,7 +269,7 @@ public class EntityManager extends BaseManager {
         }
     }
     //生成方块实体
-    public void spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced){
+    public Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced){
         CompoundTag tag = new CompoundTag().putList(new ListTag("Pos").add(new DoubleTag("", pos.x)).add(new DoubleTag("", pos.y)).add(new DoubleTag("", pos.z)))
                 .putList(new ListTag("Motion").add(new DoubleTag("", 0)).add(new DoubleTag("", 0)).add(new DoubleTag("", 0)))
                 .putList(new ListTag("Rotation").add(new FloatTag("", 0)).add(new FloatTag("", 0)))
@@ -278,9 +278,11 @@ public class EntityManager extends BaseManager {
         if(enableGravity){
             EntityFallingBlock fallingBlock = new EntityFallingBlock(pos.getChunk(),tag);
             fallingBlock.spawnToAll();
+            return fallingBlock;
         }else {
             NoFallBlock nofallBlock = new NoFallBlock(pos.getChunk(),tag,canBePlaced);
             nofallBlock.spawnToAll();
+            return nofallBlock;
         }
 
     }

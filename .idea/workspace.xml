@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="修复射箭函数" />
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="修复射箭函数中参数依赖问题">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/Node.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -641,13 +644,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00038" summary="临时同步一下">
-      <created>1597030471388</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1597030471388</updated>
-    </task>
     <task id="LOCAL-00039" summary="添加新函数int getEventResponseIndex">
       <created>1597072637648</created>
       <option name="number" value="00039" />
@@ -984,7 +980,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612079353277</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="修复射箭函数中参数依赖问题">
+      <created>1612079584535</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1612079584535</updated>
+    </task>
+    <option name="localTasksCounter" value="88" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1036,7 +1039,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="实现CustomWindowBuilder链式调用" />
     <MESSAGE value="初步实现地图渲染器功能" />
     <MESSAGE value="实现自定义固体方块，修复tips兼容" />
     <MESSAGE value="修复api兼容问题" />
@@ -1061,7 +1063,8 @@
     <MESSAGE value="修复wasm加载器版本不对问题" />
     <MESSAGE value="1.2.9.0正式版" />
     <MESSAGE value="修复射箭函数" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复射箭函数" />
+    <MESSAGE value="修复射箭函数中参数依赖问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复射箭函数中参数依赖问题" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

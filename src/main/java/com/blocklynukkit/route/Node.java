@@ -15,7 +15,7 @@ public class Node implements Comparable<Node> {
     private int H;
     private int F;
 
-    Node(Vector3 vector3, Node parent, int G, int H) {
+    public Node(Vector3 vector3, Node parent, int G, int H) {
         this.vector3 = vector3;
         this.parent = parent;
         this.G = G;
@@ -23,7 +23,7 @@ public class Node implements Comparable<Node> {
         this.F = G + H;
     }
 
-    Node(Vector3 vector3) {
+    public Node(Vector3 vector3) {
         this(vector3, null, 0, 0);
     }
 

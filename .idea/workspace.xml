@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="1.2.9.0正式版">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/MobPlugin_1_18_1.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nukkit/plugins/MobPlugin-1.18.1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1290-beta-r6.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1290.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/BlocklyNukkit/BlocklyNukkit-1291-beta-r1.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/MathUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
-    </list>
+    <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="修复射箭函数" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -650,13 +641,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00037" summary="临时推一下">
-      <created>1596689251995</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1596689251995</updated>
-    </task>
     <task id="LOCAL-00038" summary="临时同步一下">
       <created>1597030471388</created>
       <option name="number" value="00038" />
@@ -993,7 +977,14 @@
       <option name="project" value="LOCAL" />
       <updated>1611833497300</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="修复射箭函数">
+      <created>1612079353277</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1612079353277</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1045,7 +1036,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加展示终末之诗函数" />
     <MESSAGE value="实现CustomWindowBuilder链式调用" />
     <MESSAGE value="初步实现地图渲染器功能" />
     <MESSAGE value="实现自定义固体方块，修复tips兼容" />
@@ -1070,7 +1060,8 @@
     <MESSAGE value="提交丢失的依赖库文件" />
     <MESSAGE value="修复wasm加载器版本不对问题" />
     <MESSAGE value="1.2.9.0正式版" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.2.9.0正式版" />
+    <MESSAGE value="修复射箭函数" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复射箭函数" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

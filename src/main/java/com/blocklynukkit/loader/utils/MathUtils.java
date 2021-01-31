@@ -1,12 +1,8 @@
 package com.blocklynukkit.loader.utils;
 
-import org.apache.commons.math3.util.Precision;
-
 public class MathUtils {
     public static double toRadians(double x) {
         if (!Double.isInfinite(x) && x != 0.0D) {
-            double facta = 0.01745329052209854D;
-            double factb = 1.997844754509471E-9D;
             double xa = doubleHighPart(x);
             double xb = x - xa;
             double result = xb * 1.997844754509471E-9D + xb * 0.01745329052209854D + xa * 1.997844754509471E-9D + xa * 0.01745329052209854D;
@@ -20,7 +16,7 @@ public class MathUtils {
         }
     }
     private static double doubleHighPart(double d) {
-        if (d > -Precision.SAFE_MIN && d < Precision.SAFE_MIN) {
+        if (d > -Double.longBitsToDouble(4503599627370496L) && d < Double.longBitsToDouble(4503599627370496L)) {
             return d;
         } else {
             long xl = Double.doubleToRawLongBits(d);

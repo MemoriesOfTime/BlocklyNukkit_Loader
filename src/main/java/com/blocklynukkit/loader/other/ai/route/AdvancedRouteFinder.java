@@ -31,33 +31,45 @@ public class AdvancedRouteFinder extends RouteFinder{
 
 	@Override
 	public boolean search(){
+		this.succeed = false;
+		this.searching = true;
+
 		if(this.getStart() == null || this.getDestination() == null){
 			return this.succeed = this.searching = false;
 		}
 
 		this.resetNodes();
 		Node start = new Node(this.getStart().floor());
-		start.f = start.g = 0;
-
-		open.add(start);
-		this.grid.putNode(start.getVector3(), start);
-
 		Node endNode = new Node(this.realDestination.floor());
-		this.grid.putNode(endNode.getVector3(), endNode);
+		try {
+			start.f = start.g = 0;
+			open.add(start);
+			this.grid.putNode(start.getVector3(), start);
+			this.grid.putNode(endNode.getVector3(), endNode);
+		} catch (Exception e) {
+			return this.succeed = this.searching = false;
+		}
 
-		this.succeed = false;
-		this.searching = true;
-
-		int limit = 500;
+		int limit = searchLimit;
 		while(!open.isEmpty() && limit-- > 0){
+			if (this.forceStop) {
+				this.resetNodes();
+				this.forceStop = false;
+				return this.succeed = this.searching = false;
+			}
+
 			Node node = null;
 
 			double f = Double.MAX_VALUE;
-			for(Node cur : this.open){
-				if(cur.f < f && cur.f != -1){
-					node = cur;
-					f = cur.f;
+			try {
+				for(Node cur : this.open){
+					if(cur.f < f && cur.f != -1){
+						node = cur;
+						f = cur.f;
+					}
 				}
+			} catch (Exception e) {
+				return this.succeed = this.searching = false;
 			}
 
 			if(endNode.equals(node)){
@@ -66,8 +78,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 				nodes.add(node);
 				while((node = node.getParent()) != null){
 					node.add(0.5, 0, 0.5);
-					//level.addParticle(new cn.nukkit.level.particle.CriticalParticle(node.getVector3(), 3));
-
+					level.addParticle(new cn.nukkit.level.particle.CriticalParticle(node.getVector3().add(0,0.15),3));
 					nodes.add(node);
 				};
 				Collections.reverse(nodes);
@@ -92,6 +103,12 @@ public class AdvancedRouteFinder extends RouteFinder{
 				neighbor.setParent(node);
 				neighbor.g = tentative_gScore;
 				neighbor.f = neighbor.g + this.heuristic(neighbor.getVector3(), endNode.getVector3());
+
+				if (this.forceStop) {
+					this.resetNodes();
+					this.forceStop = false;
+					return this.succeed = this.searching = false;
+				}
 			}
 		}
 
@@ -140,17 +157,28 @@ public class AdvancedRouteFinder extends RouteFinder{
 		return neighbors;
 	}
 
+	public static boolean canPassThroughBlock(Block block){
+		switch (block.getId()){
+			case 6: case 31: case 32: case 37: case 38: case 39: case 40: case 50: case 55: case 59:
+			case 83: case 93: case 94: case 141: case 142: case 147: case 148: case 149: case 150:
+			case 171: case 175: case 106: case 0:
+				return true;
+			default:
+				return block.canPassThrough();
+		}
+	}
+
 	private Block getHighestUnder(double x, double dy, double z){
 		for(int y=(int)dy;y >= 0; y--){
 			Block block = level.getBlock(new Vector3(x, y, z));
 
 			if(!canWalkOn(block)) return block;
-			if(!block.canPassThrough()) return block;
+			if(!canPassThroughBlock(block)) return block;
 		}
 		return null;
 	}
 
-	private double isWalkableAt(Vector3 vec){
+	public double isWalkableAt(Vector3 vec){
 		Block block = this.getHighestUnder(vec.x, vec.y + 2, vec.z);
 		if(block == null) return -256;
 
@@ -180,15 +208,14 @@ public class AdvancedRouteFinder extends RouteFinder{
 	@Override
 	public void resetNodes(){
 		super.resetNodes();
-
 		this.grid.clear();
-		Block block = this.getHighestUnder(this.destination.x, this.destination.y, this.destination.z);
-		if(block == null){
-			block = new BlockAir();
-			block.position(new Position(this.destination.x, 0, this.destination.z));
+		if (this.destination != null) {
+			Vector3 block = this.getHighestUnder(this.destination.x, this.destination.y, this.destination.z);
+			if(block == null){
+				block = new Vector3(this.destination.x, 0, this.destination.z);
+			}
+			this.realDestination = new Vector3(this.destination.x, block.y + 1, this.destination.z).floor();
 		}
-
-		this.realDestination = new Vector3(this.destination.x, block.y + 1, this.destination.z).floor();
 	}
 
 	@Override

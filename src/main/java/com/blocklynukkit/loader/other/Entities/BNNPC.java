@@ -19,8 +19,11 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.EmotePacket;
 import cn.nukkit.network.protocol.EntityEventPacket;
+import cn.nukkit.network.protocol.MoveEntityAbsolutePacket;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
+import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
+import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.route.RouteFinder;
 import com.blocklynukkit.route.SimpleRouteFinder;
 import com.blocklynukkit.route.WalkerRouteFinder;
@@ -32,11 +35,10 @@ import java.util.List;
 
 import static com.blocklynukkit.route.WalkerRouteFinder.canPassThroughBlock;
 
-public class BNNPC extends EntityHuman {
+public class BNNPC extends MovingEntity {
     public BNNPC bnnpc;
 
     public Vector3 dvec = new Vector3(0,0,0);
-    public RouteFinder routeFinder = null;
 
     public List<Item> extraDropItems = new ArrayList<>();
     public boolean dropHand = false;
@@ -52,8 +54,7 @@ public class BNNPC extends EntityHuman {
     public String attackfunction = "BNNPCAttack";
     public int calltimetick = 10;
 
-    public boolean isjumping = false;public int jumpingtick = 0;public double jumphigh = 1;
-    public int fallingtick = 0;
+    public boolean isjumping = false;public double jumphigh = 1;
     public boolean isonRoute = false;public Vector3 nowtarget = null;public double speed = 3;public int actions=0;
     public Vector3 actioinVec = new Vector3();public int routeMax = 50;public Vector3 previousTo = null;
     public boolean justDamaged = false;
@@ -72,6 +73,7 @@ public class BNNPC extends EntityHuman {
         this.setNameTag(name);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
+        this.setScale(1.0f);
         bnnpc=this;
     }
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes,int calltick, String callback){
@@ -96,30 +98,24 @@ public class BNNPC extends EntityHuman {
         return (float) g/20;
     }
     @Override
-    public void knockBack(Entity attacker, double damage, double x, double z, double base) {
-        double f = Math.sqrt(x * x + z * z);
-        if (f > 0.0D) {
-            f = 1.0D / f;
-            Vector3 motion = new Vector3(0, 0, 0);
-            motion.x /= 2.0D;
-            motion.y /= 2.0D;
-            motion.z /= 2.0D;
-            motion.x += x * f * base;
-            motion.y += base;
-            motion.z += z * f * base;
-            if (motion.y > base) {
-                motion.y = base;
-            }
-            int times = (int)motion.length();int curr = times;
-            if(times==0){
-                if(!canPassThroughBlock(this.add(motion).getLevelBlock()))return;
-            } else while (--curr>0){
-                if(!canPassThroughBlock(this.add(motion.multiply(curr/times)).getLevelBlock())){
-                    this.dvec.x+=(motion.x*(curr-1/times));this.dvec.y+=(motion.y*(curr-1/times));this.dvec.z+=(motion.z*(curr-1/times));return;
-                }
-            }
-            this.dvec.x+=motion.x;this.dvec.y+=motion.y;this.dvec.z+=motion.z;
-        }
+    public float getWidth() {
+        return 0.6F;
+    }
+    @Override
+    public float getLength() {
+        return 0.6F;
+    }
+    @Override
+    public float getHeight() {
+        return 1.8F;
+    }
+    @Override
+    public float getEyeHeight() {
+        return 1.62F;
+    }
+    @Override
+    public float getMovementSpeed() {
+        return (float)this.speed/30;
     }
     @Override
     public boolean onUpdate(int currentTick){
@@ -127,118 +123,7 @@ public class BNNPC extends EntityHuman {
         if(currentTick%calltimetick==0 && this.isAlive()){
             Loader.plugin.call(callbackfunction,this,currentTick);
         }
-        //计算并执行线性重力
-        if(enableGravity && !isjumping ){
-            if (Position.fromObject(this,this.level).add(0,-0.05,0).getLevelBlock().isSolid()) {
-                if(!(this.y-((int)this.y)<=0.01)){
-                    this.y = Math.round(this.y);
-                    if(fallingtick>=10){
-                        this.level.addParticle(new DestroyBlockParticle(this,Position.fromObject(this,this.level).add(0,-0.05,0).getLevelBlock()));
-                    }
-                    fallingtick=0;
-                }
-            } else if (this.y > -this.getGravity() * 4) {
-                if (!(this.level.getBlock(new Vector3(NukkitMath.floorDouble(this.x), (int) (this.y + 0.8), NukkitMath.floorDouble(this.z))) instanceof BlockLiquid)) {
-                    this.dvec.y -= this.getGravity();
-                    fallingtick++;
-                }
-            } else {
-                this.dvec.y -= this.getGravity();
-                fallingtick++;
-            }
-        }
-        //处理跳跃
-        if(isjumping){
-            if(jumpingtick>10){
-                jumpingtick=0;isjumping=false;
-            }else {
-                jumpingtick++;
-                this.dvec.y+=0.5*(10-jumpingtick)*jumphigh*0.05;
-            }
-        }
-        //被击退后重新寻路
-        if(justDamaged){
-            justDamaged = false;
-            if(isonRoute && routeFinder!=null && routeFinder.hasNext() && previousTo!=null){
-                double dis = nowtarget.distance(this);
-                this.actions=(int)(dis/(speed*0.05));
-                if(nowtarget.y-this.y>0.1){
-                    this.actioinVec.x = (nowtarget.x-this.x)/(actions);
-                    this.actioinVec.z = (nowtarget.z-this.z)/actions;
-                    this.actioinVec.y = (nowtarget.y-this.y)/(actions);
-                    actions+=8;
-                }
-                this.actioinVec.x = (nowtarget.x-this.x)/actions;
-                this.actioinVec.z = (nowtarget.z-this.z)/actions;
-                this.actioinVec.y = (nowtarget.y-this.y)/actions;
-            }
-        }
-        //处理路径
-        if(isonRoute && routeFinder!=null && routeFinder.hasNext()){
-            if(Position.fromObject(this,this.level).add(0,-0.5,0).getLevelBlock().getId()== BlockID.WATER){
-                this.setSwim(true);
-            }else {
-                this.setSwim(false);
-            }
-            if(nowtarget==null){
-                nowtarget = routeFinder.next();
-                double dis = nowtarget.distance(this);
-                this.actions=(int)(dis/(speed*0.05));
-                if(nowtarget.y-this.y>0.1){
-                    this.actioinVec.x = (nowtarget.x-this.x)/(actions);
-                    this.actioinVec.z = (nowtarget.z-this.z)/actions;
-                    this.actioinVec.y = (nowtarget.y-this.y)/(actions);
-                    actions+=8;
-                }
-                this.actioinVec.x = (nowtarget.x-this.x)/actions;
-                this.actioinVec.z = (nowtarget.z-this.z)/actions;
-                this.actioinVec.y = (nowtarget.y-this.y)/actions;
-            }else {
-                if(actions>0){
-                    if(actioinVec.y>0.0001 && actions> 8){
-                        this.dvec.x+=actioinVec.x;
-                        this.dvec.z+=actioinVec.z;
-                    }else if(actioinVec.y<0.0001){
-                        this.dvec.x+=actioinVec.x;
-                        this.dvec.z+=actioinVec.z;
-                    }
-
-                    if(actioinVec.y>0.0001){
-                        this.isjumping=true;
-                    }else {
-                        this.dvec.y+=actioinVec.y;
-                    }
-                    this.actions--;
-                }else {
-                    this.actions=0;
-                    this.dvec.x+=(nowtarget.x-this.x);
-                    this.dvec.y+=(nowtarget.y-this.y);
-                    this.dvec.z+=(nowtarget.z-this.z);
-                    if(routeFinder.hasNext()){
-                        nowtarget = routeFinder.next();
-                        double dis = nowtarget.distance(this);
-                        this.actions=(int)(dis/(speed*0.05));
-                        this.actioinVec.x = (nowtarget.x-this.x)/actions;
-                        this.actioinVec.z = (nowtarget.z-this.z)/actions;
-                        this.actioinVec.y = (nowtarget.y-this.y)/actions;
-                    }else {
-                        isonRoute = false;
-                    }
-                }
-            }
-        }
-        if(routeFinder!=null && !routeFinder.hasNext()){
-            this.isonRoute=false;
-            this.nowtarget=null;
-        }
-        //处理当前刻运动
-        if(!Position.fromObject(this.add(dvec),this.level).getLevelBlock().isValid()){
-            this.y+=dvec.y;
-            dvec = new Vector3(0,0,0);
-        }else {
-            this.x+=dvec.x;this.y+=dvec.y;this.z+=dvec.z;
-            dvec = new Vector3(0,0,0);
-        }
+        //更新乘客
         try{
             for(Entity entity:this.getPassengers()){
                 if(entity.distance(this)>3){
@@ -253,6 +138,24 @@ public class BNNPC extends EntityHuman {
         //调用nk预设函数
         return super.onUpdate(currentTick);
     }
+
+//    @Override
+//    public boolean entityBaseTick(int tickDiff) {
+//        boolean re = super.entityBaseTick(tickDiff);
+//        MoveEntityAbsolutePacket packet = new MoveEntityAbsolutePacket();
+//        packet.eid = this.getId();
+//        packet.x = this.getX();
+//        packet.y = this.getY()+1.8;
+//        packet.z = this.getZ();
+//        packet.yaw = this.getYaw();
+//        packet.headYaw = this.getYaw();
+//        packet.pitch = this.getPitch();
+//        packet.onGround = this.isOnGround();
+//        packet.teleport = false;
+//        this.getViewers().values().forEach(p -> p.dataPacket(packet));
+//        return re;
+//    }
+
     @Override
     public boolean attack(EntityDamageEvent source) {
         this.updateMovement();
@@ -387,6 +290,7 @@ public class BNNPC extends EntityHuman {
     }
     public void setRouteMax(int m){
         this.routeMax = m;
+        this.route.setSearchLimit(m);
     }
     public void setSwim(boolean swim){
         this.setSwimming(swim);
@@ -413,8 +317,9 @@ public class BNNPC extends EntityHuman {
         this.getLevel().getPlayers().values().forEach((player -> player.dataPacket(pk)));
     }
     public void jump(){
-        if(isonRoute)return;
-        this.isjumping=true;
+        if(this.onGround){
+            this.motionY = 0.42*jumphigh;
+        }
     }
     public void lookAt(Position pos){
         double xdiff = pos.x - this.x;
@@ -474,48 +379,32 @@ public class BNNPC extends EntityHuman {
         return this.isSneaking();
     }
     public boolean canMoveTo(Position to){
-        WalkerRouteFinder finder = new WalkerRouteFinder(this,this,to);
+        AdvancedRouteFinder finder = new AdvancedRouteFinder(this);
+        finder.setStart(this);
+        finder.setDestination(to);
         finder.setSearchLimit(routeMax);
-        boolean out = finder.search();
-        return out;
+        finder.setLevel(to.level);
+        return finder.search();
     }
     public boolean findAndMove(Position to){
-        if(isonRoute){
-            return false;
-        }
-        routeFinder = new WalkerRouteFinder(this,this,to);
-        routeFinder.setSearchLimit(routeMax);
-        boolean out = routeFinder.search();
-        if(out){
-            isonRoute = true;
-            previousTo = to;
-            return true;
-        }else {
-            return false;
-        }
+        this.route = new AdvancedRouteFinder(this);
+        this.route.setStart(this);
+        this.route.setDestination(to);
+        this.route.setSearchLimit(routeMax);
+        this.route.setLevel(to.level);
+        boolean re = this.route.search();
+        this.setTarget(to,true);
+        return re;
     }
 
     public boolean directMove(Position to){
-        if(isonRoute){
-            return false;
-        }
-        routeFinder = new SimpleRouteFinder(this);
-        routeFinder.setDestination(to);
-        routeFinder.setSearchLimit(routeMax);
-        boolean out = routeFinder.search();
-        if(out){
-            isonRoute = true;
-            previousTo = to;
-            return true;
-        }else {
-            return false;
-        }
+        this.setTarget(to,true);
+        return true;
     }
 
     public void stopMove(){
-        this.isonRoute = false;
-        this.actioinVec = new Vector3();
-        this.actions = 0;
+        this.route.forceStop();
+
     }
     public void hit(Entity entity){
         double d;

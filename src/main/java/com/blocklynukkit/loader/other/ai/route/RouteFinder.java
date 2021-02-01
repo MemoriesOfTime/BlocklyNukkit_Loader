@@ -16,8 +16,9 @@ public abstract class RouteFinder{
 	protected List<Node> nodes = new ArrayList<>();
 	protected Level level = null;
 	protected AxisAlignedBB aabb = null;
-
+	public int searchLimit = 100;
 	protected MovingEntity entity = null;
+	protected boolean forceStop = false;
 
 	public RouteFinder(MovingEntity entity){
 		if(entity == null) throw new IllegalArgumentException("Entity cannot be null");
@@ -27,6 +28,14 @@ public abstract class RouteFinder{
 
 	public MovingEntity getEntity(){
 		return this.entity;
+	}
+
+	public void setSearchLimit(int searchLimit) {
+		this.searchLimit = searchLimit;
+	}
+
+	public int getSearchLimit() {
+		return searchLimit;
 	}
 
 	public void setPositions(Level level, Vector3 start, Vector3 dest, AxisAlignedBB bb){
@@ -142,6 +151,14 @@ public abstract class RouteFinder{
 
 		if(this.arrived) return null;
 		return nodes.get(current);
+	}
+
+	public void forceStop() {
+		this.forceStop = true;
+		if (!this.isSearching()) {
+			this.forceStop = false;
+			this.resetNodes();
+		}
 	}
 
 	public void arrived(){

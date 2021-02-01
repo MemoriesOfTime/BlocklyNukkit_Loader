@@ -5,18 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Climbable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Fallable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/Hostile.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/Node.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/SimpleRouteFinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/NoFallBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/NoFallBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/Node.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/Node.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

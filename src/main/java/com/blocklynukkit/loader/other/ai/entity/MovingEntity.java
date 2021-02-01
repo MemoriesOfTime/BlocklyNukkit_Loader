@@ -13,9 +13,9 @@ import com.blocklynukkit.loader.other.ai.route.RouteFinder;
 
 abstract public class MovingEntity extends EntityHuman{
 	private boolean isKnockback = false;
-	private RouteFinder route = null;
+	public RouteFinder route = null;
 	private Vector3 target = null;
-	private String targetSetter = "";
+	public boolean autoSeeFont = true;
 
 	public MovingEntity(FullChunk chunk, CompoundTag nbt){
 		super(chunk, nbt);
@@ -24,7 +24,7 @@ abstract public class MovingEntity extends EntityHuman{
 
 	public void jump(){
 		if(this.onGround){
-			this.motionY = 0.42;
+			this.motionY = 0.35;
 		}
 	}
 
@@ -37,13 +37,15 @@ abstract public class MovingEntity extends EntityHuman{
 		boolean hasUpdate = super.entityBaseTick(tickDiff);
 
 		if(this.isKnockback){                   // knockback 이 true 인 경우는 맞은 직후
-			this.isKnockback = false;           // 다음으로 땅에 닿을 때 knockback 으로 인한 움직임을 멈춘다.
+			this.isKnockback = false;
 		}else if(this.onGround){
 			this.motionX = this.motionZ = 0;
 		}
 
 		this.motionX *= (1 - this.getDrag());
 		this.motionZ *= (1 - this.getDrag());
+		if (this.motionX < 0.001 && this.motionX > -0.001) this.motionX = 0;
+		if (this.motionZ < 0.001 && this.motionZ > -0.001) this.motionZ = 0;
 
 		if(this.onGround && this.hasSetTarget() && (this.route.getDestination() == null || this.route.getDestination().distance(this.getTarget()) > 2)){ //目标移动
 			this.route.setPositions(this.level, this, this.getTarget(), this.boundingBox);
@@ -73,8 +75,11 @@ abstract public class MovingEntity extends EntityHuman{
 
 					this.motionX = Math.min(Math.abs(vec.x - this.x), diffX / (diffX + diffZ) * this.getMovementSpeed()) * negX;
 					this.motionZ = Math.min(Math.abs(vec.z - this.z), diffZ / (diffX + diffZ) * this.getMovementSpeed()) * negZ;
-					double angle = Math.atan2(vec.z - this.z, vec.x - this.x);
-					this.yaw = (float) ((angle * 180) / Math.PI) - 90;
+					if(vec.y > this.y)this.motionY+=this.getGravity();
+					if (this.autoSeeFont) {
+						double angle = Math.atan2(vec.z - this.z, vec.x - this.x);
+						this.yaw = (float) ((angle * 180) / Math.PI) - 90;
+					}
 				}
 			}
 		}
@@ -97,17 +102,14 @@ abstract public class MovingEntity extends EntityHuman{
 		return 30.0;
 	}
 
-	public void setTarget(Vector3 vec, String identifier){
-		this.setTarget(vec, identifier, false);
+	public void setTarget(Vector3 vec){
+		this.setTarget(vec, false);
 	}
 
-	public void setTarget(Vector3 vec, String identifier, boolean forceSearch){
-		if(identifier == null) return;
+	public void setTarget(Vector3 vec, boolean forceSearch){
 
-		if(forceSearch || !this.hasSetTarget() || identifier.equals(this.targetSetter)){
+		if(forceSearch || !this.hasSetTarget()){
 			this.target = vec;
-
-			this.targetSetter = identifier;
 		}
 
 		if(this.hasSetTarget() && (forceSearch || !this.route.hasRoute())){
@@ -177,6 +179,6 @@ abstract public class MovingEntity extends EntityHuman{
 
 	@Override
 	public void addMovement(double x, double y, double z, double yaw, double pitch, double headYaw) {
-		this.level.addEntityMovement(this, x, y - this.getEyeHeight(), z, yaw, pitch, headYaw);
+		this.level.addEntityMovement(this, x, y, z, yaw, pitch, headYaw);
 	}
 }

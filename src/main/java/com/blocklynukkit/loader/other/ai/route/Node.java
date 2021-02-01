@@ -59,6 +59,6 @@ public class Node{
 	}
 
 	public boolean equals(Node node){
-		return this.getVector3().equals(node.getVector3());
+		return (int)this.getX() == (int)node.getX() && (int)this.getY() == (int)node.getY() && (int)this.getZ() == (int)node.getZ();
 	}
 }

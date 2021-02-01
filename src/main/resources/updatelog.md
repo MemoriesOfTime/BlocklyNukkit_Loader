@@ -1,9 +1,19 @@
 ## 1.2.9.1
 
+Bug Fixed
+
+- 修复射箭函数中参数依赖问题
+- 修复方块实体无法不坠落
+- 重构BNNPC的AI架构，修复bnnpc两格高出不去问题
+- 修复bn插件包资源文件解压错误问题
+
 entity
 
 - Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced)
 
+manager
+
+- void removeCommand(String name) --移除名为name的命令
 
 ## 1.2.9.0
 

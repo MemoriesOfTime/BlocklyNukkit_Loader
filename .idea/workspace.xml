@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -643,13 +645,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00044" summary="推送更新">
-      <created>1597500036114</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1597500036114</updated>
-    </task>
     <task id="LOCAL-00045" summary="代码更新到1284-beta-r11">
       <created>1598090981734</created>
       <option name="number" value="00045" />
@@ -986,7 +981,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612179795672</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <task id="LOCAL-00093" summary="修复bn插件包资源文件解压错误问题">
+      <created>1612183321266</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1612183321267</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1038,7 +1040,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="将httpHandler移动到net.http下" />
     <MESSAGE value="初步实现自定义物品" />
     <MESSAGE value="修复npc回收空指针问题" />
     <MESSAGE value="推送1.2.9.0正式版初步代码" />
@@ -1063,7 +1064,8 @@
     <MESSAGE value="尝试修复方块实体无法不坠落" />
     <MESSAGE value="初步修复BNNPC的寻路AI问题" />
     <MESSAGE value="修复bnnpc两格高出不去问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复bnnpc两格高出不去问题" />
+    <MESSAGE value="修复bn插件包资源文件解压错误问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复bn插件包资源文件解压错误问题" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

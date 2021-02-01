@@ -665,6 +665,10 @@ public class FunctionManager extends BaseManager {
     public Config createConfig(File file, int type){
         return new Config(file, type);
     }
+    //here 2/1
+    public void removeCommand(String name){
+        this.plugin.getServer().getCommandMap().getCommand(name).unregister(this.plugin.getServer().getCommandMap());
+    }
     //here 6/11
     public void createPermission(String per,String description,String defaultper){
         if(defaultper.equals("OP")){

@@ -80,7 +80,8 @@ public class AdvancedRouteFinder extends RouteFinder{
 					node.add(0.5, 0, 0.5);
 					level.addParticle(new cn.nukkit.level.particle.CriticalParticle(node.getVector3().add(0,0.15),3));
 					nodes.add(node);
-				};
+				}
+
 				Collections.reverse(nodes);
 				nodes.remove(0);
 
@@ -122,36 +123,53 @@ public class AdvancedRouteFinder extends RouteFinder{
 		boolean s1, s2, s3, s4;
 
 		double y;
+		Node toAdd;
 		if(s1 = (y = isWalkableAt(vec.add(1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(1, y)));
+			toAdd = this.grid.getNode(vec.add(1, y));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s2 = (y = isWalkableAt(vec.add(-1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(-1, y)));
+			toAdd = this.grid.getNode(vec.add(-1, y));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s3 = (y = isWalkableAt(vec.add(0, 0, 1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(0, y, 1)));
+			toAdd = this.grid.getNode(vec.add(0, y, 1));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s4 = (y = isWalkableAt(vec.add(0, 0, -1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(0, y, -1)));
+			toAdd = this.grid.getNode(vec.add(0, y, -1));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
-		if(s1 && s3 && (y = isWalkableAt(vec.add(1, 0, 1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(1, y, 1)));
+		if(s1 && s3 && (y = isWalkableAt(vec.add(1, 0, 1))) != -256 &&
+				canPassThroughBlock(this.level.getBlock(vec.add(1, y, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1)))){
+			toAdd = (this.grid.getNode(vec.add(1, y, 1)));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
-		if(s1 && s4 && (y = isWalkableAt(vec.add(1, 0, -1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(1, y, -1)));
+		if(s1 && s4 && (y = isWalkableAt(vec.add(1, 0, -1))) != -256 &&
+				canPassThroughBlock(this.level.getBlock(vec.add(1, y, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1)))){
+			toAdd = (this.grid.getNode(vec.add(1, y, -1)));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
-		if(s2 && s3 && (y = isWalkableAt(vec.add(-1, 0, 1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(-1, y, 1)));
+		if(s2 && s3 && (y = isWalkableAt(vec.add(-1, 0, 1))) != -256 &&
+				canPassThroughBlock(this.level.getBlock(vec.add(-1, y, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1)))){
+			toAdd = (this.grid.getNode(vec.add(-1, y, 1)));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
-		if(s2 && s4 && (y = isWalkableAt(vec.add(-1, 0, -1))) != -256){
-			neighbors.add(this.grid.getNode(vec.add(-1, y, -1)));
+		if(s2 && s4 && (y = isWalkableAt(vec.add(-1, 0, -1))) != -256 &&
+				canPassThroughBlock(this.level.getBlock(vec.add(-1, y, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1)))){
+			toAdd = (this.grid.getNode(vec.add(-1, y, -1)));
+			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		return neighbors;
@@ -168,6 +186,25 @@ public class AdvancedRouteFinder extends RouteFinder{
 		}
 	}
 
+	public boolean isJamNode(Node node){
+		return false;
+//		if(node.getX() == (int) node.getX() && node.getY() == (int) node.getY() && node.getZ() == (int) node.getZ()){
+//			if(node.getVector3().distance(destination)<1.1 || node.getVector3().distance(start)<1.1){
+//				return false;
+//			}else return !(canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ())) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ())) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ()-1)) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ()+1)) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ()+1)) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ()-1)) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ()-1)) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ())) &&
+//						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ()+1)));
+//		}else {
+//			return false;
+//		}
+	}
+
 	private Block getHighestUnder(double x, double dy, double z){
 		for(int y=(int)dy;y >= 0; y--){
 			Block block = level.getBlock(new Vector3(x, y, z));
@@ -179,7 +216,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 	}
 
 	public double isWalkableAt(Vector3 vec){
-		Block block = this.getHighestUnder(vec.x, vec.y + 2, vec.z);
+		Block block = this.getHighestUnder(vec.x, vec.y + 1, vec.z);
 		if(block == null) return -256;
 
 		double diff = (block.y - vec.y) + 1;

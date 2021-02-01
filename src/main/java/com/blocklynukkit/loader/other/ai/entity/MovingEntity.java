@@ -16,10 +16,13 @@ abstract public class MovingEntity extends EntityHuman{
 	public RouteFinder route = null;
 	private Vector3 target = null;
 	public boolean autoSeeFont = true;
+	private Vector3 lastPos = null;
+	private int jammingTick = 0;
 
 	public MovingEntity(FullChunk chunk, CompoundTag nbt){
 		super(chunk, nbt);
 		this.route = new AdvancedRouteFinder(this);
+		this.lastPos = this.getPosition();
 	}
 
 	public void jump(){
@@ -64,7 +67,6 @@ abstract public class MovingEntity extends EntityHuman{
 				Vector3 vec = node.getVector3();
 				double diffX = Math.pow(vec.x - this.x, 2);
 				double diffZ = Math.pow(vec.z - this.z, 2);
-
 				if(diffX + diffZ == 0){
 					if(!this.route.next()){
 						this.route.arrived();
@@ -94,6 +96,8 @@ abstract public class MovingEntity extends EntityHuman{
 			this.motionY -= this.getGravity();
 			hasUpdate = true;
 		}
+
+		this.lastPos = this.getPosition();
 
 		return hasUpdate;
 	}

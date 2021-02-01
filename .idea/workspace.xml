@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -645,20 +643,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00042" summary="添加新的物品函数，完善gameapi">
-      <created>1597197533289</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1597197533289</updated>
-    </task>
-    <task id="LOCAL-00043" summary="推送更新">
-      <created>1597412620393</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1597412620394</updated>
-    </task>
     <task id="LOCAL-00044" summary="推送更新">
       <created>1597500036114</created>
       <option name="number" value="00044" />
@@ -988,7 +972,21 @@
       <option name="project" value="LOCAL" />
       <updated>1612154341507</updated>
     </task>
-    <option name="localTasksCounter" value="91" />
+    <task id="LOCAL-00091" summary="修复bnnpc两格高出不去问题">
+      <created>1612179780343</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1612179780344</updated>
+    </task>
+    <task id="LOCAL-00092" summary="修复bnnpc两格高出不去问题">
+      <created>1612179795672</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1612179795672</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1040,7 +1038,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="bnp别名bnpm" />
     <MESSAGE value="将httpHandler移动到net.http下" />
     <MESSAGE value="初步实现自定义物品" />
     <MESSAGE value="修复npc回收空指针问题" />
@@ -1065,7 +1062,8 @@
     <MESSAGE value="生成坠落方块返回实体" />
     <MESSAGE value="尝试修复方块实体无法不坠落" />
     <MESSAGE value="初步修复BNNPC的寻路AI问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="初步修复BNNPC的寻路AI问题" />
+    <MESSAGE value="修复bnnpc两格高出不去问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复bnnpc两格高出不去问题" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

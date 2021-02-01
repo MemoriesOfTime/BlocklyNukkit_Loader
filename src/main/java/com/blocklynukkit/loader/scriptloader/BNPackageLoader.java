@@ -170,7 +170,7 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
                 File out = new File(entry.getKey());
                 if(!out.exists()) {
                     try {
-                        out.mkdirs();
+                        if(!out.getParentFile().exists()) out.getParentFile().mkdirs();
                         out.createNewFile();
                         Utils.writeWithString(out,entry.getValue());
                     } catch (IOException e) {

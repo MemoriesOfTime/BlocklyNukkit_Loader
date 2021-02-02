@@ -131,9 +131,23 @@ public class Loader extends PluginBase implements Listener {
         plugins=this.getServer().getPluginManager().getPlugins();
         if (!plugins.containsKey("EconomyAPI")){
             try {
-                Utils.downloadPlugin("https://repo.nukkitx.com/main/me/onebone/economyapi/2.0.0-SNAPSHOT/economyapi-2.0.0-20190517.112309-17.jar");
+                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }else {
+            try{
+                if(Integer.parseInt(plugins.get("EconomyAPI").getDescription().getVersion().replaceAll("\\.",""))<201){
+                    if (Server.getInstance().getLanguage().getName().contains("中文")){
+                        this.getLogger().warning("EconomyAPI版本太低！请您及时更新！");
+                        this.getLogger().warning("最新版本下载地址：https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
+                    } else{
+                        this.getLogger().warning("The version of EconomyAPI is to low! Please update it!");
+                        this.getLogger().warning("Latest version is here: https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
+                    }
+                }
+            }catch (Exception e){
+                //ignore
             }
         }
         if (!plugins.containsKey("KotlinLib")){

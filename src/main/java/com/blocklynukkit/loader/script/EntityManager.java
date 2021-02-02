@@ -301,11 +301,7 @@ public class EntityManager extends BaseManager {
         return this.shootArrow(from, to, canPickUp, 1.0d);
     }
     public EntityArrow shootArrow(Position from,Position to,boolean canPickUp,double multiply){
-        Entity k = Entity.createEntity("Arrow", from);
-        if (!(k instanceof EntityArrow)) {
-            return null;
-        }
-        EntityArrow arrow = (EntityArrow) k;
+        EntityArrow arrow = new EntityArrow(from.getChunk(),Entity.getDefaultNBT(from));
         double xdiff = to.x - from.x;
         double zdiff = to.z - from.z;
         double angle = Math.atan2(zdiff, xdiff);

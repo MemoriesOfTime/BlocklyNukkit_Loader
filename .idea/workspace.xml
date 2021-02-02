@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -644,13 +644,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00047" summary="代码更新到1284正式版">
-      <created>1601118125030</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1601118125031</updated>
-    </task>
     <task id="LOCAL-00048" summary="代码更新到1290 beta-r6">
       <created>1601867036097</created>
       <option name="number" value="00048" />
@@ -987,7 +980,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612225404546</updated>
     </task>
-    <option name="localTasksCounter" value="96" />
+    <task id="LOCAL-00096" summary="shootArrow返回箭矢实体，添加shootSnowball">
+      <created>1612246692160</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1612246692160</updated>
+    </task>
+    <option name="localTasksCounter" value="97" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1039,7 +1039,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="推送1.2.9.0正式版初步代码" />
     <MESSAGE value="尝试修复CI文件" />
     <MESSAGE value="再尝试修复CI文件" />
     <MESSAGE value="再再尝试修复CI文件" />
@@ -1064,7 +1063,8 @@
     <MESSAGE value="修复bn插件包资源文件解压错误问题" />
     <MESSAGE value="添加移除命令函数" />
     <MESSAGE value="更正经济前置插件版本" />
-    <option name="LAST_COMMIT_MESSAGE" value="更正经济前置插件版本" />
+    <MESSAGE value="shootArrow返回箭矢实体，添加shootSnowball" />
+    <option name="LAST_COMMIT_MESSAGE" value="shootArrow返回箭矢实体，添加shootSnowball" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

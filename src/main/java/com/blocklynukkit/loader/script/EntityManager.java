@@ -8,6 +8,7 @@ import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.entity.projectile.EntityProjectile;
+import cn.nukkit.entity.projectile.EntitySnowball;
 import cn.nukkit.event.entity.EntityShootBowEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
 import cn.nukkit.item.Item;
@@ -290,19 +291,19 @@ public class EntityManager extends BaseManager {
         player.getLevel().addSound(player, Sound.valueOf(sound));
     }
     //发射箭矢
-    public void shootArrow(Position from,Position to){
-        this.shootArrow(from, to, true, 1.0d);
+    public EntityArrow shootArrow(Position from,Position to){
+        return this.shootArrow(from, to, true, 1.0d);
     }
-    public void shootArrow(Position from,Position to,double multiply){
-        this.shootArrow(from, to, true, multiply);
+    public EntityArrow shootArrow(Position from,Position to,double multiply){
+        return this.shootArrow(from, to, true, multiply);
     }
-    public void shootArrow(Position from,Position to,boolean canPickUp){
-        this.shootArrow(from, to, canPickUp, 1.0d);
+    public EntityArrow shootArrow(Position from,Position to,boolean canPickUp){
+        return this.shootArrow(from, to, canPickUp, 1.0d);
     }
-    public void shootArrow(Position from,Position to,boolean canPickUp,double multiply){
+    public EntityArrow shootArrow(Position from,Position to,boolean canPickUp,double multiply){
         Entity k = Entity.createEntity("Arrow", from);
         if (!(k instanceof EntityArrow)) {
-            return;
+            return null;
         }
         EntityArrow arrow = (EntityArrow) k;
         double xdiff = to.x - from.x;
@@ -350,6 +351,65 @@ public class EntityManager extends BaseManager {
                 from.level.addSound(from, Sound.RANDOM_BOW);
             }
         }
+        return arrow;
+    }
+    //发射雪球
+    public EntitySnowball shootSnowball(Position from,Position to){
+        return this.shootSnowball(from, to, true, 1.0d);
+    }
+    public EntitySnowball shootSnowball(Position from,Position to,double multiply){
+        return this.shootSnowball(from, to, true, multiply);
+    }
+    public EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp){
+        return this.shootSnowball(from, to, canPickUp, 1.0d);
+    }
+    public EntitySnowball shootSnowball(Position from, Position to, boolean canPickUp, double multiply){
+        EntitySnowball arrow = new EntitySnowball(from.getChunk(),Entity.getDefaultNBT(from));
+        double xdiff = to.x - from.x;
+        double zdiff = to.z - from.z;
+        double angle = Math.atan2(zdiff, xdiff);
+        double yaw = ((angle * 180) / Math.PI) - 90;
+        double ydiff = to.y - from.y;
+        Vector2 v = new Vector2(from.x, from.z);
+        double dist = v.distance(to.x, to.z);
+        angle = Math.atan2(dist, ydiff);
+        double pitch = ((angle * 180) / Math.PI) - 90;
+        double yawR = MathUtils.toRadians(yaw);
+        double pitchR = MathUtils.toRadians(pitch);
+
+        double verticalMultiplier = Math.cos(pitchR);
+        double x = verticalMultiplier * Math.sin(-yawR);
+        double z = verticalMultiplier * Math.cos(yawR);
+        double y = Math.sin(-MathUtils.toRadians(pitch));
+        double magnitude = Math.sqrt(x * x + y * y + z * z);
+        if (magnitude > 0.0D) {
+            x += x * (multiply - magnitude) / magnitude;
+            y += y * (multiply - magnitude) / magnitude;
+            z += z * (multiply - magnitude) / magnitude;
+        }
+
+        ThreadLocalRandom rand = ThreadLocalRandom.current();
+        x += rand.nextGaussian() * 0.007499999832361937D * 6.0D;
+        y += rand.nextGaussian() * 0.007499999832361937D * 6.0D;
+        z += rand.nextGaussian() * 0.007499999832361937D * 6.0D;
+        arrow.setMotion(new Vector3(x, y, z));
+
+        EntityShootBowEvent ev = new EntityShootBowEvent(null, Item.get(Item.SNOWBALL, 0, 1), arrow, multiply);
+        Server.getInstance().getPluginManager().callEvent(ev);
+        EntityProjectile projectile = ev.getProjectile();
+        if (ev.isCancelled()) {
+            projectile.close();
+        } else {
+            ProjectileLaunchEvent launch = new ProjectileLaunchEvent(projectile);
+            Server.getInstance().getPluginManager().callEvent(launch);
+            if (launch.isCancelled()) {
+                projectile.close();
+            } else {
+                projectile.spawnToAll();
+                from.level.addSound(from, Sound.RANDOM_POP);
+            }
+        }
+        return arrow;
     }
     //转视角
     public void lookAt(Entity e,Position pos){

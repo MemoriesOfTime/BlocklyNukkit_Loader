@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityLiving;
 import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.entity.projectile.EntityArrow;
@@ -292,16 +293,28 @@ public class EntityManager extends BaseManager {
     }
     //发射箭矢
     public EntityArrow shootArrow(Position from,Position to){
-        return this.shootArrow(from, to, true, 1.0d);
+        return this.shootArrow(from, to, null, true, 1.0d);
     }
     public EntityArrow shootArrow(Position from,Position to,double multiply){
-        return this.shootArrow(from, to, true, multiply);
+        return this.shootArrow(from, to, null, true, multiply);
     }
     public EntityArrow shootArrow(Position from,Position to,boolean canPickUp){
-        return this.shootArrow(from, to, canPickUp, 1.0d);
+        return this.shootArrow(from, to, null, canPickUp, 1.0d);
     }
     public EntityArrow shootArrow(Position from,Position to,boolean canPickUp,double multiply){
-        EntityArrow arrow = new EntityArrow(from.getChunk(),Entity.getDefaultNBT(from));
+        return this.shootArrow(from, to, null, canPickUp, multiply);
+    }
+    public EntityArrow shootArrow(Position from,Position to,Entity shooter,boolean canPickUp,double multiply){
+        Entity k;
+        if(shooter != null){
+            k = Entity.createEntity("Arrow", from, shooter);
+        }else {
+            k = Entity.createEntity("Arrow", from);
+        }
+        if (!(k instanceof EntityArrow)) {
+            return null;
+        }
+        EntityArrow arrow = (EntityArrow) k;
         double xdiff = to.x - from.x;
         double zdiff = to.z - from.z;
         double angle = Math.atan2(zdiff, xdiff);
@@ -331,7 +344,7 @@ public class EntityManager extends BaseManager {
         z += rand.nextGaussian() * 0.007499999832361937D * 6.0D;
         arrow.setMotion(new Vector3(x, y, z));
 
-        EntityShootBowEvent ev = new EntityShootBowEvent(null, Item.get(Item.ARROW, 0, 1), arrow, multiply);
+        EntityShootBowEvent ev = new EntityShootBowEvent((EntityLiving) shooter, Item.get(Item.ARROW, 0, 1), arrow, multiply);
         Server.getInstance().getPluginManager().callEvent(ev);
         EntityProjectile projectile = ev.getProjectile();
         if (ev.isCancelled()) {
@@ -351,16 +364,19 @@ public class EntityManager extends BaseManager {
     }
     //发射雪球
     public EntitySnowball shootSnowball(Position from,Position to){
-        return this.shootSnowball(from, to, true, 1.0d);
+        return this.shootSnowball(from, to, null, true, 1.0d);
     }
     public EntitySnowball shootSnowball(Position from,Position to,double multiply){
-        return this.shootSnowball(from, to, true, multiply);
+        return this.shootSnowball(from, to, null, true, multiply);
     }
     public EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp){
-        return this.shootSnowball(from, to, canPickUp, 1.0d);
+        return this.shootSnowball(from, to, null, canPickUp, 1.0d);
     }
-    public EntitySnowball shootSnowball(Position from, Position to, boolean canPickUp, double multiply){
-        EntitySnowball arrow = new EntitySnowball(from.getChunk(),Entity.getDefaultNBT(from));
+    public EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp,double multiply){
+        return this.shootSnowball(from, to, null, canPickUp, multiply);
+    }
+    public EntitySnowball shootSnowball(Position from, Position to, Entity shooter, boolean canPickUp, double multiply){
+        EntitySnowball arrow = new EntitySnowball(from.getChunk(),Entity.getDefaultNBT(from), shooter);
         double xdiff = to.x - from.x;
         double zdiff = to.z - from.z;
         double angle = Math.atan2(zdiff, xdiff);
@@ -390,7 +406,7 @@ public class EntityManager extends BaseManager {
         z += rand.nextGaussian() * 0.007499999832361937D * 6.0D;
         arrow.setMotion(new Vector3(x, y, z));
 
-        EntityShootBowEvent ev = new EntityShootBowEvent(null, Item.get(Item.SNOWBALL, 0, 1), arrow, multiply);
+        EntityShootBowEvent ev = new EntityShootBowEvent((EntityLiving) shooter, Item.get(Item.SNOWBALL, 0, 1), arrow, multiply);
         Server.getInstance().getPluginManager().callEvent(ev);
         EntityProjectile projectile = ev.getProjectile();
         if (ev.isCancelled()) {

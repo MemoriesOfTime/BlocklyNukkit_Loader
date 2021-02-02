@@ -255,6 +255,7 @@ public class EventLoader implements Listener {
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
         if(event.getEntity().getName().equals("BNNPC"))event.setAttackCooldown(0);
         plugin.callEventHandler(event, "EntityDamageByEntityEvent");
+        plugin.callEventHandler(event, "EntityDamageEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -630,11 +631,14 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDamageByBlockEvent");
+        plugin.callEventHandler(event, "EntityDamageEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByChildEntityEvent(EntityDamageByChildEntityEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDamageByChildEntityEvent");
+        plugin.callEventHandler(event, "EntityDamageByEntityEvent");
+        plugin.callEventHandler(event, "EntityDamageEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplodeEvent(EntityExplodeEvent event){

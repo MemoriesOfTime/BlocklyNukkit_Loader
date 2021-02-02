@@ -10,10 +10,12 @@ Bug Fixed
 entity
 
 - Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced)
+- EntityArrow shootArrow(Position from,Position to,Entity shooter,boolean canPickUp,double multiply)
 - EntityArrow shootArrow(Position from,Position to,boolean canPickUp,double multiply)
 - EntityArrow shootArrow(Position from,Position to,double multiply)
 - EntityArrow shootArrow(Position from,Position to,boolean canPickUp)
 - EntityArrow shootArrow(Position from,Position to)
+- EntitySnowball shootSnowball(Position from,Position to,Entity shooter,boolean canPickUp,double multiply)
 - EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp,double multiply)
 - EntitySnowball shootSnowball(Position from,Position to,double multiply)
 - EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp)

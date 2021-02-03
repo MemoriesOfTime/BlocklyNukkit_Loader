@@ -146,28 +146,36 @@ public class AdvancedRouteFinder extends RouteFinder{
 
 		if(s1 && s3 && (y = isWalkableAt(vec.add(1, 0, 1))) != -256 &&
 				canPassThroughBlock(this.level.getBlock(vec.add(1, y, 0))) &&
-				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1)))){
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(1, y+1, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y+1, 1)))){
 			toAdd = (this.grid.getNode(vec.add(1, y, 1)));
 			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s1 && s4 && (y = isWalkableAt(vec.add(1, 0, -1))) != -256 &&
 				canPassThroughBlock(this.level.getBlock(vec.add(1, y, 0))) &&
-				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1)))){
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(1, y+1, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y+1, -1)))){
 			toAdd = (this.grid.getNode(vec.add(1, y, -1)));
 			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s2 && s3 && (y = isWalkableAt(vec.add(-1, 0, 1))) != -256 &&
 				canPassThroughBlock(this.level.getBlock(vec.add(-1, y, 0))) &&
-				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1)))){
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, 1))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(-1, y+1, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y+1, 1)))){
 			toAdd = (this.grid.getNode(vec.add(-1, y, 1)));
 			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}
 
 		if(s2 && s4 && (y = isWalkableAt(vec.add(-1, 0, -1))) != -256 &&
 				canPassThroughBlock(this.level.getBlock(vec.add(-1, y, 0))) &&
-				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1)))){
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y, -1))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(-1, y+1, 0))) &&
+				canPassThroughBlock(this.level.getBlock(vec.add(0, y+1, -1)))){
 			toAdd = (this.grid.getNode(vec.add(-1, y, -1)));
 			if(!isJamNode(toAdd)) neighbors.add(toAdd);
 		}

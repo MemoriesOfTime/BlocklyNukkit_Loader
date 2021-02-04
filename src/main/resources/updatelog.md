@@ -7,6 +7,10 @@ Bug Fixed
 - 重构BNNPC的AI架构，修复bnnpc两格高出不去问题
 - 修复bn插件包资源文件解压错误问题
 
+particle
+
+- void drawDot(Position pos,int pid)
+
 entity
 
 - Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced)

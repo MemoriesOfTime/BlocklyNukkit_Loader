@@ -4,7 +4,9 @@ import cn.nukkit.block.Block;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.DestroyBlockParticle;
+import cn.nukkit.level.particle.GenericParticle;
 import cn.nukkit.math.Vector3;
+import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.McFunction;
 import com.blocklynukkit.loader.other.particle.CircleFlat;
 import com.blocklynukkit.loader.other.particle.FireworkRocket;
@@ -21,6 +23,9 @@ public class ParticleManager extends BaseManager {
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
+    }
+    public void drawDot(Position pos,int pid){
+        pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()));
     }
     public void drawCircle(Position pos,double radius,int pid,double sep){
         new Thread(new CircleFlat(pos, radius, pid, sep)).start();

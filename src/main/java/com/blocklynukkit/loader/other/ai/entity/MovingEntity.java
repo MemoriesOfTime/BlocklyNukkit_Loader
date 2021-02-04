@@ -4,6 +4,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.format.FullChunk;
+import cn.nukkit.level.particle.WaterDripParticle;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -16,18 +17,16 @@ abstract public class MovingEntity extends EntityHuman{
 	public RouteFinder route = null;
 	private Vector3 target = null;
 	public boolean autoSeeFont = true;
-	private Vector3 lastPos = null;
 	private int jammingTick = 0;
 
 	public MovingEntity(FullChunk chunk, CompoundTag nbt){
 		super(chunk, nbt);
 		this.route = new AdvancedRouteFinder(this);
-		this.lastPos = this.getPosition();
 	}
 
 	public void jump(){
 		if(this.onGround){
-			this.motionY = 0.35;
+			this.motionY += 0.35;
 		}
 	}
 
@@ -35,6 +34,14 @@ abstract public class MovingEntity extends EntityHuman{
 	public boolean entityBaseTick(int tickDiff){
 		if(this.closed){
 			return false;
+		}
+		if(tickDiff%20==0){
+			this.level.addParticle(new WaterDripParticle(this.add(0,0,0)));
+		}
+
+		if(tickDiff%200==0){
+			this.despawnFromAll();
+			this.spawnToAll();
 		}
 
 		boolean hasUpdate = super.entityBaseTick(tickDiff);
@@ -68,16 +75,22 @@ abstract public class MovingEntity extends EntityHuman{
 				double diffX = Math.pow(vec.x - this.x, 2);
 				double diffZ = Math.pow(vec.z - this.z, 2);
 				if(diffX + diffZ == 0){
+					System.out.println("re");
+					jammingTick=0;
+
 					if(!this.route.next()){
 						this.route.arrived();
 					}
 				}else{
+					jammingTick++;
 					int negX = vec.x - this.x < 0 ? -1 : 1;
 					int negZ = vec.z - this.z < 0 ? -1 : 1;
 
 					this.motionX = Math.min(Math.abs(vec.x - this.x), diffX / (diffX + diffZ) * this.getMovementSpeed()) * negX;
 					this.motionZ = Math.min(Math.abs(vec.z - this.z), diffZ / (diffX + diffZ) * this.getMovementSpeed()) * negZ;
+
 					if(vec.y > this.y)this.motionY+=this.getGravity();
+
 					if (this.autoSeeFont) {
 						double angle = Math.atan2(vec.z - this.z, vec.x - this.x);
 						this.yaw = (float) ((angle * 180) / Math.PI) - 90;
@@ -96,8 +109,6 @@ abstract public class MovingEntity extends EntityHuman{
 			this.motionY -= this.getGravity();
 			hasUpdate = true;
 		}
-
-		this.lastPos = this.getPosition();
 
 		return hasUpdate;
 	}

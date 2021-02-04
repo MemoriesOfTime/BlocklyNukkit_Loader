@@ -195,22 +195,25 @@ public class AdvancedRouteFinder extends RouteFinder{
 	}
 
 	public boolean isJamNode(Node node){
-		return false;
-//		if(node.getX() == (int) node.getX() && node.getY() == (int) node.getY() && node.getZ() == (int) node.getZ()){
-//			if(node.getVector3().distance(destination)<1.1 || node.getVector3().distance(start)<1.1){
-//				return false;
-//			}else return !(canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ())) &&
-//						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ())) &&
-//						canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ()-1)) &&
-//						canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ()+1)) &&
+		if(node.getX() == (int) node.getX() && node.getY() == (int) node.getY() && node.getZ() == (int) node.getZ()){
+			if(node.getVector3().distance(destination)<1.5 || node.getVector3().distance(start)<1.5){
+				return false;
+			}else{
+				boolean re = !(canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ())) &&
+						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ())) &&
+						canPassThroughBlock(this.level.getBlock((int)node.getX(),(int)node.getY(),(int)node.getZ()-1)) &&
+						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ()-1)));
+				//if(re)level.addParticle(new cn.nukkit.level.particle.FlameParticle(node.getVector3().add(0,0.15)));
+				return re;
+			}
 //						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ()+1)) &&
 //						canPassThroughBlock(this.level.getBlock((int)node.getX()-1,(int)node.getY(),(int)node.getZ()-1)) &&
 //						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ()-1)) &&
 //						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ())) &&
 //						canPassThroughBlock(this.level.getBlock((int)node.getX()+1,(int)node.getY(),(int)node.getZ()+1)));
-//		}else {
-//			return false;
-//		}
+		}else {
+			return false;
+		}
 	}
 
 	private Block getHighestUnder(double x, double dy, double z){
@@ -246,7 +249,6 @@ public class AdvancedRouteFinder extends RouteFinder{
 
 		double max = Math.max(dx, dz);
 		double min = Math.min(dx, dz);
-
 		return 0.414 * min + max + dy;
 	}
 

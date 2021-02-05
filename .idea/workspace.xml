@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/AdvancedRouteFinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -645,13 +644,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00053" summary="代码更新至1290-beta-r16">
-      <created>1604639908363</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1604639908364</updated>
-    </task>
     <task id="LOCAL-00054" summary="在javascript上实现F()语法糖并修复语法糖函数重名混淆问题">
       <created>1604658602460</created>
       <option name="number" value="00054" />
@@ -988,7 +980,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612400273187</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="回滚npc寻路">
+      <created>1612402662617</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1612402662618</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1040,7 +1039,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再再尝试修复CI文件" />
@@ -1065,7 +1063,8 @@
     <MESSAGE value="尝试修复bnnpc卡墙角问题" />
     <MESSAGE value="尝试修复bnnpc消失问题" />
     <MESSAGE value="新增绘制单点粒子函数" />
-    <option name="LAST_COMMIT_MESSAGE" value="新增绘制单点粒子函数" />
+    <MESSAGE value="回滚npc寻路" />
+    <option name="LAST_COMMIT_MESSAGE" value="回滚npc寻路" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

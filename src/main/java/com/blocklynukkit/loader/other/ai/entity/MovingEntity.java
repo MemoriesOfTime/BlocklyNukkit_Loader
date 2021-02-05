@@ -35,14 +35,11 @@ abstract public class MovingEntity extends EntityHuman{
 		if(this.closed){
 			return false;
 		}
-		if(tickDiff%20==0){
-			this.level.addParticle(new WaterDripParticle(this.add(0,0,0)));
+		if(tickDiff%5==0){
+			this.level.addParticle(new WaterDripParticle(this.add(0,0.15,0)));
 		}
 
-		if(tickDiff%200==0){
-			this.despawnFromAll();
-			this.spawnToAll();
-		}
+		this.level.getPlayers().values().forEach(this::spawnTo);
 
 		boolean hasUpdate = super.entityBaseTick(tickDiff);
 
@@ -75,7 +72,6 @@ abstract public class MovingEntity extends EntityHuman{
 				double diffX = Math.pow(vec.x - this.x, 2);
 				double diffZ = Math.pow(vec.z - this.z, 2);
 				if(diffX + diffZ == 0){
-					System.out.println("re");
 					jammingTick=0;
 
 					if(!this.route.next()){

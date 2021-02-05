@@ -29,6 +29,10 @@ manager
 
 - void removeCommand(String name) --移除名为name的命令
 
+BNNPC
+
+- void reFresh() --强制客户端刷新bnnpc以防止隐身
+
 ## 1.2.9.0
 
 new

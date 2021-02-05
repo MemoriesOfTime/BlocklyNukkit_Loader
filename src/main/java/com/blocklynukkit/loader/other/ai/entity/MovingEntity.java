@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.other.ai.entity;
 
+import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.entity.EntityHuman;
@@ -8,6 +9,8 @@ import cn.nukkit.level.particle.WaterDripParticle;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.network.protocol.AddPlayerPacket;
+import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.other.ai.route.Node;
 import com.blocklynukkit.loader.other.ai.route.RouteFinder;
@@ -18,6 +21,7 @@ abstract public class MovingEntity extends EntityHuman{
 	private Vector3 target = null;
 	public boolean autoSeeFont = true;
 	private int jammingTick = 0;
+	private long passedTick = 1;
 
 	public MovingEntity(FullChunk chunk, CompoundTag nbt){
 		super(chunk, nbt);
@@ -35,11 +39,41 @@ abstract public class MovingEntity extends EntityHuman{
 		if(this.closed){
 			return false;
 		}
-		if(tickDiff%5==0){
-			this.level.addParticle(new WaterDripParticle(this.add(0,0.15,0)));
-		}
-
-		this.level.getPlayers().values().forEach(this::spawnTo);
+		passedTick++;
+//		if(tickDiff%5==0){
+//			this.level.addParticle(new WaterDripParticle(this.add(0,0.15,0)));
+//		}
+		if(passedTick%200==0)
+		this.level.getPlayers().values().forEach(player -> {
+			this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getName(), this.skin, new Player[]{player});
+			AddPlayerPacket pk = new AddPlayerPacket();
+			pk.uuid = this.getUniqueId();
+			pk.username = this.getName();
+			pk.entityUniqueId = this.getId();
+			pk.entityRuntimeId = this.getId();
+			pk.x = (float)this.x;
+			pk.y = (float)this.y;
+			pk.z = (float)this.z;
+			pk.speedX = (float)this.motionX;
+			pk.speedY = (float)this.motionY;
+			pk.speedZ = (float)this.motionZ;
+			pk.yaw = (float)this.yaw;
+			pk.pitch = (float)this.pitch;
+			pk.item = this.getInventory().getItemInHand();
+			pk.metadata = this.dataProperties;
+			player.dataPacket(pk);
+			this.inventory.sendArmorContents(player);
+			this.offhandInventory.sendContents(player);
+			if (this.riding != null) {
+				SetEntityLinkPacket pkk = new SetEntityLinkPacket();
+				pkk.vehicleUniqueId = this.riding.getId();
+				pkk.riderUniqueId = this.getId();
+				pkk.type = 1;
+				pkk.immediate = 1;
+				player.dataPacket(pkk);
+			}
+			this.server.removePlayerListData(this.getUniqueId(), player);
+		});
 
 		boolean hasUpdate = super.entityBaseTick(tickDiff);
 

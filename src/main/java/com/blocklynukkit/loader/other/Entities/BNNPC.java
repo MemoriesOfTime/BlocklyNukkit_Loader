@@ -17,9 +17,7 @@ import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.EmotePacket;
-import cn.nukkit.network.protocol.EntityEventPacket;
-import cn.nukkit.network.protocol.MoveEntityAbsolutePacket;
+import cn.nukkit.network.protocol.*;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
@@ -480,5 +478,37 @@ public class BNNPC extends MovingEntity {
                 "Pickaxe"
         };
         doEmote(emotions[Loader.mainRandom.nextInt(emotions.length)]);
+    }
+    public void reFresh(){
+        this.level.getPlayers().values().forEach(player -> {
+            this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getName(), this.skin, new Player[]{player});
+            AddPlayerPacket pk = new AddPlayerPacket();
+            pk.uuid = this.getUniqueId();
+            pk.username = this.getName();
+            pk.entityUniqueId = this.getId();
+            pk.entityRuntimeId = this.getId();
+            pk.x = (float)this.x;
+            pk.y = (float)this.y;
+            pk.z = (float)this.z;
+            pk.speedX = (float)this.motionX;
+            pk.speedY = (float)this.motionY;
+            pk.speedZ = (float)this.motionZ;
+            pk.yaw = (float)this.yaw;
+            pk.pitch = (float)this.pitch;
+            pk.item = this.getInventory().getItemInHand();
+            pk.metadata = this.dataProperties;
+            player.dataPacket(pk);
+            this.inventory.sendArmorContents(player);
+            this.offhandInventory.sendContents(player);
+            if (this.riding != null) {
+                SetEntityLinkPacket pkk = new SetEntityLinkPacket();
+                pkk.vehicleUniqueId = this.riding.getId();
+                pkk.riderUniqueId = this.getId();
+                pkk.type = 1;
+                pkk.immediate = 1;
+                player.dataPacket(pkk);
+            }
+            this.server.removePlayerListData(this.getUniqueId(), player);
+        });
     }
 }

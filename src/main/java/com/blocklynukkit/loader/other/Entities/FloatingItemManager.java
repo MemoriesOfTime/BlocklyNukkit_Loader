@@ -32,18 +32,19 @@ public class FloatingItemManager implements Listener {
         if(event==null||event.getPlayer()==null||event.getPlayer().getLevel()==null)return;
         String levelName = event.getPlayer().getLevel().getName();
         for(Map.Entry<Position,Item> each:displayMap.keySet()){
+            if(each==null)continue;
+            if(each.getKey()==null)continue;
+            if(each.getValue()==null)continue;
+            if(each.getKey().getLevel()==null)continue;
+            if(each.getKey().getLevel().getName()==null)continue;
             if(levelName.equals(each.getKey().getLevel().getName())){
-                if(each==null)continue;
-                if(each.getKey()==null)continue;
-                if(each.getValue()==null)continue;
-                if(each.getKey().getLevel()==null)continue;
-                if(each.getKey().getLevel().getName()==null)continue;
                 forceAddFloatingItem(event.getPlayer(),each);
             }
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void playerTeleport(PlayerTeleportEvent event){
+
         if(event==null)return;
         if(event.getPlayer()==null)return;
         if(event.getFrom().getLevel()==null)return;

@@ -382,7 +382,8 @@ public class BNNPC extends MovingEntity {
         finder.setDestination(to);
         finder.setSearchLimit(routeMax);
         finder.setLevel(to.level);
-        return finder.search();
+        finder.search();
+        return finder.isSuccess();
     }
     public boolean findAndMove(Position to){
         this.route = new AdvancedRouteFinder(this);
@@ -390,9 +391,9 @@ public class BNNPC extends MovingEntity {
         this.route.setDestination(to);
         this.route.setSearchLimit(routeMax);
         this.route.setLevel(to.level);
-        boolean re = this.route.search();
+        this.route.search();
         this.setTarget(to,true);
-        return re;
+        return this.route.isSuccess();
     }
 
     public boolean directMove(Position to){

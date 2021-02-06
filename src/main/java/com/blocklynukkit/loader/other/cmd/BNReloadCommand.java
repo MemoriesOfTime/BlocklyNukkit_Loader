@@ -49,7 +49,7 @@ public class BNReloadCommand extends Command {
                         getlogger().warning("加载BN插件: " + each);
                     else
                         getlogger().warning("loading BN plugin: " + each);
-                    Loader.putEngine(each, Utils.readToString(new File(Server.getInstance().getPluginPath()+"/BlocklyNukkit/"+each)));
+                    Loader.putEngine(each, Utils.readToString(Server.getInstance().getPluginPath()+"/BlocklyNukkit/"+each));
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文"))
                         getlogger().warning("找不到加载BN插件: " + each);

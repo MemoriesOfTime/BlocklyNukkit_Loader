@@ -15,12 +15,14 @@ import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
+import cn.nukkit.resourcepacks.ResourcePack;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.other.chemistry.EnableChemistryBlocks;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
@@ -197,17 +199,16 @@ public class Loader extends PluginBase implements Listener {
 
         //如果没有显式使用bn拓展材质，则启用化学资源包，防止客户端暴毙
         //1/25追加：powernukkit停止发送，因为bug未解决
-//        if(!Nukkit.CODENAME.equals("PowerNukkit")){
-//            boolean haveBNResourceExtend = false;
-//            for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
-//                if(pack.getPackName().contains("BNExtend")){
-//                    haveBNResourceExtend = true;break;
-//                }
-//            }
-//            if(!haveBNResourceExtend){
-//                EnableChemistryBlocks.enable();
+//        boolean haveBNResourceExtend = false;
+//        for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
+//            if(pack.getPackName().contains("BNExtend")){
+//                haveBNResourceExtend = true;break;
 //            }
 //        }
+//        if(!haveBNResourceExtend){
+//            EnableChemistryBlocks.enable();
+//        }
+
         //创建红石音乐插件主线程
         noteBlockPlayerMain.onEnable();//if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //修改路径类加载器，使得脚本可以调用其他插件
@@ -730,37 +731,6 @@ public class Loader extends PluginBase implements Listener {
     * 下面是注册命令
     * 并没有大用处
     */
-
-    public class ReloadJSCommand extends Command {
-
-        private String functionName;
-
-        public ReloadJSCommand() {
-            super("hotreloadjs", "热重载js(仅控制台使用)");
-            this.setPermission("blocklynukkit.opall");
-        }
-
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args) {
-            if (sender.isPlayer()) {
-                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                    sender.sendMessage("Only console can use this command!");
-                else
-                    sender.sendMessage("只有控制台才能执行此命令");
-                return false;
-            }
-            Server.getInstance().getPluginManager().disablePlugin(plugin);
-            String path = new String(plugin.getFile().getAbsolutePath().toCharArray());
-            Server.getInstance().reload();
-            Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
-                @Override
-                public void onRun(int i) {
-                    Server.getInstance().getPluginManager().loadPlugin(path);
-                }
-            },60);
-            return false;
-        }
-    }
 
     public class InstallCommand extends Command{
         public InstallCommand() {

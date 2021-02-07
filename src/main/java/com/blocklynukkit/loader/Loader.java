@@ -118,7 +118,7 @@ public class Loader extends PluginBase implements Listener {
 
     @Override
     public void onEnable() {
-        if(ProtocolInfo.CURRENT_PROTOCOL < 422){
+        if(ProtocolInfo.CURRENT_PROTOCOL < 419){
             if (Server.getInstance().getLanguage().getName().contains("中文")){
                 this.getLogger().warning("您的服务器版本过低！BlocklyNukkit仅支持1.16.100及以上版本的服务端。");
                 this.getLogger().warning("BlocklyNukkit即将关闭，如需使用，请升级服务器或降低bn版本。");

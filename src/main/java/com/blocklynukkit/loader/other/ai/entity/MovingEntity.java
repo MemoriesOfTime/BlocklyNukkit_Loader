@@ -10,6 +10,7 @@ import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.AddPlayerPacket;
+import cn.nukkit.network.protocol.PlayerListPacket;
 import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.other.ai.route.Node;
@@ -72,7 +73,10 @@ abstract public class MovingEntity extends EntityHuman{
 				pkk.immediate = 1;
 				player.dataPacket(pkk);
 			}
-			this.server.removePlayerListData(this.getUniqueId(), player);
+			PlayerListPacket pk2 = new PlayerListPacket();
+			pk2.type = 1;
+			pk2.entries = new PlayerListPacket.Entry[]{new PlayerListPacket.Entry(this.getUniqueId())};
+			player.dataPacket(pk);
 		});
 
 		boolean hasUpdate = super.entityBaseTick(tickDiff);

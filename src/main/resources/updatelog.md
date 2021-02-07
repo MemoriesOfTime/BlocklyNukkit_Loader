@@ -28,6 +28,19 @@ entity
 manager
 
 - void removeCommand(String name) --移除名为name的命令
+- void sendMail(String smtpMailServer,String from,String to,String cc,String bcc,String subject,String content)
+  - 发送电子邮件，默认为utf-8编码
+- \<E> syncCallFunction(String functionName,Object... args)  --同步执行函数
+
+blockitem
+
+- void addShapedRecipe(String shape,Item output,(String key,Item value)...)
+  - 这是更舒服的添加有序合成API，shape是合成形状字符串，
+  - 用一个字母或数字代表合成原材料的摆放方式，用"|"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留
+  - output是合成产物，后面的参数是映射表，key是你之前的shape中的字符，value是这个key代表的物品
+  - shape中有多少种字符串就得有多少个这也的映射参数
+  - 例如 石镐:addShapedRecipe("SSS| I | I ",石镐物品,"S",圆石物品,"I",木棍物品)
+  - 工作台: addShapedRecipe("MM|MM",工作台物品,"M",橡木木板物品)
 
 BNNPC
 

@@ -28,6 +28,7 @@ import com.blocklynukkit.loader.utils.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import javassist.*;
+import nukkitcoders.mobplugin.RouteFinderThreadPool;
 
 import javax.script.ScriptEngine;
 import java.lang.reflect.Constructor;
@@ -298,6 +299,66 @@ public class BlockItemManager extends BaseManager {
         ShapedRecipe recipe = new ShapedRecipe(
                 UUID.randomUUID().toString(),100,
                 output,shape,map,linkedList
+        );
+        Server.getInstance().addRecipe(recipe);
+        Server.getInstance().getCraftingManager().rebuildPacket();
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1){
+        this.addShapedCraft(shape, output, s1, i1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, null, null, null, null, null, null, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, null, null, null, null, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4,String s5,Item i5){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, null, null, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4,String s5,Item i5,String s6,Item i6){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, null, null, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
+            ,String s7,Item i7){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, s7, i7, null, null, null, null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
+            ,String s7,Item i7,String s8,Item i8){
+        this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, s7, i7, s8, i8,null,null);
+    }
+    public void addShapedCraft(String shape,Item output
+            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
+            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
+            ,String s7,Item i7,String s8,Item i8,String s9,Item i9){
+        CharObjectHashMap<Item> ingredients = new CharObjectHashMap<>();
+        if(s1!=null)ingredients.put(s1.charAt(0),i1);
+        if(s2!=null)ingredients.put(s2.charAt(0),i2);
+        if(s3!=null)ingredients.put(s3.charAt(0),i3);
+        if(s4!=null)ingredients.put(s4.charAt(0),i4);
+        if(s5!=null)ingredients.put(s5.charAt(0),i5);
+        if(s6!=null)ingredients.put(s6.charAt(0),i6);
+        if(s7!=null)ingredients.put(s7.charAt(0),i7);
+        if(s8!=null)ingredients.put(s8.charAt(0),i8);
+        if(s9!=null)ingredients.put(s9.charAt(0),i9);
+        ShapedRecipe recipe = new ShapedRecipe(
+                UUID.randomUUID().toString(),100,
+                output,shape.split("\\|"),ingredients,new ArrayList<>()
         );
         Server.getInstance().addRecipe(recipe);
         Server.getInstance().getCraftingManager().rebuildPacket();

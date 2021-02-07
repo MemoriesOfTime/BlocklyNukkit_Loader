@@ -35,6 +35,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mchange.net.ProtocolException;
+import com.mchange.net.SmtpMailSender;
 import com.sun.management.OperatingSystemMXBean;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.Block;
@@ -45,13 +47,9 @@ import javax.script.ScriptException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.*;
 import java.nio.file.Files;
 import java.util.*;
-import java.net.DatagramSocket;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,6 +75,11 @@ public class FunctionManager extends BaseManager {
             nodejs = new NodeJSLoader();
         }else {
             nodejs = new NodeJSNotFoundLoader();
+        }
+    }
+    public Object syncCallFunction(String functionName,Object... args){
+        synchronized (Server.getInstance()){
+            return Loader.plugin.call(functionName, args);
         }
     }
     public void requireMinVersion(String minVersion,String failMessage) throws ScriptException {
@@ -495,6 +498,15 @@ public class FunctionManager extends BaseManager {
             return Utils.sendPost(url,data);
         }else {
             return "NO SUCH METHOD";
+        }
+    }
+    //email
+    public void sendMail(String smtpMailServer,String from,String to,String cc,String bcc,String subject,String content){
+        try {
+            SmtpMailSender smtpMailSender = new SmtpMailSender(smtpMailServer);
+            smtpMailSender.sendMail(from,to.split("[;, ]+"),cc.split("[;, ]+"),bcc.split("[;, ]+"),subject,content,"utf-8");
+        } catch (IOException | ProtocolException e) {
+            e.printStackTrace();
         }
     }
     //私有回调

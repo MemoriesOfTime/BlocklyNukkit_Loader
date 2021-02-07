@@ -5,11 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/smtp/smtpSender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingItemManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -647,13 +649,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00056" summary="重构代码，更新到beta-21">
-      <created>1605418982392</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1605418982393</updated>
-    </task>
     <task id="LOCAL-00057" summary="重构SimpleWindowBuilder，更新api">
       <created>1605917628830</created>
       <option name="number" value="00057" />
@@ -990,7 +985,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612493615925</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="一些小修改">
+      <created>1612618241779</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1612618241779</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1042,7 +1044,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="再再再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再再再再尝试修复CI文件" />
     <MESSAGE value="再再再再再再再再再再再尝试修复CI文件" />
@@ -1067,7 +1068,8 @@
     <MESSAGE value="回滚npc寻路" />
     <MESSAGE value="尝试修复npc隐身问题" />
     <MESSAGE value="添加BNNPC-reFresh函数" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加BNNPC-reFresh函数" />
+    <MESSAGE value="一些小修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="一些小修改" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

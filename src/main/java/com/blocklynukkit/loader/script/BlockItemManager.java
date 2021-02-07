@@ -28,7 +28,6 @@ import com.blocklynukkit.loader.utils.Utils;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import javassist.*;
-import nukkitcoders.mobplugin.RouteFinderThreadPool;
 
 import javax.script.ScriptEngine;
 import java.lang.reflect.Constructor;

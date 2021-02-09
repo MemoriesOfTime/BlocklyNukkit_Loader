@@ -1,7 +1,10 @@
 package com.blocklynukkit.loader.script;
 
+import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.ParticleEffect;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.level.particle.GenericParticle;
@@ -23,6 +26,15 @@ public class ParticleManager extends BaseManager {
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
+    }
+    public void drawEmitter(Position pos,String id,Player toPlayer){
+        pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension(),toPlayer);
+    }
+    public void drawEmitter(Position pos,String id){
+        pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension());
+    }
+    public void drawDot(Position pos,int pid,Player toPlayer){
+        pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()),toPlayer);
     }
     public void drawDot(Position pos,int pid){
         pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()));

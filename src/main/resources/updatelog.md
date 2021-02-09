@@ -11,6 +11,9 @@ Bug Fixed
 particle
 
 - void drawDot(Position pos,int pid)
+- void drawDot(Position pos,int pid,Player toPlayer)
+- void drawEmitter(Position pos,String id)
+- void drawEmitter(Position pos,String id,Player toPlayer)
 
 entity
 

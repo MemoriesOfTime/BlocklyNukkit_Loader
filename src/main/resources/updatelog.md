@@ -6,6 +6,7 @@ Bug Fixed
 - 修复方块实体无法不坠落
 - 重构BNNPC的AI架构，修复bnnpc两格高出不去问题
 - 修复bn插件包资源文件解压错误问题
+- PHP更友善的debug
 
 particle
 
@@ -34,13 +35,13 @@ manager
 
 blockitem
 
-- void addShapedRecipe(String shape,Item output,(String key,Item value)...)
+- void addShapedCraft(String shape,Item output,(String key,Item value)...)
   - 这是更舒服的添加有序合成API，shape是合成形状字符串，
   - 用一个字母或数字代表合成原材料的摆放方式，用"|"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留
   - output是合成产物，后面的参数是映射表，key是你之前的shape中的字符，value是这个key代表的物品
   - shape中有多少种字符串就得有多少个这也的映射参数
-  - 例如 石镐:addShapedRecipe("SSS| I | I ",石镐物品,"S",圆石物品,"I",木棍物品)
-  - 工作台: addShapedRecipe("MM|MM",工作台物品,"M",橡木木板物品)
+  - 例如 石镐:addShapedCraft("SSS| I | I ",石镐物品,"S",圆石物品,"I",木棍物品)
+  - 工作台: addShapedCraft("MM|MM",工作台物品,"M",橡木木板物品)
 
 BNNPC
 

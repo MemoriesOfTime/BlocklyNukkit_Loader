@@ -3,7 +3,9 @@ package com.blocklynukkit.loader.scriptloader.scriptengines;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.utils.Utils;
+import com.caucho.quercus.Location;
 import com.caucho.quercus.QuercusContext;
+import com.caucho.quercus.QuercusErrorException;
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.*;
 import com.caucho.quercus.lib.*;
@@ -46,6 +48,7 @@ import com.caucho.vfs.*;
 import javax.script.*;
 import java.io.*;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,12 +61,28 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
     public HashMap<String,Closure> closureHashMap = new HashMap<>();
     public int closureCount = -1;
     private String engineName;
+    private Field _globalMapField;
+    private Field _staticMapField;
+    private Field _mapField;
+    private Field _lastErrorLocationField;
 
     public BNPHPScriptEngine(BNLogger logger,String engineName){
         super(new QuercusScriptEngineFactory(),true);
         this.getContext().setWriter(new PrintWriter(System.out));
         this.logger=logger;
         this.engineName = engineName;
+        try {
+            _globalMapField = Env.class.getDeclaredField("_globalMap");
+            _globalMapField.setAccessible(true);
+            _mapField = Env.class.getDeclaredField("_map");
+            _mapField.setAccessible(true);
+            _staticMapField = Env.class.getDeclaredField("_staticMap");
+            _staticMapField.setAccessible(true);
+            _lastErrorLocationField = Env.class.getDeclaredField("_lastErrorLocation");
+            _lastErrorLocationField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -139,29 +158,41 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
 
     @Override
     public Object invokeFunction(String name, Object... args) throws ScriptException, NoSuchMethodException {
-        env.setScriptContext(this.getContext());
-        if(closureHashMap.containsKey(name)){
-            if(args.length==0){
-                return closureHashMap.get(name).call(this.env);
-            }else {
-                Value[] values = new Value[args.length];
-                for(int i=0;i<args.length;i++){
-                    values[i] = env.wrapJava(args[i]);
+        try {
+            env.setScriptContext(this.getContext());
+            if(closureHashMap.containsKey(name)){
+                if(args.length==0){
+                    return closureHashMap.get(name).call(this.env);
+                }else {
+                    Value[] values = new Value[args.length];
+                    for(int i=0;i<args.length;i++){
+                        values[i] = env.wrapJava(args[i]);
+                    }
+                    return closureHashMap.get(name).call(this.env,values);
                 }
-                return closureHashMap.get(name).call(this.env,values);
-            }
-        }else {
-            if(args.length==0){
-                return env.findFunction((StringValue)StringValue.create(name)).call(env);
             }else {
-                Value[] values = new Value[args.length];
-                for(int i=0;i<args.length;i++){
-                    values[i] = env.wrapJava(args[i]);
+                if(args.length==0){
+                    return env.findFunction((StringValue)StringValue.create(name)).call(env);
+                }else {
+                    Value[] values = new Value[args.length];
+                    for(int i=0;i<args.length;i++){
+                        values[i] = env.wrapJava(args[i]);
+                    }
+                    return env.findFunction(
+                            (StringValue)StringValue.create(name)).call(
+                            env, values);
                 }
-                return env.findFunction(
-                        (StringValue)StringValue.create(name)).call(
-                        env, values);
             }
+        }catch (QuercusErrorException e){
+            String mes = e.getMessage();
+            int line = -1;
+            try {
+                Location location = (Location) _lastErrorLocationField.get(this.env);
+                line = location.getLineNumber();
+            } catch (IllegalAccessException illegalAccessException) {
+                //ignore
+            }
+            throw new ScriptException(mes,engineName,line);
         }
     }
 
@@ -223,7 +254,7 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
             env = new Env(quercus, page, os, (QuercusHttpServletRequest)null, (QuercusHttpServletResponse)null);
             env.setScriptContext(cxt);
             env.setIni("__DIR__", Server.getInstance().getFilePath());
-            env.setTimeLimit(0L);
+            env.setIni("max_execution_time", LongValue.create(0L));
             env.start();
             Value result = null;
 
@@ -233,6 +264,17 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
                     result = value;
                 }
             } catch (QuercusExitException var19) {
+
+            } catch (QuercusErrorException e){
+                String mes = e.getMessage();
+                int line = -1;
+                try {
+                    Location location = (Location) _lastErrorLocationField.get(this.env);
+                    line = location.getLineNumber();
+                } catch (IllegalAccessException illegalAccessException) {
+                    //ignore
+                }
+                throw new ScriptException(mes,engineName,line);
             }
             String tmp = outputWriter.toString();
             if(tmp.trim().length()>0)
@@ -252,4 +294,28 @@ public class BNPHPScriptEngine extends QuercusScriptEngine implements Invocable 
         return value;
     }
 
+    @Override
+    public Bindings getBindings(int scope) {
+        Bindings bindings = null;
+        try {
+            if(this.env!=null && scope==300){
+                bindings = super.getBindings(100);
+                Bindings out = new SimpleBindings();
+                bindings.forEach(out::put);
+                Map<StringValue, Var> _staticMap = (Map<StringValue, Var>) _staticMapField.get(this.env);
+                Map<StringValue, EnvVar> _map = (Map<StringValue, EnvVar>) _mapField.get(this.env);
+                Map<StringValue, EnvVar> _globalMap = (Map<StringValue, EnvVar>) _mapField.get(this.env);
+                _staticMap.forEach((k,v)->out.put(k.toJavaString(),v));
+                _map.forEach((k,v)->out.put(k.toJavaString(),v));
+                _globalMap.forEach((k,v)->out.put(k.toJavaString(),v));
+                return out;
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        if(bindings == null){
+            bindings = super.getBindings(scope);
+        }
+        return bindings;
+    }
 }

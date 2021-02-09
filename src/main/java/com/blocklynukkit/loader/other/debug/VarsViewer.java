@@ -65,7 +65,12 @@ public class VarsViewer {
             // 显示对话框
             dialog.setVisible(true);
             // 结束
-            Bindings bindings = Loader.engineMap.get(pluginName).getBindings(ScriptContext.GLOBAL_SCOPE);
+            Bindings bindings;
+            if(pluginName.endsWith(".php")){
+                bindings = Loader.engineMap.get(pluginName).getBindings(300);
+            }else {
+                bindings = Loader.engineMap.get(pluginName).getBindings(ScriptContext.GLOBAL_SCOPE);
+            }
             if(bindings==null){
                 bindings = Loader.engineMap.get(pluginName).getBindings(ScriptContext.ENGINE_SCOPE);
             }

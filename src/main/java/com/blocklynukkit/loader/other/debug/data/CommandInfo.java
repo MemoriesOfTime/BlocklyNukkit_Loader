@@ -1,6 +1,7 @@
 package com.blocklynukkit.loader.other.debug.data;
 
 import cn.nukkit.Server;
+import cn.nukkit.command.data.CommandParameter;
 
 import java.util.*;
 
@@ -40,9 +41,15 @@ public class CommandInfo {
         Map<String, String> out = new LinkedHashMap<>();
         if(callInfos.empty()){
             completer = new StringBuilder();
-            Server.getInstance().getCommandMap().getCommand(commandName).getCommandParameters().forEach((key,value)->{
-                completer.append("\n    ").append(key).append(": ").append(Arrays.toString(value));
-            });
+            if(Server.getInstance().getCommandMap().getCommand(commandName)==null){
+                out.put("错误","空命令");return out;
+            }
+            Map<String, CommandParameter[]> parameterTmpMap = Server.getInstance().getCommandMap().getCommand(commandName).getCommandParameters();
+            if(parameterTmpMap == null){
+                completer.append("无可用的完成器");
+            }else {
+                parameterTmpMap.forEach((key,value)-> completer.append("\n    ").append(key).append(": ").append(Arrays.toString(value)));
+            }
             out.put("初始化","注册命令："+commandName+"\n命令描述："+commandDescription+"\n完成器："+completer.toString()+"\n");
         }
         Iterator it = callInfos.iterator();

@@ -318,6 +318,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());
         plugin.getServer().getCommandMap().register("bnreload",new BNReloadCommand());
         plugin.getServer().getCommandMap().register("signature",new SignatureCommand());
+        plugin.getServer().getCommandMap().register("bnmiscbuild",new BNMiscBuild());
 
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);

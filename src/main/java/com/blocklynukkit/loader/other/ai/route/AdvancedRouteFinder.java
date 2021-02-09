@@ -37,7 +37,6 @@ public class AdvancedRouteFinder extends RouteFinder{
 		if(this.getStart() == null || this.getDestination() == null){
 			return this.succeed = this.searching = false;
 		}
-
 		this.resetNodes();
 		Node start = new Node(this.getStart().floor());
 		Node endNode = new Node(this.realDestination.floor());
@@ -73,19 +72,31 @@ public class AdvancedRouteFinder extends RouteFinder{
 			}
 
 			if(endNode.equals(node)){
-				List<Node> nodes = new ArrayList<>();
-
-				nodes.add(node);
-				while((node = node.getParent()) != null){
-					node.add(0.5, 0, 0.5);
-					level.addParticle(new cn.nukkit.level.particle.CriticalParticle(node.getVector3().add(0,0.15),3));
-					nodes.add(node);
+				Node tmp = node;
+				while((tmp = tmp.getParent()) != null){
+					tmp.add(0.5,0,0.5);
 				}
-
+				List<Node> nodes = new ArrayList<>();
+				nodes.add(node);
+				Node previous;
+				while((node = node.getParent()) != null){
+					previous = node;
+					if(((int)node.getX())==node.getX() && ((int)node.getZ())==node.getZ()){
+						previous.setParent(node.getParent());
+					}else {
+						nodes.add(node);
+					}
+				}
+//				nodes.remove(nodes.size()-1);
+//				if(nodes.size()!=0){
+//					Node p = nodes.get(nodes.size()-1);
+//					Node a = new Node((p.getX()+entity.getX())/2,entity.getY(),(p.getZ()+entity.getZ())/2);
+//					nodes.add(a);
+//				}
 				Collections.reverse(nodes);
-				nodes.remove(0);
 
-				nodes.forEach(this::addNode);
+				super.nodes = nodes;
+				nodes.forEach(n->level.addParticle(new cn.nukkit.level.particle.CriticalParticle(n.getVector3().add(0,0.15),3)));
 				this.succeed = true; this.searching = false;
 				return true;
 			}
@@ -118,8 +129,8 @@ public class AdvancedRouteFinder extends RouteFinder{
 
 	public Set<Node> getNeighbors(Node node){
 		Set<Node> neighbors = new HashSet<>();
-
 		Vector3 vec = node.getVector3();
+
 		boolean s1, s2, s3, s4;
 
 		double y;

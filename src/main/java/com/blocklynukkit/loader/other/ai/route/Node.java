@@ -2,7 +2,7 @@ package com.blocklynukkit.loader.other.ai.route;
 
 import cn.nukkit.math.Vector3;
 
-public class Node{
+public class Node implements Cloneable{
 	private Node parent = null;
 	public boolean closed = false;
 
@@ -42,8 +42,9 @@ public class Node{
 		return this.node.z;
 	}
 
-	public void add(double x, double y, double z){
+	public Node add(double x, double y, double z){
 		this.node = this.node.add(x, y, z);
+		return this;
 	}
 
 	public String toString(){
@@ -56,6 +57,39 @@ public class Node{
 
 	public Node getParent(){
 		return this.parent;
+	}
+
+	public double getParentDx(){
+		return this.parent.getX()-this.getX();
+	}
+
+	public double getParentDy(){
+		return this.parent.getY()-this.getY();
+	}
+
+	public double getParentDz(){
+		return this.parent.getZ()-this.getZ();
+	}
+
+	public Node getGrandParent(){
+		return this.parent==null?null:this.parent.parent;
+	}
+
+	public double getGrandParentDx(){
+		return this.getGrandParent().getX()-this.getX();
+	}
+
+	public double getGrandParentDy(){
+		return this.getGrandParent().getY()-this.getY();
+	}
+
+	public double getGrandParentDz(){
+		return this.getGrandParent().getZ()-this.getZ();
+	}
+
+	@Override
+	public Node clone(){
+		return new Node(this.getVector3());
 	}
 
 	public boolean equals(Node node){

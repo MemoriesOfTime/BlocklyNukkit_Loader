@@ -77,6 +77,9 @@ public class FunctionManager extends BaseManager {
             nodejs = new NodeJSNotFoundLoader();
         }
     }
+    public void jvmGC(){
+        Runtime.getRuntime().gc();
+    }
     public Object syncCallFunction(String functionName,Object... args){
         synchronized (Server.getInstance()){
             return Loader.plugin.call(functionName, args);

@@ -35,6 +35,7 @@ manager
 - void sendMail(String smtpMailServer,String from,String to,String cc,String bcc,String subject,String content)
   - 发送电子邮件，默认为utf-8编码
 - \<E> syncCallFunction(String functionName,Object... args)  --同步执行函数
+- void jvmGC() --垃圾回收，释放无用内存
 
 blockitem
 

@@ -44,40 +44,6 @@ abstract public class MovingEntity extends EntityHuman{
 //		if(tickDiff%5==0){
 //			this.level.addParticle(new WaterDripParticle(this.add(0,0.15,0)));
 //		}
-		if(passedTick%200==0)
-		this.level.getPlayers().values().forEach(player -> {
-			this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getName(), this.skin, new Player[]{player});
-			AddPlayerPacket pk = new AddPlayerPacket();
-			pk.uuid = this.getUniqueId();
-			pk.username = this.getName();
-			pk.entityUniqueId = this.getId();
-			pk.entityRuntimeId = this.getId();
-			pk.x = (float)this.x;
-			pk.y = (float)this.y;
-			pk.z = (float)this.z;
-			pk.speedX = (float)this.motionX;
-			pk.speedY = (float)this.motionY;
-			pk.speedZ = (float)this.motionZ;
-			pk.yaw = (float)this.yaw;
-			pk.pitch = (float)this.pitch;
-			pk.item = this.getInventory().getItemInHand();
-			pk.metadata = this.dataProperties;
-			player.dataPacket(pk);
-			this.inventory.sendArmorContents(player);
-			this.offhandInventory.sendContents(player);
-			if (this.riding != null) {
-				SetEntityLinkPacket pkk = new SetEntityLinkPacket();
-				pkk.vehicleUniqueId = this.riding.getId();
-				pkk.riderUniqueId = this.getId();
-				pkk.type = 1;
-				pkk.immediate = 1;
-				player.dataPacket(pkk);
-			}
-			PlayerListPacket pk2 = new PlayerListPacket();
-			pk2.type = 1;
-			pk2.entries = new PlayerListPacket.Entry[]{new PlayerListPacket.Entry(this.getUniqueId())};
-			player.dataPacket(pk);
-		});
 
 		boolean hasUpdate = super.entityBaseTick(tickDiff);
 
@@ -103,7 +69,6 @@ abstract public class MovingEntity extends EntityHuman{
 
 		if(!this.route.isSearching() && this.route.isSuccess() && this.route.hasRoute()){ // entity has route to go
 			hasUpdate = true;
-
 			Node node = this.route.get();
 			if(node != null){
 				Vector3 vec = node.getVector3();
@@ -111,7 +76,6 @@ abstract public class MovingEntity extends EntityHuman{
 				double diffZ = Math.pow(vec.z - this.z, 2);
 				if(diffX + diffZ == 0){
 					jammingTick=0;
-
 					if(!this.route.next()){
 						this.route.arrived();
 					}

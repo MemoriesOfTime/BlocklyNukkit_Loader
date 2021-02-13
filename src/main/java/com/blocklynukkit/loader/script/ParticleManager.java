@@ -31,7 +31,11 @@ public class ParticleManager extends BaseManager {
         pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension(),toPlayer);
     }
     public void drawEmitter(Position pos,String id){
-        pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension());
+        pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension(),(Player[])null);
+    }
+    public void drawEmitter(Position pos){
+        ParticleEffect[] random = ParticleEffect.values();
+        pos.level.addParticleEffect(pos,random[Loader.mainRandom.nextInt(random.length)-1]);
     }
     public void drawDot(Position pos,int pid,Player toPlayer){
         pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()),toPlayer);

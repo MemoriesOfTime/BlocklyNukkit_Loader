@@ -45,15 +45,22 @@ public class BlockItemManager extends BaseManager {
     }
     //-添加声音
     public void makeSound(Position position,String soundname){
-        position.getLevel().addSound(new Vector3(position.x,position.y,position.z), Sound.valueOf(soundname));
+        position.getLevel().addSound(position, Sound.valueOf(soundname));
     }
     //-生成经验求
     public void makeExpBall(Position position,int point){
-        position.getLevel().dropExpOrb(new Vector3(position.x,position.y,position.z),point);
+        position.getLevel().dropExpOrb(position,point);
     }
     //-生成掉落物
     public void makeDropItem(Position position, Item item){
-        position.getLevel().dropItem(new Vector3(position.x,position.y,position.z),item);
+        position.getLevel().dropItem(position,item);
+    }
+    public void makeDropItem(Position position, Item item, boolean fly){
+        if(fly){
+            makeDropItem(position, item);
+        }else {
+            position.getLevel().dropItem(position,item,new Vector3(0,0,0));
+        }
     }
     //-获取方块
     public Block getBlock(Position position) {

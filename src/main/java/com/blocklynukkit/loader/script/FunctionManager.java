@@ -227,8 +227,24 @@ public class FunctionManager extends BaseManager {
     public String getPlayerDeviceID(Player player){
         return player.getLoginChainData().getDeviceId();
     }
-    public int getPlayerDeviceOS(Player player){
-        return player.getLoginChainData().getDeviceOS();
+    public String getPlayerDeviceOS(Player player){
+        int os = player.getLoginChainData().getDeviceOS();
+        switch (os) {
+            case 1: return "Android";
+            case 2: return "iOS";
+            case 3: return "macOS";
+            case 4: return "FireOS";
+            case 5: return "Gear VR";
+            case 6: return "Hololens";
+            case 7: return "Windows 10";
+            case 8: return "Windows";
+            case 9: return "Dedicated";
+            case 10: return "PS4";
+            case 11: case 12: return "Switch";
+            case 13: return "Xbox One";
+            case 14: return "Windows Phone";
+        }
+        return "Unknown";
     }
     public String[] getEventFunctions(Event event){
         List<String> list = new ArrayList<>();

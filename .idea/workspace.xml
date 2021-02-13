@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNMiscBuild.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNMiscBuild.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/WindowManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/data/MemoryStorage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/data/MemoryStorage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/DatabaseManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/ParticleManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/ParticleManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -646,13 +650,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00062" summary="实现CustomWindowBuilder链式调用">
-      <created>1606055413842</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1606055413845</updated>
-    </task>
     <task id="LOCAL-00063" summary="初步实现地图渲染器功能">
       <created>1606296614101</created>
       <option name="number" value="00063" />
@@ -989,7 +986,14 @@
       <option name="project" value="LOCAL" />
       <updated>1612860602379</updated>
     </task>
-    <option name="localTasksCounter" value="111" />
+    <task id="LOCAL-00111" summary="完善注册物品api">
+      <created>1612939648395</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1612939648395</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1041,7 +1045,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="1.2.9.0正式版" />
     <MESSAGE value="修复射箭函数" />
     <MESSAGE value="修复射箭函数中参数依赖问题" />
     <MESSAGE value="生成坠落方块返回实体" />
@@ -1066,7 +1069,8 @@
     <MESSAGE value="更好的debug" />
     <MESSAGE value="尝试粒子发射器" />
     <MESSAGE value="优化npc" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化npc" />
+    <MESSAGE value="完善注册物品api" />
+    <option name="LAST_COMMIT_MESSAGE" value="完善注册物品api" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

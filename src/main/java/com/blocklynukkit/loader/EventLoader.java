@@ -62,70 +62,70 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerRespawnEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteractEntity(PlayerInteractEntityEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerInteractEntityEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTeleport(PlayerTeleportEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerTeleportEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSwim(PlayerToggleSwimEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerToggleSwimEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onGlide(PlayerToggleGlideEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerToggleGlideEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSneak(PlayerToggleSneakEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerToggleSneakEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSprint(PlayerToggleSprintEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerToggleSprintEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onFlight(PlayerToggleFlightEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerToggleFlightEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnterBed(PlayerBedEnterEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerBedEnterEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeaveBed(PlayerBedLeaveEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerBedLeaveEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(PlayerChatEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerChatEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(PlayerPreLoginEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerPreLoginEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerQuitEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onJoin(PlayerJoinEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerJoinEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBreak(BlockBreakEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockBreakEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlace(BlockPlaceEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockPlaceEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -143,37 +143,37 @@ public class EventLoader implements Listener {
                 Loader.windowCallbackMap.get(event.getFormID()).call(event);
             }
         }
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerFormRespondedEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPistonChangeEvent(BlockPistonChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockPistonChangeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockUpdateEvent(BlockUpdateEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockUpdateEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockSpreadEvent(BlockSpreadEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockSpreadEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDoorToggleEvent(DoorToggleEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "DoorToggleEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockRedstoneEvent(BlockRedstoneEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockRedstoneEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCommand(PlayerCommandPreprocessEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerCommandPreprocessEvent");
         if(event.isCancelled())return;
         if(event.getMessage().equals("/version")||event.getMessage().equals("version")||
                 event.getMessage().equals("/version ")||event.getMessage().equals("version ")){
@@ -190,15 +190,15 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventory(InventoryTransactionEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryTransactionEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerItemHeld(PlayerItemHeldEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerItemHeldEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerInteractEvent");
         PlayerInteractEvent.Action action = event.getAction();
         if(action.equals(PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)){
             plugin.callEventHandler(event, "RightClickBlockEvent");
@@ -213,7 +213,7 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onServerCommand(ServerCommandEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ServerCommandEvent");
         if(event.isCancelled())return;
         if(event.getCommand().equals("/version")||event.getCommand().equals("version")||
         event.getCommand().equals("/version ")||event.getCommand().equals("version ")){
@@ -233,17 +233,17 @@ public class EventLoader implements Listener {
 //        Player player=event.getPlayer();
 //        DummyBossBar.Builder builder=new DummyBossBar.Builder(player);
 //        player.createBossBar()
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerMoveEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntity(EntitySpawnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntitySpawnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDespawn(EntityDespawnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDespawnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -260,123 +260,123 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDeath(PlayerDeathEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerDeathEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDeath(EntityDeathEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityDeathEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTeleport(EntityTeleportEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityTeleportEvent");
     }
 
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemDespawnEvent(ItemDespawnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ItemDespawnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemSpawnEvent(ItemSpawnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ItemSpawnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjecttileHit(ProjectileHitEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ProjectileHitEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileLaunch(ProjectileLaunchEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ProjectileLaunchEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityLevelChangeEvent(EntityLevelChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityLevelChangeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityInventoryChange(EntityInventoryChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityInventoryChangeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExplosionPrime(EntityExplosionPrimeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityExplosionPrimeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBurn(BlockBurnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockBurnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFormEvent(BlockFormEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"BlockFormEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockIgniteEvent(BlockIgniteEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockIgniteEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFade(BlockFadeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockFadeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFall(BlockFallEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockFallEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockGrow(BlockGrowEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockGrowEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSignChangeEvent(SignChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "SignChangeEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onItemFrameDrop(ItemFrameDropItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ItemFrameDropItemEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLeavesDecay(LeavesDecayEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LeavesDecayEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRedstoneUpdateEvent(RedstoneUpdateEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "RedstoneUpdateEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCraft(CraftItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "CraftItemEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryOpen(InventoryOpenEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryOpenEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClock(InventoryCloseEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryCloseEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onFurnaceBurn(FurnaceBurnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "FurnaceBurnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -397,22 +397,22 @@ public class EventLoader implements Listener {
         if(out!=null){
             event.setResult(out);
         }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "FurnaceSmeltEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryPickupArrow(InventoryPickupArrowEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryPickupArrowEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onIntentoryPickupItem(InventoryPickupItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryPickupItemEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPotionCollideEvent(PotionCollideEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PotionCollideEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -435,7 +435,7 @@ public class EventLoader implements Listener {
 //                }
 //            });
 //        }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "DataPacketReceiveEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -531,27 +531,27 @@ public class EventLoader implements Listener {
 //            }
 //            event.getPlayer().dataPacket(packet);
 //        }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "DataPacketSendEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQueryRegenerate(QueryRegenerateEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "QueryRegenerateEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockForm(BlockFormEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockFormEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockFormTo(BlockFromToEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BlockFromToEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLiquid(LiquidFlowEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LiquidFlowEvent");
         Position position = Position.fromObject(new Vector3(
                 event.getBlock().x,event.getBlock().y,event.getBlock().z
         ),event.getBlock().getLevel());
@@ -569,19 +569,19 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSongEnd(SongEndEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "SongEndEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSongDestroy(SongDestroyingEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "SongDestroyingEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSongStop(SongStoppedEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "SongStoppedEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryClick(InventoryClickEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryClickEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkUnload(ChunkUnloadEvent event){
@@ -593,41 +593,42 @@ public class EventLoader implements Listener {
                 event.setCancelled();
             }
         }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ChunkUnloadEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerSetting(PlayerSettingsRespondedEvent event){
         if(!event.wasClosed()&&event.getResponse()!=null){
             Loader.callEventHandler(event,Loader.serverSettingCallback.get(event.getPlayer().getName()));
         }
+        plugin.callEventHandler(event, "PlayerSettingsRespondedEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnEvent(CreatureSpawnEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "CreatureSpawnEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreeperPowerEvent(CreeperPowerEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "CreeperPowerEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityArmorChangeEvent(EntityArmorChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityArmorChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityBlockChangeEvent(EntityBlockChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityBlockChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityCombustByBlockEvent(EntityCombustByBlockEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityCombustByBlockEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityCombustByEntityEvent(EntityCombustByEntityEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityCombustByEntityEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityCombustEvent(EntityCombustEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityCombustEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByBlockEvent(EntityDamageByBlockEvent event){
@@ -642,55 +643,55 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExplodeEvent(EntityExplodeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityExplodeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityMotionEvent(EntityMotionEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityMotionEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityPortalEnterEvent(EntityPortalEnterEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityPortalEnterEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityRegainHealthEvent(EntityRegainHealthEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityRegainHealthEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityShootBowEvent(EntityShootBowEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityShootBowEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityVehicleEnterEvent(EntityVehicleEnterEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityVehicleEnterEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityVehicleExitEvent(EntityVehicleExitEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityVehicleExitEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onExplosionPrimeEvent(ExplosionPrimeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ExplosionPrimeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBrewEvent(BrewEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "BrewEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEnchantItemEvent(EnchantItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EnchantItemEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInventoryMoveItemEvent(InventoryMoveItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "InventoryMoveItemEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onStartBrewEvent(StartBrewEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "StartBrewEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkLoadEvent(ChunkLoadEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ChunkLoadEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChunkPopulateEvent(ChunkPopulateEvent event) {
@@ -701,164 +702,164 @@ public class EventLoader implements Listener {
                  render.rend(event.getLevel(),event.getChunk());
              }
         }
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ChunkPopulateEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLevelInitEvent(LevelInitEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LevelInitEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLevelLoadEvent(LevelLoadEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LevelLoadEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLevelSaveEvent(LevelSaveEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LevelSaveEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLevelUnloadEvent(LevelUnloadEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LevelUnloadEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSpawnChangeEvent(SpawnChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "SpawnChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onThunderChangeEvent(ThunderChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "ThunderChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWeatherChangeEvent(WeatherChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "WeatherChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerAchievementAwardedEvent(PlayerAchievementAwardedEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerAchievementAwardedEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerAnimationEvent(PlayerAnimationEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerAnimationEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerAsyncPreLoginEvent(PlayerAsyncPreLoginEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerAsyncPreLoginEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBlockPickEvent(PlayerBlockPickEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerBlockPickEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBucketEmptyEvent(PlayerBucketEmptyEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerBucketEmptyEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerBucketFillEvent(PlayerBucketFillEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerBucketFillEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChangeSkinEvent(PlayerChangeSkinEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerChangeSkinEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChunkRequestEvent(PlayerChunkRequestEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerChunkRequestEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCreationEvent(PlayerCreationEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerCreationEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerDropItemEvent(PlayerDropItemEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerDropItemEvent");
     }
     ////////////////////////
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEatFoodEvent(PlayerEatFoodEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerEatFoodEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEditBookEvent(PlayerEditBookEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerEditBookEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerFoodLevelChangeEvent(PlayerFoodLevelChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerFoodLevelChangeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerGameModeChangeEvent(PlayerGameModeChangeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"PlayerGameModeChangeEvent");
     }
     //////////////222222
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMouseOverEntityEvent(PlayerMouseOverEntityEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerMouseOverEntityEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerServerSettingsRequestEvent(PlayerServerSettingsRequestEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerServerSettingsRequestEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPotionApplyEvent(PotionApplyEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PotionApplyEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void PlayerDataSerializeEvent(PlayerDataSerializeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerDataSerializeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPluginEnableEvent(PluginEnableEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PluginEnableEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPluginDisableEvent(PluginDisableEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PluginDisableEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onRemoteServerCommandEvent(RemoteServerCommandEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "RemoteServerCommandEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityEnterVehicleEvent(EntityEnterVehicleEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityEnterVehicleEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityExitVehicleEvent(EntityExitVehicleEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "EntityExitVehicleEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVehicleCreateEvent(VehicleCreateEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "VehicleCreateEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVehicleDamageEvent(VehicleDamageEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event,"VehicleDamageEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVehicleDestroyEvent(VehicleDestroyEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "VehicleDestroyEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVehicleMoveEvent(VehicleMoveEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "VehicleMoveEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onVehicleUpdateEvent(VehicleUpdateEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "VehicleUpdateEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLightningStrikeEvent(LightningStrikeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "LightningStrikeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerItemConsumeEvent(PlayerItemConsumeEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerItemConsumeEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerKickEvent(PlayerKickEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerKickEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMapInfoRequestEvent(PlayerMapInfoRequestEvent event){
-        plugin.callEventHandler(event, event.getClass().getSimpleName());
+        plugin.callEventHandler(event, "PlayerMapInfoRequestEvent");
     }
 }

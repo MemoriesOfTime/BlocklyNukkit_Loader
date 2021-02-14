@@ -464,7 +464,6 @@ public class BNNPC extends MovingEntity {
             default:
                 packet.emoteID=action;
         }
-        System.out.println("BNNPC(ID:"+this.getId()+") 正在执行: "+packet.emoteID);
         this.level.getPlayers().values().forEach(e->e.dataPacket(packet));
     }
     public void doEmote(){

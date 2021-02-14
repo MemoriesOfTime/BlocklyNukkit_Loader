@@ -7,7 +7,6 @@ public abstract class BaseSolidBlock extends BlockSolid {
     public abstract int getTier();
     @Override
     public Item[] getDrops(Item item){
-        System.out.println(this);
         if(item.getTier()>=this.getTier()){
             if(this.getToolType()==0
                     ||(this.getToolType()==1&&item.isSword())

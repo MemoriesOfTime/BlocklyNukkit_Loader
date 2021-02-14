@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
     static Matcher urlMatcher = null;
+    static boolean sended = false;
     public static void makeHttpServer(int port){
         try {
             InetSocketAddress address = new InetSocketAddress(port);
@@ -113,7 +114,8 @@ public class Utils {
             int webint = Integer.parseInt(web.replaceAll("\\.",""));
             int verint = Integer.parseInt(version.replaceAll("\\.",""));
             if((!version.equals(web)) || verint>10000){
-                if(webint<verint ){
+                if(webint<verint && !sended){
+                    sended = true;
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         Loader.getlogger().warning(TextFormat.YELLOW+"您正在使用BlocklyNukkit先行测试版！");
                     }else {

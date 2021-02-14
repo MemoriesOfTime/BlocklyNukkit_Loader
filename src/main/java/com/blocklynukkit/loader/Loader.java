@@ -312,7 +312,7 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
         plugin.getServer().getCommandMap().register("showstacktrace",new showStackTrace());
-        plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
+        //plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
         plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
         plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
         plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());

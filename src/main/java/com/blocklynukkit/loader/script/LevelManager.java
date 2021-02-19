@@ -289,11 +289,11 @@ public class LevelManager extends BaseManager {
         pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4, Chunk.getEmptyChunk((int)pos.x>>4,(int)pos.z>>4));
     }
     public void clearChunk(Position pos){
-        BaseFullChunk chunk = pos.level.getChunk((int)pos.x>>4,(int)pos.z>>4);
+        int sx = (int)pos.x;int sz=(int)pos.z;
+        int cx = (sx>>4)<<4;int cz = (sz>>4)<<4;
         for(int x=0;x<16;x++) for(int y=0;y<256;y++) for(int z=0;z<16;z++){
-            chunk.setBlockAt(x,y,z,0,0);
+            pos.level.setBlockAt(cx+x,y,cz+z,0,0);
         }
-        pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4,chunk);
     }
 
     public void defineChunkRenderByName(String forLevel,String callback){

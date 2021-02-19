@@ -32,10 +32,6 @@ public class MyHttpHandler implements HttpHandler {
                 for (Map.Entry<String,String> entry:Loader.htmlholdermap.entrySet()){
                     html = html.replaceAll(entry.getKey(),entry.getValue());
                 }
-//                if(Server.getInstance().getPluginManager().getPlugins().keySet().contains("PlaceholderAPI") && Class.forName("com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI")!=null){
-//                    html = PlaceholderAPI.getInstance().translateString(html);
-//
-//                }
                 html = html.replaceAll("%random_developer%", Utils.randomDeveloper());
 
                 html = html.replaceAll("##","%");

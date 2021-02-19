@@ -131,6 +131,11 @@ public class Loader extends PluginBase implements Listener {
         plugin=this;
         pluginFile=this.getFile();
         plugins=this.getServer().getPluginManager().getPlugins();
+        if (Server.getInstance().getLanguage().getName().contains("中文")){
+            this.getLogger().info("正在检查前置插件是否存在...");
+        } else{
+            this.getLogger().info("Checking whether the libraries exists...");
+        }
         if (!plugins.containsKey("EconomyAPI")){
             try {
                 Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
@@ -235,11 +240,11 @@ public class Loader extends PluginBase implements Listener {
         //获取云端同步列表并下载
         Config config = new Config(this.getDataFolder()+"/update.yml",Config.YAML);
         if(!config.exists("mods")){
-            config.set("mods", Arrays.asList("first.js"));
+            config.set("mods", new String[0]);
             config.save();
         }
         List<String> list = (List<String>) config.get("mods");
-        if(list!=null)
+        if(list!=null && list.size()>0)
         for(String a:list){
             Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
         }
@@ -286,22 +291,8 @@ public class Loader extends PluginBase implements Listener {
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
         eventLoader = new EventLoader(this);
-        //检测nk版本，根据版本决定是否注册新增事件监听器
-        boolean isNewNukkitVersion = false;
-        try {
-            isNewNukkitVersion = (null != Class.forName("cn.nukkit.event.player.PlayerJumpEvent"));
-        } catch (Throwable t) {
-            isNewNukkitVersion = false;
-        }
-        if(isNewNukkitVersion){
-            new CompatibleEventLoader(this);
-        }else {
-            if (Server.getInstance().getLanguage().getName().contains("中文")){
-                getlogger().warning(TextFormat.RED+"Nukkit版本太低！这可能导致一些问题。");
-            }else {
-                getlogger().warning(TextFormat.RED+"Nukkit version is too low! This may cause problems.");
-            }
-        }
+        //动态事件加载器(历史遗留问题)
+        new CompatibleEventLoader(this);
         //注册bn的生物实体
         Entity.registerEntity("BNFloatingText", FloatingText.class);
         Entity.registerEntity("BNNPC", BNNPC.class);
@@ -331,7 +322,6 @@ public class Loader extends PluginBase implements Listener {
         }
         portconfig.save();
         Utils.makeHttpServer(portto);
-
     }
 
 

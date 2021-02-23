@@ -108,6 +108,7 @@ public class Utils {
     }
     public static void checkupdate(){
         try {
+            if(sended)return;
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
             String web = sendGet("https://tools.blocklynukkit.com/version.txt","");
             web = web.replaceAll("[^0123456789.]","");

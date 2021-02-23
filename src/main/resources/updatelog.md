@@ -8,6 +8,8 @@ Bug Fixed
 - 修复bn插件包资源文件解压错误问题
 - PHP更友善的debug
 - 修复PHP超时bug
+- 修复world.clearChunk
+- 修复localstroage缓存出错问题
 
 particle
 

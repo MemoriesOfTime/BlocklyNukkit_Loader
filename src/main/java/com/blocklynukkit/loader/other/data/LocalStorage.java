@@ -57,12 +57,14 @@ public class LocalStorage {
     public String getItem(String key){
         String tmp = storage.get(key);
         String re = null;
-        if(tmp==null && storage.containsKey(key)){
+        if(tmp==null && !storage.containsKey(key)){
             try{
                 re = cache(key);
             }catch (Exception e){
                 // ignore
             }
+        }else {
+            re = tmp;
         }
         return re;
     }

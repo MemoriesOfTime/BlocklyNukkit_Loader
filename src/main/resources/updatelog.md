@@ -10,11 +10,18 @@ Bug Fixed
 - 修复PHP超时bug
 - 修复world.clearChunk
 - 修复localstroage缓存出错问题
+- 修复切换雷暴天气不下雨的问题
+- 清理部分无用的代码
+- js中可以使用pragma es6
 
 particle
 
 - void drawDot(Position pos,int pid)
 - void drawDot(Position pos,int pid,Player toPlayer)
+- void drawDot(Position pos,int pid,int data)
+- void drawDot(Position pos,int pid,int r,int g,int b)
+- void drawDot(Position pos,int pid,int data,Player toPlayer)
+- void drawDot(Position pos,int pid,int r,int g,int b,Player toPlayer)
 - void drawEmitter(Position pos) --随机粒子发生器
 - void drawEmitter(Position pos,String id)
 - void drawEmitter(Position pos,String id,Player toPlayer)

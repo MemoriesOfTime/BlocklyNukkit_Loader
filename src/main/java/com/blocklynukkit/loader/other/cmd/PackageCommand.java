@@ -137,7 +137,7 @@ public class PackageCommand extends Command {
                             "// | |_) | | (_) | (__|   <| | |_| | |\\  | |_| |   <|   <| | |_ \n" +
                             "// |____/|_|\\___/ \\___|_|\\_\\_|\\__, |_| \\_|\\__,_|_|\\_\\_|\\_\\_|\\__|\n" +
                             "//                             __/ |                            \n" +
-                            "//                            |___/                             \n\n// pragma Polyfill\n\n" + out);
+                            "//                            |___/                             \n\n" + out);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

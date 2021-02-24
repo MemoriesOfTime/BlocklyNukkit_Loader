@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.Babel;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
@@ -22,6 +23,7 @@ import static com.blocklynukkit.loader.Loader.*;
 
 public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter {
     public String polyfilljs = null;
+    public List<String> pragmas;
     public JavaScriptLoader(Loader plugin){
         super(plugin);
     }
@@ -31,7 +33,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
                 String js = Utils.readToString(file);
-                List<String> pragmas= getPragma(js);
+                pragmas = getPragma(js);
                 if(pragmas.contains("pragma autoload false")){
                     return;
                 }
@@ -76,6 +78,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
     }
     public void putJavaScriptEngine(String name,String js){
         js = formatExportJavaSript(name,js);
+        if(pragmas == null)pragmas = getPragma(js);
         engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine());
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
@@ -92,12 +95,10 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             return;
         }
         try {
-            if(js.contains("//pragma es9")||js.contains("//pragma es8")||js.contains("//pragma es7")||js.contains("//pragma es6")||js.contains("//pragma es2015")||
-                    js.contains("// pragma es9")||js.contains("// pragma es8")||js.contains("// pragma es7")||js.contains("// pragma es6")||js.contains("// pragma es2015")||
-                    js.contains("//pragma polyfill")||js.contains("//pragma babel")||js.contains("//pragma Polyfill")||js.contains("//pragma Babel")||
-                    js.contains("// pragma polyfill")||js.contains("// pragma babel")||js.contains("// pragma Polyfill")||js.contains("// pragma Babel")){
-                engineMap.get(name).put("javax.script.filename","babel-polyfill");
-                engineMap.get(name).eval(getPolyfilljs());
+            if(pragmas.contains("pragma es6")||pragmas.contains("pragma es2015")){
+                if(babel == null)babel = new Babel();
+                js = babel.transform(js);
+                Utils.writeWithString(new File("./plugins/BlocklyNukkit/"+name+".es5"),js);
             }
             engineMap.get(name).put("lambdaCount",-1);
             engineMap.get(name).put("baseInterpreterBNJavaScriptEngine",engineMap.get(name));

@@ -88,7 +88,7 @@ public class BlockItemManager extends BaseManager {
                 level.setThundering(false);
             }else if(mode.equals("thunder")){
                 level.setThundering(true);
-                level.setRaining(false);
+                level.setRaining(true);
             }
         } else {
             level.setRaining(false);

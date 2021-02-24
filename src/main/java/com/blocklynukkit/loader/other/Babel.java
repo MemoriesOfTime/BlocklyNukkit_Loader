@@ -18,7 +18,7 @@ public class Babel {
     public Babel(){
         babelRuntime = new NashornScriptEngineFactory().getScriptEngine();
         try {
-            InputStream is=this.getClass().getResourceAsStream("/babel.js");
+            InputStream is=this.getClass().getResourceAsStream("/babel.min.js");
             BufferedReader br=new BufferedReader(new InputStreamReader(is));
             String s="";String babeljs="";
             while((s=br.readLine())!=null)babeljs+=s;
@@ -37,7 +37,7 @@ public class Babel {
     public String transform(String escode){
         babelRuntime.put("BNinputESCode",escode);
         try {
-            return (String)babelRuntime.eval("Babel.transform(BNinputESCode,{ presets: ['env'] }).code");
+            return (String)babelRuntime.eval("Babel.transform(BNinputESCode,{ presets: ['es2015'] }).code");
         } catch (ScriptException e) {
            Loader.getlogger().error(TextFormat.RED+"Failed to transform!");
            e.printStackTrace();

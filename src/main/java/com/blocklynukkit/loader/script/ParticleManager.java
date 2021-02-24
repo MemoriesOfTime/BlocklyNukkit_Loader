@@ -17,6 +17,7 @@ import com.blocklynukkit.loader.other.particle.LineFlat;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 
 import javax.script.ScriptEngine;
+import java.awt.*;
 
 public class ParticleManager extends BaseManager {
     public ParticleManager(ScriptEngine scriptEngine) {
@@ -40,8 +41,20 @@ public class ParticleManager extends BaseManager {
     public void drawDot(Position pos,int pid,Player toPlayer){
         pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()),toPlayer);
     }
+    public void drawDot(Position pos,int pid,int data,Player toPlayer){
+        pos.level.addParticle(new GenericParticle(pos,pid, data),toPlayer);
+    }
+    public void drawDot(Position pos,int pid,int r,int g,int b,Player toPlayer){
+        this.drawDot(pos, pid, (0xFF << 24)|((r & 0xFF) << 16)|((g & 0xFF) << 8)|((b & 0xFF)),toPlayer);
+    }
     public void drawDot(Position pos,int pid){
         pos.level.addParticle(new GenericParticle(pos,pid, Loader.mainRandom.nextInt()));
+    }
+    public void drawDot(Position pos,int pid,int data){
+        pos.level.addParticle(new GenericParticle(pos,pid, data));
+    }
+    public void drawDot(Position pos,int pid,int r,int g,int b){
+        this.drawDot(pos, pid, (0xFF << 24)|((r & 0xFF) << 16)|((g & 0xFF) << 8)|((b & 0xFF)));
     }
     public void drawCircle(Position pos,double radius,int pid,double sep){
         new Thread(new CircleFlat(pos, radius, pid, sep)).start();

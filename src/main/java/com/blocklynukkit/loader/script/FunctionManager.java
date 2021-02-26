@@ -24,6 +24,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.net.http.CustomHttpHandler;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
@@ -38,6 +39,7 @@ import com.google.gson.JsonParser;
 import com.mchange.net.ProtocolException;
 import com.mchange.net.SmtpMailSender;
 import com.sun.management.OperatingSystemMXBean;
+import com.sun.net.httpserver.HttpServer;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
@@ -54,8 +56,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.blocklynukkit.loader.Loader.nodejs;
-import static com.blocklynukkit.loader.Loader.fakeNukkitCodeVersion;
+import static com.blocklynukkit.loader.Loader.*;
 
 public class FunctionManager extends BaseManager {
     @Override
@@ -67,7 +68,6 @@ public class FunctionManager extends BaseManager {
 
     public bnqqbot qq = Loader.qq;
 
-
     public FunctionManager(ScriptEngine engine){
         super(engine);
         this.plugin = Loader.plugin;
@@ -76,6 +76,35 @@ public class FunctionManager extends BaseManager {
         }else {
             nodejs = new NodeJSNotFoundLoader();
         }
+    }
+    public boolean createHttpServer(int port){
+        if(Loader.httpServers.containsKey(port)){
+            return false;
+        }else {
+            try {
+                HttpServer httpServer = HttpServer.create(new InetSocketAddress(port),0);
+                httpServer.setExecutor(mainExecutor);
+                httpServers.put(port,httpServer);
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+    }
+    public void startHttpServer(int port) throws IOException {
+        if(httpServers.containsKey(port)){
+            httpServers.get(port).start();
+        }else {
+            throw new IOException("No httpServer instance found on port "+port);
+        }
+    }
+    public boolean attachHandlerToHttpServer(int port,String path,String function){
+        if(httpServers.containsKey(port)){
+            httpServers.get(port).createContext(path,new CustomHttpHandler(function));
+            return true;
+        }
+        return false;
     }
     public void jvmGC(){
         Runtime.getRuntime().gc();
@@ -108,7 +137,7 @@ public class FunctionManager extends BaseManager {
         throw new ScriptException(info);
     }
     public Player[] getOnlinePlayers(){
-        return (Player[]) Server.getInstance().getOnlinePlayers().values().toArray();
+        return Server.getInstance().getOnlinePlayers().values().toArray(new Player[]{});
     }
     //here 11/6
     public boolean isPathExists(String path){

@@ -18,7 +18,9 @@ import cn.nukkit.item.enchantment.Enchantment;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
+import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -108,6 +110,29 @@ public class BlockItemManager extends BaseManager {
         position.getLevel().setBlockAt(
                 (int)position.x,(int)position.y,(int)position.z,block.getId(),block.getDamage()
         );
+    }
+    //-方块更新
+    public void blockUpdate(Position position){
+        int x = position.getFloorX();
+        int y = position.getFloorY();
+        int z = position.getFloorZ();
+        Block block = position.getLevelBlock();
+        BaseFullChunk chunk = position.level.getChunk(x >> 4, z >> 4, true);
+        Block blockPrevious = chunk.getAndSetBlock(x & 15, y, z & 15, block);
+        if (blockPrevious.isTransparent() != block.isTransparent() || blockPrevious.getLightLevel() != block.getLightLevel()) {
+            position.level.addLightUpdate(x, y, z);
+        }
+        BlockUpdateEvent ev = new BlockUpdateEvent(block);
+        Server.getInstance().getPluginManager().callEvent(ev);
+        if (!ev.isCancelled()) {
+            Entity[] entities = position.level.getNearbyEntities(new SimpleAxisAlignedBB((x - 1), (y - 1), (z - 1), (x + 1), (y + 1), (z + 1)));
+            for (Entity entity : entities) {
+                entity.scheduleUpdate();
+            }
+            block = ev.getBlock();
+            block.onUpdate(1);
+            position.level.updateAround(x, y, z);
+        }
     }
     //-获取玩家手中物品
     public Item getItemInHand(Player player){

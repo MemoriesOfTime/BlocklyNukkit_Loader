@@ -9,15 +9,23 @@ import java.io.FileOutputStream;
 
 public class Test {
     public static void main(String[] args){
+        long start = System.currentTimeMillis();
         Babel babel = new Babel();
-        System.out.println(babel.transform("class Person{//定义了一个名字为Person的类\n" +
-                "    constructor(name,age){//constructor是一个构造方法，用来接收参数\n" +
-                "        this.name = name;//this代表的是实例对象\n" +
+        String escode = "class Person{\n" +
+                "    constructor(name,age){\n" +
+                "        this.name=name;\n" +
                 "        this.age=age;\n" +
                 "    }\n" +
-                "    say(){//这是一个类的方法，注意千万不要加上function\n" +
-                "        return \"我的名字叫\" + this.name+\"今年\"+this.age+\"岁了\";\n" +
+                "    say(){\n" +
+                "        return \"我的名字叫\"+this.name+\"今年\"+this.age+\"岁了\";\n" +
                 "    }\n" +
-                "}\n"));
+                "    information(){\n" +
+                "        ['BN','NB','求各位发电'].map(i=>console.log(i));\n" +
+                "    }\n" +
+                "}\n";
+        System.out.println(escode);
+        System.out.println(System.currentTimeMillis()-start);
+        System.out.println(babel.transform(escode));
+        System.out.println(System.currentTimeMillis()-start);
     }
 }

@@ -181,21 +181,6 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         return var instanceof JSObject;
     }
 
-    public String getPolyfilljs(){
-        if(polyfilljs==null){
-            polyfilljs="";
-            InputStream is2=this.getClass().getResourceAsStream("/polyfill.js");
-            BufferedReader br2=new BufferedReader(new InputStreamReader(is2));
-            String s2="";
-            try{
-                while((s2=br2.readLine())!=null)polyfilljs+=s2;
-            }catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return polyfilljs;
-    }
-
     @Override
     public List<String> getPragma(String code){
         List<String> pragma = new ArrayList<>();

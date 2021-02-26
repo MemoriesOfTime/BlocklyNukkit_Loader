@@ -22,11 +22,6 @@ public class Babel {
             BufferedReader br=new BufferedReader(new InputStreamReader(is));
             String s="";String babeljs="";
             while((s=br.readLine())!=null)babeljs+=s;
-            InputStream is2=this.getClass().getResourceAsStream("/polyfill.js");
-            BufferedReader br2=new BufferedReader(new InputStreamReader(is2));
-            String s2="";String polyfilljs="";
-            while((s2=br2.readLine())!=null)polyfilljs+=s2;
-            babelRuntime.eval(polyfilljs);
             babelRuntime.eval(babeljs);
         } catch (ScriptException e) {
             e.printStackTrace();

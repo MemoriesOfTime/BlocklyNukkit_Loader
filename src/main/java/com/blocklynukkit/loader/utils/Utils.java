@@ -30,30 +30,28 @@ public class Utils {
     static Matcher urlMatcher = null;
     static boolean sended = false;
     public static void makeHttpServer(int port){
-        try {
-            InetSocketAddress address = new InetSocketAddress(port);
-            Loader.httpServer = HttpServer.create(address, 10);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         try{
-            Loader.httpServer.createContext("/", new MyHttpHandler());
-            Loader.httpServer.createContext("/file",new MyFileHandler());
-            Loader.httpServer.createContext("/api",new MyCustomHandler());
+            InetSocketAddress address = new InetSocketAddress(port);
+            HttpServer httpServer = HttpServer.create(address, 10);
+            Loader.httpServers.put(port,httpServer);
+            httpServer.createContext("/", new MyHttpHandler());
+            httpServer.createContext("/file",new MyFileHandler());
+            httpServer.createContext("/api",new MyCustomHandler());
             //设置服务器的线程池对象
-            Loader.httpServer.setExecutor(Executors.newFixedThreadPool(10));
+            httpServer.setExecutor(Loader.mainExecutor);
             //启动服务器
-            Loader.httpServer.start();
+            httpServer.start();
         }catch (Exception e){
             try {
-                Loader.httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
-                Loader.httpServer.createContext("/", new MyHttpHandler());
-                Loader.httpServer.createContext("/file",new MyFileHandler());
-                Loader.httpServer.createContext("/api",new MyCustomHandler());
+                HttpServer httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
+                Loader.httpServers.put(54321,httpServer);
+                httpServer.createContext("/", new MyHttpHandler());
+                httpServer.createContext("/file",new MyFileHandler());
+                httpServer.createContext("/api",new MyCustomHandler());
                 //设置服务器的线程池对象
-                Loader.httpServer.setExecutor(Executors.newFixedThreadPool(10));
+                httpServer.setExecutor(Loader.mainExecutor);
                 //启动服务器
-                Loader.httpServer.start();
+                httpServer.start();
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     Loader.getlogger().info(TextFormat.RED+"您的"+port+"端口被占用！尝试在54321端口启动httpapi！");
                 }else {

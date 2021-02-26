@@ -44,6 +44,7 @@ import com.sun.net.httpserver.HttpServer;
 import com.xxmicloxx.NoteBlockAPI.NoteBlockPlayerMain;
 import de.theamychan.scoreboard.network.Scoreboard;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import javassist.CtClass;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -53,6 +54,8 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Loader extends PluginBase implements Listener {
 
@@ -78,7 +81,6 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, Object> easytmpmap = new HashMap<>();
     public static Map<String, String> htmlholdermap = new HashMap<>();
     public static BNCrafting bnCrafting = new BNCrafting();
-    public static HttpServer httpServer = null;
     public static EventLoader eventLoader;
     public static FloatingItemManager floatingItemManager = new FloatingItemManager();
     public static NoteBlockPlayerMain noteBlockPlayerMain = new NoteBlockPlayerMain();
@@ -90,6 +92,7 @@ public class Loader extends PluginBase implements Listener {
     public static boolean enableWasm = false;
     public static Map<String,List<Integer>> pluginTasksMap = new HashMap<>();
     public static Random mainRandom = new Random(System.currentTimeMillis());
+    public static Executor mainExecutor = Executors.newFixedThreadPool((int)(Runtime.getRuntime().availableProcessors()*1.75));
     //es2020->es5翻译器
     public static Babel babel = null;
     //windowManager变量
@@ -113,6 +116,7 @@ public class Loader extends PluginBase implements Listener {
     public static bnqqbot qq = new bnqqbot();
     public static String fakeNukkitCodeVersion = "";
     public static ExtendScriptLoader nodejs = null;
+    public static Int2ObjectOpenHashMap<HttpServer> httpServers = new Int2ObjectOpenHashMap<>();
     //databaseManager变量
     public static MemoryStorage<Object,Object> memoryStorage = new MemoryStorage<>();
 
@@ -337,9 +341,7 @@ public class Loader extends PluginBase implements Listener {
         }catch (NoClassDefFoundError e){
             //ignore
         }
-        if(httpServer!=null){
-            httpServer.stop(0);
-        }
+        httpServers.values().forEach(s -> {if(s!=null)s.stop(0);});
         engineMap.clear();
         Server.getInstance().getScheduler().cancelTask(this);
         System.gc();

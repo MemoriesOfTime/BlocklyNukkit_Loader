@@ -13,6 +13,7 @@ Bug Fixed
 - 修复切换雷暴天气不下雨的问题
 - 清理部分无用的代码
 - js中可以使用pragma es6
+- 修复获取在线玩家报错问题
 
 particle
 
@@ -86,6 +87,31 @@ manager
 - \<E> syncCallFunction(String functionName,Object... args)  --同步执行函数
 - void jvmGC() --垃圾回收，释放无用内存
 - String getPlayerDeviceOS(Player player) --获取玩家设备操作系统
+- boolean createHttpServer(int port)
+- void startHttpServer(int port)
+- boolean attachHandlerToHttpServer(int port,String path,String functionName)
+- boolean attachHandlerToHttpServer(int port,String path,F function)
+  - 在指定端口的http服务器上绑定请求处理器，当请求path路径时该处理器被调用
+  - 路径指去掉域名和端口后面，?的前面的部分，以/开头
+
+http服务器回调函数
+
+- 参数(HttpRequestEntry request);
+- request成员函数：
+  - String getRequestUrl()
+  - String getPath()
+  - String getHeader()
+  - String getMethod()
+  - String getParameter()
+  - String getProtocol()
+  - String getFromAddress()
+  - void addResponseHeaderEntry(String name,String value)
+  - void addResponseHeader(String header)
+  - void addDefaultResponseHeader()
+  - void addDefaultResponseHeader(String charSet)  
+  - boolean response(int statusCode,String content)
+  - boolean response(int statusCode,String content,String charSet)
+  - boolean response(int statusCode,byte[] content)
 
 blockitem
 
@@ -99,6 +125,7 @@ blockitem
 - void registerSimpleItem(int id,String name,int stackSize/void)
   - 注册简单的物品堆，只能覆写教育版物品，stackSize指定最大堆叠数量，不填为64
 - void makeDropItem(Position position, Item item, boolean fly) --fly指定生成物品时物品是否具有随机初速度  
+- void blockUpdate(Position position)
 
 BNNPC
 

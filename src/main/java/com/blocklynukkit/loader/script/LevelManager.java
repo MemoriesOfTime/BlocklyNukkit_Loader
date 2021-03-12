@@ -314,7 +314,7 @@ public class LevelManager extends BaseManager {
             BufferedImage image;
             if(Loader.savedImgMap.get(xl+","+yl+","+zl+img)==null){
                 image = ImageIO.read(new File(img));
-                image = Utils.toBufferedImage(image.getScaledInstance(Math.max(xl,zl)*128,yl*128, Image.SCALE_DEFAULT));
+                image = Utils.toBufferedImage(image.getScaledInstance(Math.max(xl,zl)*128,yl*128, Image.SCALE_FAST));
                 Loader.savedImgMap.put(xl+","+yl+","+zl+img,image);
             }else {
                 image = Loader.savedImgMap.get(xl+","+yl+","+zl+img);
@@ -335,18 +335,18 @@ public class LevelManager extends BaseManager {
                                 continue;
                             }else {
                                 level.removeBlockEntity(blockEntity);
-                                level.setBlock(new Vector3(i,j,k),Block.get(0));
+                                level.setBlock(new Vector3(i,j,k),Block.get(0),true,false);
                             }
                         }else {
                             BlockItemFrame frame = new BlockItemFrame(faceData);
-                            level.setBlock(new Vector3(i,j,k),frame);
+                            level.setBlock(new Vector3(i,j,k),frame,true,false);
                         }
                         CompoundTag nbt = (new CompoundTag()).putString("id", "ItemFrame").putInt("x", i).putInt("y", j).putInt("z", k);
-                        level.getPlayers().values().forEach(itemMap::sendImage);
                         BlockEntityItemFrame blockEntityItemFrame = new BlockEntityItemFrame(Position.fromObject(new Vector3(i,j,k),level).getChunk(),nbt);
                         blockEntityItemFrame.setItem(itemMap);
                         level.addBlockEntity(blockEntityItemFrame);
-                        blockEntityItemFrame.scheduleUpdate();
+                        blockEntityItemFrame.onUpdate();
+                        //level.getPlayers().values().forEach(itemMap::sendImage);
                     }
                 }
             }

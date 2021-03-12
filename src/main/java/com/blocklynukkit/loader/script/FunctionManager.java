@@ -36,6 +36,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.mchange.net.ProtocolException;
 import com.mchange.net.SmtpMailSender;
 import com.sun.management.OperatingSystemMXBean;
@@ -43,6 +44,8 @@ import com.sun.net.httpserver.HttpServer;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 import jdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
@@ -476,29 +479,20 @@ public class FunctionManager extends BaseManager {
     //json与yaml互转
     public String JSONtoYAML(String json){
         json = formatJSON(json);
-        writeFile("./transferTMP.json",json);
-        Config jsonConfig = new Config(new File("./transferTMP.json"),Config.JSON);
-        ConfigSection section = jsonConfig.getRootSection();
-        Config yamlConfig = new Config(new File("./transferTMP.yml"),Config.YAML);
-        yamlConfig.setAll(section);
-        yamlConfig.save();
-        String out = readFile("./transferTMP.yml");
-        new File("./transferTMP.json").delete();
-        new File("./transferTMP.yml").delete();
-        return out;
+        Config config = new Config(Config.YAML);
+        config.setAll((LinkedHashMap)new Gson().fromJson(json, (new TypeToken<LinkedHashMap<String, Object>>() {}).getType()));
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        Yaml yaml = new Yaml(dumperOptions);
+        return yaml.dump(config.getRootSection());
     }
     public String YAMLtoJSON(String yaml){
-        writeFile("./transferTMP.yml",yaml);
-        Config yamlConfig = new Config(new File("./transferTMP.yml"),Config.YAML);
-        ConfigSection section = yamlConfig.getRootSection();
-        Config jsonConfig = new Config(new File("./transferTMP.json"),Config.JSON);
-        jsonConfig.setAll(section);
-        jsonConfig.save();
-        String out = readFile("./transferTMP.json");
-        new File("./transferTMP.json").delete();
-        new File("./transferTMP.yml").delete();
-        out = formatJSON(out);
-        return out;
+        Config config = new Config(Config.JSON);
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        Yaml yamlObj = new Yaml(dumperOptions);
+        config.setAll(yamlObj.loadAs(yaml, LinkedHashMap.class));
+        return new GsonBuilder().setPrettyPrinting().create().toJson(config.getRootSection());
     }
     public String formatJSON(String json) {
         JsonParser jsonParser = new JsonParser();

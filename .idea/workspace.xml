@@ -7,8 +7,10 @@
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tests/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tests/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/LevelManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/transformer/JsArrowFunctionTransformer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/transformer/JsArrowFunctionTransformer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -680,13 +682,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00069" summary="修复npc回收空指针问题">
-      <created>1607153520587</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1607153520587</updated>
-    </task>
     <task id="LOCAL-00070" summary="推送1.2.9.0正式版初步代码">
       <created>1611819423788</created>
       <option name="number" value="00070" />
@@ -1023,7 +1018,14 @@
       <option name="project" value="LOCAL" />
       <updated>1614307750377</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="优化JSON于YAML互转">
+      <created>1615558874300</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1615558874300</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1075,7 +1077,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修复bn插件包资源文件解压错误问题" />
     <MESSAGE value="添加移除命令函数" />
     <MESSAGE value="更正经济前置插件版本" />
     <MESSAGE value="shootArrow返回箭矢实体，添加shootSnowball" />
@@ -1100,7 +1101,8 @@
     <MESSAGE value="修复localstroage缓存出错问题" />
     <MESSAGE value="es6问题" />
     <MESSAGE value="1.2.9.1正式版" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.2.9.1正式版" />
+    <MESSAGE value="优化JSON于YAML互转" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化JSON于YAML互转" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

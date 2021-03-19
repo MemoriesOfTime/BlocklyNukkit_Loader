@@ -3,6 +3,7 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.scriptloader.transformer.JsArrowFunctionTransformer;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
@@ -103,10 +104,11 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             engineMap.get(name).put("lambdaCount",-1);
             engineMap.get(name).put("baseInterpreterBNJavaScriptEngine",engineMap.get(name));
             ((NashornScriptEngine)engineMap.get(name)).compile("function F(f){lambdaCount++;baseInterpreterBNJavaScriptEngine.put('Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount,f);return 'Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount;}").eval();
+            engineMap.get(name).eval("var require = Java.type;");
             putBaseObject(name);
             engineMap.get(name).put("javax.script.filename",name);
             engineMap.get(name).put("console",engineMap.get(name).get("logger"));
-            engineMap.get(name).eval(js);
+            engineMap.get(name).eval(new JsArrowFunctionTransformer(js).transform());
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -150,6 +152,15 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             if(bn!=null) bnClasses.put(name,bn);
         }
         return output;
+    }
+    public String packageToClass(String pkg){
+        String[] paths = pkg.split("\\.");
+        if(paths.length == 2 && (paths[1].equals("js") || paths[1].equals("py") ||
+                paths[1].equals("php") || paths[1].equals("lua") || paths[1].equals("wasm"))){
+            return paths[0];
+        }else {
+            return paths[1];
+        }
     }
     @Override
     public String toString(Object var){

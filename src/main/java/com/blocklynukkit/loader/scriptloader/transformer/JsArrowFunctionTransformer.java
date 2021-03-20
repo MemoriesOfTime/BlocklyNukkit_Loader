@@ -1,18 +1,16 @@
 package com.blocklynukkit.loader.scriptloader.transformer;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class JsArrowFunctionTransformer {
     private String code;
     private char stringMode = ' ';
     private char commentMode = ' ';
-    private char[] chars;
-    private List<String> strConverts = new LinkedList<>();
-    private List<String> arrayFunctionConverts = new LinkedList<>();
+    private final char[] chars;
+    private final List<String> strConverts = new LinkedList<>();
+    private final List<String> arrayFunctionConverts = new LinkedList<>();
     public JsArrowFunctionTransformer(String code){
         this.code = " " + code + " ";
         chars = code.toCharArray();
@@ -97,7 +95,6 @@ public class JsArrowFunctionTransformer {
                     }
                     arrayFunctionConverts.add(function.toString());
                     code = code.replaceFirst(Pattern.quote(arrayFunCode),"BNES6_ArrayFunction");
-                    System.out.println(source.toString());
                 }
                 //双斜杠注释处理
                 if(current == '/' && previous == '/'){

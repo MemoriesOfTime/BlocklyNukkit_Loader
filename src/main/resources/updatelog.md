@@ -3,6 +3,17 @@
 Bug Fixed
 
 - 修复了异步JSON与YAML互转的问题，大幅提升转换速度
+- js中可以使用箭头函数
+- js中可以通过require(java类名/文件名)来调用java类或其他插件
+
+New Event
+
+- BNInitializedEvent
+  - 在所有bn插件都初始化后发出
+  - 无成员函数，无法被取消
+- BNClosedEvent
+  - 在bn被nk要求关闭的时候发出
+  - 无成员函数，无法被取消
 
 ## 1.2.9.1
 

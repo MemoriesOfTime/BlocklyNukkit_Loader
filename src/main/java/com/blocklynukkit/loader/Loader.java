@@ -258,7 +258,6 @@ public class Loader extends PluginBase implements Listener {
         new File(getDataFolder()+"/skin").mkdir();
         new File(getDataFolder()+"/notemusic").mkdir();
         new File(getDataFolder()+"/lib").mkdir();
-
         //加载bn插件包
         new BNPackageLoader(this).loadplugins();
         //加载javascript
@@ -275,23 +274,18 @@ public class Loader extends PluginBase implements Listener {
             new PythonLoader(plugin).loadplugins();
             enablePython=true;
         }
-
         //加载PHP
         if(plugins.containsKey("PHPBN")){
             new PHPLoader(plugin).loadplugins();
             enablePHP=true;
         }
-
         //加载Lua
         new LuaLoader(plugin).loadplugins();
-
         //加载Wasm
         if(plugins.containsKey("WebassemblyBN")){
             new WasmLoader(plugin).loadplugins();
             enableWasm=true;
         }
-
-
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
         eventLoader = new EventLoader(this);
@@ -314,7 +308,6 @@ public class Loader extends PluginBase implements Listener {
         plugin.getServer().getCommandMap().register("bnreload",new BNReloadCommand());
         plugin.getServer().getCommandMap().register("signature",new SignatureCommand());
         plugin.getServer().getCommandMap().register("bnmiscbuild",new BNMiscBuild());
-
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
         int portto;
@@ -326,6 +319,8 @@ public class Loader extends PluginBase implements Listener {
         }
         portconfig.save();
         Utils.makeHttpServer(portto);
+        //初始化完成，通知各bn插件
+        callEventHandler(new BNInitializedEvent(),"BNInitializedEvent","BNInitializedEvent");
     }
 
 
@@ -334,6 +329,7 @@ public class Loader extends PluginBase implements Listener {
     public void onDisable(){
         LevelManager.dosaveSkyLandGeneratorSettings();
         LevelManager.dosaveOceanGeneratorSettings();
+        callEventHandler(new BNClosedEvent(),"BNClosedEvent","BNClosedEvent");
         EntityManager.recycleAllFloatingText();
         EntityManager.recycleAllBNNPC();
         try{
@@ -519,6 +515,34 @@ public class Loader extends PluginBase implements Listener {
                     }
                     case "FakeSlotChangeEvent": {
                         FakeSlotChangeEvent event = (FakeSlotChangeEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    case "BNInitializedEvent": {
+                        BNInitializedEvent event = (BNInitializedEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
+                            }
+                        }
+                        break;
+                    }
+                    case "BNClosedEvent": {
+                        BNClosedEvent event = (BNClosedEvent) e;
                         if (entry.getValue().get(functionName) != null) {
                             ((Invocable) entry.getValue()).invokeFunction(functionName, event);
                         }

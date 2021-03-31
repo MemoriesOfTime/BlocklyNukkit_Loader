@@ -22,6 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PHPLoader extends ExtendScriptLoader implements Interpreter {
+    List<String> pragmas;
     public PHPLoader(Loader plugin){
         super(plugin);
     }
@@ -33,7 +34,7 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
                     if(file.getName().endsWith(".php")&&!file.getName().contains("bak")){
                         try {
                             String php = Utils.readToString(file.getPath());
-                            List<String> pragmas= getPragma(php);
+                            pragmas= getPragma(php);
                             if(pragmas.contains("pragma autoload false")){
                                 return;
                             }

@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.item.EntityBoat;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -68,7 +69,6 @@ public class EventLoader implements Listener {
     public void onInteractEntity(PlayerInteractEntityEvent event){
         plugin.callEventHandler(event,"PlayerInteractEntityEvent");
     }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onTeleport(PlayerTeleportEvent event){
         plugin.callEventHandler(event,"PlayerTeleportEvent");

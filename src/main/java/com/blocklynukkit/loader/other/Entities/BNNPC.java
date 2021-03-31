@@ -57,6 +57,10 @@ public class BNNPC extends MovingEntity {
     public Vector3 actioinVec = new Vector3();public int routeMax = 50;public Vector3 previousTo = null;
     public boolean justDamaged = false;
 
+    public BNNPC(FullChunk chunk, CompoundTag nbt){
+        this(chunk,nbt,"BNNPC",new Clothes("steve"));
+    }
+
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes) {
         super(chunk, nbt.putString("NameTag", name).putString("name", "BNNPC")
                 .putCompound("Skin", new CompoundTag()).putBoolean("ishuman", true).putBoolean("npc", true)

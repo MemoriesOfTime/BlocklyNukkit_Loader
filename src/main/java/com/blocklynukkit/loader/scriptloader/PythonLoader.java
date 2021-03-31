@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import static com.blocklynukkit.loader.Loader.bnClasses;
 
 public class PythonLoader extends ExtendScriptLoader implements Interpreter {
+    List<String> pragmas;
     public PythonLoader(Loader plugin){
         super(plugin);
     }
@@ -35,7 +36,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                     if(file.getName().endsWith(".py")&&!file.getName().contains("bak")){
                         try {
                             String py = Utils.readToString(file);
-                            List<String> pragmas= getPragma(py);
+                            pragmas= getPragma(py);
                             if(pragmas.contains("pragma autoload false")){
                                 return;
                             }

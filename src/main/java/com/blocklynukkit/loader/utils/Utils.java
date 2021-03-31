@@ -221,6 +221,7 @@ public class Utils {
     }
     public static void writeWithString(File file,String string,String charSet) {
         try {
+            if(!file.exists())file.createNewFile();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),charSet));
             writer.write(string);
             writer.flush();

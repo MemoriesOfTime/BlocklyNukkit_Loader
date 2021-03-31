@@ -44,6 +44,7 @@ public class JavaExporter {
                     CtMethod ctMethod = CtMethod.make(src,bnClass);
                     bnClass.addMethod(ctMethod);
                 }
+                //添加通配调用方法
                 //导入到jvm中
                 bnClass.toClass();
                 bnClass.defrost();

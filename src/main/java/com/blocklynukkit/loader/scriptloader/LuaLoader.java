@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import static com.blocklynukkit.loader.Loader.bnClasses;
 
 public class LuaLoader extends ExtendScriptLoader implements Interpreter {
+    List<String> pragmas;
     public LuaLoader(Loader plugin){
         super(plugin);
     }
@@ -33,7 +34,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
                 if(file.getName().endsWith(".lua")&&!file.getName().contains("bak")){
                     try {
                         String lua = Utils.readToString(file.getPath());
-                        List<String> pragmas= getPragma(lua);
+                        pragmas= getPragma(lua);
                         if(pragmas.contains("pragma autoload false")){
                             return;
                         }

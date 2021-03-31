@@ -247,10 +247,14 @@ public class Loader extends PluginBase implements Listener {
             config.set("mods", new String[0]);
             config.save();
         }
-        List<String> list = (List<String>) config.get("mods");
-        if(list!=null && list.size()>0)
-        for(String a:list){
-            Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
+        try{
+            List<String> list = (List<String>) config.get("mods");
+            if(list!=null && list.size()>0)
+                for(String a:list){
+                    Utils.download("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/"+a,new File(this.getDataFolder()+"/"+a));
+                }
+        }catch (Exception e){
+            //ignore
         }
         //创建二级文件夹
         getDataFolder().isDirectory();

@@ -11,7 +11,6 @@ import com.google.gson.GsonBuilder;
 import javassist.*;
 import jdk.nashorn.api.scripting.*;
 
-import javax.script.CompiledScript;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
@@ -78,7 +77,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         this.putJavaScriptEngine(name, code);
     }
     public void putJavaScriptEngine(String name,String js){
-        js = formatExportJavaSript(name,js);
+        js = formatExportJavaScript(name,js);
         if(pragmas == null)pragmas = getPragma(js);
         engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine());
         if (engineMap.get(name) == null) {
@@ -125,7 +124,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         }
         bnpluginset.add(name);
     }
-    public String formatExportJavaSript(String name,String code){
+    public String formatExportJavaScript(String name, String code){
         String[] lines = code.split("\n");
         String output = "";String tmp;
         Map<String,String[]> exportFunctions = new HashMap<>();
@@ -150,6 +149,13 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         if(matcher.matches()){
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
+            for(String each:pragmas){
+                if(each.startsWith("pragma module")){
+                    String moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
+                    CtClass module = JavaExporter.makeExportJava(moduleName,exportFunctions);
+                    if(module != null) bnClasses.put(moduleName,module);
+                }
+            }
         }
         return output;
     }

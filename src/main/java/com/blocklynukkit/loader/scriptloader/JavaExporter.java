@@ -45,6 +45,11 @@ public class JavaExporter {
                     bnClass.addMethod(ctMethod);
                 }
                 //添加通配调用方法
+                CtMethod caller = CtMethod.make("public static java.lang.Object call(java.lang.String funName,java.lang.Object[] args){" +
+                        "   return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(funName,args);" +
+                        "}",bnClass);
+                caller.setModifiers(caller.getModifiers() | Modifier.VARARGS);
+                bnClass.addMethod(caller);
                 //导入到jvm中
                 bnClass.toClass();
                 bnClass.defrost();

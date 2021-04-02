@@ -120,6 +120,14 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
         if(matcher.matches()){
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
+            if(pragmas!=null)
+            for(String each:pragmas){
+                if(each.startsWith("pragma module")){
+                    String moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
+                    CtClass module = JavaExporter.makeExportJava(moduleName,exportFunctions);
+                    if(module != null) bnClasses.put(moduleName,module);
+                }
+            }
         }
         output = output.replaceAll("(?<!\\/)(?<!['\"])echo (.*?);(?![ ]*\")","global \\$logger;\\$logger->info($1);");
         output = output.replaceAll("(?<!\\/)(?<!['\"])print (.*?);(?![ ]*\")","global \\$logger;\\$logger->info($1);");
@@ -146,7 +154,7 @@ public class PHPLoader extends ExtendScriptLoader implements Interpreter {
             if(line.trim().startsWith("//")){
                 String toCheck = line.replaceFirst("//","").trim();
                 if(toCheck.startsWith("pragma")){
-                    toCheck = toCheck.replaceAll(" +","");
+                    toCheck = toCheck.replaceAll(" +"," ");
                     if(toCheck.startsWith("pragma end")){
                         break;
                     }

@@ -1,5 +1,7 @@
 package com.blocklynukkit.loader.scriptloader.transformer;
 
+import com.blocklynukkit.loader.utils.StringUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -31,7 +33,8 @@ public class JsArrowFunctionTransformer {
                     if(stringMode == current){
                         stringBuilder.append(current);
                         strConverts.add(stringBuilder.toString());
-                        code = code.replaceFirst(Pattern.quote(stringBuilder.toString()), "BNES6_StrKey");
+                        code = StringUtils.replace(code,stringBuilder.toString(),"BNES6_StrKey",1);
+                        //code = code.replaceFirst(Pattern.quote(stringBuilder.toString()), "BNES6_StrKey");
                         stringMode = ' ';
                     }
                 }
@@ -42,13 +45,15 @@ public class JsArrowFunctionTransformer {
                 if(stringMode != ' '){
                     stringMode = ' ';
                     strConverts.add(stringBuilder.toString());
-                    code = code.replaceFirst(Pattern.quote(stringBuilder.toString()), "BNES6_StrKey");
+                    code = StringUtils.replace(code,stringBuilder.toString(),"BNES6_StrKey",1);
+                    //code = code.replaceFirst(Pattern.quote(stringBuilder.toString()), "BNES6_StrKey");
                     stringMode = ' ';
                 }
                 //双斜杠注释跨行处理
                 if(commentMode == '/'){
                     commentMode = ' ';
-                    code = code.replaceFirst(Pattern.quote(stringBuilder.toString()),"");
+                    code = StringUtils.replace(code,stringBuilder.toString(),"",1);
+                    //code = code.replaceFirst(Pattern.quote(stringBuilder.toString()),"");
                 }
             }
             //多行注释处理
@@ -60,7 +65,8 @@ public class JsArrowFunctionTransformer {
                 for(int j=0;j<comment.length();j++){
                     if(comment.charAt(j) == '\n') toReplace.append('\n');
                 }
-                code = code.replaceFirst(Pattern.quote(stringBuilder.toString()),toReplace.toString());
+                code = StringUtils.replace(code,stringBuilder.toString(),toReplace.toString(),1);
+                //code = code.replaceFirst(Pattern.quote(stringBuilder.toString()),toReplace.toString());
             }
             //如果是字符串就计入字符串缓冲区
             if(stringMode != ' ' || commentMode != ' '){
@@ -89,12 +95,12 @@ public class JsArrowFunctionTransformer {
                     source.reverse();
                     String arrayFunCode = source.toString();
                     if(singleParm){
-                        function.append('(').append(arrayFunCode.replaceFirst("=>","")).append(')');
+                        function.append('(').append(StringUtils.replace(arrayFunCode, "=>", "", 1)).append(')');
                     }else {
-                        function.append(arrayFunCode.replaceFirst("=>",""));
+                        function.append(StringUtils.replace(arrayFunCode, "=>", "", 1));
                     }
                     arrayFunctionConverts.add(function.toString());
-                    code = code.replaceFirst(Pattern.quote(arrayFunCode),"BNES6_ArrayFunction");
+                    code = StringUtils.replace(code,arrayFunCode,"BNES6_ArrayFunction",1);
                 }
                 //双斜杠注释处理
                 if(current == '/' && previous == '/'){
@@ -110,10 +116,13 @@ public class JsArrowFunctionTransformer {
         }
         //返回处理后的代码
         for(String fun:arrayFunctionConverts){
-            code = code.replaceFirst(Pattern.quote("BNES6_ArrayFunction"),fun);
+            code = StringUtils.replace(code,"BNES6_ArrayFunction",fun,1);
+            //code = code.replaceFirst("BNES6_ArrayFunction",fun);
         }
         for(String str:strConverts){
-            code = code.replaceFirst(Pattern.quote("BNES6_StrKey"),str);
+            code = StringUtils.replace(code,"BNES6_StrKey",
+                    str.replaceAll("\"","\\\"").replaceAll("'","\\'"),1);
+            //code = code.replaceFirst("BNES6_StrKey",str.replaceAll("\"","\\\\\"").replaceAll("'","\\\\'"));
         }
         return code;
     }

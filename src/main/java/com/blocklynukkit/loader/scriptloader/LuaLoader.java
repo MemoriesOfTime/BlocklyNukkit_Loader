@@ -204,6 +204,14 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
         if(matcher.matches()){
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".lua")?name:(name+".lua"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
+            if(pragmas!=null)
+            for(String each:pragmas){
+                if(each.startsWith("pragma module")){
+                    String moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
+                    CtClass module = JavaExporter.makeExportJava(moduleName,exportFunctions);
+                    if(module != null) bnClasses.put(moduleName,module);
+                }
+            }
         }
         return output;
     }
@@ -228,7 +236,7 @@ public class LuaLoader extends ExtendScriptLoader implements Interpreter {
             if(line.trim().startsWith("--")){
                 String toCheck = line.replaceFirst("--","").trim();
                 if(toCheck.startsWith("pragma")){
-                    toCheck = toCheck.replaceAll(" +","");
+                    toCheck = toCheck.replaceAll(" +"," ");
                     if(toCheck.startsWith("pragma end")){
                         break;
                     }

@@ -119,10 +119,17 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
         Pattern pattern = Pattern.compile("^[A-Za-z_$]+[A-Za-z_$.\\d]+$");
         Matcher matcher = pattern.matcher(name);
         if(matcher.matches()){
-            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".py")?name:(name+".py"),exportFunctions);
+            String moduleName = null;
+            if(pragmas!=null)
+                for(String each:pragmas){
+                    if(each.startsWith("pragma module")){
+                        moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
+                    }
+                }
+            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".py")?name:(name+".py"),exportFunctions,moduleName);
             if(bn!=null) bnClasses.put(name,bn);
+
         }
-        super.toString();
         return output;
     }
     @Override
@@ -146,7 +153,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
             if(line.trim().startsWith("#")){
                 String toCheck = line.replaceFirst("#","").trim();
                 if(toCheck.startsWith("pragma")){
-                    toCheck = toCheck.replaceAll(" +","");
+                    toCheck = toCheck.replaceAll(" +"," ");
                     if(toCheck.startsWith("pragma end")){
                         break;
                     }

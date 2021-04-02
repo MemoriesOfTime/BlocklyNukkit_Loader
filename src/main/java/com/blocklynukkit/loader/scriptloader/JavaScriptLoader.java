@@ -149,6 +149,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         if(matcher.matches()){
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
             if(bn!=null) bnClasses.put(name,bn);
+            if(pragmas!=null)
             for(String each:pragmas){
                 if(each.startsWith("pragma module")){
                     String moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
@@ -206,7 +207,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             if(line.trim().startsWith("//")){
                 String toCheck = line.replaceFirst("//","").trim();
                 if(toCheck.startsWith("pragma")){
-                    toCheck = toCheck.replaceAll(" +","");
+                    toCheck = toCheck.replaceAll(" +"," ");
                     if(toCheck.startsWith("pragma end")){
                         break;
                     }

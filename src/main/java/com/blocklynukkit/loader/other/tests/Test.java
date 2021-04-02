@@ -28,7 +28,7 @@ public class Test {
                 "var fun = ((toReplace, filter, handler) => {});\n" +
                 "var config = JSON.parse(manager.YAMLtoJSON(configText));\n" +
                 "//准备启动http服务器\n" +
-                "if(manager.createHttpServer(config['port'])){\n" +
+                "if(manager.createHttpServer(config['po\\'%p\\'rt'])){\n" +
                 "    console.log(\"成功开始http服务器\");\n" +
                 "    if(manager.attachHandlerToHttpServer(config['port'],\"/NKHI\",F(function(request){\n" +
                 "        request.addDefaultResponseHeader();\n" +

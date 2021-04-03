@@ -5,6 +5,20 @@ Bug Fixed
 - 修复了异步JSON与YAML互转的问题，大幅提升转换速度
 - js中可以使用箭头函数
 - js中可以通过require(java类名/文件名)来调用java类或其他插件
+- 修复了js解析器错误解析字符串中的正则表达式的问题
+- 修复了manager.doPathCreate无法创建文件夹问题
+- 修复了BlackBE合作API错误的问题
+- 修复了PowerNukkit1.4.0.x生物兼容问题
+
+Module
+
+- 通过注释宏：pragma module 模块名定义模块
+- 定义模块后，可以通过模块名来引入其他模块中的导出函数
+
+manager
+
+- void appendFile(String path,String text)
+  - 追加写入文件内容
 
 New Event
 

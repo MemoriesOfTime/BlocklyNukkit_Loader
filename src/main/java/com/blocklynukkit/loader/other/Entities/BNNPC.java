@@ -58,7 +58,8 @@ public class BNNPC extends MovingEntity {
     public boolean justDamaged = false;
 
     public BNNPC(FullChunk chunk, CompoundTag nbt){
-        this(chunk,nbt,"BNNPC",new Clothes("steve"));
+        super(chunk, nbt);
+        super.close();
     }
 
     public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes) {

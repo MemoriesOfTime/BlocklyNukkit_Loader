@@ -32,9 +32,9 @@ public class JavaExporter {
         }
         return null;
     }
+    @SuppressWarnings("all")
     private static void processMethod(String name,CtClass bnClass,Map<String,String[]> exportFunctions){
         try {
-            System.out.println("name = " + name + ", bnClass = " + bnClass + ", exportFunctions = " + exportFunctions);
             //添加默认构造函数
             CtConstructor constructor = new CtConstructor(new CtClass[]{},bnClass);
             constructor.setBody("{}");

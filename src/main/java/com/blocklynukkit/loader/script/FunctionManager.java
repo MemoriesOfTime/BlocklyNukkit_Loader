@@ -161,10 +161,14 @@ public class FunctionManager extends BaseManager {
     public void doPathCreate(String path){
         File file = new File(path);
         if(file.exists())file.delete();
-        try {
-            file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(file.getName().contains(".")){
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            file.mkdirs();
         }
     }
     public boolean isPathReadable(String path){
@@ -523,6 +527,20 @@ public class FunctionManager extends BaseManager {
         }
         Utils.writeWithString(file,text);
     }
+    public void appendFile(String path,String text){
+        File file = new File(path);
+        if(!file.exists()) {
+            try {
+                if (file.getParentFile() != null && !file.getParentFile().exists()) {
+                    file.getParentFile().mkdirs();
+                }
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.appendWithString(file,text);
+    }
     public boolean isFileSame(String path1,String path2){
         return Utils.check(new File(path1),new File(path2));
     }
@@ -575,7 +593,7 @@ public class FunctionManager extends BaseManager {
 
     //云黑检测
     public String checkIsBear(Player player){
-        String response = Utils.sendGetBlackBE("http://47.103.201.235/api/check.php?","id="+player.getName());
+        String response = Utils.sendGetBlackBE("http://blackbe.xyz/api/check","id="+player.getName());
         return response;
     }
     public String checkIsBearName(String player){

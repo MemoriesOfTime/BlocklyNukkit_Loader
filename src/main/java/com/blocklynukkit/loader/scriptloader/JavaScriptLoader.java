@@ -147,16 +147,15 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         Pattern pattern = Pattern.compile("^[A-Za-z_$]+[A-Za-z_$.\\d]+$");
         Matcher matcher = pattern.matcher(name);
         if(matcher.matches()){
-            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions);
-            if(bn!=null) bnClasses.put(name,bn);
+            String moduleName = null;
             if(pragmas!=null)
-            for(String each:pragmas){
-                if(each.startsWith("pragma module")){
-                    String moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
-                    CtClass module = JavaExporter.makeExportJava(moduleName,exportFunctions);
-                    if(module != null) bnClasses.put(moduleName,module);
+                for(String each:pragmas){
+                    if(each.startsWith("pragma module")){
+                        moduleName = each.replaceFirst("pragma module","").trim().replaceAll(" ","_");
+                    }
                 }
-            }
+            CtClass bn = JavaExporter.makeExportJava(name.endsWith(".js")?name:(name+".js"),exportFunctions,moduleName);
+            if(bn!=null) bnClasses.put(name,bn);
         }
         return output;
     }

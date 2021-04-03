@@ -128,7 +128,6 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                 }
             CtClass bn = JavaExporter.makeExportJava(name.endsWith(".py")?name:(name+".py"),exportFunctions,moduleName);
             if(bn!=null) bnClasses.put(name,bn);
-
         }
         return output;
     }

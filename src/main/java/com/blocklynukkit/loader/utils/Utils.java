@@ -226,13 +226,25 @@ public class Utils {
             writer.write(string);
             writer.flush();
             writer.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (IOException e2) {
-            e2.printStackTrace();
         }
     }
     public static void writeWithString(File file,String string){
+        writeWithString(file, string, "UTF-8");
+    }
+    public static void appendWithString(File file,String string,String charSet) {
+        try {
+            if(!file.exists())file.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,true),charSet));
+            writer.write(string);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void appendWithString(File file,String string){
         writeWithString(file, string, "UTF-8");
     }
     public static boolean check(File file1, File file2) {

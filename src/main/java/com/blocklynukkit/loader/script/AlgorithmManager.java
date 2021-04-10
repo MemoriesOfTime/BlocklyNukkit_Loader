@@ -61,6 +61,9 @@ public class AlgorithmManager extends BaseManager {
         return (Position)block;
     }
     public Position buildPositionfromEntity(Entity entity){return (Position) entity;}
+    public Position buildPosition(double x,double y,double z,Level level){
+        return new Position(x, y, z, level);
+    }
 
     @Override
     public String toString() {

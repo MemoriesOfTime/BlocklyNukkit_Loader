@@ -22,6 +22,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
+import cn.nukkit.network.protocol.EntityEventPacket;
 import cn.nukkit.potion.Effect;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
@@ -439,5 +440,19 @@ public class EntityManager extends BaseManager {
         double pitch = ((angle * 180) / Math.PI) - 90;
         e.yaw = yaw;
         e.pitch = pitch;
+    }
+    //显示受伤动画
+    public void displayHurt(Entity e){
+        EntityEventPacket pk = new EntityEventPacket();
+        pk.eid = e.getId();
+        pk.event = EntityEventPacket.HURT_ANIMATION;
+        e.getViewers().values().forEach((player -> player.dataPacket(pk)));
+    }
+    //显示死亡动画
+    public void displayDie(Entity e){
+        EntityEventPacket pk = new EntityEventPacket();
+        pk.eid = e.getId();
+        pk.event = EntityEventPacket.DEATH_ANIMATION;
+        e.getViewers().values().forEach((player -> player.dataPacket(pk)));
     }
 }

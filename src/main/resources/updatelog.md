@@ -24,12 +24,18 @@ manager
 entity
 
 - BNNPC buildNPC(Position pos,String name)
+- void displayHurt(Entity e)
+- void displayDie(Entity e)
 
 blockitem
 
 - void addFishingResult(String type,Item item,double chance)
   - 添加钓鱼产物，type为新增产物种类，item是产物物品，changce是概率权重
   - type可以取TREASURES;宝藏;JUNKS;垃圾;FISHES;鱼类，中英文皆可
+  
+algorithm
+
+- Position buildPosition(double x,double y,double z,Level level)
 
 New Event
 
@@ -48,12 +54,12 @@ New Event
 
 BNPM
 
-- 新增了BNPM插件管理器，用于一键安装、更新，快速分发插件
-- 命令：
-  - bnpm install 插件名 -安装或更新指定插件
-  - bnpm delete 插件名 -卸载指定插件
-- 相关链接：
-  - bnpm插件中心：https://wiki.blocklynukkit.com/bnpm/viewPlugin
+  - 新增了BNPM插件管理器，用于一键安装、更新，快速分发插件
+  - 命令：
+    - bnpm install 插件名 -安装或更新指定插件
+    - bnpm delete 插件名 -卸载指定插件
+  - 相关链接：
+    - bnpm插件中心：https://wiki.blocklynukkit.com/bnpm/viewPlugin
 
 ## 1.2.9.1
 

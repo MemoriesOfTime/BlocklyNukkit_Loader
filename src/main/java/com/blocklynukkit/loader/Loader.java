@@ -541,6 +541,20 @@ public class Loader extends PluginBase implements Listener {
                         }
                         break;
                     }
+                    case "StartFishingEvent": {
+                        StartFishingEvent event = (StartFishingEvent) e;
+                        if (entry.getValue().get(functionName) != null) {
+                            ((Invocable) entry.getValue()).invokeFunction(functionName, event);
+                        }
+                        if (privatecalls.containsKey(functionName)) {
+                            for (String a : privatecalls.get(functionName)) {
+                                if (entry.getValue().get(a) != null) {
+                                    ((Invocable) entry.getValue()).invokeFunction(a, e);
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             } catch (final Exception se) {
                 if(se instanceof ScriptException){

@@ -5,6 +5,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJumpEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
+import cn.nukkit.item.randomitem.Fishing;
 
 public class CompatibleEventLoader implements Listener {
     private Loader plugin;

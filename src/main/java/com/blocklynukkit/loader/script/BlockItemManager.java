@@ -15,6 +15,10 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.RuntimeItemMapping;
 import cn.nukkit.item.RuntimeItems;
 import cn.nukkit.item.enchantment.Enchantment;
+import cn.nukkit.item.randomitem.ConstantItemSelector;
+import cn.nukkit.item.randomitem.Fishing;
+import cn.nukkit.item.randomitem.RandomItem;
+import cn.nukkit.item.randomitem.Selector;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
@@ -483,6 +487,23 @@ public class BlockItemManager extends BaseManager {
         CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
         compoundTag.putBoolean("Unbreakable",unbreakable);
         item.setCompoundTag(compoundTag);
+    }
+    //添加钓鱼产物
+    public void addFishingResult(String type,Item item,double chance){
+        Selector parent;
+        switch (type){
+            case "TREASURES":
+            case "宝藏":
+                parent = Fishing.TREASURES;
+                break;
+            case "JUNKS":
+            case "垃圾":
+                parent = Fishing.JUNKS;
+                break;
+            default:
+                parent = Fishing.FISHES;
+        }
+        RandomItem.putSelector(new ConstantItemSelector(item, parent),(float) chance);
     }
     //不对外暴露: 注册新方块
     public void registerBlock(int id, Class<? extends Block> clazz) {

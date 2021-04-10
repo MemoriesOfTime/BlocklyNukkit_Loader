@@ -35,7 +35,7 @@ public class PackageCommand extends Command {
                 sender.sendMessage(TextFormat.RED+Utils.translate("命令参数错误！","wrong arguments!"));
                 sender.sendMessage(this.getUsage());
                 return false;
-            }else if(args[0].equals("build")){
+            }else if(args[0].equalsIgnoreCase("build")||args[0].equalsIgnoreCase("-b")){
                 File config = new File(args[1]);
                 JsonObject json = null;
                 if(!config.exists()){
@@ -122,7 +122,7 @@ public class PackageCommand extends Command {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }else if(args[0].equals("transformjs")||args[0].equals("transformJS")||args[0].equals("transjs")||args[0].equals("transJS")||args[0].equals("tjs")){
+            }else if(args[0].equalsIgnoreCase("-t")||args[0].equals("transformjs")||args[0].equals("transformJS")||args[0].equals("transjs")||args[0].equals("transJS")||args[0].equals("tjs")){
                 File input = new File(args[1]);
                 if(!input.exists()){
                     sender.sendMessage(TextFormat.RED+"Input file not found!");
@@ -181,8 +181,13 @@ public class PackageCommand extends Command {
                     bnpmConfig.set("time",dateFormat.format(Utils.localDateTime2Date(LocalDateTime.now())));
                     for (String asset : assets) {
                         String fileName = asset.substring(asset.lastIndexOf('/') + 1);
-                        localPaths.add("./plugins/BlocklyNukkit/"+fileName);
-                        Utils.downLoadFromUrl(asset, fileName, fileName.endsWith(".jar")?"./plugins":"./plugins/BlocklyNukkit");
+                        if(fileName.endsWith(".jar")){
+                            localPaths.add("./plugins/"+fileName);
+                            Utils.downLoadFromUrl(asset, fileName, "./plugins");
+                        }else {
+                            localPaths.add("./plugins/BlocklyNukkit/"+fileName);
+                            Utils.downLoadFromUrl(asset, fileName, "./plugins/BlocklyNukkit");
+                        }
                         sender.sendMessage(Utils.translate("正在下载 " + fileName + " ...", "Downloading " + fileName + " ..."));
                     }
                     bnpmConfig.set("pluginPaths",localPaths);
@@ -201,7 +206,8 @@ public class PackageCommand extends Command {
                         List<String> pluginPaths = bnpmConfig.getStringList("pluginPaths");
                         for(String each:pluginPaths){
                             File tmp = new File(each);
-                            if(tmp.exists())tmp.delete();
+                            if (tmp.exists() && !tmp.delete())
+                                sender.sendMessage(TextFormat.RED + Utils.translate("文件" + each + "删除失败", "Failed to delete file " + each));
                         }
                         bnpmConfigFile.delete();
                         sender.sendMessage(TextFormat.YELLOW+Utils.translate(args[1]+version+"已经删除",args[1]+" "+version+" has been deleted"));

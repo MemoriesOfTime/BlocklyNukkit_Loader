@@ -123,23 +123,20 @@ public class Loader extends PluginBase implements Listener {
     @Override
     public void onEnable() {
         if(ProtocolInfo.CURRENT_PROTOCOL < 419){
-            if (Server.getInstance().getLanguage().getName().contains("中文")){
-                this.getLogger().warning("您的服务器版本过低！BlocklyNukkit仅支持1.16.100及以上版本的服务端。");
-                this.getLogger().warning("BlocklyNukkit即将关闭，如需使用，请升级服务器或降低bn版本。");
-            } else{
-                this.getLogger().warning("Your server version is too low! Blockylnukkit only supports 1.16.100 and above server.");
-                this.getLogger().warning("Blockynukkit will be closed soon. If you need to use it, please upgrade the server or reduce the BN version.");
-            }
+            this.getLogger().warning(Utils.translate(
+                    "您的服务器版本过低！BlocklyNukkit仅支持1.16.100及以上版本的服务端。","Your server version is too low! Blockylnukkit only supports 1.16.100 and above server."
+            ));
+            this.getLogger().warning(Utils.translate(
+                    "BlocklyNukkit即将关闭，如需使用，请升级服务器或降低bn版本。","Blockynukkit will be closed soon. If you need to use it, please upgrade the server or reduce the BN version."
+            ));
             return;
         }
         plugin=this;
         pluginFile=this.getFile();
         plugins=this.getServer().getPluginManager().getPlugins();
-        if (Server.getInstance().getLanguage().getName().contains("中文")){
-            this.getLogger().info("正在检查前置插件是否存在...");
-        } else{
-            this.getLogger().info("Checking whether the libraries exists...");
-        }
+        this.getLogger().warning(Utils.translate(
+                "正在检查前置插件是否存在...","Checking whether the libraries exists..."
+        ));
         if (!plugins.containsKey("EconomyAPI")){
             try {
                 Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
@@ -149,13 +146,12 @@ public class Loader extends PluginBase implements Listener {
         }else {
             try{
                 if(Integer.parseInt(plugins.get("EconomyAPI").getDescription().getVersion().replaceAll("\\.",""))<201){
-                    if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        this.getLogger().warning("EconomyAPI版本太低！请您及时更新！");
-                        this.getLogger().warning("最新版本下载地址：https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
-                    } else{
-                        this.getLogger().warning("The version of EconomyAPI is to low! Please update it!");
-                        this.getLogger().warning("Latest version is here: https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
-                    }
+                    this.getLogger().warning(Utils.translate(
+                            "EconomyAPI版本太低！请您及时更新！","The version of EconomyAPI is to low! Please update it!"
+                    ));
+                    this.getLogger().warning(Utils.translate(
+                            "最新版本下载地址：https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar",
+                            "Latest version is here: https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar"));
                 }
             }catch (Exception e){
                 //ignore
@@ -169,14 +165,10 @@ public class Loader extends PluginBase implements Listener {
             }
         }
         if (!plugins.containsKey("PlaceholderAPI")){
-            try {
-                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                Loader.getlogger().warning(TextFormat.RED+"您没有安装PlaceholderAPI,虽然不是必须安装，但PlaceHolderAPI前置有些作用，建议您安装，下载地址：https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
-                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                Loader.getlogger().warning(TextFormat.RED+"You haven't installed PlaceholderAPI,although it's not necessary,but PlaceHolderAPI is needed by the moudle inner_http_page_server and moudle scoreboard,we suggest you to install,download link: https://repo.nukkitx.com/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.4-SNAPSHOT/PlaceholderAPI-1.4-20200314.133954-18.jar");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            this.getLogger().warning(Utils.translate(
+                    TextFormat.RED+"您没有安装PlaceholderAPI,虽然不是必须安装，但PlaceHolderAPI前置有些作用，建议您安装，下载地址：https://repo.opencollab.dev/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.3-SNAPSHOT/PlaceholderAPI-1.3-20200509.152757-7.jar",
+                    TextFormat.RED+"You haven't installed PlaceholderAPI,although it's not necessary,but PlaceHolderAPI is needed by the moudle inner_http_page_server and moudle scoreboard,we suggest you to install,download link: https://repo.opencollab.dev/main/com/creeperface/nukkit/placeholderapi/PlaceholderAPI/1.3-SNAPSHOT/PlaceholderAPI-1.3-20200509.152757-7.jar"
+            ));
         }
         if (!plugins.containsKey("FakeInventories")){
             try {
@@ -193,14 +185,10 @@ public class Loader extends PluginBase implements Listener {
             }
         }
         if (!plugins.containsKey("GameAPI")){
-            try {
-                if (Server.getInstance().getLanguage().getName().contains("中文"))
-                    Loader.getlogger().warning(TextFormat.RED+"您没有安装BNGameAPI,虽然不是必须安装，但它是部分bn插件的必要依赖，建议您安装，下载地址：https://tools.blocklynukkit.com/BNGameAPI.jar");
-                if (!Server.getInstance().getLanguage().getName().contains("中文"))
-                    Loader.getlogger().warning(TextFormat.RED+"You haven't installed bngameapi,although it's not necessary,but PlaceHolderAPI is needed by the gameapi module,we suggest you to install,download link: https://tools.blocklynukkit.com/BNGameAPI.jar");
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            this.getLogger().warning(Utils.translate(
+                    TextFormat.RED+"您没有安装BNGameAPI,虽然不是必须安装，但它是部分bn插件的必要依赖，建议您安装，下载地址：https://tools.blocklynukkit.com/BNGameAPI.jar",
+                    TextFormat.RED+"You haven't installed bngameapi,although it's not necessary,but PlaceHolderAPI is needed by the gameapi module,we suggest you to install,download link: https://tools.blocklynukkit.com/BNGameAPI.jar"
+            ));
         }
         //创建各种基对象
         //这里没有database因为后面要检查依赖库是否存在再创建
@@ -268,10 +256,9 @@ public class Loader extends PluginBase implements Listener {
         try{
             new JavaScriptLoader(plugin).loadplugins();
         }catch (NoClassDefFoundError e){
-            if (Server.getInstance().getLanguage().getName().contains("中文"))
-                getLogger().warning("java运行时环境不完整，无法加载.js插件，请安装java8SE-java14SE的完整版本！");
-            else
-                getLogger().warning("java runtime is incomplete!");
+            this.getLogger().warning(TextFormat.RED+Utils.translate(
+                    "java运行时环境不完整，无法加载.js插件，请安装java8SE-java14SE的完整版本！","java runtime is incomplete!"
+            ));
         }
         //加载python
         if(plugins.containsKey("PyBN")){
@@ -358,14 +345,12 @@ public class Loader extends PluginBase implements Listener {
             if(plugins.containsKey("PyBN")){
                 new PythonLoader(plugin).putPythonEngine(name, js);
             }else {
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    getlogger().warning("无法加载:" + name+"! 缺少python依赖库");
-                    getlogger().warning("请到 https://tools.blocklynukkit.com/PyBN.jar 下载依赖插件");
-                }
-                else{
-                    getlogger().warning("cannot load BN plugin:" + name+" python libs not found!");
-                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
-                }
+                getlogger().warning(Utils.translate(
+                        "无法加载:" + name+"! 缺少python依赖库","cannot load BN plugin:" + name+" python libs not found!"
+                ));
+                getlogger().warning(Utils.translate(
+                        "请到 https://tools.blocklynukkit.com/PyBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar"
+                ));
             }
         }else if(js.contains("--pragma Lua")||js.contains("--pragma lua")||js.contains("--pragma LUA")
                 ||js.contains("-- pragma Lua")||js.contains("-- pragma lua")||js.contains("-- pragma LUA")){
@@ -377,14 +362,12 @@ public class Loader extends PluginBase implements Listener {
             if(plugins.containsKey("PHPBN")){
                 new PHPLoader(plugin).putPHPEngine(name, js);
             }else {
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    getlogger().warning("无法加载:" + name+"! 缺少php依赖库");
-                    getlogger().warning("请到 https://tools.blocklynukkit.com/PHPBN.jar 下载依赖插件");
-                }
-                else{
-                    getlogger().warning("cannot load BN plugin:" + name+" PHP libs not found!");
-                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
-                }
+                getlogger().warning(Utils.translate(
+                        "无法加载:" + name+"! 缺少php依赖库","cannot load BN plugin:" + name+" PHP libs not found!"
+                ));
+                getlogger().warning(Utils.translate(
+                        "请到 https://tools.blocklynukkit.com/PHPBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar"
+                ));
             }
         }else if(js.startsWith("bnp")){
             BNPackageLoader bnPackageLoader = new BNPackageLoader(plugin);
@@ -439,17 +422,16 @@ public class Loader extends PluginBase implements Listener {
                 if (se instanceof ScriptException) {
                     ScriptException ee = (ScriptException) se;
                     previousException = ee;
-                    if (Server.getInstance().getLanguage().getName().contains("中文")) {
-                        Loader.getlogger().warning("在调用\"" + entry.getKey() + "\"中的函数" + functionName + "时");
-                        Loader.getlogger().warning("在第" + ee.getLineNumber() + "行第" + ee.getColumnNumber() + "列发生错误:");
-                        Loader.getlogger().warning(ee.getMessage());
-                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                    } else {
-                        Loader.getlogger().warning("when calling function " + functionName + " in \"" + entry.getKey() + "\"");
-                        Loader.getlogger().warning("at line " + ee.getLineNumber() + " column " + ee.getColumnNumber() + " occurred an error:");
-                        Loader.getlogger().warning(ee.getMessage());
-                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                    }
+                    getlogger().warning(Utils.translate(
+                            "在调用\"" + entry.getKey() + "\"中的函数" + functionName + "时","when calling function " + functionName + " in \"" + entry.getKey() + "\""
+                    ));
+                    getlogger().warning(Utils.translate(
+                            "在第" + ee.getLineNumber() + "行第" + ee.getColumnNumber() + "列发生错误:","at line " + ee.getLineNumber() + " column " + ee.getColumnNumber() + " occurred an error:"
+                    ));
+                    getlogger().warning(ee.getMessage());
+                    getlogger().warning(Utils.translate(
+                            "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                    ));
                 } else {
                     se.printStackTrace();
                 }
@@ -562,19 +544,18 @@ public class Loader extends PluginBase implements Listener {
                 }
             } catch (final Exception se) {
                 if(se instanceof ScriptException){
-                    ScriptException ee = (ScriptException)se;
+                    ScriptException ee = (ScriptException) se;
                     previousException = ee;
-                    if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
-                        Loader.getlogger().warning("在第"+ee.getLineNumber()+"行第"+ee.getColumnNumber()+"列发生错误:");
-                        Loader.getlogger().warning(ee.getMessage());
-                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                    }else {
-                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
-                        Loader.getlogger().warning("at line "+ee.getLineNumber()+" column "+ee.getColumnNumber()+" occurred an error:");
-                        Loader.getlogger().warning(ee.getMessage());
-                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                    }
+                    getlogger().warning(Utils.translate(
+                            "在调用\"" + entry.getKey() + "\"中的函数" + functionName + "时","when calling function " + functionName + " in \"" + entry.getKey() + "\""
+                    ));
+                    getlogger().warning(Utils.translate(
+                            "在第" + ee.getLineNumber() + "行第" + ee.getColumnNumber() + "列发生错误:","at line " + ee.getLineNumber() + " column " + ee.getColumnNumber() + " occurred an error:"
+                    ));
+                    getlogger().warning(ee.getMessage());
+                    getlogger().warning(Utils.translate(
+                            "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                    ));
                 }else {
                     se.printStackTrace();
                 }
@@ -597,17 +578,16 @@ public class Loader extends PluginBase implements Listener {
                     ScriptException e = (ScriptException)se;
                     previousException = e;
                     Loader.plugincmdsmap.get(commandName).setLastCallError("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误",se.getStackTrace());
-                    if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
-                        Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
-                        Loader.getlogger().warning(e.getMessage());
-                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                    }else {
-                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
-                        Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
-                        Loader.getlogger().warning(e.getMessage());
-                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                    }
+                    getlogger().warning(Utils.translate(
+                            "在调用\""+entry.getKey()+"\"中的函数"+functionName+"时","when calling function "+functionName+" in \""+entry.getKey()+"\""
+                    ));
+                    getlogger().warning(Utils.translate(
+                            "在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:","at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:"
+                    ));
+                    getlogger().warning(e.getMessage());
+                    getlogger().warning(Utils.translate(
+                            "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                    ));
                 }else {
                     se.printStackTrace();
                 }
@@ -629,17 +609,16 @@ public class Loader extends PluginBase implements Listener {
                     if(se instanceof ScriptException){
                         ScriptException e = (ScriptException)se;
                         previousException = e;
-                        if (Server.getInstance().getLanguage().getName().contains("中文")){
-                            Loader.getlogger().warning("在调用\""+sp[0]+"\"中的函数"+functionName+"时");
-                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                        }else {
-                            Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
-                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                        }
+                        getlogger().warning(Utils.translate(
+                                "在调用\""+sp[0]+"\"中的函数"+functionName+"时","when calling function "+functionName+" in \""+e.getFileName()+"\""
+                        ));
+                        getlogger().warning(Utils.translate(
+                                "在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:","at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:"
+                        ));
+                        getlogger().warning(e.getMessage());
+                        getlogger().warning(Utils.translate(
+                                "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                        ));
                     }else {
                         se.printStackTrace();
                     }
@@ -654,17 +633,16 @@ public class Loader extends PluginBase implements Listener {
                     return ((Invocable) entry.getValue()).invokeFunction(functionName, args);
                 } catch (final ScriptException e) {
                     previousException = e;
-                    if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
-                        Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
-                        Loader.getlogger().warning(e.getMessage());
-                        Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                    }else {
-                        Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
-                        Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
-                        Loader.getlogger().warning(e.getMessage());
-                        Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                    }
+                    getlogger().warning(Utils.translate(
+                            "在调用\""+entry.getKey()+"\"中的函数"+functionName+"时","when calling function "+functionName+" in \""+entry.getKey()+"\""
+                    ));
+                    getlogger().warning(Utils.translate(
+                            "在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:","at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:"
+                    ));
+                    getlogger().warning(e.getMessage());
+                    getlogger().warning(Utils.translate(
+                            "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                    ));
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
@@ -688,17 +666,16 @@ public class Loader extends PluginBase implements Listener {
                     if(se instanceof ScriptException){
                         ScriptException e = (ScriptException)se;
                         previousException = e;
-                        if (Server.getInstance().getLanguage().getName().contains("中文")){
-                            Loader.getlogger().warning("在调用\""+sp[0]+"\"中的函数"+functionName+"时");
-                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                        }else {
-                            Loader.getlogger().warning("when calling function "+functionName+" in \""+e.getFileName()+"\"");
-                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                        }
+                        getlogger().warning(Utils.translate(
+                                "在调用\""+sp[0]+"\"中的函数"+functionName+"时","when calling function "+functionName+" in \""+e.getFileName()+"\""
+                        ));
+                        getlogger().warning(Utils.translate(
+                                "在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:","at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:"
+                        ));
+                        getlogger().warning(e.getMessage());
+                        getlogger().warning(Utils.translate(
+                                "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                        ));
                     }else {
                         se.printStackTrace();
                     }
@@ -718,17 +695,16 @@ public class Loader extends PluginBase implements Listener {
                     if(se instanceof ScriptException){
                         ScriptException e = (ScriptException)se;
                         previousException = e;
-                        if (Server.getInstance().getLanguage().getName().contains("中文")){
-                            Loader.getlogger().warning("在调用\""+entry.getKey()+"\"中的函数"+functionName+"时");
-                            Loader.getlogger().warning("在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("使用命令showstacktrace来查看错误堆栈信息");
-                        }else {
-                            Loader.getlogger().warning("when calling function "+functionName+" in \""+entry.getKey()+"\"");
-                            Loader.getlogger().warning("at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:");
-                            Loader.getlogger().warning(e.getMessage());
-                            Loader.getlogger().warning("use command showstacktrace to see the stacktrace information");
-                        }
+                        getlogger().warning(Utils.translate(
+                                "在调用\""+entry.getKey()+"\"中的函数"+functionName+"时","when calling function "+functionName+" in \""+entry.getKey()+"\""
+                        ));
+                        getlogger().warning(Utils.translate(
+                                "在第"+e.getLineNumber()+"行第"+e.getColumnNumber()+"列发生错误:","at line "+e.getLineNumber()+" column "+e.getColumnNumber()+" occurred an error:"
+                        ));
+                        getlogger().warning(e.getMessage());
+                        getlogger().warning(Utils.translate(
+                                "使用命令showstacktrace来查看错误堆栈信息","use command showstacktrace to see the stacktrace information"
+                        ));
                     }else {
                         se.printStackTrace();
                     }

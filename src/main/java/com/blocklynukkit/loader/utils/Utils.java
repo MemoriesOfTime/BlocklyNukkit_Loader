@@ -5,6 +5,7 @@ import cn.nukkit.command.ConsoleCommandSender;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.net.http.MyHttpHandler;
+import com.google.common.base.Strings;
 import com.sun.net.httpserver.HttpServer;
 import com.blocklynukkit.loader.other.net.http.MyCustomHandler;
 import com.blocklynukkit.loader.other.net.http.MyFileHandler;
@@ -17,8 +18,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Base64;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -193,7 +202,14 @@ public class Utils {
             Loader.getlogger().info(TextFormat.GREEN+"successfully update: "+file.getName());
     }
     public static boolean isWindows() {
-        return System.getProperties().getProperty("os.name").toUpperCase().indexOf("WINDOWS") != -1;
+        return System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS");
+    }
+    public static String translate(String chn,String eng){
+        if (Server.getInstance().getLanguage().getName().contains("中文")){
+            return chn;
+        }else {
+            return eng;
+        }
     }
     public static String readToString(File file) {
         String encoding = getFilecharset(file);
@@ -354,7 +370,7 @@ public class Utils {
 
         //得到输入流
         InputStream inputStream = conn.getInputStream();
-        //获取自己数组
+        //获取字节数组
         byte[] getData = readInputStream(inputStream);
 
         //文件保存位置
@@ -419,13 +435,17 @@ public class Utils {
         return bos.toByteArray();
     }
 
+    public static Date localDateTime2Date(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
     public static String sendGet(String url, String param) {
         String result = "NULL";
         BufferedReader in = null;
         try {
             String urlNameString = urlEncodeChinese(url);
             if(!(param.length()==0||param==null)){
-                urlNameString = url + "?" + URLEncoder.encode(param,"utf-8");
+                urlNameString = url + "?" + URLEncoder.encode(param.replaceAll("=","WaITeQuALsChaR"),"utf-8").replaceAll("WaITeQuALsChaR","=");
             }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
@@ -822,6 +842,44 @@ public class Utils {
         g.dispose();
 
         return bimage;
+    }
+    /**
+     * 把base64转化为文件.
+     *
+     * @param base64   base64
+     * @param filePath 目标文件路径
+     * @return boolean isTrue
+     */
+    public static Boolean decryptByBase64(String base64, String filePath) {
+
+        if (Strings.isNullOrEmpty(base64) && Strings.isNullOrEmpty(filePath)) {
+            return Boolean.FALSE;
+        }
+        try {
+            Files.write(Paths.get(filePath),
+                    Base64.getDecoder().decode(base64.substring(base64.indexOf(",") + 1)), StandardOpenOption.CREATE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Boolean.TRUE;
+    }
+
+    /**
+     * 把文件转化为base64.
+     *
+     * @param filePath 源文件路径
+     * @return String 转化后的base64
+     */
+    public static String encryptToBase64(String filePath) {
+        if (!Strings.isNullOrEmpty(filePath)) {
+            try {
+                byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+                return Base64.getEncoder().encodeToString(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }
 

@@ -246,6 +246,9 @@ public class EntityManager extends BaseManager {
         return entity;
     }
     //构建bnNPC
+    public BNNPC buildNPC(Position pos,String name){
+        return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes("Steve"));
+    }
     public BNNPC buildNPC(Position pos,String name,String skinID){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID));
     }

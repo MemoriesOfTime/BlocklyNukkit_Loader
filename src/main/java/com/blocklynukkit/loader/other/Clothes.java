@@ -6,6 +6,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.utils.Binary;
 import cn.nukkit.utils.Config;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.utils.Utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,6 +36,9 @@ public class Clothes {
         skin.setTrusted(true);
         try{
             File fileskin = new File(Loader.plugin.getDataFolder()+"/skin/"+skinname+".png");
+            if(skinname.equals("Steve") && !fileskin.exists()){
+                Utils.decryptByBase64("iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAV1BMVEUAAAD//fv///D++fj99fT+9PL99PT88vD+8O787Oj56+n84OH/47/y4+D/2eT6ztDmztD6x7a01s//q6iuwtbrlLHrk7G1m8SxjpGjepWRao2FbW55XmFhKOxcAAAAAXRSTlMAQObYZgAAAoRJREFUeNrtlttyozAMhn0gddEuTmtZpdvy/s+544N8AJIhdPZiZ/JPBiFif5ZlgyxEFhRN8SdWmqZ63RUYM2hjfgDg8bPEowIzaD0YgNfL5XJ5hROAqACQ8hSAp5AAZ6aQkngecCQCvNPxlup6TABYF7UsKxgwBkztwX62BQCTQYIKgPQwAoYVYMiAYFNDkYGEmGmTCdZMAgYwGgaAaxQUn63JgCEAMW9RAzAEO4AAHRpqgGW5XpcFip9tSZUWRgtd9/iQL2AmM0wGls/v6/X7c2GfrW5fhWq1TgAdASYAXt6kfHtZ2Gd7E5Ct4LeP15/9zVs5lQt35YsQiIhERGW/eOxUnisr5bi3wdYAvAFAdRhAtAtw+wCFbgWgcaQ9AG0BiKgCoFcD6PJB5JS1CjtAeMIAm4wqU/B+9g5VvHfOUSAo1wJsiMChc6GB9TZGVImIob9VCWAdkSNCXCUwpTDQOYLVlJJvrbexWQcYg2rTfOsQbejkbDI8wzSObQEy6VeUlDIPgWk06+OkHFITqfX2DuAr6E/UV3ufAvOeyLm9COJMRinle9DvqPf2Po7t59mHVNEdwK0I0uxDBO2WCwDVA+p+cGn185pSpzsRpP45dc0a9s0aQAf++MjZtuu9fRvw1FNPPaa2xCBu/hKIeBaAfMGzEfyL+fq+WhPiYx+Rdbn/zwD9p9Qjl7pU2Q4AfHuo8HMqJGjtYUA+VOQi7bmcxkJxCBBKn/P1SJPPDbFQKDqeg5HPDarkIBxcDgC4zHPZJyLFR6RDEWwB8Vh2fBW4yHLR9SECl1PhTwBmTy73Jz+vNkvxRPUqQKUIXFO9/R4A22/CNoLOH3cj2OyD7rywC2j0F+DPXhic88ufAAAAAElFTkSuQmCC","./plugins/BlocklyNukkit/Steve.png");
+            }
             if(fileskin.exists()){
                 if(Loader.skinimagemap.get(skinname)!=null){
                     skin.setSkinData(Loader.skinimagemap.get(skinname));
@@ -83,7 +87,7 @@ public class Clothes {
                 skin.setSkinId(UUID.randomUUID()+"."+skinname);
                 return skin;
             }else {
-                Loader.getlogger().warning("没有该皮肤！");
+                Loader.getlogger().warning(Utils.translate("没有该皮肤！","Skin not found"));
             }
         }catch (Exception e){
             e.printStackTrace();

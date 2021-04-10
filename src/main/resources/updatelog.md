@@ -9,6 +9,7 @@ Bug Fixed
 - 修复了manager.doPathCreate无法创建文件夹问题
 - 修复了BlackBE合作API错误的问题
 - 修复了PowerNukkit1.4.0.x生物兼容问题
+- NPC有默认皮肤了
 
 Module
 
@@ -19,6 +20,10 @@ manager
 
 - void appendFile(String path,String text)
   - 追加写入文件内容
+  
+entity
+
+- BNNPC buildNPC(Position pos,String name)
 
 New Event
 

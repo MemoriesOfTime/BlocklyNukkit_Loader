@@ -22,6 +22,7 @@ public class JavaExporter {
                 classPool.importPackage("com.blocklynukkit.loader");
                 if(classPool.getOrNull(name)!=null)return classPool.getCtClass(name);
                 bnClass = classPool.makeClass(name);
+                if(moduleName != null)
                 moduleClass = classPool.makeClass(moduleName);
             } catch (NotFoundException e) {
                 e.printStackTrace();

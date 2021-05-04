@@ -1,6 +1,7 @@
 package com.blocklynukkit.loader.other.Entities;
 
 import cn.nukkit.Player;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import com.blocklynukkit.loader.Loader;
@@ -38,6 +39,12 @@ public class FloatingText extends EntityMob {
             super.spawnTo(player);
         }
     }
+
+    @Override
+    public boolean attack(EntityDamageEvent source) {
+        return false;
+    }
+
     @Override
     public void saveNBT() {
         super.saveNBT();

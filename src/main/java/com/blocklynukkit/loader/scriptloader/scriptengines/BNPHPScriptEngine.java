@@ -8,6 +8,7 @@ import com.caucho.quercus.QuercusContext;
 import com.caucho.quercus.QuercusErrorException;
 import com.caucho.quercus.QuercusExitException;
 import com.caucho.quercus.env.*;
+import com.caucho.quercus.function.AbstractFunction;
 import com.caucho.quercus.lib.*;
 import com.caucho.quercus.lib.curl.CurlModule;
 import com.caucho.quercus.lib.date.DateModule;

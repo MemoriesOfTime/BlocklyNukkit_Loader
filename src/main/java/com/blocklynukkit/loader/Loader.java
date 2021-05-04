@@ -287,18 +287,14 @@ public class Loader extends PluginBase implements Listener {
         Entity.registerEntity("BNNPC", BNNPC.class);
         //注册bn命令
         plugin.getServer().getPluginManager().addPermission(new Permission("blocklynukkit.opall","blocklynukkit插件op权限","op"));
-        //hotreloadjs命令被bnreload替代
-        //plugin.getServer().getCommandMap().register("hotreloadjs",new ReloadJSCommand());
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
         plugin.getServer().getCommandMap().register("bninstall",new InstallCommand());
         plugin.getServer().getCommandMap().register("showstacktrace",new showStackTrace());
-        //plugin.getServer().getCommandMap().register("gentestworld",new GenTestWorldCommand());
         plugin.getServer().getCommandMap().register("bndebug",new DebugerCommand());
         plugin.getServer().getCommandMap().register("exportdevjar",new ExportDevJarCommand());
         plugin.getServer().getCommandMap().register("bnpackage",new PackageCommand());
         plugin.getServer().getCommandMap().register("bnreload",new BNReloadCommand());
         plugin.getServer().getCommandMap().register("signature",new SignatureCommand());
-        plugin.getServer().getCommandMap().register("bnmiscbuild",new BNMiscBuild());
         //开启速建官网服务器
         Config portconfig = new Config(this.getDataFolder()+"/port.yml",Config.YAML);
         int portto;

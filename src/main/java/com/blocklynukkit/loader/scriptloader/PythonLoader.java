@@ -156,7 +156,7 @@ public class PythonLoader extends ExtendScriptLoader implements Interpreter {
                     if(toCheck.startsWith("pragma end")){
                         break;
                     }
-                    pragma.add(toCheck.toLowerCase());
+                    pragma.add(toCheck);
                 }
             }
         }

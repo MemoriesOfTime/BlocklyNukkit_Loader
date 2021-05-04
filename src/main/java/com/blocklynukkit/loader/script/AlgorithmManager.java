@@ -6,6 +6,7 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 
@@ -15,8 +16,11 @@ public class AlgorithmManager extends BaseManager {
     public AlgorithmManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
-
-    public void forEachBlockInArea(Position a, Position b, boolean isair, String callback){
+    @Comment(value = "为a到b位置的所有方块执行回调函数")
+    public void forEachBlockInArea(@Comment(value = "起点") Position a
+            ,@Comment(value = "终点") Position b
+            ,@Comment(value = "是否为空气方块也执行回调函数") boolean isair
+            ,@Comment(value = "回调函数名，参数(cn.nukkit.Block)") String callback){
         Level level = a.level;
         for (int i=(int)a.x;i<(int)b.x;i++){
             for (int j=(int)a.y;i<(int)b.y;j++){
@@ -32,17 +36,20 @@ public class AlgorithmManager extends BaseManager {
             }
         }
     }
-
-    public void forLinkedBlock(Position a,String callback){
+    @Comment(value = "为指定坐标相邻的同种方块及相邻同种方块的相邻同种方块执行回调函数")
+    public void forLinkedBlock(@Comment(value = "指定坐标") Position a
+            ,@Comment(value = "回调函数，参数(cn.nukkit.level.Position)") String callback){
         Loader.positionstmp="";
         forLinkedBlock((int)a.x,(int)a.y,(int)a.z,callback,0,a.level,a.getLevelBlock().getId());
     }
 
-
+    @Comment(value = "xyz转字符串")
     public static String posinttostr(int x,int y,int z){
         return x+","+y+","+z+";";
     }
-    public void forLinkedBlock(int x,int y,int z,String callback,int step,Level level,int id){
+
+    @Comment(value = "forLinkedBlock(cn.nukkit.level.Position,java.lang.String)的递归函数")
+    private void forLinkedBlock(int x,int y,int z,String callback,int step,Level level,int id){
         if(level.getBlockIdAt(x,y,z)==0)return;
         if(step>50)return;
         Loader.plugin.call(callback,Position.fromObject(new Vector3(x,y,z),level));
@@ -54,14 +61,18 @@ public class AlgorithmManager extends BaseManager {
         if(level.getBlockIdAt(x,y,z+1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z+1))))forLinkedBlock(x,y,z+1,callback,step+1,level,id);
         if(level.getBlockIdAt(x,y,z-1)==id&&(!Loader.positionstmp.contains(posinttostr(x,y,z-1))))forLinkedBlock(x,y,z-1,callback,step+1,level,id);
     }
-    public Position buildPositionfromPlayer(Player player){
-        return player.getPosition();
+    @Comment(value = "从玩家构建坐标对象")
+    public Position buildPositionfromPlayer(@Comment(value = "从哪个玩家") Player player){
+        return player.getPosition().clone();
     }
-    public Position buildPositionfromBlock(Block block){
-        return (Position)block;
+    @Comment(value = "从方块构建坐标对象")
+    public Position buildPositionfromBlock(@Comment(value = "从哪个方块") Block block){
+        return (Position) block.clone();
     }
-    public Position buildPositionfromEntity(Entity entity){return (Position) entity;}
-    public Position buildPosition(double x,double y,double z,Level level){
+    @Comment(value = "从实体构建坐标对象")
+    public Position buildPositionfromEntity(@Comment(value = "从哪个实体") Entity entity){return (Position) entity.clone();}
+    @Comment(value = "通过xyz和世界构建坐标对象")
+    public Position buildPosition(@Comment(value = "x") double x,@Comment(value = "y") double y,@Comment(value = "z") double z,@Comment(value = "世界") Level level){
         return new Position(x, y, z, level);
     }
 

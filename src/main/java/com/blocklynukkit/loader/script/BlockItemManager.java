@@ -28,6 +28,7 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
@@ -50,18 +51,27 @@ public class BlockItemManager extends BaseManager {
         return "BlocklyNukkit Based Object";
     }
     //-添加声音
-    public void makeSound(Position position,String soundname){
+    @Comment(value = "在指定位置播放声音")
+    public void makeSound(@Comment(value = "播放声音的坐标") Position position
+            ,@Comment(value = "声音名称，详见[声音列表](https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master/javadoc/cn/nukkit/level/Sound.html)") String soundname){
         position.getLevel().addSound(position, Sound.valueOf(soundname));
     }
     //-生成经验求
-    public void makeExpBall(Position position,int point){
+    @Comment(value = "在指定位置生成经验球")
+    public void makeExpBall(@Comment(value = "生成经验球的位置") Position position
+            ,@Comment(value = "包含的经验点数") int point){
         position.getLevel().dropExpOrb(position,point);
     }
     //-生成掉落物
-    public void makeDropItem(Position position, Item item){
+    @Comment(value = "在指定位置生成掉落物")
+    public void makeDropItem(@Comment(value = "生成掉落物的位置") Position position
+            ,@Comment(value = "生成的掉落物实体的内容") Item item){
         position.getLevel().dropItem(position,item);
     }
-    public void makeDropItem(Position position, Item item, boolean fly){
+    @Comment(value = "在指定位置生成掉落物")
+    public void makeDropItem(@Comment(value = "生成掉落物的位置") Position position
+            ,@Comment(value = "生成的掉落物实体的内容") Item item
+            ,@Comment(value = "生成的掉落物是否有初速度飞出，默认为false") boolean fly){
         if(fly){
             makeDropItem(position, item);
         }else {
@@ -69,24 +79,30 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //-获取方块
-    public Block getBlock(Position position) {
+    @Comment(value = "获取指定位置的方块对象")
+    public Block getBlock(@Comment(value = "坐标") Position position) {
         return position.getLevelBlock();
     }
     //-获取生物数组
-    public List<Entity> getLevelEntities(Position position){
+    @Comment(value = "获取指定坐标所在世界的所有实体")
+    public List<Entity> getLevelEntities(@Comment(value = "坐标") Position position){
         return Arrays.asList(position.getLevel().getEntities());
     }
     //-获取世界中的玩家
-    public List<Player> getLevelPlayers(Position position){
+    @Comment(value = "获取指定坐标所在世界的所有玩家")
+    public List<Player> getLevelPlayers(@Comment(value = "坐标") Position position){
         return new ArrayList<Player>(position.getLevel().getPlayers().values());
     }
     //-获取是否晴天
-    public boolean getIsSunny(Position position){
+    @Comment(value = "获取指定位置是否是晴天")
+    public boolean getIsSunny(@Comment(value = "坐标") Position position){
         Level level=position.getLevel();
         return !(level.isRaining()||level.isThundering());
     }
     //-设置天气
-    public void setLevelWeather(Position position,String mode){
+    @Comment(value = "设置指定位置的天气")
+    public void setLevelWeather(@Comment(value = "坐标") Position position
+            ,@Comment(value = "天气，值为clear/rain/thunder") String mode){
         Level level=position.getLevel();
         if (!mode.equals("clear")) {
             if(mode.equals("rain")){
@@ -102,11 +118,15 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //-获取白天黑夜
-    public boolean isDay(Position position){
+    @Comment(value = "获取指定位置是白天还是黑夜")
+    public boolean isDay(@Comment(value = "坐标") Position position){
         return position.getLevel().isDaytime();
     }
     //-设置方块
-    public void setBlock(Position position,Block block,boolean particle){
+    @Comment(value = "设置指定位置的方块")
+    public void setBlock(@Comment(value = "坐标") Position position
+            ,@Comment(value = "要被设置的方块对象") Block block
+            ,@Comment(value = "是否产生破坏先前方块的粒子") boolean particle){
         if(particle==true){
             position.getLevel().addParticle(new DestroyBlockParticle(new Vector3(position.x+0.5,position.y+0.5,position.z+0.5),position.getLevelBlock()));
         }
@@ -116,7 +136,8 @@ public class BlockItemManager extends BaseManager {
         );
     }
     //-方块更新
-    public void blockUpdate(Position position){
+    @Comment(value = "强制更新指定坐标上的方块")
+    public void blockUpdate(@Comment(value = "坐标") Position position){
         int x = position.getFloorX();
         int y = position.getFloorY();
         int z = position.getFloorZ();
@@ -139,15 +160,20 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //-获取玩家手中物品
-    public Item getItemInHand(Player player){
+    @Comment(value = "获取玩家手中物品")
+    public Item getItemInHand(@Comment(value = "要获取物品的玩家") Player player){
         return player.getInventory().getItemInHand();
     }
     //-设置玩家手中物品
-    public void setItemInHand(Player player,Item item){
+    @Comment(value = "设置玩家手中物品")
+    public void setItemInHand(@Comment(value = "要设置物品的玩家") Player player
+            ,@Comment(value = "要被设置到玩家手中的物品") Item item){
         player.getInventory().setItemInHand(item);
     }
     //-向玩家背包添加物品
-    public void addItemToPlayer(Player player,Item item){
+    @Comment(value = "向玩家背包添加物品")
+    public void addItemToPlayer(@Comment(value = "要添加物品的玩家") Player player
+            ,@Comment(value = "要添加到玩家背包的物品") Item item){
         if(player.getInventory().canAddItem(item)){
             player.getInventory().addItem(item);
         }else {
@@ -156,10 +182,12 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //-玩家背包是否有物品
-    public boolean hasItemToPlayer(Player player,Item item){
+    @Comment(value = "检测玩家背包是否有指定物品")
+    public boolean hasItemToPlayer(@Comment(value = "要检测物品的玩家") Player player
+            ,@Comment(value = "要检测是否存在的物品") Item item){
         return player.getInventory().contains(item);
     }
-    public boolean PlayercontainsItem(Player player,int x,Item ...item){
+    public boolean PlayercontainsItem(@Comment(value = "") Player player,int x,Item ...item){
         Item[] tmp = item;
         boolean have = true;
         if(x!=1)
@@ -174,13 +202,16 @@ public class BlockItemManager extends BaseManager {
         }
         return true;
     }
-    public void removeItemToPlayer(Player player,Item item){
+    @Comment(value = "将玩家背包内的指定物品移除")
+    public void removeItemToPlayer(@Comment(value = "要移除物品的玩家") Player player
+            ,@Comment(value = "要被从玩家背包移除的物品") Item item){
         if(PlayercontainsItem(player,1,item)){
             player.getInventory().removeItem(item);
         }
     }
     //获取世界掉落物
-    public EntityItem[] getDropItems(Position position){
+    @Comment(value = "获取坐标所在世界的所有掉落物")
+    public EntityItem[] getDropItems(@Comment(value = "坐标") Position position){
         ArrayList<EntityItem> list = new ArrayList();
         for (Entity entity:position.getLevel().getEntities()){
             if(entity.getNetworkId()==64){
@@ -189,7 +220,8 @@ public class BlockItemManager extends BaseManager {
         }
         return list.toArray(new EntityItem[list.size()]);
     }
-    public EntityItem[] getDropItems(Level level){
+    @Comment(value = "获取指定世界上所有的掉落物")
+    public EntityItem[] getDropItems(@Comment(value = "世界对象") Level level){
         ArrayList<EntityItem> list = new ArrayList();
         for (Entity entity:level.getEntities()){
             if(entity.getNetworkId()==64){
@@ -199,7 +231,8 @@ public class BlockItemManager extends BaseManager {
         return list.toArray(new EntityItem[list.size()]);
     }
     //获取世界生物
-    public Entity[] getEntities(Position position){
+    @Comment(value = "获取坐标所在世界的所有生物")
+    public Entity[] getEntities(@Comment(value = "坐标") Position position){
         ArrayList<Entity> list = new ArrayList();
         for (Entity entity:position.getLevel().getEntities()){
             list.add(entity);
@@ -207,27 +240,35 @@ public class BlockItemManager extends BaseManager {
         return list.toArray(new Entity[list.size()]);
     }
     //获取世界名称
-    public String getLevelName(Level level){
+    @Comment(value = "获取世界对象的世界名")
+    public String getLevelName(@Comment(value = "世界对象") Level level){
         return level.getName();
     }
     //here 4/23
-    public void PositionMove(Position position,double x,double y,double z){
+    @Comment(value = "偏移一个坐标对象")
+    public void PositionMove(@Comment(value = "被执行偏移操作的坐标对象") Position position
+            ,@Comment(value = "x轴偏移量") double x
+            ,@Comment(value = "y轴偏移量") double y
+            ,@Comment(value = "z轴偏移量") double z){
         position.x += x;
         position.y += y;
         position.z += z;
     }
     /********************************* 纯方块物品方法 *************************************/
     //-构建方块
-    public Block buildBlock(int id,int data){
+    @Comment(value = "构建方块")
+    public Block buildBlock(@Comment(value = "方块id") int id,@Comment(value = "方块特殊值") int data){
         return Block.get(id, data);
     }
     //-获取方块id*
     //-构建物品
-    public Item buildItem(int id,int data,int count){
+    @Comment(value = "构建物品")
+    public Item buildItem(@Comment(value = "物品id") int id,@Comment(value = "物品特殊值") int data,@Comment(value = "物品对象数量") int count){
         return Item.get(id,data,count);
     }
     //-从方块构建物品
-    public Item buildItemFromBlock(Block block){
+    @Comment(value = "从方块构建物品")
+    public Item buildItemFromBlock(@Comment(value = "源方块") Block block){
         return block.toItem();
     }
     //-设置物品数量*
@@ -239,11 +280,13 @@ public class BlockItemManager extends BaseManager {
     //-获取物品名称*
     //-物品不可破坏*
     @Deprecated
+    @Comment(value = "此函数已弃用")
     public void setItemProperty(Item item, Integer data, Integer count, Boolean unbreakable, String name, String lore, String nbt) {
 
     }
     //未完成-获取工具种类*
-    public String getItemLore(Item item){
+    @Comment(value = "获取物品的Lore标签内容，多行用;分割")
+    public String getItemLore(@Comment(value = "物品对象") Item item){
         String string="";
         for(String a:item.getLore()){
             string+=a+";";
@@ -251,29 +294,39 @@ public class BlockItemManager extends BaseManager {
         return string;
     }
     //添加创造物品栏
-    public void addToCreativeBar(Item item){
+    @Comment(value = "将指定物品对象添加到创造模式物品栏中")
+    public void addToCreativeBar(@Comment(value = "物品对象") Item item){
         if(!Item.isCreativeItem(item)){
             Item.addCreativeItem(item);
         }
     }
-    public void setItemLore(Item item,String string){
+    @Comment(value = "设置物品的lore标签内容，多行;分割")
+    public void setItemLore(@Comment(value = "物品对象") Item item
+            ,@Comment(value = "要设置的lore内容") String string){
         item.setLore(string.split(";"));
     }
     //-无序合成
-    public void addShapelessCraft(Item[] inputs,Item output){
+    @Comment(value = "添加无序合成")
+    public void addShapelessCraft(@Comment(value = "原料物品数组，需使用`Java.to`函数进行转换") Item[] inputs
+            ,@Comment(value = "产物物品对象") Item output){
         Server.getInstance().addRecipe(new ShapelessRecipe(
                 UUID.randomUUID().toString(),99,output,Arrays.asList(inputs)
         ));
         Server.getInstance().getCraftingManager().rebuildPacket();
     }
     //-冶炼合成
-    public void addFurnaceCraft(Item input,Item output){
+    @Comment(value = "添加熔炉冶炼合成")
+    public void addFurnaceCraft(@Comment(value = "原料物品对象") Item input
+            ,@Comment(value = "产物物品对象") Item output){
         Server.getInstance().addRecipe(new FurnaceRecipe(output,input));
         Server.getInstance().getCraftingManager().rebuildPacket();
         Loader.furnaceMap.put(input,output);
     }
     //-有序合成
-    public void addShapedCraft(String[] shape,Item output,Item[] append){
+    @Comment(value = "添加有序合成，不推荐使用")
+    public void addShapedCraft(@Comment(value = "合成形状字符串，需使用`Java.to`函数进行转换") String[] shape
+            ,@Comment(value = "产物") Item output
+            ,@Comment(value = "追加返回产物") Item[] append){
         if(shape[2].equals("   ")){
             String[] tmp=shape;
             shape=new String[]{tmp[0],tmp[1]};
@@ -338,49 +391,94 @@ public class BlockItemManager extends BaseManager {
         Server.getInstance().addRecipe(recipe);
         Server.getInstance().getCraftingManager().rebuildPacket();
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第个字母对应的物品对象") Item i1){
         this.addShapedCraft(shape, output, s1, i1, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, null, null, null, null, null, null, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, null, null, null, null, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4,String s5,Item i5){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4
+            ,@Comment(value = "shape中的第5个字母") String s5,@Comment(value = "第5个字母对应的物品对象") Item i5){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, null, null, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4,String s5,Item i5,String s6,Item i6){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4
+            ,@Comment(value = "shape中的第5个字母") String s5,@Comment(value = "第5个字母对应的物品对象") Item i5
+            ,@Comment(value = "shape中的第6个字母") String s6,@Comment(value = "第6个字母对应的物品对象") Item i6){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, null, null, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
-            ,String s7,Item i7){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4
+            ,@Comment(value = "shape中的第5个字母") String s5,@Comment(value = "第5个字母对应的物品对象") Item i5
+            ,@Comment(value = "shape中的第6个字母") String s6,@Comment(value = "第6个字母对应的物品对象") Item i6
+            ,@Comment(value = "shape中的第7个字母") String s7,@Comment(value = "第7个字母对应的物品对象") Item i7){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, s7, i7, null, null, null, null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
-            ,String s7,Item i7,String s8,Item i8){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4
+            ,@Comment(value = "shape中的第5个字母") String s5,@Comment(value = "第5个字母对应的物品对象") Item i5
+            ,@Comment(value = "shape中的第6个字母") String s6,@Comment(value = "第6个字母对应的物品对象") Item i6
+            ,@Comment(value = "shape中的第7个字母") String s7,@Comment(value = "第7个字母对应的物品对象") Item i7
+            ,@Comment(value = "shape中的第8个字母") String s8,@Comment(value = "第8个字母对应的物品对象") Item i8){
         this.addShapedCraft(shape, output, s1, i1, s2, i2, s3, i3, s4, i4, s5, i5, s6, i6, s7, i7, s8, i8,null,null);
     }
-    public void addShapedCraft(String shape,Item output
-            ,String s1,Item i1,String s2,Item i2,String s3,Item i3
-            ,String s4,Item i4,String s5,Item i5,String s6,Item i6
-            ,String s7,Item i7,String s8,Item i8,String s9,Item i9){
+    @Comment(value = "添加有序合成")
+    public void addShapedCraft(@Comment(value = "用一个字母或数字代表合成原材料的摆放方式，用\"|\"来连接三行，用空格来占格，如果最后的一行或列没有东西，请不要保留\n例如石镐:`addShapedCraft(\"SSS| I | I \",石镐物品对象,\"S\",圆石物品对象,\"I\",木棍物品对象)`，工作台:`addShapedCraft(\"MM|MM\",工作台物品,\"M\",橡木木板物品)`") String shape
+            ,@Comment(value = "合成产物") Item output
+            ,@Comment(value = "shape中的第1个字母") String s1,@Comment(value = "第1个字母对应的物品对象") Item i1
+            ,@Comment(value = "shape中的第2个字母") String s2,@Comment(value = "第2个字母对应的物品对象") Item i2
+            ,@Comment(value = "shape中的第3个字母") String s3,@Comment(value = "第3个字母对应的物品对象") Item i3
+            ,@Comment(value = "shape中的第4个字母") String s4,@Comment(value = "第4个字母对应的物品对象") Item i4
+            ,@Comment(value = "shape中的第5个字母") String s5,@Comment(value = "第5个字母对应的物品对象") Item i5
+            ,@Comment(value = "shape中的第6个字母") String s6,@Comment(value = "第6个字母对应的物品对象") Item i6
+            ,@Comment(value = "shape中的第7个字母") String s7,@Comment(value = "第7个字母对应的物品对象") Item i7
+            ,@Comment(value = "shape中的第8个字母") String s8,@Comment(value = "第8个字母对应的物品对象") Item i8
+            ,@Comment(value = "shape中的第9个字母") String s9,@Comment(value = "第9个字母对应的物品对象") Item i9){
         CharObjectHashMap<Item> ingredients = new CharObjectHashMap<>();
         if(s1!=null)ingredients.put(s1.charAt(0),i1);
         if(s2!=null)ingredients.put(s2.charAt(0),i2);
@@ -399,23 +497,33 @@ public class BlockItemManager extends BaseManager {
         Server.getInstance().getCraftingManager().rebuildPacket();
     }
     //添加附魔
-    public void addItemEnchant(Item item,int id,int level){
+    @Comment(value = "为物品对象添加附魔")
+    public void addItemEnchant(@Comment(value = "物品对象") Item item
+            ,@Comment(value = "附魔id") int id
+            ,@Comment(value = "附魔等级") int level){
         Enchantment enchantment = Enchantment.getEnchantment(id);
         enchantment.setLevel(level);
         addEnchantment(item,level,enchantment);
     }
     //获取附魔
-    public Enchantment[] getItemEnchant(Item item){
+    @Comment(value = "获取物品对象的所有附魔属性对象")
+    public Enchantment[] getItemEnchant(@Comment(value = "物品对象") Item item){
         return item.getEnchantments();
     }
-    public int getEnchantID(Enchantment enchantment){
+    @Comment(value = "获取附魔对象的id")
+    public int getEnchantID(@Comment(value = "附魔对象") Enchantment enchantment){
         return enchantment.getId();
     }
-    public int getEnchantLevel(Enchantment enchantment){
+    @Comment(value = "获取附魔对象的等级")
+    public int getEnchantLevel(@Comment(value = "附魔等级") Enchantment enchantment){
         return enchantment.getLevel();
     }
     //比较物品
-    public boolean isSame(Item item1,Item item2,boolean damage,boolean nbt){
+    @Comment(value = "比较两个物品对象内容是否相同")
+    public boolean isSame(@Comment(value = "一个物品对象") Item item1
+            ,@Comment(value = "另一个物品对象") Item item2
+            ,@Comment(value = "是否比较特殊值") boolean damage
+            ,@Comment(value = "是否比较nbt") boolean nbt){
         return item1.equals(item2,damage,nbt);
     }
     //makeenchant
@@ -461,35 +569,51 @@ public class BlockItemManager extends BaseManager {
         item.setNamedTag(tag);
     }
     //添加BN合成
-    public void addBNCraft(String type,String description,Item[] input,Item[] output,int delay,double percent){
+    @Comment(value = "添加bn高级合成")
+    public void addBNCraft(@Comment(value = "合成类别，可自定义") String type
+            ,@Comment(value = "对合成的描述") String description
+            ,@Comment(value = "原料物品对象数组，需要使用`Java.to`函数转换") Item[] input
+            ,@Comment(value = "合成的产物数组，需要使用`Java.to`函数转换") Item[] output
+            ,@Comment(value = "合成耗时") int delay
+            ,@Comment(value = "合成成功率") double percent){
         Loader.bnCrafting.addCraft(type, description, input, output, delay, percent);
     }
     //打开BN合成
-    public void openBNCraftForPlayer(String type, Player player){
+    @Comment(value = "为指定玩家打开指定类别的bn合成")
+    public void openBNCraftForPlayer(@Comment(value = "合成类别") String type
+            ,@Comment(value = "为哪个玩家打开") Player player){
         Loader.bnCrafting.showTypeToPlayer(type, player);
     }
     //获取nbt字符串
-    public String getNBTString(Item item){
+    @Comment(value = "获取物品对象的nbt字符串")
+    public String getNBTString(@Comment(value = "物品对象") Item item){
         return Utils.bytesToHexString(item.getCompoundTag());
     }
     //给物品注入nbt字符串
-    public void putinNBTString(Item item,String str){
+    @Comment(value = "把nbt字符串包含的物品信息注入到物品对象上")
+    public void putinNBTString(@Comment(value = "物品对象") Item item,@Comment(value = "nbt字符串") String str){
         item.setCompoundTag(Utils.hexStringToBytes(str));
     }
     //设置物品颜色
-    public void setItemColor(Item item,int r,int g,int b){
+    @Comment(value = "设置物品的颜色")
+    public void setItemColor(@Comment(value = "物品对象") Item item,int r,int g,int b){
         CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
         compoundTag.putInt("customColor", r*65536+g*256+b);
         item.setCompoundTag(compoundTag);
     }
     //设置不可破坏
-    public void setItemUnbreakable(Item item,boolean unbreakable){
+    @Comment(value = "设置物品是否无限耐久")
+    public void setItemUnbreakable(@Comment(value = "物品对象") Item item
+            ,@Comment(value = "是否无限耐久") boolean unbreakable){
         CompoundTag compoundTag = item.hasCompoundTag()? item.getNamedTag() : new CompoundTag();
         compoundTag.putBoolean("Unbreakable",unbreakable);
         item.setCompoundTag(compoundTag);
     }
     //添加钓鱼产物
-    public void addFishingResult(String type,Item item,double chance){
+    @Comment(value = "添加钓鱼可能产出的产物")
+    public void addFishingResult(@Comment(value = "种类，可以为TREASURES/JUNKS/FISH") String type
+            ,@Comment(value = "新增的产物物品") Item item
+            ,@Comment(value = "概率权重") double chance){
         Selector parent;
         switch (type){
             case "TREASURES":
@@ -572,8 +696,17 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //动态生成类并注册新的固体方块
-    public void registerSolidBlock(int id,String name,double hardness,double resistance,int toolType
-            ,boolean isSilkTouchable,int dropMinExp,int dropMaxExp,int mineTier){
+    @Comment(value = "注册新的自定义方块")
+    public void registerSolidBlock(
+            @Comment(value = "新方块的id") int id
+            ,@Comment(value = "新方块的名称") String name
+            ,@Comment(value = "新方块的硬度") double hardness
+            ,@Comment(value = "新方块的抗爆炸度") double resistance
+            ,@Comment(value = "用于开采的工具种类，0-无,1-剑,2-铲,3-镐,4-斧,5-剪刀") int toolType
+            ,@Comment(value = "是否允许被精准采集") boolean isSilkTouchable
+            ,@Comment(value = "挖掘后掉落的最小经验") int dropMinExp
+            ,@Comment(value = "挖掘后掉落的最大经验") int dropMaxExp
+            ,@Comment(value = "新方块的挖掘等级，0-空手,1-木,2-金,3-石,4-铁,5-钻石") int mineTier){
         try {
             //获取类加载器并导入类路径
             ClassPool classPool = ClassPool.getDefault();
@@ -615,10 +748,15 @@ public class BlockItemManager extends BaseManager {
         }
     }
     //动态生成类并注册新的简单物品
-    public void registerSimpleItem(int id,String name){
+    @Comment(value = "注册新的物品")
+    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name){
         this.registerSimpleItem(id, name, 64);
     }
-    public void registerSimpleItem(int id,String name,int stackSize){
+    @Comment(value = "注册新的物品")
+    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;

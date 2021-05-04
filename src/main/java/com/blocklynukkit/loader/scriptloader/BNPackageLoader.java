@@ -135,12 +135,18 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
     public void runPlugins(LinkedHashMap<String,String> plugins){
         for(Map.Entry<String,String> entry:plugins.entrySet()){
             if(entry.getKey().endsWith(".js")){
-                new JavaScriptLoader(plugin).putEngine(entry.getKey(),entry.getValue());
+                JavaScriptLoader loader = new JavaScriptLoader(plugin);
+                loader.pragmas = loader.getPragma(entry.getValue());
+                loader.putEngine(entry.getKey(),entry.getValue());
             }else if(entry.getKey().endsWith(".lua")){
-                new LuaLoader(plugin).putEngine(entry.getKey(),entry.getValue());
+                LuaLoader loader = new LuaLoader(plugin);
+                loader.pragmas = loader.getPragma(entry.getValue());
+                loader.putEngine(entry.getKey(),entry.getValue());
             }else if(entry.getKey().endsWith(".py")){
                 if(!plugins.containsKey("PyBN")){
-                    new PythonLoader(plugin).putEngine(entry.getKey(),entry.getValue());
+                    PythonLoader loader = new PythonLoader(plugin);
+                    loader.pragmas = loader.getPragma(entry.getValue());
+                    loader.putEngine(entry.getKey(),entry.getValue());
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         getlogger().warning("无法加载:" + entry.getKey()+"! 缺少python依赖库");
@@ -153,7 +159,9 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
                 }
             }else if(entry.getKey().endsWith(".php")){
                 if(!plugins.containsKey("PHPBN")){
-                    new PHPLoader(plugin).putEngine(entry.getKey(),entry.getValue());
+                    PHPLoader loader = new PHPLoader(plugin);
+                    loader.pragmas = loader.getPragma(entry.getValue());
+                    loader.putEngine(entry.getKey(),entry.getValue());
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         getlogger().warning("无法加载:" + entry.getKey()+"! 缺少PHP依赖库");

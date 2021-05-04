@@ -27,6 +27,7 @@ import cn.nukkit.network.protocol.ChangeDimensionPacket;
 import cn.nukkit.network.protocol.PlayStatusPacket;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.OceanGenerator;
 import com.blocklynukkit.loader.other.generator.SkyLand;
@@ -58,7 +59,10 @@ public class LevelManager extends BaseManager {
         Generator.addGenerator(SkyLand.class,"skyland_bn3",Generator.TYPE_INFINITE);
         Generator.addGenerator(OceanGenerator.class,"ocean_bn4",Generator.TYPE_INFINITE);
     }
-    public void genLevel(String name, long seed, String generator){
+    @Comment(value = "生成新世界")
+    public void genLevel(@Comment(value = "新世界名") String name
+            ,@Comment(value = "种子") long seed
+            ,@Comment(value = "生成器名称，可选NORMAL/FLAT/NETHER/VOID/OCEAN/SKYLAND") String generator){
         switch(generator){
             case "FLAT":
                 Server.getInstance().generateLevel(name,seed, Flat.class);
@@ -101,6 +105,7 @@ public class LevelManager extends BaseManager {
         }
 
     }
+    @Comment(value = "设置镜像天域生成器参数，详见bnwiki#编程开发文档")
     public void setSkyLandGenerator(int seaHeight,int movey,boolean enableOre,
                                     int coalcount,int coalsize,int coalmin,int coalmax,
                                     int ironcount,int ironsize,int ironmin,int ironmax,
@@ -185,7 +190,8 @@ public class LevelManager extends BaseManager {
         map.put("andesite_option_max",andesitemax);
         skylandoptions=map;
     }
-    public void setOceanGenerator(int seaLevel){
+    @Comment(value = "设置海洋世界生成器参数")
+    public void setOceanGenerator(@Comment(value = "海平面高度y") int seaLevel){
         OceanSeaLevel=seaLevel;
     }
     public static void dosaveSkyLandGeneratorSettings(){
@@ -218,21 +224,25 @@ public class LevelManager extends BaseManager {
             OceanSeaLevel = config.getInt("OceanSeaLevel");
         }
     }
-    public void loadLevel(String string){
+    @Comment(value = "强制加载世界")
+    public void loadLevel(@Comment(value = "世界名") String string){
         Server.getInstance().loadLevel(string);
     }
     //here 4/23
+    @Comment(value = "获取服务器上的所有世界")
     public List<Level> getServerLevels(){
         return new ArrayList<>(Server.getInstance().getLevels().values());
     }
-
-    public void loadScreenTP(Player player,Position pos){
+    @Comment(value = "跨维度传送玩家(有维度加载动画)")
+    public void loadScreenTP(@Comment(value = "玩家对象") Player player,@Comment(value = "目的地") Position pos){
         this.loadScreenTP(player, pos, 60,false);
     }
-    public void loadScreenTP(Player player,Position pos,int loadScreenTick){
+    @Comment(value = "跨维度传送玩家(有维度加载动画)")
+    public void loadScreenTP(@Comment(value = "玩家对象") Player player,@Comment(value = "目的地") Position pos,@Comment(value = "跨纬度加载界面停留时间(刻)") int loadScreenTick){
         this.loadScreenTP(player, pos, loadScreenTick,false);
     }
-    public void loadScreenTP(Player player,Position pos,int loadScreenTick,boolean finish){
+    @Comment(value = "跨维度传送玩家(有维度加载动画)")
+    public void loadScreenTP(@Comment(value = "玩家对象") Player player,@Comment(value = "目的地") Position pos,@Comment(value = "跨纬度加载界面停留时间(刻)") int loadScreenTick,@Comment(value = "是否为最后一阶段") boolean finish){
         boolean has = false;
         for (File file:new File(Server.getInstance().getDataPath()+"/worlds/").listFiles()){
             if(file.getName().equals("loadScreenWorld")&&file.isDirectory()){
@@ -285,27 +295,33 @@ public class LevelManager extends BaseManager {
         }, 4+loadScreenTick);
 
     }
-    public void regenerateChunk(Position pos){
+    @Comment(value = "重新生成坐标所在区块区块")
+    public void regenerateChunk(@Comment(value = "坐标") Position pos){
         pos.level.setChunk((int)pos.x>>4,(int)pos.z>>4, Chunk.getEmptyChunk((int)pos.x>>4,(int)pos.z>>4));
     }
-    public void clearChunk(Position pos){
+    @Comment(value = "清空坐标所在区块")
+    public void clearChunk(@Comment(value = "坐标") Position pos){
         int sx = (int)pos.x;int sz=(int)pos.z;
         int cx = (sx>>4)<<4;int cz = (sz>>4)<<4;
         for(int x=0;x<16;x++) for(int y=0;y<256;y++) for(int z=0;z<16;z++){
             pos.level.setBlockAt(cx+x,y,cz+z,0,0);
         }
     }
-
-    public void defineChunkRenderByName(String forLevel,String callback){
+    @Comment(value = "为指定名称的世界加载器绑定世界渲染器")
+    public void defineChunkRenderByName(@Comment(value = "世界名") String forLevel
+            ,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)") String callback){
         Loader.levelRenderList.add(new LevelNameRender(forLevel,callback));
         Collections.sort(Loader.levelRenderList);
     }
-    public void defineChunkRenderByName(String forLevel,String callback,int priority){
+    public void defineChunkRenderByName(@Comment(value = "世界名") String forLevel,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)") String callback,@Comment(value = "权重，越高越优先调用") int priority){
         Loader.levelRenderList.add(new LevelNameRender(forLevel,callback,priority));
         Collections.sort(Loader.levelRenderList);
     }
-
-    public void drawPic(Position pos1,Position pos2,String img,int faceData){
+    @Comment(value = "在指定坐标根据图片绘制地图画")
+    public void drawPic(@Comment(value = "地图画绘制起始点") Position pos1
+            ,@Comment(value = "地图画绘制终点") Position pos2
+            ,@Comment(value = "地图画的图片路径") String img
+            ,@Comment(value = "单个地图的朝向") int faceData){
         try {
             Level level = pos1.getLevel();
             int xl = (int)Math.abs(pos1.x-pos2.x) + 1;

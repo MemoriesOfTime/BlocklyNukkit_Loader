@@ -4,22 +4,110 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.utils.StringUtils;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.BNPackageLoader;
 import com.google.gson.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class PackageCommand extends Command {
+    private static final String tsHead = "type double = number;\n" +
+            "type float = number;\n" +
+            "type byte = 0xff;\n" +
+            "type short = number;\n" +
+            "type int = number;\n" +
+            "type long = number;\n" +
+            "type char = string;\n" +
+            "declare var server : cn.nukkit.Server;\n" +
+            "declare var plugin : cn.nukkit.plugin.Plugin;\n" +
+            "declare var logger : com.blocklynukkit.loader.other.BNLogger;\n" +
+            "declare namespace java.lang{\n" +
+            "    class Object{}\n" +
+            "    type String = string;\n" +
+            "    type Integer = number;\n" +
+            "    type Long = number;\n" +
+            "    type Float = number;\n" +
+            "    type Double = number;\n" +
+            "    type Short = number;\n" +
+            "    type Byte = 0xff;\n" +
+            "    type Character = string;\n" +
+            "}\n" +
+            "declare namespace java.math{\n" +
+            "    type BigDecimal = number;\n" +
+            "    type BigInteger = number;\n" +
+            "}\n" +
+            "/** 一个来自Java的类 */\n" +
+            "/**\n" +
+            " * @version 1.2.9.2\n" +
+            " */\n" +
+            "interface Class{}\n" +
+            "/**\n" +
+            " * @version 1.2.9.2\n" +
+            " * @param {java.lang.String} 要导入的模块或者java类的名称\n" +
+            " */\n" +
+            "declare function require(className:java.lang.String): Class;\n" +
+            "/**\n" +
+            " * @version 1.2.9.2\n" +
+            " */\n" +
+            "declare namespace Java{\n" +
+            "    /** \n" +
+            "     * 将一个java类导入到js中\n" +
+            "     * @param {string} className java类的全类名\n" +
+            "     */\n" +
+            "    function type(className: java.lang.String): Class;\n" +
+            "    /**\n" +
+            "     * 用js继承并拓展一个java类\n" +
+            "     * @param {Class} clazz 被继承拓展的java类对象\n" +
+            "     * @param {any} methods 包含拓展函数的js对象\n" +
+            "     */\n" +
+            "    function extend(clazz: Class, methods: any): Class;\n" +
+            "    /**\n" +
+            "     * 将java对象转为合适的js数组或对象\n" +
+            "     * @param {Class} input 要被转换的java对象\n" +
+            "     * @example Java.from(java数组) = 对应的js数组\n" +
+            "     * @example Java.from(javaMap) = 对应js对象\n" +
+            "     */\n" +
+            "    function from(input: any): any;\n" +
+            "    /**\n" +
+            "     * 将java对象转为合适的js数组或对象\n" +
+            "     * @param {Class} input 要被转换的java对象\n" +
+            "     * @example Java.from(java数组) = 对应的js数组\n" +
+            "     * @example Java.from(javaMap) = 对应js对象\n" +
+            "     */\n" +
+            "    function from(input: java.util.List): Array<any>;\n" +
+            "    /**\n" +
+            "     * 将java对象转为合适的js数组或对象\n" +
+            "     * @param {Class} input 要被转换的java对象\n" +
+            "     * @example Java.from(java数组) = 对应的js数组\n" +
+            "     * @example Java.from(javaMap) = 对应js对象\n" +
+            "     */\n" +
+            "    function from(input: java.util.Map): JSON;\n" +
+            "    /**\n" +
+            "     * 将js数组或对象转为合适的java对象\n" +
+            "     * @param {any} input 要被转换的js对象\n" +
+            "     * @param {(Class|string)} 要转换到的java类\n" +
+            "     * @example Java.to(new Array()) = 对应的java数组\n" +
+            "     * @example Java.to(new Object()) = 对应的javaMap\n" +
+            "     */\n" +
+            "    function to(input: any,toClass: Class|string): any;\n" +
+            "    /**\n" +
+            "     * 将js数组或对象转为合适的java对象\n" +
+            "     * @param {any} input 要被转换的js对象\n" +
+            "     * @param {(Class|string)} 要转换到的java类\n" +
+            "     * @example Java.to(new Array()) = 对应的java数组\n" +
+            "     * @example Java.to(new Object()) = 对应的javaMap\n" +
+            "     */\n" +
+            "    function to(input: Array<any>,toClass: Class|string): java.util.List;\n" +
+            "}";
     public PackageCommand() {
         super("bnpackage","display previous error stacktrace","bnpm <install/update/build/load> <args>",new String[]{"bnp","bnpack","bnpm"});
         this.setPermission("blocklynukkit.opall");
@@ -217,8 +305,293 @@ public class PackageCommand extends Command {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }else if(args[0].equalsIgnoreCase("ts")){
+                Map<String, JsonObject> defs = new HashMap<>();
+                String output = ""+tsHead;
+                String manifest = Utils.readToString(args[1]);
+                for(String each:manifest.split(";")){
+                    defs.put(getBaseObjName(each),generateDefinition(each));
+                }
+                for(Map.Entry<String, JsonObject> entry:defs.entrySet()){
+                    System.out.println("正在处理"+entry.getKey());
+                    String eachOutput = "";
+                    String version = entry.getValue().get("version").getAsString();
+                    if(!entry.getKey().contains(".")){
+                        eachOutput = "/**\n" +
+                                " * @version " + version + "\n" +
+                                " */\ndeclare namespace "+entry.getKey()+"{" +
+                                "\n";
+                        JsonObject fields = entry.getValue().get("definitions").getAsJsonObject().get("fields").getAsJsonObject();
+                        for(Map.Entry<String,JsonElement> field:fields.entrySet()){
+                            eachOutput += ("    /** "+field.getValue().getAsJsonObject().get("comment").getAsString()+" */\n    var "+field.getKey()+": "+field.getValue().getAsJsonObject().get("type").getAsString()+";\n");
+                        }
+                        JsonObject methods = entry.getValue().get("definitions").getAsJsonObject().get("methods").getAsJsonObject();
+                        for(Map.Entry<String,JsonElement> method:methods.entrySet()){
+                            JsonArray list = method.getValue().getAsJsonArray();
+                            for(JsonElement tmpInfo:list){
+                                JsonObject info = (JsonObject) tmpInfo;
+                                //加函数注释
+                                eachOutput += ("    /**\n     * "+info.get("comment").getAsString()+"\n");
+                                for(JsonElement param:info.get("parameters").getAsJsonArray()){
+                                    JsonObject detailParam = param.getAsJsonObject();
+                                    eachOutput+=("     * @param {"+detailParam.get("type").getAsString()+"} "+paramConvert(detailParam.get("name").getAsString())+" "+detailParam.get("comment").getAsString()+"\n");
+                                }
+                                eachOutput += ("     */\n");
+                                //加函数声明
+                                eachOutput += ("    function "+method.getKey()+"(");
+                                for(JsonElement param:info.get("parameters").getAsJsonArray()){
+                                    JsonObject detailParam = param.getAsJsonObject();
+                                    eachOutput+=((detailParam.get("varargs").getAsBoolean()?"...":"")+paramConvert(detailParam.get("name").getAsString())+": "+detailParam.get("type").getAsString()+",");
+                                }
+                                eachOutput += ("): "+info.get("returnType").getAsString()+";\n");
+                                if(info.get("parameterCount").getAsInt() != 0)
+                                    eachOutput = Utils.replaceLast(eachOutput,",","");
+                            }
+                        }
+                        eachOutput+=("}\n");
+                        output+=eachOutput;
+                    }else{
+                        String namespace = entry.getKey().substring(0,entry.getKey().lastIndexOf("."));
+                        String className = entry.getKey().substring(entry.getKey().lastIndexOf(".")+1);
+                        eachOutput = "declare namespace "+namespace+"{\n" +
+                                "    "+(entry.getValue().get("abstract").getAsBoolean()?"abstract":"")+" class "+className+" extends "+entry.getValue().get("extends").getAsString()+"{\n";
+                        JsonObject fields = entry.getValue().get("definitions").getAsJsonObject().get("fields").getAsJsonObject();
+                        for(Map.Entry<String,JsonElement> field:fields.entrySet()){
+                            eachOutput += ("        /** "+field.getValue().getAsJsonObject().get("comment").getAsString()+" */\n        "+field.getKey()+": "+field.getValue().getAsJsonObject().get("type").getAsString()+";\n");
+                        }
+                        JsonObject methods = entry.getValue().get("definitions").getAsJsonObject().get("methods").getAsJsonObject();
+                        for(Map.Entry<String,JsonElement> method:methods.entrySet()){
+                            JsonArray list = method.getValue().getAsJsonArray();
+                            for(JsonElement tmpInfo:list){
+                                JsonObject info = (JsonObject) tmpInfo;
+                                //加函数注释
+                                eachOutput += ("        /**\n         * "+info.get("comment").getAsString()+"\n");
+                                for(JsonElement param:info.get("parameters").getAsJsonArray()){
+                                    JsonObject detailParam = param.getAsJsonObject();
+                                    eachOutput+=("         * @param {"+detailParam.get("type").getAsString()+"} "+paramConvert(detailParam.get("name").getAsString())+" "+detailParam.get("comment").getAsString()+"\n");
+                                }
+                                eachOutput += ("         */\n");
+                                //加函数声明
+                                eachOutput += ("        "+info.get("modifier").getAsString()
+                                        .replaceAll("final","")
+                                        .replaceAll("synchronized","")
+                                        .replaceAll("transient","")
+                                        .replaceAll("native","")
+                                        .replaceAll("volatile","")+" "+method.getKey()+"(");
+                                for(JsonElement param:info.get("parameters").getAsJsonArray()){
+                                    JsonObject detailParam = param.getAsJsonObject();
+                                    eachOutput+=((detailParam.get("varargs").getAsBoolean()?"...":"")+paramConvert(detailParam.get("name").getAsString())+": "+detailParam.get("type").getAsString()+",");
+                                }
+                                eachOutput += ("): "+info.get("returnType").getAsString()+";\n");
+                                if(info.get("parameterCount").getAsInt() != 0)
+                                    eachOutput = Utils.replaceLast(eachOutput,",","");
+                            }
+                        }
+                        eachOutput+=("    }\n}\n");
+                        output+=eachOutput;
+                    }
+                }
+                File dtsFile = new File("./plugins/dts/bn.d.ts");
+                File dtsFolder = new File("./plugins/dts");
+                if(!dtsFolder.exists())dtsFolder.mkdirs();
+                if(!dtsFile.exists()) {
+                    try {
+                        dtsFile.createNewFile();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                Utils.writeWithString(dtsFile,output);
             }
         }
         return false;
+    }
+    public JsonObject generateDefinition(String className){
+        class MethodDef implements Serializable{
+            String modifier;
+            String returnType;
+            int parameterCount;
+            Map<String,Object>[] parameters;
+            String comment;
+            public Map<String, Object> toMap(){
+                Map<String, Object> map = new HashMap<>();
+                map.put("modifier",modifier);
+                map.put("returnType",returnType);
+                map.put("parameterCount",parameterCount);
+                map.put("parameters",parameters);
+                map.put("comment",comment);
+                return map;
+            }
+        }
+        String originClassName = StringUtils.replace(className,"$","",1);
+        String superClassName = "java.lang.Object";
+        boolean isAbstract = false;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Map<String, List<Map<String, Object>>> info = new HashMap<>();
+        Map<String, Map<String, String>> fields = new HashMap<>();
+        List<Map<String,Object>> constructors = new ArrayList<>();
+        try {
+            Class clazz = Class.forName(className);
+            if(clazz.getSuperclass() != null)
+                superClassName = clazz.getSuperclass().getCanonicalName();
+            isAbstract = Modifier.isAbstract(clazz.getModifiers());
+            for(Constructor constructor:clazz.getDeclaredConstructors()){
+                Map<String, Object> con = new HashMap<>();
+                con.put("modifier",Modifier.toString(constructor.getModifiers()));
+                con.put("parameterCount",constructor.getParameterCount());
+                Map<String,Object>[] parameters = new HashMap[constructor.getParameterCount()];
+                for (int i = 0; i < parameters.length; i++) {
+                    Map<String,Object> tmp = new HashMap<>();
+                    for(Parameter parameter:constructor.getParameters()){
+                        tmp.put("name",parameter.getName());
+                        tmp.put("type",parameter.getType().getCanonicalName());
+                        tmp.put("varargs",parameter.isVarArgs());
+                        Comment comment = parameter.getAnnotation(Comment.class);
+                        if(comment!=null){
+                            tmp.put("comment",comment.value());
+                        }else{
+                            tmp.put("comment","");
+                        }
+                    }
+                    parameters[i] = tmp;
+                }
+                con.put("parameters",parameters);
+                Comment constructorComment = (Comment) constructor.getAnnotation(Comment.class);
+                if(constructorComment!=null){
+                    con.put("comment",constructorComment.value());
+                }else{
+                    con.put("comment","");
+                }
+                constructors.add(con);
+            }
+            for(Method method: clazz.getDeclaredMethods()) {
+                if (info.containsKey(method.getName())) {
+                    MethodDef methodDef = new MethodDef();
+                    methodDef.modifier = Modifier.toString(method.getModifiers());
+                    methodDef.returnType = method.getReturnType().getCanonicalName();
+                    methodDef.parameterCount = method.getParameterCount();
+                    Comment methodComment = method.getAnnotation(Comment.class);
+                    if(methodComment!=null)
+                        methodDef.comment = methodComment.value();
+                    else
+                        methodDef.comment = "";
+                    Map<String,Object>[] tmp = new HashMap[method.getParameterCount()];
+                    for (int i = 0; i < method.getParameterCount(); i++) {
+                        Parameter parameter = method.getParameters()[i];
+                        HashMap<String,Object> arg = new HashMap<>();
+                        arg.put("name",parameter.getName());
+                        arg.put("type",parameter.getType().getCanonicalName());
+                        arg.put("varargs",parameter.isVarArgs());
+                        Comment comment = parameter.getAnnotation(Comment.class);
+                        if(comment!=null)
+                            arg.put("comment",comment.value());
+                        else
+                            arg.put("comment","");
+                        tmp[i] = arg;
+                    }
+                    methodDef.parameters = tmp;
+                    List<Map<String, Object>> newArr = info.get(method.getName());
+                    newArr.add(methodDef.toMap());
+                    info.put(method.getName(), newArr);
+                } else {
+                    MethodDef methodDef = new MethodDef();
+                    methodDef.modifier = Modifier.toString(method.getModifiers());
+                    methodDef.returnType = method.getReturnType().getCanonicalName();
+                    methodDef.parameterCount = method.getParameterCount();
+                    Comment methodComment = method.getAnnotation(Comment.class);
+                    if(methodComment!=null)
+                        methodDef.comment = methodComment.value();
+                    else
+                        methodDef.comment = "";
+                    Map<String,Object>[] tmp = new HashMap[method.getParameterCount()];
+                    for (int i = 0; i < method.getParameterCount(); i++) {
+                        Parameter parameter = method.getParameters()[i];
+                        HashMap<String,Object> arg = new HashMap<>();
+                        arg.put("name",parameter.getName());
+                        arg.put("type",parameter.getType().getCanonicalName());
+                        arg.put("varargs",parameter.isVarArgs());
+                        Comment comment = parameter.getAnnotation(Comment.class);
+                        if(comment!=null){
+                            arg.put("comment",comment.value());
+                        }
+                        else{
+                            arg.put("comment","");
+                        }
+                        tmp[i] = arg;
+                    }
+                    methodDef.parameters = tmp;
+                    ArrayList<Map<String, Object>> newArr = new ArrayList<>();
+                    newArr.add(methodDef.toMap());
+                    info.put(method.getName(), newArr);
+                }
+            }
+            for(Field field:clazz.getDeclaredFields()){
+                Map<String, String> entry = new HashMap<>();
+                entry.put("modifier",Modifier.toString(field.getModifiers()));
+                entry.put("type",field.getType().getCanonicalName());
+                Comment comment = field.getAnnotation(Comment.class);
+                if(comment!=null){
+                    entry.put("comment",comment.value());
+                }else {
+                    entry.put("comment","");
+                }
+                fields.put(field.getName(),entry);
+            }
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+        Map<String,Object> out = new HashMap<>();
+        out.put("type",getBaseObjName(className).equals(className)?"class":"baseobj");
+        out.put("version",Loader.plugin.getDescription().getVersion());
+        out.put("extends",superClassName);
+        out.put("abstract",isAbstract);
+        Map<String,Object> defs = new HashMap<>();
+        defs.put("name",getBaseObjName(className));
+        defs.put("constructors",constructors);
+        defs.put("methods",info);
+        defs.put("fields",fields);
+        out.put("definitions",defs);
+        File f = new File("./definitions/"+getBaseObjName(className)+".json");
+        File folders = new File("./definitions");
+        if(!folders.exists()){
+            folders.exists();
+        }
+        if(!f.exists()) {
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Utils.writeWithString(f,gson.toJson(out));
+        return (JsonObject) gson.toJsonTree(out);
+    }
+    private String getBaseObjName(String className){
+        if(!className.startsWith("com.blocklynukkit.loader.script")){
+            return className;
+        }else {
+            className = StringUtils.replace(className,"com.blocklynukkit.loader.script.","",1);
+        }
+        switch (className){
+            case "AlgorithmManager":return "algorithm";
+            case "BlockItemManager":return "blockitem";
+            case "DatabaseManager":return "database";
+            case "EntityManager":return "entity";
+            case "FunctionManager":return "manager";
+            case "GameManager":return "gameapi";
+            case "InventoryManager":return "inventory";
+            case "LevelManager":return "world";
+            case "NotemusicManager":return "notemusic";
+            case "ParticleManager":return "particle";
+            case "WindowManager":return "window";
+            default:return className;
+        }
+    }
+    private String paramConvert(String param){
+        switch (param){
+            case "var": return "_var";
+            case "function": return "_function";
+            default: return param;
+        }
     }
 }

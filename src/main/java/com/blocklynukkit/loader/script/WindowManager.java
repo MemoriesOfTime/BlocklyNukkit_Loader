@@ -11,19 +11,16 @@ import cn.nukkit.form.response.FormResponseModal;
 import cn.nukkit.form.response.FormResponseSimple;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
-import cn.nukkit.inventory.BrewingInventory;
 import cn.nukkit.network.protocol.ShowCreditsPacket;
 import cn.nukkit.network.protocol.ShowProfilePacket;
 import cn.nukkit.utils.DummyBossBar;
-import com.blocklynukkit.loader.other.packets.ShowStoreOfferPacket;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
@@ -40,8 +37,6 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
 import java.io.File;
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -57,8 +52,9 @@ public class WindowManager extends BaseManager {
     public String toString() {
         return "BlocklyNukkit Based Object";
     }
-
-    public void updateAllScoreBoard(String title,String text){
+    @Comment(value = "更新所有玩家的计分板内容")
+    public void updateAllScoreBoard(@Comment(value = "计分板标题") String title
+            ,@Comment(value = "计分板内容，以;分割多行") String text){
         for (Player p: Server.getInstance().getOnlinePlayers().values()){
             if(title.contains("%"))
                 title = PlaceholderAPI.getInstance().translateString(title,p);
@@ -80,7 +76,8 @@ public class WindowManager extends BaseManager {
             }
         }
     }
-    public void updateOneScoreBoard(String title,String text,Player p){
+    @Comment(value = "更新单个玩家的计分板内容")
+    public void updateOneScoreBoard(@Comment(value = "计分板标题") String title,@Comment(value = "计分板内容，以;分割多行") String text,@Comment(value = "要更新计分板内容的玩家") Player p){
         if(title.contains("%"))
             title = PlaceholderAPI.getInstance().translateString(title,p);
         if(text.contains("%"))
@@ -101,25 +98,28 @@ public class WindowManager extends BaseManager {
             boards.put(p.getName(),sb);
         }
     }
-
-    public Simple getSimpleWindowBuilder(String title,String context){
+    @Comment(value = "获取新的简单窗口构建器")
+    public Simple getSimpleWindowBuilder(@Comment(value = "标题") String title,@Comment(value = "文字") String context){
         Simple simple=new Simple();
         simple.setTitle(title);
         simple.setContext(context);
         return simple;
     }
-    public Modal getModalWindowBuilder(String title,String context){
+    @Comment(value = "获取新的对话框构建器")
+    public Modal getModalWindowBuilder(@Comment(value = "标题") String title,@Comment(value = "文字") String context){
         Modal modal=new Modal();
         modal.setContext(context);
         modal.setTitle(title);
         return modal;
     }
-    public Custom getCustomWindowBuilder(String title){
+    @Comment(value = "获取新的自定义窗口构建器")
+    public Custom getCustomWindowBuilder(@Comment(value = "标题") String title){
         Custom custom=new Custom();
         custom.setTitle(title);
         return custom;
     }
-    public String getEventResponseText(PlayerFormRespondedEvent event){
+    @Comment(value = "从玩家操作窗口事件获取简单窗口被点击按钮的文字")
+    public String getEventResponseText(@Comment(value = "玩家操作窗口事件") PlayerFormRespondedEvent event){
         if(event==null){
             return "NULL";
         }else if(event.wasClosed()){
@@ -132,7 +132,8 @@ public class WindowManager extends BaseManager {
             return "NULL";
         }
     }
-    public String getEventResponseModal(PlayerFormRespondedEvent event){
+    @Comment(value = "从玩家操作窗口事件获取对话框被点击按钮的文字")
+    public String getEventResponseModal(@Comment(value = "玩家操作窗口事件") PlayerFormRespondedEvent event){
         if(event==null){
             return "NULL";
         }else if(event.wasClosed()){
@@ -145,7 +146,8 @@ public class WindowManager extends BaseManager {
             return "NULL";
         }
     }
-    public int getEventResponseIndex(PlayerFormRespondedEvent event){
+    @Comment(value = "从玩家操作窗口事件获取对话框被点击按钮的索引")
+    public int getEventResponseIndex(@Comment(value = "玩家操作窗口事件") PlayerFormRespondedEvent event){
         if(event==null||event.wasClosed()){
             return -2147483648;
         }
@@ -157,7 +159,10 @@ public class WindowManager extends BaseManager {
             return -2147483648;
         }
     }
-    public String getEventCustomVar(PlayerFormRespondedEvent event,int id,String mode){
+    @Comment(value = "从玩家操作窗口事件获取高级窗口被操作元素的内容")
+    public String getEventCustomVar(@Comment(value = "玩家操作窗口事件") PlayerFormRespondedEvent event
+            ,@Comment(value = "元素索引") int id
+            ,@Comment(value = "元素种类，可为input/toggle/dropdown/slider/stepslider") String mode){
         if(event==null){
             return "NULL";
         }else if(event.wasClosed()){
@@ -178,7 +183,10 @@ public class WindowManager extends BaseManager {
             return "NULL";
         }
     }
-    public String getEventCustomVar(PlayerSettingsRespondedEvent event, int id, String mode){
+    @Comment(value = "从玩家操作窗口事件获取高级窗口被操作元素的内容")
+    public String getEventCustomVar(@Comment(value = "玩家操作服务器设置事件") PlayerSettingsRespondedEvent event
+            ,@Comment(value = "元素索引") int id
+            ,@Comment(value = "元素种类，可为input/toggle/dropdown/slider/stepslider") String mode){
         FormResponseCustom custom=(FormResponseCustom)event.getResponse();
         if(mode.equals("input")){
             return custom.getInputResponse(id);
@@ -194,7 +202,10 @@ public class WindowManager extends BaseManager {
             return "NULL";
         }
     }
-    public long[] setPlayerBossBar(Player player,String text,float len){
+    @Comment(value = "设置玩家的boss血条，返回此次设置的所有血条的id")
+    public long[] setPlayerBossBar(@Comment(value = "要设置玩家血条的id") Player player
+            ,@Comment(value = "血量内容，以;分割多个血条") String text
+            ,@Comment(value = "血条长度0~1") float len){
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
@@ -216,52 +227,61 @@ public class WindowManager extends BaseManager {
         }
         return ids;
     }
-    public void removePlayerBossBar(Player player){
+    @Comment(value = "清除玩家的所有boss血条")
+    public void removePlayerBossBar(@Comment(value = "玩家对象") Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
     }
-    public void removePlayerBossBar(Player player,long id){
+    @Comment(value = "根据id清除玩家的指定boss血条")
+    public void removePlayerBossBar(@Comment(value = "玩家对象") Player player,@Comment(value = "血条id") long id){
         player.removeBossBar(id);
     }
-    public double getLengthOfPlayerBossBar(Player player){
+    @Comment(value = "获取玩家屏幕最上方boss血条的长度")
+    public double getLengthOfPlayerBossBar(@Comment(value = "玩家对象") Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             return player.getDummyBossBar(bar).getLength();
         }
         return -1.0d;
     }
-    public double getLengthOfPlayerBossBar(Player player,long id){
+    @Comment(value = "获取玩家指定id的boss血条的长度")
+    public double getLengthOfPlayerBossBar(@Comment(value = "玩家对象") Player player,@Comment(value = "血条id") long id){
         DummyBossBar bar = player.getDummyBossBar(id);
         if(bar==null)return -1.0d;else return bar.getLength();
     }
-    public String getTextOfPlayerBossBar(Player player){
+    @Comment(value = "获取玩家屏幕最上方boss血条的文字")
+    public String getTextOfPlayerBossBar(@Comment(value = "玩家对象") Player player){
         for(long bar:player.getDummyBossBars().keySet()){
             return player.getDummyBossBar(bar).getText();
         }
         return "NULL";
     }
-    public String getTextOfPlayerBossBar(Player player,long id){
+    @Comment(value = "获取玩家指定id的boss血条的长度")
+    public String getTextOfPlayerBossBar(@Comment(value = "玩家对象") Player player,@Comment(value = "血条id") long id){
         DummyBossBar bar = player.getDummyBossBar(id);
         if(bar==null)return "NULL";else return bar.getText();
     }
     //here 6/26
-    public void setBelowName(Player player,String str){
+    @Comment(value = "设置玩家名下计分板内容")
+    public void setBelowName(@Comment(value = "玩家") Player player,@Comment(value = "内容") String str){
         player.setScoreTag(str);
     }
-
-    public void makeTipsVar(String varname,String provider){
+    @Comment(value = "设置tips的动态变量")
+    public void makeTipsVar(@Comment(value = "变量名") String varname,@Comment(value = "回调函数，参数(cn.nukkit.Player要求提供变量的玩家)，返回值将用作变量的替换内容") String provider){
         tipsVar.put(varname,"function->"+provider);
     }
-
-    public void makeTipsStatic(String varname,String toReplace){
+    @Comment(value = "设置tips的静态变量")
+    public void makeTipsStatic(@Comment(value = "变量名") String varname,@Comment(value = "替换内容") String toReplace){
         tipsVar.put(varname, toReplace);
     }
     //here 8/7
-    public void forceClearWindow(Player player){
+    @Comment(value = "强制清除玩家的所有打开的物品栏和对话框窗口")
+    public void forceClearWindow(@Comment(value = "玩家对象") Player player){
         player.removeAllWindows();
     }
     //here 8/18
-    public void setPauseScreenList(String list){
+    @Comment(value = "设置玩家暂停屏幕看到的玩家列表的玩家")
+    public void setPauseScreenList(@Comment(value = "玩家名，以;分割") String list){
         Map p = Server.getInstance().getOnlinePlayers();
         for(String each:list.split("(?<!\\\\);")){
             each = each.replaceAll("\\\\;",";");
@@ -274,20 +294,21 @@ public class WindowManager extends BaseManager {
         }
     }
     //here 11/21
-    public void sendPlayerXboxInfo(Player from,Player to){
+    @Comment(value = "向玩家发送指定玩家的xbox信息对话框")
+    public void sendPlayerXboxInfo(@Comment(value = "内容来源") Player from,@Comment(value = "被发送的玩家") Player to){
         ShowProfilePacket profilePacket = new ShowProfilePacket();
         profilePacket.xuid = from.getLoginChainData().getXUID();
         to.dataPacket(profilePacket);
     }
-
-    public void startEndPoem(Player player){
+    @Comment(value = "让指定玩家的屏幕上开始播放终末之诗")
+    public void startEndPoem(@Comment(value = "玩家对象") Player player){
         ShowCreditsPacket creditsPacket = new ShowCreditsPacket();
         creditsPacket.eid = player.getId();
         creditsPacket.status = ShowCreditsPacket.STATUS_START_CREDITS;
         player.dataPacket(creditsPacket);
     }
-
-    public void setSwingStyle(String style){
+    @Comment(value = "设置swing GUI框架的主题")
+    public void setSwingStyle(@Comment(value = "主题，可以为Darcula/Intellij/Metal/Motif/Multi/Nimbus/OS") String style){
         switch (style){
             case "Darcula":
                 try {
@@ -340,8 +361,8 @@ public class WindowManager extends BaseManager {
                 break;
         }
     }
-
-    public JFrame getStyledSwingWindow(String title,int width,int height,String iconPath){
+    @Comment(value = "获取设置了主题的swing窗口")
+    public JFrame getStyledSwingWindow(@Comment(value = "窗口标题") String title,@Comment(value = "宽(像素)") int width,@Comment(value = "高(像素)") int height,@Comment(value = "图标图片路径，png/jpg格式") String iconPath){
         JFrame.setDefaultLookAndFeelDecorated(true);
         JDialog.setDefaultLookAndFeelDecorated(true);
         JFrame jf = new JFrame(title);

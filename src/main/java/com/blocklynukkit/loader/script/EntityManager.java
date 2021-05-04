@@ -24,6 +24,7 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.EntityEventPacket;
 import cn.nukkit.potion.Effect;
+import com.blocklynukkit.loader.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
@@ -49,103 +50,148 @@ public class EntityManager extends BaseManager {
         return "BlocklyNukkit Based Object";
     }
     //获取掉落物物品
-    public Item getDropItemStack(EntityItem entityItem){
+    @Comment(value = "获取掉落物的物品")
+    public Item getDropItemStack(@Comment(value = "掉落物实体对象") EntityItem entityItem){
         return entityItem.getItem();
     }
     //移除生物
-    public void removeEntity(Entity entity){
+    @Comment(value = "移除生物")
+    public void removeEntity(@Comment(value = "生物实体对象") Entity entity){
         entity.close();
     }
     //设置生物的名称
-    public void setEntityName(Entity entity,String name){
+    @Comment(value = "设置生物的名称")
+    public void setEntityName(@Comment(value = "生物实体对象") Entity entity
+            ,@Comment(value = "名称") String name){
         entity.setNameTag(name);
     }
     //设置生物名称高亮
-    public void setEntityNameTagAlwaysVisable(Entity entity,boolean vis){
+    @Comment(value = "设置生物名称是否高亮（永远能看到）")
+    public void setEntityNameTagAlwaysVisable(@Comment(value = "生物对象") Entity entity
+            ,@Comment(value = "是否高亮") boolean vis){
         entity.setNameTagVisible(vis);
         entity.setNameTagAlwaysVisible(vis);
     }
-    //设置生物血量
-    public void setEntityHealth(Entity entity,double health){
+    //
+    @Comment(value = "设置生物血量")
+    public void setEntityHealth( Entity entity
+            ,@Comment(value = "血量") double health){
         entity.setHealth((float)health);
     }
     //设置生物最大血量
-    public void setEntityMaxHealth(Entity entity,double health){
+    @Comment(value = "设置生物最大血量")
+    public void setEntityMaxHealth(@Comment(value = "生物对象") Entity entity
+            ,@Comment(value = "最大血量") double health){
         entity.setMaxHealth((int) health);
     }
     //获取生物血量
-    public float getEntityHealth(Entity entity){
+    @Comment(value = "获取生物血量")
+    public float getEntityHealth(@Comment(value = "生物对象") Entity entity){
         return entity.getHealth();
     }
     //获取生物最大血量
-    public float getEntityMaxHealth(Entity entity){
+    @Comment(value = "获取生物最大血量")
+    public float getEntityMaxHealth(@Comment(value = "生物对象") Entity entity){
         return entity.getMaxHealth();
     }
     //here 4/23
     //清除生物的药水状态
-    public void clearEntityEffect(Entity entity){
+    @Comment(value = "清除生物的药水状态")
+    public void clearEntityEffect(@Comment(value = "生物对象") Entity entity){
         entity.removeAllEffects();
     }
     //为生物添加药水状态
-    public void addEntityEffect(Entity entity,int id,int level,int tick,int r,int g,int b){
+    @Comment(value = "为生物添加药水状态")
+    public void addEntityEffect(@Comment(value = "生物对象") Entity entity
+            ,@Comment(value = "药水id") int id
+            ,@Comment(value = "药效等级") int level
+            ,@Comment(value = "持续时间(刻)") int tick
+            ,@Comment(value = "药效粒子颜色 r") int r
+            ,@Comment(value = "药效粒子颜色 g") int g
+            ,@Comment(value = "药效粒子颜色 b") int b){
         Effect effect =Effect.getEffect(id).setAmplifier(level).setVisible(true).setDuration(tick);
         effect.setColor(r, g, b);
         entity.addEffect(effect);
     }
-    public void addEntityEffect(Entity entity,int id,int level,int tick){
+    @Comment(value = "为生物添加药水状态")
+    public void addEntityEffect(@Comment(value = "生物对象") Entity entity
+            ,@Comment(value = "药水id") int id
+            ,@Comment(value = "药效等级") int level
+            ,@Comment(value = "持续时间(刻)") int tick){
         Effect effect =Effect.getEffect(id).setAmplifier(level).setDuration(tick).setVisible(false);
         entity.addEffect(effect);
     }
     //玩家经验操作
-    public void setPlayerExp(Player player,int exp){
+    @Comment(value = "给玩家添加经验")
+    public void setPlayerExp(@Comment(value = "玩家对象") Player player
+            ,@Comment(value = "经验值量") int exp){
         player.setExperience(exp);
         player.sendExperience(exp);
     }
-    public int getPlayerExp(Player player){
+    @Comment(value = "获取玩家的经验值")
+    public int getPlayerExp(@Comment(value = "玩家对象") Player player){
         return player.getExperience();
     }
-    public void setPlayerExpLevel(Player player,int lel){
+    @Comment(value = "设置玩家的经验值等级")
+    public void setPlayerExpLevel(@Comment(value = "玩家对象") Player player
+            ,@Comment(value = "经验值等级") int lel){
         player.setExperience(player.getExperience(),lel);
         player.sendExperienceLevel(lel);
     }
-    public int getPlayerExpLevel(Player player){
+    @Comment(value = "获取玩家的经验值等级")
+    public int getPlayerExpLevel(@Comment(value = "玩家对象") Player player){
         return player.getExperienceLevel();
     }
     //玩家饥饿度操作
-    public void setPlayerHunger(Player player,int hunger){
+    @Comment(value = "设置玩家的饥饿度")
+    public void setPlayerHunger(@Comment(value = "玩家对象") Player player
+            ,@Comment(value = "饥饿度") int hunger){
         player.getFoodData().setLevel(hunger);
     }
-    public int getPlayerHunger(Player player){
+    @Comment(value = "获取玩家的饥饿度")
+    public int getPlayerHunger(@Comment(value = "玩家对象") Player player){
         return player.getFoodData().getLevel();
     }
     //获取实体id
-    public String getEntityID(Entity entity){
+    @Comment(value = "获取实体的唯一标识符(ID)")
+    public String getEntityID(@Comment(value = "实体对象") Entity entity){
         return entity.getId()+"";
     }
     //从id获取实体
-    public Entity getEntityByLevelAndID(Level level,String id){
+    @Comment(value = "根据实体唯一标识符(ID)获取实体对象")
+    public Entity getEntityByLevelAndID(@Comment(value = "实体所在的世界") Level level
+            ,@Comment(value = "实体唯一标识符(ID)") String id){
         Entity entity = null;
         entity = level.getEntity(Long.parseLong(id));
         return entity;
     }
     //获取实体世界
-    public Level getEntityLevel(Entity entity){
+    @Comment(value = "获取实体所在的世界")
+    public Level getEntityLevel(@Comment(value = "实体对象") Entity entity){
         return entity.getLevel();
     }
     //获取实体名称
-    public String getEntityName(Entity entity){
+    @Comment(value = "获取实体名称")
+    public String getEntityName(@Comment(value = "实体对象") Entity entity){
         return entity.getNameTag();
     }
     //获取实体位置
-    public Position getEntityPosition(Entity entity){
+    @Comment(value = "获取实体位置")
+    public Position getEntityPosition(@Comment(value = "实体对象") Entity entity){
         return entity.getPosition();
     }
     //设置实体位置
-    public void setEntityPosition(Entity entity,Position position){
+    @Comment(value = "设置实体位置")
+    public void setEntityPosition(@Comment(value = "实体对象") Entity entity
+            ,@Comment(value = "坐标") Position position){
         entity.teleport(position);
     }
     //在指定位置构造浮空字实体
-    public Entity buildFloatingText(String text,Position pos,int calltick,String callback){
+    @Comment(value = "在指定位置构造浮空字实体")
+    public Entity buildFloatingText(@Comment(value = "浮空字内容，其实就是实体名") String text
+            ,@Comment(value = "浮空字实体的位置") Position pos
+            ,@Comment(value = "回调函数回调间隔(tick)") int calltick
+            ,@Comment(value = "回调函数名,参数(cn.nukkit.entity.Entity 浮空字实体自身)") String callback){
         double x = pos.x;
         double y = pos.y;
         double z = pos.z;
@@ -162,7 +208,8 @@ public class EntityManager extends BaseManager {
         return tmp;
     }
     //启动浮空字实体
-    public void startDisplayFloatingText(Entity entity){
+    @Comment(value = "启动浮空字实体显示")
+    public void startDisplayFloatingText(@Comment(value = "浮空字实体") Entity entity){
         if(entity.getNetworkId()!=61){return;}
         entity.setNameTagVisible(true);
         entity.setNameTagAlwaysVisible(true);
@@ -170,7 +217,8 @@ public class EntityManager extends BaseManager {
         entity.spawnToAll();
     }
     //获取指定世界的所有浮空字
-    public FloatingText[] getLevelFloatingText(Level level){
+    @Comment(value = "获取指定世界的所有浮空字")
+    public FloatingText[] getLevelFloatingText(@Comment(value = "世界对象") Level level){
         List<FloatingText> list=new ArrayList<>();
         for(Entity e:level.getEntities()){
             if(e.getNetworkId()==61&&e.getMaxHealth()>=29998&&e.getScale()<=0.001f&&(!e.isClosed())){
@@ -207,28 +255,34 @@ public class EntityManager extends BaseManager {
     }
     //here 5/2
     //获取实体所有的药水效果
-    public Effect[] getEntityEffect(Entity entity){
+    @Comment(value = "获取实体或玩家的所有的药水效果对象")
+    public Effect[] getEntityEffect(@Comment(value = "实体对象") Entity entity){
         List<Effect> list = new ArrayList<>(entity.getEffects().values());
         return list.toArray(new Effect[list.size()]);
     }
     //获取药水效果等级
-    public int getEffectLevel(Effect effect){
+    @Comment(value = "获取药水效果等级")
+    public int getEffectLevel(@Comment(value = "药水效果对象") Effect effect){
         return effect.getAmplifier();
     }
     //同上id
-    public int getEffectID(Effect effect){
+    @Comment(value = "获取药水效果ID")
+    public int getEffectID(@Comment(value = "药水效果对象") Effect effect){
         return effect.getId();
     }
     //同上剩余时间(s)
-    public int getEffectTime(Effect effect){
+    @Comment(value = "获取药水效果剩余的对象")
+    public int getEffectTime(@Comment(value = "药水效果对象") Effect effect){
         return effect.getDuration();
     }
     //获取生物networkid
-    public int getNetworkID(Entity entity){
+    @Comment(value = "获取生物networkid")
+    public int getNetworkID(@Comment(value = "药水效果对象") Entity entity){
         return entity.getNetworkId();
     }
     //获取生物标识名
-    public String getIDName(Entity entity){
+    @Comment(value = "获取生物标识名")
+    public String getIDName(@Comment(value = "实体对象") Entity entity){
         if((entity.getNetworkId()==63||entity.getNetworkId()==-1)&&entity instanceof Player){
             return "Player";
         }else {
@@ -236,7 +290,9 @@ public class EntityManager extends BaseManager {
         }
     }
     //生成生物
-    public Entity spawnEntity(String name,Position pos){
+    @Comment(value = "生成生物")
+    public Entity spawnEntity(@Comment(value = "生物标识名") String name
+            ,@Comment(value = "生成的位置") Position pos){
         double x = pos.x;
         double y = pos.y;
         double z = pos.z;
@@ -247,27 +303,35 @@ public class EntityManager extends BaseManager {
         return entity;
     }
     //构建bnNPC
-    public BNNPC buildNPC(Position pos,String name){
+    @Comment(value = "构建bnNPC")
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes("Steve"));
     }
-    public BNNPC buildNPC(Position pos,String name,String skinID){
+    @Comment(value = "构建bnNPC")
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID));
     }
-    public BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction){
+    @Comment(value = "构建bnNPC")
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") String callfunction){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction);
     }
-    public BNNPC buildNPC(Position pos,String name,String skinID,int calltick,String callfunction,String attackfunction){
+    @Comment(value = "构建bnNPC")
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") String callfunction,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)") String attackfunction){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction,attackfunction);
     }
     //展示浮空物品
-    public void showFloatingItem(Position pos,Item item){
+    @Comment(value = "展示浮空物品")
+    public void showFloatingItem(@Comment(value = "展示浮空物品的坐标") Position pos
+            ,@Comment(value = "展示的内容") Item item){
         Loader.floatingItemManager.addFloatingItem(pos,item);
     }
-    public void removeFloatingItem(Position pos,Item item){
+    @Comment(value = "取消浮空物品展示")
+    public void removeFloatingItem(@Comment(value = "浮空物品的坐标") Position pos,@Comment(value = "浮空物品的内容") Item item){
         Loader.floatingItemManager.removeFloatingItem(pos, item);
     }
     //是否是玩家
-    public boolean isPlayer(Entity e){
+    @Comment(value = "检测实体是否是玩家")
+    public boolean isPlayer(@Comment(value = "实体对象") Entity e){
         if(e.getName().equals("BNNPC")|| e.getName().equalsIgnoreCase("NPC")){
             return false;//优先排除各种npc
         }else{
@@ -275,7 +339,11 @@ public class EntityManager extends BaseManager {
         }
     }
     //生成方块实体
-    public Entity spawnFallingBlock(Position pos, Block block, boolean enableGravity,boolean canBePlaced){
+    @Comment(value = "生成实体方块")
+    public Entity spawnFallingBlock(@Comment(value = "生成的位置") Position pos
+            ,@Comment(value = "方块") Block block
+            ,@Comment(value = "是否启用重力") boolean enableGravity
+            ,@Comment(value = "掉到地上是否成为固体方块") boolean canBePlaced){
         CompoundTag tag = new CompoundTag().putList(new ListTag("Pos").add(new DoubleTag("", pos.x)).add(new DoubleTag("", pos.y)).add(new DoubleTag("", pos.z)))
                 .putList(new ListTag("Motion").add(new DoubleTag("", 0)).add(new DoubleTag("", 0)).add(new DoubleTag("", 0)))
                 .putList(new ListTag("Rotation").add(new FloatTag("", 0)).add(new FloatTag("", 0)))
@@ -292,23 +360,42 @@ public class EntityManager extends BaseManager {
         }
     }
     //单独播放声音
-    public void makeSoundToPlayer(Player player,String sound){
+    @Comment(value = "向指定玩家播放声音")
+    public void makeSoundToPlayer(@Comment(value = "要指定播放声音的玩家") Player player
+            ,@Comment(value = "声音名称，详见[声音列表](https://ci.opencollab.dev/job/NukkitX/job/Nukkit/job/master/javadoc/cn/nukkit/level/Sound.html)") String sound){
         player.getLevel().addSound(player, Sound.valueOf(sound));
     }
     //发射箭矢
-    public EntityArrow shootArrow(Position from,Position to){
+    @Comment(value = "发射箭矢")
+    public EntityArrow shootArrow(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to){
         return this.shootArrow(from, to, null, true, 1.0d);
     }
-    public EntityArrow shootArrow(Position from,Position to,double multiply){
+    @Comment(value = "发射箭矢")
+    public EntityArrow shootArrow(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "速度扩倍倍率") double multiply){
         return this.shootArrow(from, to, null, true, multiply);
     }
-    public EntityArrow shootArrow(Position from,Position to,boolean canPickUp){
+    @Comment(value = "发射箭矢")
+    public EntityArrow shootArrow(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "是否可以被捡起") boolean canPickUp){
         return this.shootArrow(from, to, null, canPickUp, 1.0d);
     }
-    public EntityArrow shootArrow(Position from,Position to,boolean canPickUp,double multiply){
+    @Comment(value = "发射箭矢")
+    public EntityArrow shootArrow(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "是否可以被捡起") boolean canPickUp
+            ,@Comment(value = "速度扩倍倍率") double multiply){
         return this.shootArrow(from, to, null, canPickUp, multiply);
     }
-    public EntityArrow shootArrow(Position from,Position to,Entity shooter,boolean canPickUp,double multiply){
+    @Comment(value = "发射箭矢")
+    public EntityArrow shootArrow(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "发射箭矢的实体") Entity shooter
+            ,@Comment(value = "是否可以被捡起") boolean canPickUp
+            ,@Comment(value = "速度扩倍倍率") double multiply){
         Entity k;
         if(shooter != null){
             k = Entity.createEntity("Arrow", from, shooter);
@@ -367,19 +454,36 @@ public class EntityManager extends BaseManager {
         return arrow;
     }
     //发射雪球
-    public EntitySnowball shootSnowball(Position from,Position to){
+    @Comment(value = "发射雪球")
+    public EntitySnowball shootSnowball(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to){
         return this.shootSnowball(from, to, null, true, 1.0d);
     }
-    public EntitySnowball shootSnowball(Position from,Position to,double multiply){
+    @Comment(value = "发射雪球")
+    public EntitySnowball shootSnowball(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "速度扩倍倍率") double multiply){
         return this.shootSnowball(from, to, null, true, multiply);
     }
-    public EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp){
+    @Comment(value = "发射雪球")
+    public EntitySnowball shootSnowball(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "是否可以被捡起") boolean canPickUp){
         return this.shootSnowball(from, to, null, canPickUp, 1.0d);
     }
-    public EntitySnowball shootSnowball(Position from,Position to,boolean canPickUp,double multiply){
+    @Comment(value = "发射雪球")
+    public EntitySnowball shootSnowball(@Comment(value = "发射的起点") Position from
+            ,@Comment(value = "目标终点方向坐标") Position to
+            ,@Comment(value = "是否可以被捡起") boolean canPickUp
+            ,@Comment(value = "速度扩倍倍率") double multiply){
         return this.shootSnowball(from, to, null, canPickUp, multiply);
     }
-    public EntitySnowball shootSnowball(Position from, Position to, Entity shooter, boolean canPickUp, double multiply){
+    @Comment(value = "发射雪球")
+    public EntitySnowball shootSnowball(@Comment(value = "发射的起点") Position from
+            , @Comment(value = "目标终点方向坐标") Position to
+            , @Comment(value = "发射雪球的实体") Entity shooter
+            , @Comment(value = "是否可以被捡起") boolean canPickUp
+            , @Comment(value = "速度扩倍倍率") double multiply){
         EntitySnowball arrow = new EntitySnowball(from.getChunk(),Entity.getDefaultNBT(from), shooter);
         double xdiff = to.x - from.x;
         double zdiff = to.z - from.z;
@@ -428,7 +532,8 @@ public class EntityManager extends BaseManager {
         return arrow;
     }
     //转视角
-    public void lookAt(Entity e,Position pos){
+    @Comment(value = "让生物转动视角看向指定坐标")
+    public void lookAt(@Comment(value = "实体对象") Entity e,@Comment(value = "坐标") Position pos){
         double xdiff = pos.x - e.x;
         double zdiff = pos.z - e.z;
         double angle = Math.atan2(zdiff, xdiff);
@@ -442,14 +547,16 @@ public class EntityManager extends BaseManager {
         e.pitch = pitch;
     }
     //显示受伤动画
-    public void displayHurt(Entity e){
+    @Comment(value = "让指定生物显示受伤动画")
+    public void displayHurt(@Comment(value = "实体对象") Entity e){
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = e.getId();
         pk.event = EntityEventPacket.HURT_ANIMATION;
         e.getViewers().values().forEach((player -> player.dataPacket(pk)));
     }
     //显示死亡动画
-    public void displayDie(Entity e){
+    @Comment(value = "让指定生物显示死亡动画")
+    public void displayDie(@Comment(value = "实体对象") Entity e){
         EntityEventPacket pk = new EntityEventPacket();
         pk.eid = e.getId();
         pk.event = EntityEventPacket.DEATH_ANIMATION;

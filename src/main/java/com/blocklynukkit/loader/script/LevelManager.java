@@ -9,29 +9,26 @@ import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityItemFrame;
 import cn.nukkit.event.player.PlayerTeleportEvent;
 import cn.nukkit.item.ItemMap;
-import cn.nukkit.level.ChunkManager;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
-import cn.nukkit.level.biome.Biome;
 import cn.nukkit.level.format.anvil.Chunk;
-import cn.nukkit.level.format.generic.BaseChunk;
-import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.generator.Flat;
 import cn.nukkit.level.generator.Generator;
 import cn.nukkit.level.generator.Nether;
 import cn.nukkit.level.generator.Normal;
-import cn.nukkit.math.NukkitRandom;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.ChangeDimensionPacket;
 import cn.nukkit.network.protocol.PlayStatusPacket;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.generator.OceanGenerator;
 import com.blocklynukkit.loader.other.generator.SkyLand;
 import com.blocklynukkit.loader.other.generator.VoidGenerator;
+import com.blocklynukkit.loader.other.generator.render.AllLevelRender;
 import com.blocklynukkit.loader.other.generator.render.LevelNameRender;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
@@ -48,7 +45,7 @@ import java.util.List;
 import static com.blocklynukkit.loader.Loader.OceanSeaLevel;
 import static com.blocklynukkit.loader.Loader.skylandoptions;
 
-public class LevelManager extends BaseManager {
+public final class LevelManager extends BaseManager {
     @Override
     public String toString() {
         return "BlocklyNukkit Based Object";
@@ -309,12 +306,28 @@ public class LevelManager extends BaseManager {
     }
     @Comment(value = "为指定名称的世界加载器绑定世界渲染器")
     public void defineChunkRenderByName(@Comment(value = "世界名") String forLevel
-            ,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)") String callback){
+            ,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)")
+             @CallbackFunction(classes = {"cn.nukkit.level.Level", "cn.nukkit.level.format.FullChunk"}, parameters = {"level", "chunk"}, comments = {"执行此渲染器的世界", "渲染器此次工作的区块"}) String callback){
         Loader.levelRenderList.add(new LevelNameRender(forLevel,callback));
         Collections.sort(Loader.levelRenderList);
     }
-    public void defineChunkRenderByName(@Comment(value = "世界名") String forLevel,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)") String callback,@Comment(value = "权重，越高越优先调用") int priority){
+    @Comment(value = "为指定名称的世界加载器绑定世界渲染器")
+    public void defineChunkRenderByName(@Comment(value = "世界名") String forLevel
+            ,@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)")
+             @CallbackFunction(classes = {"cn.nukkit.level.Level", "cn.nukkit.level.format.FullChunk"}, parameters = {"level", "chunk"}, comments = {"执行此渲染器的世界", "渲染器此次工作的区块"})String callback,@Comment(value = "权重，越高越优先调用") int priority){
         Loader.levelRenderList.add(new LevelNameRender(forLevel,callback,priority));
+        Collections.sort(Loader.levelRenderList);
+    }
+    @Comment(value = "为所有世界加载器绑定世界渲染器")
+    public void defineChunkRenderAll(@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)")
+                                        @CallbackFunction(classes = {"cn.nukkit.level.Level", "cn.nukkit.level.format.FullChunk"}, parameters = {"level", "chunk"}, comments = {"执行此渲染器的世界", "渲染器此次工作的区块"}) String callback){
+        Loader.levelRenderList.add(new AllLevelRender(callback));
+        Collections.sort(Loader.levelRenderList);
+    }
+    @Comment(value = "为所有世界加载器绑定世界渲染器")
+    public void defineChunkRenderAll(@Comment(value = "世界渲染器回调函数，参数(cn.nukkit.level.Level世界对象, cn.nukkit.level.format.FullChunk区块对象)")
+                                        @CallbackFunction(classes = {"cn.nukkit.level.Level", "cn.nukkit.level.format.FullChunk"}, parameters = {"level", "chunk"}, comments = {"执行此渲染器的世界", "渲染器此次工作的区块"})String callback,@Comment(value = "权重，越高越优先调用") int priority){
+        Loader.levelRenderList.add(new AllLevelRender(callback,priority));
         Collections.sort(Loader.levelRenderList);
     }
     @Comment(value = "在指定坐标根据图片绘制地图画")

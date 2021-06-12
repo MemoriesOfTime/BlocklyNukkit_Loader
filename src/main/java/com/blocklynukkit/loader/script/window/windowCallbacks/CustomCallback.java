@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.util.Map;
 
-public class CustomCallback extends WindowCallback {
+public final class CustomCallback extends WindowCallback {
     public String defaultCallback = null;
     public Int2ObjectMap<String> actionCallbacks = new Int2ObjectOpenHashMap<>();
 

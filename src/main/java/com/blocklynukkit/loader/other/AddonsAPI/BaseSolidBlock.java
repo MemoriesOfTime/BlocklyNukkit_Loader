@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader.other.Blocks;
+package com.blocklynukkit.loader.other.AddonsAPI;
 
 import cn.nukkit.block.BlockSolid;
 import cn.nukkit.item.Item;

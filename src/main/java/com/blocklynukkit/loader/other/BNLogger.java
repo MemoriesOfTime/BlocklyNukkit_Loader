@@ -10,7 +10,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Arrays;
 
-public class BNLogger {
+public final class BNLogger {
     private String name;
     public BNLogger(String name){
         this.name=name.replaceFirst("\\.js","").replaceFirst("\\.py","").replaceFirst("\\.lua","").replaceFirst("\\.php","").replaceFirst("\\.wasm","");

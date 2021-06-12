@@ -4,7 +4,8 @@ import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Babel;
 import com.blocklynukkit.loader.utils.StringUtils;
@@ -30,6 +31,18 @@ public class PackageCommand extends Command {
             "declare var server : cn.nukkit.Server;\n" +
             "declare var plugin : cn.nukkit.plugin.Plugin;\n" +
             "declare var logger : com.blocklynukkit.loader.other.BNLogger;\n" +
+            "type FunV = string | Function;\n" +
+            "type Fun<T> = string | ((a: T) => void);\n" +
+            "type Fun2<A, B> = string | ((a: A, b: B) => void);\n" +
+            "type Fun3<A, B, C> = string | ((a: A, b: B, c: C) => void);\n" +
+            "type Fun4<A, B, C, D> = string | ((a: A, b: B, c: C, d: D) => void);\n" +
+            "type Fun5<A, B, C, D, E> = string | ((a: A, b: B, c: C, d: D, e: E) => void);\n" +
+            "function F<A, B, C, D, E>(input: Fun5<A, B, C, D, E>) : Fun5<A, B, C, D, E>;\n" +
+            "function F<A, B, C, D>(input: Fun4<A, B, C, D>) : Fun3<A, B, C, D>;\n" +
+            "function F<A, B, C>(input: Fun3<A, B, C>) : Fun3<A, B, C>;\n" +
+            "function F<A, B>(input: Fun2<A, B>) : Fun2<A, B>;\n" +
+            "function F<A>(input: Fun<A>) : Fun<A>;\n" +
+            "function F(input: FunV) : FunV;\n" +
             "declare namespace java.lang{\n" +
             "    class Object{}\n" +
             "    type String = string;\n" +
@@ -47,16 +60,16 @@ public class PackageCommand extends Command {
             "}\n" +
             "/** 一个来自Java的类 */\n" +
             "/**\n" +
-            " * @version 1.2.9.2\n" +
+            " * @version 1.2.9.4\n" +
             " */\n" +
             "interface Class{}\n" +
             "/**\n" +
-            " * @version 1.2.9.2\n" +
+            " * @version 1.2.9.4\n" +
             " * @param {java.lang.String} 要导入的模块或者java类的名称\n" +
             " */\n" +
             "declare function require(className:java.lang.String): Class;\n" +
             "/**\n" +
-            " * @version 1.2.9.2\n" +
+            " * @version 1.2.9.4\n" +
             " */\n" +
             "declare namespace Java{\n" +
             "    /** \n" +
@@ -341,9 +354,22 @@ public class PackageCommand extends Command {
                                 eachOutput += ("    function "+method.getKey()+"(");
                                 for(JsonElement param:info.get("parameters").getAsJsonArray()){
                                     JsonObject detailParam = param.getAsJsonObject();
-                                    eachOutput+=((detailParam.get("varargs").getAsBoolean()?"...":"")+paramConvert(detailParam.get("name").getAsString())+": "+detailParam.get("type").getAsString()+",");
+                                    if(detailParam.get("callbackInfo").isJsonArray()){
+                                        JsonArray array = detailParam.getAsJsonArray("callbackInfo");
+                                        String fx = "Fun"+array.size()+"<";
+                                        if(fx.equals("Fun0<")){
+                                            fx = "FunV";
+                                        }else{
+                                            for(JsonElement eachType:array){
+                                                fx += (((JsonObject)eachType).get("type").getAsString()+",");
+                                            }
+                                            fx = Utils.replaceLast(fx, ",", ">");
+                                        }
+                                        eachOutput+=((detailParam.get("varargs").getAsBoolean()?"...":"")+paramConvert(detailParam.get("name").getAsString())+": "+fx+",");
+                                    }else
+                                        eachOutput+=((detailParam.get("varargs").getAsBoolean()?"...":"")+paramConvert(detailParam.get("name").getAsString())+": "+detailParam.get("type").getAsString()+",");
                                 }
-                                eachOutput += ("): "+info.get("returnType").getAsString()+";\n");
+                                eachOutput += ("): "+info.get("returnType").getAsString()+";\n").replaceAll("final","");
                                 if(info.get("parameterCount").getAsInt() != 0)
                                     eachOutput = Utils.replaceLast(eachOutput,",","");
                             }
@@ -487,6 +513,24 @@ public class PackageCommand extends Command {
                             arg.put("comment",comment.value());
                         else
                             arg.put("comment","");
+                        CallbackFunction cb = parameter.getAnnotation(CallbackFunction.class);
+                        if(cb!=null){
+                            System.out.println(method.getName()+":"+parameter.getName()+" ENC!");
+                            String[] CB_classes = cb.classes();
+                            String[] CB_parameters = cb.parameters();
+                            String[] CB_comments = cb.comments();
+                            Map<String, String>[] array = new Map[CB_classes.length];
+                            for(int j=0;j<CB_classes.length;j++){
+                                Map<String, String> entry = new HashMap<>();
+                                entry.put("type",CB_classes[j]);
+                                entry.put("name", CB_parameters[j]);
+                                entry.put("comment", CB_comments[j]);
+                                array[j] = entry;
+                            }
+                            arg.put("callbackInfo",array);
+                        }else{
+                            arg.put("callbackInfo","");
+                        }
                         tmp[i] = arg;
                     }
                     methodDef.parameters = tmp;
@@ -516,6 +560,24 @@ public class PackageCommand extends Command {
                         }
                         else{
                             arg.put("comment","");
+                        }
+                        CallbackFunction cb = parameter.getAnnotation(CallbackFunction.class);
+                        if(cb!=null){
+                            System.out.println(method.getName()+":"+parameter.getName()+" ENC!");
+                            String[] CB_classes = cb.classes();
+                            String[] CB_parameters = cb.parameters();
+                            String[] CB_comments = cb.comments();
+                            Map<String, String>[] array = new Map[CB_classes.length];
+                            for(int j=0;j<CB_classes.length;j++){
+                                Map<String, String> entry = new HashMap<>();
+                                entry.put("type",CB_classes[j]);
+                                entry.put("name", CB_parameters[j]);
+                                entry.put("comment", CB_comments[j]);
+                                array[j] = entry;
+                            }
+                            arg.put("callbackInfo",array);
+                        }else{
+                            arg.put("callbackInfo","");
                         }
                         tmp[i] = arg;
                     }

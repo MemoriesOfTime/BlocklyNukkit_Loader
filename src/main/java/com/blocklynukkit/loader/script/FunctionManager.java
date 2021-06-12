@@ -1,4 +1,5 @@
 package com.blocklynukkit.loader.script;
+import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.Command;
@@ -21,11 +22,12 @@ import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
-import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.net.http.CustomHttpHandler;
+import com.blocklynukkit.loader.other.net.http.HttpRequestEntry;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
@@ -52,6 +54,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.*;
 import java.lang.management.ManagementFactory;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.file.Files;
@@ -108,7 +111,8 @@ public class FunctionManager extends BaseManager {
     @Comment(value = "将处理器函数绑定到指定端口的http服务器上")
     final public boolean attachHandlerToHttpServer(@Comment(value = "要绑定处理器函数的http服务器的端口") int port
             ,@Comment(value = "要绑定处理器处理的访问路径") String path
-            ,@Comment(value = "要绑定的处理器函数") String function){
+            ,@Comment(value = "要绑定的处理器函数")
+             @CallbackFunction(classes = "com.blocklynukkit.loader.other.net.http.HttpRequestEntry", parameters = "request", comments = "请求内容对象") String function){
         if(httpServers.containsKey(port)){
             httpServers.get(port).createContext(path,new CustomHttpHandler(function));
             return true;
@@ -120,7 +124,7 @@ public class FunctionManager extends BaseManager {
         Runtime.getRuntime().gc();
     }
     @Comment(value = "强制与NK主线程同步调用指定函数")
-    final public Object syncCallFunction(@Comment(value = "要调用的函数") String functionName
+    final public Object syncCallFunction(@Comment(value = "要调用的函数") @CallbackFunction String functionName
             ,@Comment(value = "调用函数的参数") Object... args){
         synchronized (Server.getInstance()){
             return Loader.plugin.call(functionName, args);
@@ -136,7 +140,7 @@ public class FunctionManager extends BaseManager {
         }
     }
     @Comment(value = "将指定函数立即在新线程上调用，并立即返回该函数运行的线程对象")
-    final public Thread runThread(@Comment(value = "要在新线程运行的函数名称") String functionName
+    final public Thread runThread(@Comment(value = "要在新线程运行的函数名称") @CallbackFunction String functionName
             ,@Comment(value = "调用函数的参数") Object... args){
         Thread thread = new Thread(() -> Loader.plugin.call(getScriptName()+"::"+functionName,args));
         thread.start();
@@ -516,12 +520,6 @@ public class FunctionManager extends BaseManager {
         },pluginid);
     }
     //here 10/11
-    //用于测试
-    @Comment(value = "此函数已经废弃")
-    @Deprecated
-    final public void testClass(@Comment(value = "此函数已废弃") Object object){
-        Loader.getlogger().info(object.getClass().getName());
-    }
 
     @Comment(value = "从xyz构建三维向量")
     final public Vector3 buildvec3(@Comment(value = "向量x分量") double x
@@ -958,6 +956,8 @@ public class FunctionManager extends BaseManager {
                     case "@operator":
                         current.type = CommandParamType.OPERATOR;
                         break;
+                    case "@sub":
+                        break;
                 }
                 if(enums!=null)current.enumData = new CommandEnum(name,Arrays.asList(enums.split(";")));
                 commandParameters.add(current);
@@ -968,14 +968,16 @@ public class FunctionManager extends BaseManager {
     @Comment(value = "创建新的命令")
     final public void createCommand(@Comment(value = "命令主名") String name
             ,@Comment(value = "命令描述") String description
-            ,@Comment(value = "命令回调函数") String functionName){
+            ,@Comment(value = "命令回调函数")
+             @CallbackFunction(classes = {"cn.nukkit.command.CommandSender", "java.lang.String[]"}, parameters = {"sender", "args"}, comments = {"命令发送者", "命令回调参数数组"}) String functionName){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName));
         Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
     }
     @Comment(value = "创建新的命令")
     final public void createCommand(@Comment(value = "命令主名") String name
             ,@Comment(value = "命令描述") String description
-            ,@Comment(value = "命令回调函数") String functionName
+            ,@Comment(value = "命令回调函数")
+             @CallbackFunction(classes = {"cn.nukkit.command.CommandSender", "java.lang.String[]"}, parameters = {"sender", "args"}, comments = {"命令发送者", "命令回调参数数组"}) String functionName
             ,@Comment(value = "命令对应的权限节点") String per){
         plugin.getServer().getCommandMap().register(functionName, new EntryCommand(name, description, functionName, per));
         Loader.plugincmdsmap.put(name,new CommandInfo(name,description,getScriptName()));//debug记录器
@@ -993,7 +995,7 @@ public class FunctionManager extends BaseManager {
     }
     //end here
     @Comment(value = "创建新的延迟任务，返回任务对象")
-    final public TaskHandler createTask(@Comment(value = "任务回调函数名") String functionName
+    final public TaskHandler createTask(@Comment(value = "任务回调函数名") @CallbackFunction String functionName
             ,@Comment(value = "任务延迟(刻)") int delay
             ,@Comment(value = "回调函数调用参数") Object... args){
         TaskHandler handler = plugin.getServer().getScheduler().scheduleDelayedTask(Loader.plugin,new ModTask(functionName,args), delay);
@@ -1033,7 +1035,7 @@ public class FunctionManager extends BaseManager {
     }
     //end here
     @Comment(value = "创建新的定时循环任务，返回任务对象")
-    final public TaskHandler createLoopTask(@Comment(value = "定时循环任务名") String functionName
+    final public TaskHandler createLoopTask(@Comment(value = "定时循环任务名") @CallbackFunction String functionName
             ,@Comment(value = "间隔(刻)") int delay
             ,@Comment(value = "回调函数调用参数") Object... args){
         TaskHandler handler = plugin.getServer().getScheduler().scheduleDelayedRepeatingTask(Loader.plugin,new ModTask(functionName,args), 20, delay);
@@ -1101,6 +1103,17 @@ public class FunctionManager extends BaseManager {
     final public String format(@Comment(value = "格式化模板") String msg
             ,@Comment(value = "格式化参数run") Object... args){
         return String.format(msg, args);
+    }
+
+    @Comment(value = "是否运行在PowerNukkit上")
+    final public boolean isPowerNukkit(){
+        try {
+            Field codename = Nukkit.class.getDeclaredField("CODENAME");
+            return codename.get(Nukkit.class).equals("PowerNukkit");
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private String strzero(int time){

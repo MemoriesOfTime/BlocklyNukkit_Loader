@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseManager extends BaseManager {
+public final class DatabaseManager extends BaseManager {
     public LocalStorage localStorage;
     public MemoryStorage<Object,Object> memoryStorage = Loader.memoryStorage;
     public DatabaseManager(ScriptEngine scriptEngine) {

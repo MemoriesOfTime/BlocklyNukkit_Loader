@@ -18,6 +18,7 @@ public class CustomHttpHandler implements HttpHandler {
         HttpRequestEntry requestEntry = new HttpRequestEntry(exchange);
         requestEntry.setFromAddress(exchange.getRemoteAddress().getAddress().getHostAddress()+":"+exchange.getRemoteAddress().getPort());
         requestEntry.setRequestUrl(exchange.getRequestURI().toString());
+        requestEntry.setRequestRawUrl(exchange.getRequestURI().toASCIIString());
         requestEntry.setPath(exchange.getRequestURI().getQuery());
         StringBuilder stringBuilder = new StringBuilder();
         exchange.getRequestHeaders().forEach((k,v)->{

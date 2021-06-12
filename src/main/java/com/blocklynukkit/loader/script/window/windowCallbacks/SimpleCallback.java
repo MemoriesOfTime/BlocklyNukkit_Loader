@@ -6,7 +6,7 @@ import com.blocklynukkit.loader.Loader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
-public class SimpleCallback extends WindowCallback {
+public final class SimpleCallback extends WindowCallback {
     public String defaultCallback = null;
     public Int2ObjectMap<String> actionCallbacks = new Int2ObjectOpenHashMap<>();
 

@@ -1,23 +1,24 @@
 package com.blocklynukkit.loader.other.Items;
 
-import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 
-import java.io.IOException;
 
 public class ItemComponentEntry {
-    public String name;
-    public CompoundTag nbt;
-    public ItemComponentEntry(String name,CompoundTag nbt){
-        this.name=name;
-        this.nbt=nbt;
+    public static final ItemComponentEntry[] EMPTY_ARRAY = new ItemComponentEntry[0];
+
+    public final String name;
+    public final CompoundTag data;
+
+    public ItemComponentEntry(String name, CompoundTag data) {
+        this.name = name;
+        this.data = data;
     }
-    public byte[] toBytes(){
-        try {
-            return NBTIO.write(nbt);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+    public String getName() {
+        return name;
+    }
+
+    public CompoundTag getData() {
+        return data;
     }
 }

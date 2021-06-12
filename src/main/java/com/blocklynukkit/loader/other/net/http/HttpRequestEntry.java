@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 
 public class HttpRequestEntry{
     String requestUrl;
+    String requestRawUrl;
     String path; // starts with /xxx
     String header;
     String method;
@@ -21,6 +22,14 @@ public class HttpRequestEntry{
 
     public void setRequestUrl(String requestUrl) {
         this.requestUrl = requestUrl;
+    }
+
+    public String getRequestRawUrl() {
+        return requestRawUrl;
+    }
+
+    public void setRequestRawUrl(String requestRawUrl) {
+        this.requestRawUrl = requestRawUrl;
     }
 
     public String getPath() {

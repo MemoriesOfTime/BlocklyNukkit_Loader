@@ -1,24 +1,19 @@
 package com.blocklynukkit.loader.other.packets;
 
-import cn.nukkit.Server;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.network.protocol.DataPacket;
-import cn.nukkit.network.protocol.ProtocolInfo;
+import cn.nukkit.utils.MainLogger;
 import com.blocklynukkit.loader.other.Items.ItemComponentEntry;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.nio.ByteOrder;
 
 public class ItemComponentPacket extends DataPacket {
-    public List<ItemComponentEntry> entries = new ArrayList<>();
-
-    public ItemComponentPacket(){
-        Server.getInstance().getNetwork().registerPacket((byte)162,this.getClass());
-    }
+    public ItemComponentEntry[] entries = ItemComponentEntry.EMPTY_ARRAY;
 
     @Override
     public byte pid() {
-        return (byte)162;
+        return (byte) 0xa2;
     }
 
     @Override
@@ -28,10 +23,15 @@ public class ItemComponentPacket extends DataPacket {
 
     @Override
     public void encode() {
-        this.putUnsignedVarInt(entries.size());
-        for(ItemComponentEntry entry:entries){
-            this.putString(entry.name);
-            this.putByteArray(entry.toBytes());
+        this.reset();
+        this.putUnsignedVarInt(this.entries.length);
+        try {
+            for (ItemComponentEntry entry : this.entries) {
+                this.putString(entry.getName());
+                this.put(NBTIO.write(entry.getData(), ByteOrder.LITTLE_ENDIAN, true));
+            }
+        } catch (IOException e) {
+            MainLogger.getLogger().error("Error while encoding NBT data of ItemComponentPacket", e);
         }
     }
 }

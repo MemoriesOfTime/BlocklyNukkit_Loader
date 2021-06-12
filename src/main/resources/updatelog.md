@@ -1,3 +1,127 @@
+## 1.2.9.4
+
+New
+
+- Js已经支持for of循环
+- Js中修复了错误的=>实现
+- Js中新增宏注释：//pragma optimistic，添加后bn将会为此代码在载入期间激进地进行类型推导以优化运行时性能
+- bnp支持.phpfile后缀名
+- bnp和bnpx可以直接放入plugins文件夹加载
+- 小幅优化性能
+- js中可以直接使用类的全名使用java类，无需进行Java.type或require引入
+- 材质包不会无谓地重复生成
+
+HttpHandler
+
+- 回调参数中新增getRequestRawUrl函数
+
+BNNPC
+
+- 优化ai算法，避免npc消失bug
+
+manager
+
+- addCommandCompleter新增@sub规则，表示一个子命令补全选项
+- @Comment(value = "是否运行在PowerNukkit上")
+  public boolean isPowerNukkit()
+  
+inventory
+
+- @Comment(value = "新建一个漏斗物品栏")
+  public HopperFakeInventory addHopperInv(@Comment(value = "包含的物品，需要使用`Java.to`函数转换") Item[] item
+  ,@Comment(value = "物品栏标题") String name)
+
+blockitem
+
+- @Comment(value = "注册新的简易物品, 允许任意自定义物品")
+  public void registerSimpleItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
+  ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand)
+  
+- @Comment(value = "注册新的工具物品")
+    public void registerToolItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
+  ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
+  ,@Comment(value = "工具耐久值") int durability
+  ,@Comment(value = "攻击伤害") int attackDamage
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand)
+  
+- @Comment(value = "注册新的食物物品")
+  public void registerFoodItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "提供的饥饿度") int nutrition
+  ,@Comment(value = "食用持续时间(刻)") int eatTime
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand)
+  
+- @Comment(value = "注册新的饮品物品")
+  public void registerDrinkItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "提供的饥饿度") int nutrition
+  ,@Comment(value = "饮用持续时间(刻)") int drinkTime
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand)
+  
+- @Comment(value = "注册新的盔甲物品")
+  public void registerArmorItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "盔甲种类,可为helmet chest leggings boots") String armorType
+  ,@Comment(value = "盔甲等级 0-无,1-皮革,2-铁,3-锁链,4-金,5-钻石,6-下界合金") int armorTier
+  ,@Comment(value = "工具耐久值") int durability
+  ,@Comment(value = "提供的盔甲值") int armorPoint
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand)
+  
+- @Comment(value = "添加新的盔甲材质")
+  public void addArmorTexture(@Comment(value = "物品id") int id
+  ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPath
+  ,@Comment(value = "盔甲穿着时材质图片路径") String modelPath)
+  
+- @Comment(value = "添加新的物品材质")
+  public void addItemTexture(@Comment(value = "物品id") int id
+  ,@Comment(value = "物品材质图片路径") String path)
+  
+- @Comment(value = "为指定id物品添加中文翻译名")
+  public void addItemChineseTranslation(@Comment(value = "物品id") int id
+  ,@Comment(value = "中文名") String name)
+  
+- @Comment(value = "为指定id物品添加英文翻译名")
+  public void addItemEnglishTranslation(@Comment(value = "物品id") int id
+  ,@Comment(value = "英文名") String name)
+  
+- @Comment(value = "向材质包中指定位置添加json文件")
+  public void addResourcePackJsonEntry(@Comment(value = "材质包内相对位置，包含路径和文件全名") String entryPath
+  ,@Comment(value = "json文件内容") String json)
+  
+- @Comment(value = "向材质包中指定位置添加图片文件")
+  public void addResourcePackPictureEntry(@Comment(value = "材质包内相对位置，包含路径和文件全名") String entryPath
+  ,@Comment(value = "要复制到材质包中的硬盘上的图片路径") String path)
+  
+world
+
+- void defineChunkRenderAll(String callback,int priority / void)
+  - 为所有世界添加地形渲染器
+  - callback是渲染器回调函数
+  - priority是优先级，优先级越大先调用，不填默认为0
+  
+entity
+
+- @Comment(value = "构建4d展示模型")
+    public BNModel buildModel(@Comment(value = "生成模型的位置") Position pos
+  ,@Comment(value = "模型4d皮肤id") String modelSkinID
+  ,@Comment(value = "模型长") double length
+  ,@Comment(value = "模型宽") double width
+  ,@Comment(value = "模型高") double height
+  ,@Comment(value = "模型缩放比例") double scale
+  ,@Comment(value = "定时回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","int"}, parameters = {"model", "tick"}, comments = {"执行此函数的模型实体", "当前实体运行刻"}) String tickCallback
+  ,@Comment(value = "定时回调函数回调间隔(刻)") int callTick
+  ,@Comment(value = "被攻击回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"model", "damageEvent"}, comments = {"执行此函数的模型实体", "实体受到的伤害事件"}) String attackCallback
+  ,@Comment(value = "实体交互回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","cn.nukkit.Player","cn.nukkit.item.Item","cn.nukkit.math.Vector3"}, parameters = {"model","player","item","clickPos"}, comments = {"执行此函数的模型实体", "发起交互的玩家", "交互使用的物品", "交互点击的位置"})  String interactCallback)
+
+
 ## 1.2.9.3
 
 Bug Fixed

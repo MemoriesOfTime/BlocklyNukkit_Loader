@@ -4,7 +4,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.format.FullChunk;
 import com.blocklynukkit.loader.Loader;
 
-public class LevelNameRender extends BaseRender {
+public final class LevelNameRender extends BaseRender {
     private String forLevel = null;
     private String callback = null;
     public LevelNameRender(String forLevel,String callback){

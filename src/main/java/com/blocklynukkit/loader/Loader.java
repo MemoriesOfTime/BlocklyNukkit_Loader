@@ -15,14 +15,13 @@ import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.PluginLogger;
-import cn.nukkit.resourcepacks.ResourcePack;
-import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
+import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourcePack;
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Babel;
-import com.blocklynukkit.loader.other.chemistry.EnableChemistryBlocks;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
@@ -56,6 +55,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import static com.blocklynukkit.loader.script.BlockItemManager.blocklyNukkitMcpack;
 
 public class Loader extends PluginBase implements Listener {
 
@@ -104,9 +105,13 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String, Scoreboard> boards = new HashMap<>();
     public static Map<String,String> tipsVar = new HashMap<>();
     //blockitemManager变量
+    public static byte[] ItemPalette = null;
     public static short registerBlocks = 0;
+    public static short registerCustomBlocks = 0;
     public static short registerItems = 0;
     public static List<Integer> registerItemIds = new ArrayList<>();
+    public static List<Integer> registerBlockIds = new ArrayList<>();
+    public static Int2ObjectOpenHashMap<CustomItemInfo> registerItemInfos = new Int2ObjectOpenHashMap<>();
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;
@@ -194,25 +199,11 @@ public class Loader extends PluginBase implements Listener {
         //这里没有database因为后面要检查依赖库是否存在再创建
         //10/25add 现在创建多个基对象，动态创建，无需在插件启动时创建
 
-        //如果没有显式使用bn拓展材质，则启用化学资源包，防止客户端暴毙
-        //1/25追加：powernukkit停止发送，因为bug未解决
-//        boolean haveBNResourceExtend = false;
-//        for(ResourcePack pack:this.getServer().getResourcePackManager().getResourceStack()){
-//            if(pack.getPackName().contains("BNExtend")){
-//                haveBNResourceExtend = true;break;
-//            }
-//        }
-//        if(!haveBNResourceExtend){
-//            EnableChemistryBlocks.enable();
-//        }
-
         //创建红石音乐插件主线程
         noteBlockPlayerMain.onEnable();//if(plugins.containsKey("GameAPI"))gameManager=new GameManager();
         //修改路径类加载器，使得脚本可以调用其他插件
         ClassLoader cl = plugin.getClass().getClassLoader();
         Thread.currentThread().setContextClassLoader(cl);
-        //为nashorn js引擎开启es6支持
-        System.setProperty("nashorn.args", "--language=es6");
         //更新检测
         new Timer().schedule(new TimerTask() {
             @Override
@@ -220,8 +211,8 @@ public class Loader extends PluginBase implements Listener {
                 Utils.checkupdate();
             }
         },0,3600*2*1000);
-        //加载统计器类
-        MetricsLite metricsLite=new MetricsLite(this,6769);
+        //加载统计器类 ID: 11334
+        MetricsLite metricsLite=new MetricsLite(this,11334);
         //世界生成器初始化
         LevelManager.doreloadSkyLandGeneratorSettings();
         LevelManager.doreloadOceanGeneratorSettings();
@@ -308,6 +299,8 @@ public class Loader extends PluginBase implements Listener {
         Utils.makeHttpServer(portto);
         //初始化完成，通知各bn插件
         callEventHandler(new BNInitializedEvent(),"BNInitializedEvent","BNInitializedEvent");
+        //生成bn自定义物品材质包
+        ResourcePack.resourcePackGenerate();
     }
 
 

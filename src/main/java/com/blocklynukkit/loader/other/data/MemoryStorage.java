@@ -1,6 +1,6 @@
 package com.blocklynukkit.loader.other.data;
 
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.Comment;
 
 import java.util.concurrent.ConcurrentHashMap;
 

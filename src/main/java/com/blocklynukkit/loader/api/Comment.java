@@ -1,4 +1,4 @@
-package com.blocklynukkit.loader;
+package com.blocklynukkit.loader.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

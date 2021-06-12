@@ -1,15 +1,12 @@
 package com.blocklynukkit.loader.other.data;
 
 import cn.nukkit.Server;
-import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.script.FunctionManager;
 import com.blocklynukkit.loader.utils.Utils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static com.blocklynukkit.loader.Loader.plugin;

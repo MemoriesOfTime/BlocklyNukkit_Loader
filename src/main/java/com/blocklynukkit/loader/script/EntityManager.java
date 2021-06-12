@@ -24,23 +24,21 @@ import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.EntityEventPacket;
 import cn.nukkit.potion.Effect;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
-import com.blocklynukkit.loader.other.Entities.BNNPC;
-import com.blocklynukkit.loader.other.Entities.FloatingText;
-import com.blocklynukkit.loader.other.Entities.NoFallBlock;
+import com.blocklynukkit.loader.other.Entities.*;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.MathUtils;
 
 import javax.script.ScriptEngine;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-public class EntityManager extends BaseManager {
+public final class EntityManager extends BaseManager {
     public EntityManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
@@ -191,7 +189,8 @@ public class EntityManager extends BaseManager {
     public Entity buildFloatingText(@Comment(value = "浮空字内容，其实就是实体名") String text
             ,@Comment(value = "浮空字实体的位置") Position pos
             ,@Comment(value = "回调函数回调间隔(tick)") int calltick
-            ,@Comment(value = "回调函数名,参数(cn.nukkit.entity.Entity 浮空字实体自身)") String callback){
+            ,@Comment(value = "回调函数名,参数(cn.nukkit.entity.Entity 浮空字实体自身)")
+             @CallbackFunction(classes = "com.blocklynukkit.loader.other.Entities.FloatingText", parameters = "ent", comments = "浮空字实体") String callback){
         double x = pos.x;
         double y = pos.y;
         double z = pos.z;
@@ -304,7 +303,7 @@ public class EntityManager extends BaseManager {
     }
     //构建bnNPC
     @Comment(value = "构建bnNPC")
-    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name){
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos, @Comment(value = "bnnpc的名字") String name){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes("Steve"));
     }
     @Comment(value = "构建bnNPC")
@@ -312,12 +311,48 @@ public class EntityManager extends BaseManager {
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID));
     }
     @Comment(value = "构建bnNPC")
-    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") String callfunction){
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"}) String callfunction){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction);
     }
     @Comment(value = "构建bnNPC")
-    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") String callfunction,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)") String attackfunction){
+    public BNNPC buildNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction
+            ,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"npc", "damageEvent"}, comments = {"执行此函数的npc实体", "实体受到的伤害事件"})  String attackfunction){
         return new BNNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction,attackfunction);
+    }
+    @Comment(value = "构建旧版bnNPC")
+    public BNNPC_Fix buildNPC_Old(@Comment(value = "生成bnnpc的位置") Position pos, @Comment(value = "bnnpc的名字") String name){
+        return new BNNPC_Fix(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes("Steve"));
+    }
+    @Comment(value = "构建旧版bnNPC")
+    public BNNPC_Fix buildNPC_Old(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID){
+        return new BNNPC_Fix(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID));
+    }
+    @Comment(value = "构建旧版bnNPC")
+    public BNNPC_Fix buildNPC_Old(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC_Fix","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction){
+        return new BNNPC_Fix(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction);
+    }
+    @Comment(value = "构建旧版bnNPC")
+    public BNNPC_Fix buildNPC_Old(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name,@Comment(value = "皮肤名称") String skinID,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction
+            ,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)")@CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC_Fix","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"npc", "damageEvent"}, comments = {"执行此函数的npc实体", "实体受到的伤害事件"})  String attackfunction){
+        return new BNNPC_Fix(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction,attackfunction);
+    }
+    //构建展示4d模型
+    @Comment(value = "构建4d展示模型")
+    public BNModel buildModel(@Comment(value = "生成模型的位置") Position pos
+            ,@Comment(value = "模型4d皮肤id") String modelSkinID
+            ,@Comment(value = "模型长") double length
+            ,@Comment(value = "模型宽") double width
+            ,@Comment(value = "模型高") double height
+            ,@Comment(value = "模型缩放比例") double scale
+            ,@Comment(value = "定时回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","int"}, parameters = {"model", "tick"}, comments = {"执行此函数的模型实体", "当前实体运行刻"}) String tickCallback
+            ,@Comment(value = "定时回调函数回调间隔(刻)") int callTick
+            ,@Comment(value = "被攻击回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"model", "damageEvent"}, comments = {"执行此函数的模型实体", "实体受到的伤害事件"}) String attackCallback
+            ,@Comment(value = "实体交互回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNModel","cn.nukkit.Player","cn.nukkit.item.Item","cn.nukkit.math.Vector3"}, parameters = {"model","player","item","clickPos"}, comments = {"执行此函数的模型实体", "发起交互的玩家", "交互使用的物品", "交互点击的位置"})  String interactCallback){
+        return new BNModel(pos.getChunk(), Entity.getDefaultNBT(pos),new Clothes(modelSkinID),length,width,height,scale,tickCallback,callTick,attackCallback,interactCallback);
     }
     //展示浮空物品
     @Comment(value = "展示浮空物品")

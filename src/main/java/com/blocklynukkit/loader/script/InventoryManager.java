@@ -2,22 +2,19 @@ package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockHopper;
-import cn.nukkit.block.BlockID;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.blockentity.BlockEntityChest;
 import cn.nukkit.blockentity.BlockEntityContainer;
 import cn.nukkit.blockentity.BlockEntityHopper;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
-import cn.nukkit.entity.mob.EntityMob;
-import cn.nukkit.inventory.HopperInventory;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.EventLoader;
-import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.inventoty.HopperFakeInventory;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.nukkitx.fakeinventories.inventory.ChestFakeInventory;
 import com.nukkitx.fakeinventories.inventory.DoubleChestFakeInventory;
@@ -29,7 +26,7 @@ import java.util.List;
 
 import java.util.Map;
 
-public class InventoryManager extends BaseManager {
+public final class InventoryManager extends BaseManager {
     public InventoryManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
@@ -39,7 +36,7 @@ public class InventoryManager extends BaseManager {
         return "BlocklyNukkit Based Object";
     }
     @Comment(value = "新建一个箱子物品栏")
-    public FakeInventory addInv(@Comment(value = "是否为大箱子") boolean isDoubleChest
+    public ChestFakeInventory addInv(@Comment(value = "是否为大箱子") boolean isDoubleChest
             ,@Comment(value = "包含的物品，需要使用`Java.to`函数转换") Item[] item
             ,@Comment(value = "物品栏标题") String name){
         ChestFakeInventory inv;
@@ -48,6 +45,19 @@ public class InventoryManager extends BaseManager {
         }else{
             inv = new ChestFakeInventory();
         }
+        for(int i=0;i<inv.getSize()&&i<item.length;i++){
+            inv.setItem(i,item[i]);
+        }
+        if (!name.isEmpty()){
+            inv.setName(name);
+        }
+        inv.addListener(EventLoader::onSlotChange);
+        return inv;
+    }
+    @Comment(value = "新建一个漏斗物品栏")
+    public HopperFakeInventory addHopperInv(@Comment(value = "包含的物品，需要使用`Java.to`函数转换") Item[] item
+            ,@Comment(value = "物品栏标题") String name){
+        HopperFakeInventory inv = new HopperFakeInventory();
         for(int i=0;i<inv.getSize()&&i<item.length;i++){
             inv.setItem(i,item[i]);
         }

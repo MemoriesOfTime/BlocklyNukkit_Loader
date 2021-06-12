@@ -15,7 +15,7 @@ import com.blocklynukkit.loader.script.window.windowCallbacks.CustomCallback;
 import com.blocklynukkit.loader.script.window.windowCallbacks.SimpleCallback;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
-public class Custom {
+public final class Custom {
     public LinkedHashMap<Element,String> elementMap=new LinkedHashMap<>();
     private Element previousElement = null;
     public int id = (int) Math.floor(Math.random()*10000000);

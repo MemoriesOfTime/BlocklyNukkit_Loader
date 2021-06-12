@@ -14,7 +14,8 @@ import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.network.protocol.ShowCreditsPacket;
 import cn.nukkit.network.protocol.ShowProfilePacket;
 import cn.nukkit.utils.DummyBossBar;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
@@ -43,7 +44,7 @@ import java.util.UUID;
 import static com.blocklynukkit.loader.Loader.boards;
 import static com.blocklynukkit.loader.Loader.tipsVar;
 
-public class WindowManager extends BaseManager {
+public final class WindowManager extends BaseManager {
     public WindowManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
@@ -267,7 +268,8 @@ public class WindowManager extends BaseManager {
         player.setScoreTag(str);
     }
     @Comment(value = "设置tips的动态变量")
-    public void makeTipsVar(@Comment(value = "变量名") String varname,@Comment(value = "回调函数，参数(cn.nukkit.Player要求提供变量的玩家)，返回值将用作变量的替换内容") String provider){
+    public void makeTipsVar(@Comment(value = "变量名") String varname,@Comment(value = "回调函数，参数(cn.nukkit.Player要求提供变量的玩家)，返回值将用作变量的替换内容")
+            @CallbackFunction(classes = "cn.nukkit.Player", parameters = "player", comments = "要将变量显示给的玩家") String provider){
         tipsVar.put(varname,"function->"+provider);
     }
     @Comment(value = "设置tips的静态变量")

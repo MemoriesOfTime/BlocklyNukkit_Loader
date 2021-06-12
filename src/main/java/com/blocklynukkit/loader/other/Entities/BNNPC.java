@@ -115,6 +115,7 @@ public class BNNPC extends MovingEntity {
     @Override
     public float getEyeHeight() {
         return 1.62F;
+        //return 0.0F;
     }
     @Override
     public float getMovementSpeed() {
@@ -417,8 +418,8 @@ public class BNNPC extends MovingEntity {
         }else {
             d = 1;
         }
-        entity.attack(new EntityDamageByEntityEvent(this,entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK,(float) d,0.5f));
         this.displaySwing();
+        entity.attack(new EntityDamageByEntityEvent(this,entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK,(float) d,0.5f));
     }
     public void start(){
         this.spawnToAll();

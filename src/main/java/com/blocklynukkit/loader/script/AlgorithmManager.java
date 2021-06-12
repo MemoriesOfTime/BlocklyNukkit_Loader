@@ -6,13 +6,14 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 
 import javax.script.ScriptEngine;
 
-public class AlgorithmManager extends BaseManager {
+public final class AlgorithmManager extends BaseManager {
     public AlgorithmManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
@@ -20,7 +21,8 @@ public class AlgorithmManager extends BaseManager {
     public void forEachBlockInArea(@Comment(value = "起点") Position a
             ,@Comment(value = "终点") Position b
             ,@Comment(value = "是否为空气方块也执行回调函数") boolean isair
-            ,@Comment(value = "回调函数名，参数(cn.nukkit.Block)") String callback){
+            ,@Comment(value = "回调函数名，参数(cn.nukkit.Block)")
+             @CallbackFunction(classes = "cn.nukkit.block.Block", parameters = "block", comments = "当前执行到的方块") String callback){
         Level level = a.level;
         for (int i=(int)a.x;i<(int)b.x;i++){
             for (int j=(int)a.y;i<(int)b.y;j++){
@@ -38,7 +40,8 @@ public class AlgorithmManager extends BaseManager {
     }
     @Comment(value = "为指定坐标相邻的同种方块及相邻同种方块的相邻同种方块执行回调函数")
     public void forLinkedBlock(@Comment(value = "指定坐标") Position a
-            ,@Comment(value = "回调函数，参数(cn.nukkit.level.Position)") String callback){
+            ,@Comment(value = "回调函数，参数(cn.nukkit.level.Position)")
+             @CallbackFunction(classes = "cn.nukkit.level.Position", parameters = "pos", comments = "当前执行到的位置") String callback){
         Loader.positionstmp="";
         forLinkedBlock((int)a.x,(int)a.y,(int)a.z,callback,0,a.level,a.getLevelBlock().getId());
     }

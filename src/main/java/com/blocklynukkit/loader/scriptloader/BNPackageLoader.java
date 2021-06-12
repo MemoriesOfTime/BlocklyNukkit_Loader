@@ -7,10 +7,7 @@ import com.blocklynukkit.loader.utils.GZIPUtils;
 import com.blocklynukkit.loader.utils.Utils;
 
 import java.io.*;
-import java.util.Base64;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -23,7 +20,14 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
     @Override
     public void loadplugins(){
         try{
-            for (File file : Objects.requireNonNull(plugin.getDataFolder().listFiles())) {
+            LinkedList<File> pluginFiles = new LinkedList<>();
+            pluginFiles.addAll(Arrays.asList(
+                    Objects.requireNonNull(new File(Server.getInstance().getPluginPath()).listFiles(
+                            (dir, name) -> name.endsWith(".bnp") || name.endsWith(".bnpx"))
+                    )));
+            pluginFiles.addAll(Arrays.asList(Objects.requireNonNull(plugin.getDataFolder().listFiles(
+                    (dir, name) -> name.endsWith(".bnp") || name.endsWith(".bnpx")))));
+            for (File file : pluginFiles) {
                 if(file.isDirectory()) continue;
                 if(file.getName().endsWith(".bnp")&&!file.getName().contains("bak")){
                     try {
@@ -157,7 +161,7 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
                         getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
                     }
                 }
-            }else if(entry.getKey().endsWith(".php")){
+            }else if(entry.getKey().endsWith(".php")||entry.getKey().endsWith(".phpfile")){
                 if(!plugins.containsKey("PHPBN")){
                     PHPLoader loader = new PHPLoader(plugin);
                     loader.pragmas = loader.getPragma(entry.getValue());

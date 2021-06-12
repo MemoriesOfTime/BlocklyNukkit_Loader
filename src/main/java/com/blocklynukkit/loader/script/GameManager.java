@@ -15,7 +15,7 @@ import javax.script.ScriptEngine;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class GameManager extends BaseManager {
+public final class GameManager extends BaseManager {
     public GameManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }

@@ -3,7 +3,8 @@ package com.blocklynukkit.loader.scriptloader;
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Babel;
-import com.blocklynukkit.loader.scriptloader.transformer.JsArrowFunctionTransformer;
+import com.blocklynukkit.loader.scriptloader.functions.JSExistFunction;
+import com.blocklynukkit.loader.scriptloader.transformer.JsES6Transformer;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
@@ -79,7 +80,19 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
     public void putJavaScriptEngine(String name,String js){
         js = formatExportJavaScript(name,js);
         if(pragmas == null)pragmas = getPragma(js);
-        engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine());
+        if(pragmas.contains("pragma optimistic")){
+            if(Utils.getVersion() >= 11){
+                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--no-deprecation-warning", "--language=es6", "--optimistic-types=true"));
+            }else{
+                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6", "--optimistic-types=true"));
+            }
+        }else{
+            if(Utils.getVersion() >= 11){
+                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--no-deprecation-warning", "--language=es6"));
+            }else{
+                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6"));
+            }
+        }
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 getlogger().error("JavaScript引擎加载出错！");
@@ -102,12 +115,13 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             }
             engineMap.get(name).put("lambdaCount",-1);
             engineMap.get(name).put("baseInterpreterBNJavaScriptEngine",engineMap.get(name));
+            engineMap.get(name).put("__exist",new JSExistFunction());
             ((NashornScriptEngine)engineMap.get(name)).compile("function F(f){lambdaCount++;baseInterpreterBNJavaScriptEngine.put('Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount,f);return 'Lambda_"+Utils.getMD5(name.getBytes())+"_'+lambdaCount;}").eval();
-            engineMap.get(name).eval("var require = Java.type;");
+            engineMap.get(name).eval("function require(c){if(__exist(c)){return Java.type(c);}else{return undefined;}}");
             putBaseObject(name);
             engineMap.get(name).put("javax.script.filename",name);
             engineMap.get(name).put("console",engineMap.get(name).get("logger"));
-            engineMap.get(name).eval(new JsArrowFunctionTransformer(js).transform());
+            engineMap.get(name).eval(new JsES6Transformer(js).transform());
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -158,15 +172,6 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             if(bn!=null) bnClasses.put(name,bn);
         }
         return output;
-    }
-    public String packageToClass(String pkg){
-        String[] paths = pkg.split("\\.");
-        if(paths.length == 2 && (paths[1].equals("js") || paths[1].equals("py") ||
-                paths[1].equals("php") || paths[1].equals("lua") || paths[1].equals("wasm"))){
-            return paths[0];
-        }else {
-            return paths[1];
-        }
     }
     @Override
     public String toString(Object var){

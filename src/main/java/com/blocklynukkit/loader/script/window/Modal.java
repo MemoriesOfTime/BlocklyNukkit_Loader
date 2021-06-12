@@ -11,7 +11,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.util.Map;
 
-public class Modal {
+public final class Modal {
     public int id = (int) Math.floor(Math.random()*10000000);
     public String title="";
     public String context="";

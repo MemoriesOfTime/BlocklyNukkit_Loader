@@ -4,7 +4,7 @@ import cn.nukkit.event.player.PlayerFormRespondedEvent;
 import cn.nukkit.form.response.FormResponseModal;
 import com.blocklynukkit.loader.Loader;
 
-public class ModalCallback extends WindowCallback {
+public final class ModalCallback extends WindowCallback {
     public String defaultCallback = null;
     public String yesCallback = null;
     public String noCallback = null;

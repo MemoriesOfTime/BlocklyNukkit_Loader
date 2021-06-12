@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.other.ai.route;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
+import cn.nukkit.block.BlockFence;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.other.ai.entity.Climbable;

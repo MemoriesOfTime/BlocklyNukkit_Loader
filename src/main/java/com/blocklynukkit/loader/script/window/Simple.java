@@ -12,7 +12,7 @@ import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.util.*;
 
-public class Simple {
+public final class Simple {
     public LinkedHashMap<ElementButton,String> buttonsMap=new LinkedHashMap<>();
     public int id = (int) Math.floor(Math.random()*10000000);
     public String title="";

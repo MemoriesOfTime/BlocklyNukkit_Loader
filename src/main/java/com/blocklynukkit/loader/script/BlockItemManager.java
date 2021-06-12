@@ -11,10 +11,10 @@ import cn.nukkit.event.block.BlockUpdateEvent;
 import cn.nukkit.inventory.FurnaceRecipe;
 import cn.nukkit.inventory.ShapedRecipe;
 import cn.nukkit.inventory.ShapelessRecipe;
-import cn.nukkit.item.Item;
-import cn.nukkit.item.RuntimeItemMapping;
-import cn.nukkit.item.RuntimeItems;
+import cn.nukkit.item.*;
 import cn.nukkit.item.enchantment.Enchantment;
+import cn.nukkit.item.food.Food;
+import cn.nukkit.item.food.FoodNormal;
 import cn.nukkit.item.randomitem.ConstantItemSelector;
 import cn.nukkit.item.randomitem.Fishing;
 import cn.nukkit.item.randomitem.RandomItem;
@@ -28,20 +28,38 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
-import com.blocklynukkit.loader.Comment;
+import cn.nukkit.utils.BinaryStream;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourceNode;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourcePack;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.TranslationNode;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceArmorManifest;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceItemManifest;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceJSON;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourcePicture;
+import com.blocklynukkit.loader.other.Items.ItemData;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import javassist.*;
 
 import javax.script.ScriptEngine;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-public class BlockItemManager extends BaseManager {
+public final class BlockItemManager extends BaseManager {
+    public static ResourcePack blocklyNukkitMcpack = new ResourcePack("./resource_packs/blocklynukkit.mcpack");
+    public static TranslationNode mcpackTranslation = new TranslationNode();
+
     public BlockItemManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }
@@ -629,10 +647,52 @@ public class BlockItemManager extends BaseManager {
         }
         RandomItem.putSelector(new ConstantItemSelector(item, parent),(float) chance);
     }
+    //不对外暴露: 获取全称ID
+    public int getFullId(int id, int data) {
+        return (((short) id) << 16) | ((data & 0x7fff) << 1);
+    }
+    //不对外暴露: 向NK写入物品数据
+    public void injectItem2Nukkit(String name, int id) throws NoSuchFieldException, IllegalAccessException {
+        RuntimeItemMapping runtimeItemMapping = null;
+        try {
+            runtimeItemMapping = RuntimeItems.getMapping();
+        }catch (NoSuchMethodError error){
+            try {
+                Method getRuntimeItemMappingMethod = RuntimeItems.class.getMethod("getRuntimeMapping");
+                runtimeItemMapping = (RuntimeItemMapping) getRuntimeItemMappingMethod.invoke(RuntimeItemMapping.class);
+            } catch (NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            Field runtime2Legacy = runtimeItemMapping.getClass().getDeclaredField("runtime2Legacy");runtime2Legacy.setAccessible(true);
+            Field legacy2Runtime = runtimeItemMapping.getClass().getDeclaredField("legacy2Runtime");legacy2Runtime.setAccessible(true);
+            Field identifier2Legacy = runtimeItemMapping.getClass().getDeclaredField("identifier2Legacy");identifier2Legacy.setAccessible(true);
+            int fullId = (short)id << 16 | ((0) & 32767) << 1;
+            RuntimeItemMapping.LegacyEntry legacyEntry = new RuntimeItemMapping.LegacyEntry(id, false, 0);
+            ((Int2ObjectMap<RuntimeItemMapping.RuntimeEntry>)legacy2Runtime.get(runtimeItemMapping)).put(fullId, new RuntimeItemMapping.RuntimeEntry("blocklynukkit:"+name, id, false));
+            ((Int2ObjectMap<RuntimeItemMapping.LegacyEntry>)runtime2Legacy.get(runtimeItemMapping)).put(id, legacyEntry);
+            ((HashMap<String, RuntimeItemMapping.LegacyEntry>)identifier2Legacy.get(runtimeItemMapping)).put("blocklynukkit:"+name, legacyEntry);
+        }catch (NoSuchFieldException | IllegalAccessException e){
+            Field legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");legacyNetworkMap.setAccessible(true);
+            Field networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");networkLegacyMap.setAccessible(true);
+            Field namespaceNetworkMap = runtimeItemMapping.getClass().getDeclaredField("namespaceNetworkMap");namespaceNetworkMap.setAccessible(true);
+            Field networkNamespaceMap = runtimeItemMapping.getClass().getDeclaredField("networkNamespaceMap");networkNamespaceMap.setAccessible(true);
+            int fullId = (short)id << 16 | ((0) & 32767) << 1;
+            ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(fullId, id << 1);
+            ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id, fullId);
+            ((Map<String, OptionalInt>)namespaceNetworkMap.get(runtimeItemMapping)).put("blocklynukkit:"+name, OptionalInt.of(id));
+            ((Int2ObjectMap<String>)networkNamespaceMap.get(runtimeItemMapping)).put(id, "blocklynukkit:"+name);
+        }
+    }
     //不对外暴露: 注册新方块
     public void registerBlock(int id, Class<? extends Block> clazz) {
-        Item.list[id] = clazz;
-        RuntimeItemMapping runtimeItemMapping = RuntimeItems.getRuntimeMapping();
+        if(id < 255 && id > 0) {
+            Item.list[id] = clazz;
+        }else {
+            Loader.registerCustomBlocks++;
+        }
+        RuntimeItemMapping runtimeItemMapping = RuntimeItems.getMapping();
         Field legacyNetworkMap = null;
         try {
             legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");
@@ -648,17 +708,53 @@ public class BlockItemManager extends BaseManager {
         }
         networkLegacyMap.setAccessible(true);
         try {
-            ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(RuntimeItems.getFullId(id,0), id << 1);
+            ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(getFullId(id,0), id << 1);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         try {
-            ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,RuntimeItems.getFullId(id,0));
+            ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,getFullId(id,0));
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        Loader.registerItemIds.add(id);
+        //Loader.registerItemIds.add(id);
+        if(Block.list.length < 800){
+            Class[] list = new Class[2048];
+            System.arraycopy(Block.list, 0, list, 0, Block.list.length);
+            Block.list = list;
+            Block[] fullList = new Block[2048 * (1 << 4)];
+            System.arraycopy(Block.fullList, 0, fullList, 0, Block.fullList.length);
+            Block.fullList = fullList;
+            int[] light = new int[2048];
+            System.arraycopy(Block.light, 0, light, 0, Block.light.length);
+            Block.light = light;
+            int[] lightFilter = new int[2048];
+            System.arraycopy(Block.lightFilter, 0, lightFilter, 0, Block.lightFilter.length);
+            Block.lightFilter = lightFilter;
+            boolean[] solid = new boolean[2048];
+            System.arraycopy(Block.solid, 0, solid, 0, Block.solid.length);
+            Block.solid = solid;
+            double[] hardness = new double[2048];
+            System.arraycopy(Block.hardness, 0, hardness, 0, Block.hardness.length);
+            Block.hardness = hardness;
+            boolean[] transparent = new boolean[2048];
+            System.arraycopy(Block.transparent, 0, transparent, 0, Block.transparent.length);
+            Block.transparent = transparent;
+            boolean[] diffusesSkyLight = new boolean[2048];
+            try {
+                Field diffField = Block.class.getDeclaredField("diffusesSkyLight");
+                boolean[] source = (boolean[]) diffField.get(Block.class);
+                System.arraycopy(source, 0, diffusesSkyLight, 0, source.length);
+                diffField.set(Block.class, diffusesSkyLight);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            boolean[] hasMeta = new boolean[2048];
+            System.arraycopy(Block.hasMeta, 0, hasMeta, 0, Block.hasMeta.length);
+            Block.hasMeta = hasMeta;
+        }
         Block.list[id] = clazz;
+
         Block block;
         try {
             block = clazz.newInstance();
@@ -708,6 +804,13 @@ public class BlockItemManager extends BaseManager {
             ,@Comment(value = "挖掘后掉落的最大经验") int dropMaxExp
             ,@Comment(value = "新方块的挖掘等级，0-空手,1-木,2-金,3-石,4-铁,5-钻石") int mineTier){
         try {
+            //仅在PowerNukkit上可用
+            if(!Loader.getFunctionManager().isPowerNukkit()){
+                Loader.getlogger().alert("Custom block can only work on powernukkit!");
+                return;
+            }
+            //记录方块id
+            Loader.registerBlockIds.add(id);
             //获取类加载器并导入类路径
             ClassPool classPool = ClassPool.getDefault();
             CtClass blockClass = null;
@@ -716,7 +819,7 @@ public class BlockItemManager extends BaseManager {
             classPool.insertClassPath(new ClassClassPath(Nukkit.class));
             classPool.importPackage("com.blocklynukkit.loader");
             //创建继承固体方块的类
-            blockClass = classPool.makeClass("Block_ID_"+id+"_"+Loader.registerBlocks++,classPool.getCtClass("com.blocklynukkit.loader.other.Blocks.BaseSolidBlock"));
+            blockClass = classPool.makeClass("Block_ID_"+id+"_"+Loader.registerBlocks++,classPool.getCtClass("com.blocklynukkit.loader.other.AddonsAPI.BaseSolidBlock"));
             //添加构造函数
             CtConstructor constructor = new CtConstructor(new CtClass[]{},blockClass);
             constructor.setBody("{}");
@@ -741,22 +844,36 @@ public class BlockItemManager extends BaseManager {
             blockClass.addMethod(CtMethod.make("public int getTier(){return "+mineTier+";}",blockClass));
             //编译到jvm中
             registerBlock(id, (Class<? extends Block>) blockClass.toClass());
-        } catch (NotFoundException e) {
-            e.printStackTrace();
-        } catch (CannotCompileException e) {
+        } catch (NotFoundException | CannotCompileException e) {
             e.printStackTrace();
         }
     }
     //动态生成类并注册新的简单物品
-    @Comment(value = "注册新的物品")
+    @Comment(value = "注册新的简易物品")
     public void registerSimpleItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name){
-        this.registerSimpleItem(id, name, 64);
+        this.registerSimpleItem(id, name, 64, "items");
     }
-    @Comment(value = "注册新的物品")
+    @Comment(value = "注册新的简易物品")
     public void registerSimpleItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name
-            ,@Comment(value = "新物品的最大堆叠上限") int stackSize){
+            ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type){
+        this.registerSimpleItem(id, name, 64, type);
+    }
+    @Comment(value = "注册新的简易物品")
+    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type){
+        this.registerSimpleItem(id, name, stackSize, type, false, false);
+    }
+    @Comment(value = "注册新的简易物品")
+    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
+            ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -779,19 +896,370 @@ public class BlockItemManager extends BaseManager {
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
             Item.list[id] = itemClass.toClass();
+            //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
                     ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
-                RuntimeItemMapping runtimeItemMapping = RuntimeItems.getRuntimeMapping();
-                Field legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");legacyNetworkMap.setAccessible(true);
-                Field networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");networkLegacyMap.setAccessible(true);
-                int fullId = RuntimeItems.getFullId(id, 0);
-                ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(fullId, id << 1);
-                ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,fullId);
+                injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
+                //记录物品注册信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, 4, isDisplayAsTool, canOnOffhand);
+                //记录物品分类种类
+                switch (type){
+                    case "construction": customItemInfo.setType(1);break;
+                    case "nature": customItemInfo.setType(2);break;
+                    case "equipment": customItemInfo.setType(3);break;
+                    default: customItemInfo.setType(4); //item
+                }
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
             }
         } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+    @Comment(value = "注册新的工具物品")
+    public void registerToolItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
+            ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
+            ,@Comment(value = "工具耐久值") int durability
+            ,@Comment(value = "攻击伤害") int attackDamage
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass itemClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            //构建物品类
+            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemTool"));
+            //添加构造函数
+            CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            itemClass.addConstructor(twoConstructor);
+            CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            itemClass.addConstructor(oneConstructor);
+            CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            itemClass.addConstructor(voidConstructor);
+            //最大堆叠数量
+            itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return 1;}",itemClass));
+            //工具种类
+            int toolTypeNum = 0;
+            switch (toolType){
+                case "sword":
+                    toolTypeNum = 1;
+                    itemClass.addMethod(CtMethod.make("public boolean isSword(){return true;}",itemClass));
+                    break;
+                case "shovel":
+                    toolTypeNum = 2;
+                    itemClass.addMethod(CtMethod.make("public boolean isShovel(){return true;}",itemClass));
+                    break;
+                case "pickaxe":
+                    toolTypeNum = 3;
+                    itemClass.addMethod(CtMethod.make("public boolean isPickaxe(){return true;}",itemClass));
+                    break;
+                case "axe":
+                    toolTypeNum = 4;
+                    itemClass.addMethod(CtMethod.make("public boolean isAxe(){return true;}",itemClass));
+                    break;
+                case "hoe":
+                    toolTypeNum = 6;
+                    itemClass.addMethod(CtMethod.make("public boolean isHoe(){return true;}",itemClass));
+                    break;
+            }
+            //工具挖掘等级
+            itemClass.addMethod(CtMethod.make("public int getTier(){return "+toolTier+";}",itemClass));
+            //工具耐久
+            itemClass.addMethod(CtMethod.make("public int getMaxDurability(){return "+durability+";}",itemClass));
+            //完成类生成
+            Item.list[id] = itemClass.toClass();
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录工具信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, canOnOffhand, toolTypeNum, toolTier, durability, attackDamage);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Comment(value = "注册新的食物物品")
+    public void registerFoodItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "食用持续时间(刻)") int eatTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass itemClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            //构建物品类
+            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            //添加构造函数
+            CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            itemClass.addConstructor(twoConstructor);
+            CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            itemClass.addConstructor(oneConstructor);
+            CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            itemClass.addConstructor(voidConstructor);
+            //覆写使用函数
+            itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
+                    "   return super.onUse(player, ticksUsed);" +
+                    "}",itemClass));
+            //最大堆叠数量
+            itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
+            Item.list[id] = itemClass.toClass();
+            //构建食物类
+            Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录物品注册信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, true, canOnOffhand, eatTime, nutrition);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Comment(value = "注册新的饮品物品")
+    public void registerDrinkItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "饮用持续时间(刻)") int drinkTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass itemClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            //构建物品类
+            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            //添加构造函数
+            CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            itemClass.addConstructor(twoConstructor);
+            CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            itemClass.addConstructor(oneConstructor);
+            CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            itemClass.addConstructor(voidConstructor);
+            //覆写使用函数
+            itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
+                    "   return super.onUse(player, ticksUsed);" +
+                    "}",itemClass));
+            //最大堆叠数量
+            itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
+            Item.list[id] = itemClass.toClass();
+            //构建食物类
+            Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录物品注册信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, false, canOnOffhand, drinkTime, nutrition);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Comment(value = "注册新的盔甲物品")
+    public void registerArmorItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "盔甲种类,可为helmet chest leggings boots") String armorType
+            ,@Comment(value = "盔甲等级 0-无,1-皮革,2-铁,3-锁链,4-金,5-钻石,6-下界合金") int armorTier
+            ,@Comment(value = "工具耐久值") int durability
+            ,@Comment(value = "提供的盔甲值") int armorPoint
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            ClassPool classPool = ClassPool.getDefault();
+            CtClass itemClass = null;
+            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
+            classPool.insertClassPath(new ClassClassPath(Loader.class));
+            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
+            classPool.importPackage("com.blocklynukkit.loader");
+            //构建物品类
+            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemArmor"));
+            //添加构造函数
+            CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            itemClass.addConstructor(twoConstructor);
+            CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            itemClass.addConstructor(oneConstructor);
+            CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            itemClass.addConstructor(voidConstructor);
+            //最大堆叠数量
+            itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return 1;}",itemClass));
+            //表明是盔甲
+            itemClass.addMethod(CtMethod.make("public boolean isArmor(){return true;}",itemClass));
+            //工具种类
+            int armorTypeNum = 0;
+            switch (armorType){
+                case "helmet":
+                    armorTypeNum = 0;
+                    itemClass.addMethod(CtMethod.make("public boolean isHelmet(){return true;}",itemClass));
+                    break;
+                case "chest":
+                    armorTypeNum = 1;
+                    itemClass.addMethod(CtMethod.make("public boolean isChestplate(){return true;}",itemClass));
+                    break;
+                case "leggings":
+                    armorTypeNum = 2;
+                    itemClass.addMethod(CtMethod.make("public boolean isLeggings(){return true;}",itemClass));
+                    break;
+                case "boots":
+                    armorTypeNum = 3;
+                    itemClass.addMethod(CtMethod.make("public boolean isBoots(){return true;}",itemClass));
+                    break;
+            }
+            //盔甲品阶
+            itemClass.addMethod(CtMethod.make("public int getTier(){return "+armorTier+";}",itemClass));
+            //盔甲耐久
+            itemClass.addMethod(CtMethod.make("public int getMaxDurability(){return "+durability+";}",itemClass));
+            //盔甲护甲值
+            itemClass.addMethod(CtMethod.make("public int getArmorPoints(){return "+armorPoint+";}",itemClass));
+            //完成类生成
+            Item.list[id] = itemClass.toClass();
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录盔甲信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, armorTypeNum, canOnOffhand, durability);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Comment(value = "刷新客户端物品注册表")
+    public void refreshItemPalette(){
+        //TODO: 优化算法复杂度
+        InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_states.json");
+        if(stream == null){
+            stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");
+        }
+        if (stream == null) {
+            throw new AssertionError("Unable to load runtime_item_states.json or runtime_item_ids.json");
+        }
+        final Gson GSON = new Gson();
+        final Type ENTRY_TYPE = new TypeToken<ArrayList<ItemData>>(){}.getType();
+        InputStreamReader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
+        Collection<ItemData> entries = GSON.fromJson(reader, ENTRY_TYPE);
+        BinaryStream paletteBuffer = new BinaryStream();
+        paletteBuffer.putUnsignedVarInt(entries.size() + Loader.registerItems);
+        for (ItemData entry : entries) {
+            paletteBuffer.putString(entry.name);
+            paletteBuffer.putLShort(entry.id);
+            paletteBuffer.putBoolean(false);
+        }
+        for(Integer i : Loader.registerItemIds){
+            Item item = Item.get(i);
+            paletteBuffer.putString("blocklynukkit:"+item.getName());
+            paletteBuffer.putLShort(i);
+            paletteBuffer.putBoolean(true);
+        }
+        Loader.ItemPalette = paletteBuffer.getBuffer();
+    }
+
+    @Comment(value = "向材质包中指定位置添加json文件")
+    public void addResourcePackJsonEntry(@Comment(value = "材质包内相对位置，包含路径和文件全名") String entryPath
+            ,@Comment(value = "json文件内容") String json){
+        blocklyNukkitMcpack.addNode(new ResourceNode().putData(entryPath,new ResourceJSON(json)));
+    }
+
+    @Comment(value = "向材质包中指定位置添加图片文件")
+    public void addResourcePackPictureEntry(@Comment(value = "材质包内相对位置，包含路径和文件全名") String entryPath
+            ,@Comment(value = "要复制到材质包中的硬盘上的图片路径") String path){
+        blocklyNukkitMcpack.addNode(new ResourceNode().putData(entryPath,new ResourcePicture(path)));
+    }
+
+    @Comment(value = "添加新的物品材质")
+    public void addItemTexture(@Comment(value = "物品id") int id
+            ,@Comment(value = "物品材质图片路径") String path){
+        Item tmp = Item.get(id);
+        ResourceItemManifest.addItem(tmp.getName());
+        blocklyNukkitMcpack.addNode(
+                new ResourceNode().putData("textures/items/"+tmp.getName()+".png",new ResourcePicture(path))
+        );
+    }
+
+    @Comment(value = "添加新的盔甲材质")
+    public void addArmorTexture(@Comment(value = "物品id") int id
+            ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPath
+            ,@Comment(value = "盔甲穿着时材质图片路径") String modelPath){
+        Item tmp = Item.get(id);
+        ResourceItemManifest.addItem(tmp.getName());
+        String type = "helmet";
+        if(tmp.isChestplate()){
+            type = "chest";
+        }else if(tmp.isLeggings()){
+            type = "leggings";
+        }else if(tmp.isBoots()){
+            type = "boots";
+        }
+        blocklyNukkitMcpack.addNode(
+                new ResourceNode()
+                        .putData("textures/items/"+tmp.getName()+".png",new ResourcePicture(inventoryPath))
+                        .putData("textures/models/armor/"+tmp.getName()+".png", new ResourcePicture(modelPath))
+                        .putData("attachables/"+tmp.getName()+".json", new ResourceArmorManifest(tmp.getName(), type))
+        );
+    }
+
+    @Comment(value = "为指定id物品添加中文翻译名")
+    public void addItemChineseTranslation(@Comment(value = "物品id") int id
+            ,@Comment(value = "中文名") String name){
+        Item tmp = Item.get(id);
+        mcpackTranslation.addChineseTranslation("item.blocklynukkit:"+tmp.getName(), name);
+    }
+
+    @Comment(value = "为指定id物品添加英文翻译名")
+    public void addItemEnglishTranslation(@Comment(value = "物品id") int id
+            ,@Comment(value = "英文名") String name){
+        Item tmp = Item.get(id);
+        mcpackTranslation.addEnglishTranslation("item.blocklynukkit:"+tmp.getName(), name);
     }
 }

@@ -18,6 +18,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -107,6 +108,16 @@ public class Utils {
             e.printStackTrace();
             return null;
         }
+    }
+    public static int getVersion() {
+        String version = System.getProperty("java.version");
+        if(version.startsWith("1.")) {
+            version = version.substring(2, 3);
+        } else {
+            int dot = version.indexOf(".");
+            if(dot != -1) { version = version.substring(0, dot); }
+        }
+        return Integer.parseInt(version);
     }
     public static String randomDeveloper(){
         String[] list = new String[]{"冰凉","电池酱","企鹅","红楼君","夏亚","亦染","WetABQ","HBJ","你的旺财","若水","神奇的YYT"
@@ -445,7 +456,7 @@ public class Utils {
         try {
             String urlNameString = urlEncodeChinese(url);
             if(!(param.length()==0||param==null)){
-                urlNameString = url + "?" + URLEncoder.encode(param.replaceAll("=","WaITeQuALsChaR"),"utf-8").replaceAll("WaITeQuALsChaR","=");
+                urlNameString = url + "?" + URLEncoder.encode(param.replaceAll("=","WaITeQuALsChaR").replaceAll("&","ASDGifsigIOSFHObisG"),"utf-8").replaceAll("WaITeQuALsChaR","=").replaceAll("ASDGifsigIOSFHObisG","&");
             }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
@@ -460,7 +471,7 @@ public class Utils {
             // 获取所有响应头字段
             // 定义 BufferedReader输入流来读取URL的响应
             in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+                    connection.getInputStream(), "utf-8"));
             String line;
             result="";
             while ((line = in.readLine()) != null) {
@@ -490,6 +501,8 @@ public class Utils {
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(15000);
             // 设置通用的请求属性
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
@@ -533,35 +546,35 @@ public class Utils {
     }
 
     public static String sendPost(String url, String param, Map<String, String> header) throws UnsupportedEncodingException, IOException {
-        PrintWriter out = null;
         BufferedReader in = null;
         String result = "";
         URL realUrl = new URL(urlEncodeChinese(url));
         URLConnection conn = realUrl.openConnection();
         conn.setConnectTimeout(5000);
         conn.setReadTimeout(15000);
+        conn.setRequestProperty("accept", "*/*");
+        conn.setRequestProperty("connection", "Keep-Alive");
+        conn.setRequestProperty("user-agent",
+                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         if (header!=null) {
             for (Map.Entry<String, String> entry : header.entrySet()) {
                 conn.setRequestProperty(entry.getKey(), entry.getValue());
             }
         }
-        conn.setRequestProperty("accept", "*/*");
-        conn.setRequestProperty("connection", "Keep-Alive");
-        conn.setRequestProperty("user-agent",
-                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
         conn.setDoOutput(true);
         conn.setDoInput(true);
-        out = new PrintWriter(conn.getOutputStream());
-        out.print(param);
-        out.flush();
+        OutputStream outputStream = conn.getOutputStream();
+        outputStream.write(param.getBytes(StandardCharsets.UTF_8));
+        outputStream.flush();
+
         in = new BufferedReader(
                 new InputStreamReader(conn.getInputStream(), "utf8"));
         String line;
         while ((line = in.readLine()) != null) {
             result += line;
         }
-        if(out!=null){
-            out.close();
+        if(outputStream != null){
+            outputStream.close();
         }
         if(in!=null){
             in.close();

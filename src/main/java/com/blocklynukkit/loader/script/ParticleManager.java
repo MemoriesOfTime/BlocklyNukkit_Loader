@@ -2,14 +2,11 @@ package com.blocklynukkit.loader.script;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
-import cn.nukkit.entity.Entity;
-import cn.nukkit.level.Level;
 import cn.nukkit.level.ParticleEffect;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.particle.DestroyBlockParticle;
 import cn.nukkit.level.particle.GenericParticle;
-import cn.nukkit.math.Vector3;
-import com.blocklynukkit.loader.Comment;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.McFunction;
 import com.blocklynukkit.loader.other.particle.CircleFlat;
@@ -18,9 +15,8 @@ import com.blocklynukkit.loader.other.particle.LineFlat;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 
 import javax.script.ScriptEngine;
-import java.awt.*;
 
-public class ParticleManager extends BaseManager {
+public final class ParticleManager extends BaseManager {
     public ParticleManager(ScriptEngine scriptEngine) {
         super(scriptEngine);
     }

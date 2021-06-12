@@ -22,6 +22,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.server.*;
 import cn.nukkit.event.vehicle.*;
 import cn.nukkit.event.weather.LightningStrikeEvent;
+import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
@@ -30,9 +31,13 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.BinaryStream;
+import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
+import com.blocklynukkit.loader.other.AddonsAPI.DiggerNBT;
 import com.blocklynukkit.loader.other.Items.ItemComponentEntry;
 import com.blocklynukkit.loader.other.Items.ItemData;
+import com.blocklynukkit.loader.other.ProxyPlayer;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
+import com.blocklynukkit.loader.other.packets.BNResourcePackStackPacket;
 import com.blocklynukkit.loader.other.packets.ItemComponentPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
@@ -120,7 +125,7 @@ public class EventLoader implements Listener {
         Loader.callEventHandler(event, "PlayerJoinEvent");
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event){
         Loader.callEventHandler(event, "BlockBreakEvent");
     }
@@ -255,7 +260,6 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event){
-        if(event.getEntity().getName().equals("BNNPC"))event.setAttackCooldown(0);
         Loader.callEventHandler(event, "EntityDamageByEntityEvent");
         Loader.callEventHandler(event, "EntityDamageEvent");
     }
@@ -445,97 +449,6 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketSend(DataPacketSendEvent event){
-//        DataPacket tmp = event.getPacket();
-//        if(tmp.pid()==ProtocolInfo.START_GAME_PACKET){
-//            event.setCancelled();
-//            StartGamePacket packet = (StartGamePacket)tmp;
-//            packet.eduEditionOffer = 1;
-//            packet.hasEduFeaturesEnabled = true;
-//            //获取原版物品元数据
-//            InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");
-//            if (stream == null) {
-//                throw new AssertionError("Unable to locate RuntimeID table");
-//            } else {
-//                Reader reader = new InputStreamReader(stream, StandardCharsets.UTF_8);
-//                Gson gson = new Gson();
-//                Type collectionType = (new TypeToken<Collection<ItemData>>(){}).getType();
-//                Collection<ItemData> entries = gson.fromJson(reader, collectionType);
-//                BinaryStream paletteBuffer = new BinaryStream();
-//                paletteBuffer.putUnsignedVarInt((long)(entries.size()+Loader.registerItemIds.size()));
-//                for(int data:Loader.registerItemIds){
-//                    paletteBuffer.putString("blocklynukkit:"+Item.get(data).getName());
-//                    paletteBuffer.putLShort(data);
-//                    paletteBuffer.putBoolean(true);
-//                }
-//                for (ItemData data : entries) {
-//                    paletteBuffer.putString(data.name);
-//                    paletteBuffer.putLShort(data.id);
-//                    paletteBuffer.putBoolean(false);
-//                }
-//                byte[] itemData = paletteBuffer.getBuffer();
-//                packet.reset();
-//                packet.putEntityUniqueId(packet.entityUniqueId);
-//                packet.putEntityRuntimeId(packet.entityRuntimeId);
-//                packet.putVarInt(packet.playerGamemode);
-//                packet.putVector3f(packet.x, packet.y, packet.z);
-//                packet.putLFloat(packet.yaw);
-//                packet.putLFloat(packet.pitch);
-//                packet.putVarInt(packet.seed);
-//                packet.putLShort(0x00); // SpawnBiomeType - Default
-//                packet.putString("plains"); // UserDefinedBiomeName
-//                packet.putVarInt(packet.dimension);
-//                packet.putVarInt(packet.generator);
-//                packet.putVarInt(packet.worldGamemode);
-//                packet.putVarInt(packet.difficulty);
-//                packet.putBlockVector3(packet.spawnX, packet.spawnY, packet.spawnZ);
-//                packet.putBoolean(packet.hasAchievementsDisabled);
-//                packet.putVarInt(packet.dayCycleStopTime);
-//                packet.putVarInt(packet.eduEditionOffer);
-//                packet.putBoolean(packet.hasEduFeaturesEnabled);
-//                packet.putString(""); // Education Edition Product ID
-//                packet.putLFloat(packet.rainLevel);
-//                packet.putLFloat(packet.lightningLevel);
-//                packet.putBoolean(packet.hasConfirmedPlatformLockedContent);
-//                packet.putBoolean(packet.multiplayerGame);
-//                packet.putBoolean(packet.broadcastToLAN);
-//                packet.putVarInt(packet.xblBroadcastIntent);
-//                packet.putVarInt(packet.platformBroadcastIntent);
-//                packet.putBoolean(packet.commandsEnabled);
-//                packet.putBoolean(packet.isTexturePacksRequired);
-//                packet.putGameRules(packet.gameRules);
-//                packet.putLInt(0); // Experiment count
-//                packet.putBoolean(false); // Were experiments previously toggled
-//                packet.putBoolean(packet.bonusChest);
-//                packet.putBoolean(packet.hasStartWithMapEnabled);
-//                packet.putVarInt(packet.permissionLevel);
-//                packet.putLInt(packet.serverChunkTickRange);
-//                packet.putBoolean(packet.hasLockedBehaviorPack);
-//                packet.putBoolean(packet.hasLockedResourcePack);
-//                packet.putBoolean(packet.isFromLockedWorldTemplate);
-//                packet.putBoolean(packet.isUsingMsaGamertagsOnly);
-//                packet.putBoolean(packet.isFromWorldTemplate);
-//                packet.putBoolean(packet.isWorldTemplateOptionLocked);
-//                packet.putBoolean(packet.isOnlySpawningV1Villagers);
-//                packet.putString(packet.vanillaVersion);
-//                packet.putLInt(16); // Limited world width
-//                packet.putLInt(16); // Limited world height
-//                packet.putBoolean(false); // Nether type
-//                packet.putBoolean(false); // Experimental Gameplay
-//                packet.putString(packet.levelId);
-//                packet.putString(packet.worldName);
-//                packet.putString(packet.premiumWorldTemplateId);
-//                packet.putBoolean(packet.isTrial);
-//                packet.putVarInt(packet.isMovementServerAuthoritative ? 1 : 0); // 2 - rewind
-//                packet.putLLong(packet.currentTick);
-//                packet.putVarInt(packet.enchantmentSeed);
-//                packet.putUnsignedVarInt(0); // Custom blocks
-//                packet.put(itemData);
-//                packet.putString(packet.multiplayerCorrelationId);
-//                packet.putBoolean(packet.isInventoryServerAuthoritative);
-//                packet.encode();
-//            }
-//            event.getPlayer().dataPacket(packet);
-//        }
         Loader.callEventHandler(event, "DataPacketSendEvent");
     }
 
@@ -594,7 +507,7 @@ public class EventLoader implements Listener {
         for(Entity entity:event.getChunk().getEntities().values()){
             if(entity==null)continue;
             if(entity.getName()==null)continue;
-            if(entity.getName().equals("BNNPC")||entity.getName().equals("BNFloatingText")){
+            if(entity.getName().equals("BNNPC")||entity.getName().equals("BNFloatingText")||entity.getName().equals("BNModel")){
                 event.setCancelled();
             }
         }
@@ -771,6 +684,7 @@ public class EventLoader implements Listener {
     }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCreationEvent(PlayerCreationEvent event){
+        event.setPlayerClass(ProxyPlayer.class);
         Loader.callEventHandler(event, "PlayerCreationEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)

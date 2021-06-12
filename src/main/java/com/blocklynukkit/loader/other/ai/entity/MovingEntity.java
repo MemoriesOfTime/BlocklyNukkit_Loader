@@ -1,17 +1,12 @@
 package com.blocklynukkit.loader.other.ai.entity;
 
-import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.format.FullChunk;
-import cn.nukkit.level.particle.WaterDripParticle;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.AddPlayerPacket;
-import cn.nukkit.network.protocol.PlayerListPacket;
-import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.other.ai.route.Node;
 import com.blocklynukkit.loader.other.ai.route.RouteFinder;
@@ -52,6 +47,7 @@ abstract public class MovingEntity extends EntityHuman{
 		}else if(this.onGround){
 			this.motionX = this.motionZ = 0;
 		}
+		this.motionY = 0;
 
 		this.motionX *= (1 - this.getDrag());
 		this.motionZ *= (1 - this.getDrag());
@@ -97,10 +93,7 @@ abstract public class MovingEntity extends EntityHuman{
 			}
 		}
 
-		if((this.motionX != 0 || this.motionZ != 0) && this.isCollidedHorizontally){
-			this.jump();
-		}
-		this.move(this.motionX, this.motionY, this.motionZ);
+		//this.move(this.motionX, this.motionY, this.motionZ);
 
 		this.checkGround();
 		if(!this.onGround){
@@ -108,7 +101,29 @@ abstract public class MovingEntity extends EntityHuman{
 			hasUpdate = true;
 		}
 
+
+		if((this.motionX != 0 || this.motionZ != 0) && this.isCollidedHorizontally){
+			this.jump();
+		}
+
+		this.x+=this.motionX;
+		if(Math.abs(this.y+this.motionY-(int)this.y)<this.getGravity()-0.01){
+			this.y = (int)this.y;
+		}else {
+			this.y += this.motionY;
+		}
+		this.z+=this.motionZ;
+
 		return hasUpdate;
+	}
+
+	private double toRound(double i){
+		long p = Math.round(i);
+		if(Math.abs(i-p)<0.2){
+			return p;
+		}else {
+			return i;
+		}
 	}
 
 	public double getRange(){
@@ -163,30 +178,34 @@ abstract public class MovingEntity extends EntityHuman{
 		// onGround 는 onUpdate 에서 확인
 	}
 
-	private void checkGround(){
+	private void _checkGround(){
 		AxisAlignedBB[] list = this.level.getCollisionCubes(this, this.level.getTickRate() > 1 ? this.boundingBox.getOffsetBoundingBox(0, -1, 0) : this.boundingBox.addCoord(0, -1, 0), false);
-
 		double maxY = 0;
 		for(AxisAlignedBB bb : list){
 			if(bb.getMaxY() > maxY){
 				maxY = bb.getMaxY();
 			}
 		}
-
 		this.onGround = (maxY == this.boundingBox.getMinY());
+	}
+
+	private void checkGround(){
+		int id = this.level.getBlock((int)this.x,(int)(this.y-this.getGravity()),(int)this.z-1).getId();
+		if(id == 0){
+			this.onGround = false;
+		}else {
+			this.onGround = true;
+		}
 	}
 
 	@Override
 	protected void initEntity(){
 		super.initEntity();
-
-		this.setDataFlag(Entity.DATA_FLAGS, Entity.DATA_FLAG_NO_AI);
 	}
 
 	@Override
 	public void knockBack(Entity attacker, double damage, double x, double z, double base){
 		this.isKnockback = true;
-
 		super.knockBack(attacker, damage, x, z, base);
 	}
 

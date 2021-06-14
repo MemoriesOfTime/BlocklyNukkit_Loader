@@ -43,7 +43,7 @@ public class Clothes {
                 if(Loader.skinimagemap.get(skinname)!=null){
                     skin.setSkinData(Loader.skinimagemap.get(skinname));
                 }else {
-                    BufferedImage bi = (BufferedImage) ImageIO.read(fileskin);
+                    BufferedImage bi = ImageIO.read(fileskin);
                     skin.setSkinData(bi);
                     Loader.skinimagemap.put(skinname,bi);
                 }

@@ -976,6 +976,8 @@ public final class BlockItemManager extends BaseManager {
             itemClass.addMethod(CtMethod.make("public int getTier(){return "+toolTier+";}",itemClass));
             //工具耐久
             itemClass.addMethod(CtMethod.make("public int getMaxDurability(){return "+durability+";}",itemClass));
+            //工具伤害
+            itemClass.addMethod(CtMethod.make("public int getAttackDamage() { return "+attackDamage+"; }",itemClass));
             //完成类生成
             Item.list[id] = itemClass.toClass();
             //修改运行时物品数据

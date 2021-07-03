@@ -1,3 +1,54 @@
+## 1.2.9.5
+
+Bug Fixed
+
+- 修复了自定义工具伤害问题
+- 修复js中java包重导入报错
+- 修复胡椒商店兼容性问题
+- 修复不同模块同名函数调用混乱问题
+
+New
+
+- 注册自定义物品速度加快
+- NPC寻路不再显示路径粒子
+
+blockitem
+
+- boolean isBlockWaterLogged(Block block) --检测方块是否为含水方块
+
+BNNPC
+
+- void start(Player player) --只对某一个玩家启动显示
+
+entity
+
+- RouteFinder buildRouteFinder(Entity entity) --为实体构建寻路器
+
+RouteFinder
+
+- Entity getEntity()
+- void setSearchLimit(int searchLimit)
+- int getSearchLimit()
+- void setStart(Vector3 start)
+- Vector3 getStart()
+- void setDestination(Vector3 destination)
+- Vector3 getDestination()
+- void setLevel(Level level)
+- Level getLevel()
+- void setBoundingBox(AxisAlignedBB bb)
+- AxisAlignedBB getBoundingBox()
+- boolean hasNext()
+- Node next()
+- boolean hasReachedNode(Vector3 vec)
+- Node get()
+- void forceStop()
+- void arrived()
+- boolean hasRoute()
+- boolean search()
+- boolean research()
+- boolean isSearching()
+- boolean isSuccess()
+
 ## 1.2.9.4
 
 New

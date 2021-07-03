@@ -4,9 +4,7 @@ import com.blocklynukkit.loader.utils.StringUtils;
 import com.blocklynukkit.loader.utils.Utils;
 import com.google.gson.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class JsES6Transformer {
     private String code;
@@ -20,7 +18,7 @@ public class JsES6Transformer {
         final List<String> strConverts = new LinkedList<>();
         final List<String> arrayFunctionConverts = new LinkedList<>();
         final List<String> forOfConverts = new LinkedList<>();
-        final List<String> packagesImported = new LinkedList<>();
+        final Set<String> packagesImported = new HashSet<>();
         final ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         char current;
         char previous;

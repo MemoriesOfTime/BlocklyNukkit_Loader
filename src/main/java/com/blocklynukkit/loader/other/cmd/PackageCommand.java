@@ -629,7 +629,7 @@ public class PackageCommand extends Command {
         return (JsonObject) gson.toJsonTree(out);
     }
     private String getBaseObjName(String className){
-        if(!className.startsWith("com.blocklynukkit.loader.script")){
+        if(!(className.startsWith("com.blocklynukkit.loader.script") && className.contains("Manager"))){
             return className;
         }else {
             className = StringUtils.replace(className,"com.blocklynukkit.loader.script.","",1);

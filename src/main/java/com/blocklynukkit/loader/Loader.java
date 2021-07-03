@@ -56,12 +56,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import static com.blocklynukkit.loader.script.BlockItemManager.blocklyNukkitMcpack;
-
 public class Loader extends PluginBase implements Listener {
 
     public static Loader plugin;
     public static File pluginFile;
+    public static boolean isEnabling = true;
 
     public static Map<String, ScriptEngine> engineMap = new HashMap<>();
     public static Map<String,HashSet<String>> privatecalls = new HashMap<>();
@@ -91,6 +90,7 @@ public class Loader extends PluginBase implements Listener {
     public static boolean enablePython = false;
     public static boolean enablePHP = false;
     public static boolean enableWasm = false;
+    public static Map<String, String> moduleFileMap = new HashMap<>();
     public static Map<String,List<Integer>> pluginTasksMap = new HashMap<>();
     public static Random mainRandom = new Random(System.currentTimeMillis());
     public static Executor mainExecutor = Executors.newFixedThreadPool((int)(Runtime.getRuntime().availableProcessors()*1.75));
@@ -301,6 +301,10 @@ public class Loader extends PluginBase implements Listener {
         callEventHandler(new BNInitializedEvent(),"BNInitializedEvent","BNInitializedEvent");
         //生成bn自定义物品材质包
         ResourcePack.resourcePackGenerate();
+        //启动完成
+        isEnabling = false;
+        //生成自定义物品数据序列
+        new BlockItemManager(null).refreshItemPalette();
     }
 
 

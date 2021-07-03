@@ -12,6 +12,8 @@ public class JavaExporter {
         return makeExportJava(name, exportFunctions, null);
     }
     public static CtClass makeExportJava(String name,Map<String,String[]> exportFunctions,String moduleName){
+        Loader.moduleFileMap.put(moduleName, name);
+        Loader.moduleFileMap.put(name, name);
         if(!exportFunctions.isEmpty()){
             ClassPool classPool = ClassPool.getDefault();
             CtClass bnClass = null;
@@ -51,7 +53,7 @@ public class JavaExporter {
                 }
                 announctionArgs = announctionArgs.replaceFirst(",","");
                 usageArgs = usageArgs.replaceFirst(",","");
-                usageArgs = ("\""+entry.getKey()+"\","+usageArgs+"}");
+                usageArgs = ("\""+Loader.moduleFileMap.get(name)+"::"+entry.getKey()+"\","+usageArgs+"}");
                 String src = "public static java.lang.Object "+entry.getKey()+"("+announctionArgs+"){\n" +
                         "        return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction("+usageArgs+");\n" +
                         "    }";

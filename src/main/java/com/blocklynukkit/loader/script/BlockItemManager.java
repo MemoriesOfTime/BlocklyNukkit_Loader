@@ -5,6 +5,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockUnknown;
+import cn.nukkit.block.BlockWater;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.event.block.BlockUpdateEvent;
@@ -647,37 +648,63 @@ public final class BlockItemManager extends BaseManager {
         }
         RandomItem.putSelector(new ConstantItemSelector(item, parent),(float) chance);
     }
+    //检测是否为含水方块
+    static Method getLevelBlockAtLayerMethod = null;
+    @Comment(value = "检测方块是否为含水方块")
+    public boolean isBlockWaterLogged(@Comment(value = "要检测的方块") Block block){
+        if(Loader.getFunctionManager().isPowerNukkit()){
+            try {
+                if(getLevelBlockAtLayerMethod == null){
+                    getLevelBlockAtLayerMethod = Block.class.getMethod("getLevelBlockAtLayer", int.class);
+                }
+                return getLevelBlockAtLayerMethod.invoke(block, 1) instanceof BlockWater;
+            } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
     //不对外暴露: 获取全称ID
     public int getFullId(int id, int data) {
         return (((short) id) << 16) | ((data & 0x7fff) << 1);
     }
     //不对外暴露: 向NK写入物品数据
+    Method getRuntimeItemMappingMethod = null;
+    Field runtime2Legacy = null;
+    Field legacy2Runtime = null;
+    Field identifier2Legacy = null;
+    Field legacyNetworkMap = null;
+    Field networkLegacyMap = null;
+    Field namespaceNetworkMap = null;
+    Field networkNamespaceMap = null;
     public void injectItem2Nukkit(String name, int id) throws NoSuchFieldException, IllegalAccessException {
         RuntimeItemMapping runtimeItemMapping = null;
         try {
             runtimeItemMapping = RuntimeItems.getMapping();
         }catch (NoSuchMethodError error){
             try {
-                Method getRuntimeItemMappingMethod = RuntimeItems.class.getMethod("getRuntimeMapping");
+                if(getRuntimeItemMappingMethod == null) getRuntimeItemMappingMethod = RuntimeItems.class.getMethod("getRuntimeMapping");
                 runtimeItemMapping = (RuntimeItemMapping) getRuntimeItemMappingMethod.invoke(RuntimeItemMapping.class);
             } catch (NoSuchMethodException | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
         try {
-            Field runtime2Legacy = runtimeItemMapping.getClass().getDeclaredField("runtime2Legacy");runtime2Legacy.setAccessible(true);
-            Field legacy2Runtime = runtimeItemMapping.getClass().getDeclaredField("legacy2Runtime");legacy2Runtime.setAccessible(true);
-            Field identifier2Legacy = runtimeItemMapping.getClass().getDeclaredField("identifier2Legacy");identifier2Legacy.setAccessible(true);
+            if(runtime2Legacy == null) runtime2Legacy = runtimeItemMapping.getClass().getDeclaredField("runtime2Legacy");runtime2Legacy.setAccessible(true);
+            if(legacy2Runtime == null) legacy2Runtime = runtimeItemMapping.getClass().getDeclaredField("legacy2Runtime");legacy2Runtime.setAccessible(true);
+            if(identifier2Legacy == null) identifier2Legacy = runtimeItemMapping.getClass().getDeclaredField("identifier2Legacy");identifier2Legacy.setAccessible(true);
             int fullId = (short)id << 16 | ((0) & 32767) << 1;
             RuntimeItemMapping.LegacyEntry legacyEntry = new RuntimeItemMapping.LegacyEntry(id, false, 0);
             ((Int2ObjectMap<RuntimeItemMapping.RuntimeEntry>)legacy2Runtime.get(runtimeItemMapping)).put(fullId, new RuntimeItemMapping.RuntimeEntry("blocklynukkit:"+name, id, false));
             ((Int2ObjectMap<RuntimeItemMapping.LegacyEntry>)runtime2Legacy.get(runtimeItemMapping)).put(id, legacyEntry);
             ((HashMap<String, RuntimeItemMapping.LegacyEntry>)identifier2Legacy.get(runtimeItemMapping)).put("blocklynukkit:"+name, legacyEntry);
         }catch (NoSuchFieldException | IllegalAccessException e){
-            Field legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");legacyNetworkMap.setAccessible(true);
-            Field networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");networkLegacyMap.setAccessible(true);
-            Field namespaceNetworkMap = runtimeItemMapping.getClass().getDeclaredField("namespaceNetworkMap");namespaceNetworkMap.setAccessible(true);
-            Field networkNamespaceMap = runtimeItemMapping.getClass().getDeclaredField("networkNamespaceMap");networkNamespaceMap.setAccessible(true);
+            if(legacyNetworkMap == null) legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");legacyNetworkMap.setAccessible(true);
+            if(networkLegacyMap == null) networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");networkLegacyMap.setAccessible(true);
+            if(namespaceNetworkMap == null) namespaceNetworkMap = runtimeItemMapping.getClass().getDeclaredField("namespaceNetworkMap");namespaceNetworkMap.setAccessible(true);
+            if(networkNamespaceMap == null) networkNamespaceMap = runtimeItemMapping.getClass().getDeclaredField("networkNamespaceMap");networkNamespaceMap.setAccessible(true);
             int fullId = (short)id << 16 | ((0) & 32767) << 1;
             ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(fullId, id << 1);
             ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id, fullId);
@@ -686,38 +713,7 @@ public final class BlockItemManager extends BaseManager {
         }
     }
     //不对外暴露: 注册新方块
-    public void registerBlock(int id, Class<? extends Block> clazz) {
-        if(id < 255 && id > 0) {
-            Item.list[id] = clazz;
-        }else {
-            Loader.registerCustomBlocks++;
-        }
-        RuntimeItemMapping runtimeItemMapping = RuntimeItems.getMapping();
-        Field legacyNetworkMap = null;
-        try {
-            legacyNetworkMap = runtimeItemMapping.getClass().getDeclaredField("legacyNetworkMap");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        legacyNetworkMap.setAccessible(true);
-        Field networkLegacyMap = null;
-        try {
-            networkLegacyMap = runtimeItemMapping.getClass().getDeclaredField("networkLegacyMap");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        networkLegacyMap.setAccessible(true);
-        try {
-            ((Int2IntMap)legacyNetworkMap.get(runtimeItemMapping)).put(getFullId(id,0), id << 1);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        try {
-            ((Int2IntMap)networkLegacyMap.get(runtimeItemMapping)).put(id,getFullId(id,0));
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        //Loader.registerItemIds.add(id);
+    public void registerBlock(int id, String name, Class<? extends Block> clazz) {
         if(Block.list.length < 800){
             Class[] list = new Class[2048];
             System.arraycopy(Block.list, 0, list, 0, Block.list.length);
@@ -754,42 +750,120 @@ public final class BlockItemManager extends BaseManager {
             Block.hasMeta = hasMeta;
         }
         Block.list[id] = clazz;
-
-        Block block;
         try {
-            block = clazz.newInstance();
-            try {
-                Constructor constructor = clazz.getDeclaredConstructor(int.class);
-                constructor.setAccessible(true);
-                for (int data = 0; data < 16; ++data) {
-                    Block.fullList[(id << 4) | data] = (Block) constructor.newInstance(data);
-                }
-                Block.hasMeta[id] = true;
-            } catch (NoSuchMethodException ignore) {
-                for (int data = 0; data < 16; ++data) {
-                    Block.fullList[(id << 4) | data] = block;
-                }
-            }
-        } catch (Exception e) {
-            Loader.getlogger().alert("Error while registering " + clazz.getName(), e);
-            for (int data = 0; data < 16; ++data) {
-                Block.fullList[(id << 4) | data] = new BlockUnknown(id, data);
-            }
-            return;
+            Method registerBlockImplementationMethod = Block.class.getMethod("registerBlockImplementation", int.class, Class.class, String.class, boolean.class);
+            registerBlockImplementationMethod.invoke(Block.class, id, clazz, "blocklynukkit:"+name, true);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
-        Block.solid[id] = block.isSolid();
-        Block.transparent[id] = block.isTransparent();
-        Block.hardness[id] = block.getHardness();
-        Block.light[id] = block.getLightLevel();
-        if (block.isSolid()) {
-            if (block.isTransparent()) {
-                Block.lightFilter[id] = 1;
-            } else {
-                Block.lightFilter[id] = 15;
-            }
-        } else {
-            Block.lightFilter[id] = 1;
-        }
+
+//        /////
+//        Class<? extends Block> c = clazz;
+//        if (c != null) {
+//            Block block;
+//            try {
+//                block = c.getDeclaredConstructor().newInstance();
+//                Class BlockStateRegistry = Class.forName("cn.nukkit.blockstate.BlockStateRegistry");
+//                Method registerPersistenceNameMethod = BlockStateRegistry.getMethod("registerPersistenceName", int.class, String.class);
+//                Method getPersistenceName = block.getClass().getMethod("getPersistenceName");
+//                String persistenceName = (String) getPersistenceName.invoke(block);
+//                registerPersistenceNameMethod.invoke(BlockStateRegistry, id, persistenceName);
+//                Field runtimeIdRegistrationField = BlockStateRegistry.getDeclaredField("runtimeIdRegistration");
+//                registerPersistenceNameMethod.setAccessible(true);
+//                Int2ObjectMap runtimeIdRegistration = (Int2ObjectMap) runtimeIdRegistrationField.get(BlockStateRegistry);
+//                Method registerStateIdMethod = BlockStateRegistry.getDeclaredMethod("registerStateId", CompoundTag.class, int.class);
+//                registerStateIdMethod.setAccessible(true);
+//                registerStateIdMethod.invoke(BlockStateRegistry, new CompoundTag().putCompound(""))
+//                try {
+//                    Constructor<? extends Block> constructor = c.getDeclaredConstructor(int.class);
+//                    constructor.setAccessible(true);
+//                    for (int data = 0; data < (1 << 4); ++data) {
+//                        int fullId = (id << 4) | data;
+//                        Block b;
+//                        try {
+//                            b = constructor.newInstance(data);
+//                            if (b.getDamage() != data) {
+//                                b = new BlockUnknown(id, data);
+//                            }
+//                        } catch (InvocationTargetException wrapper) {
+//                            Throwable uncaught = wrapper.getTargetException();
+//                            if (!(uncaught.getClass().getCanonicalName().equals("InvalidBlockDamageException"))) {
+//                                Loader.getlogger().error("Error while registering "+c.getName()+" with meta "+data, uncaught);
+//                            }
+//                            b = new BlockUnknown(id, data);
+//                        }
+//                        Block.fullList[fullId] = b;
+//                    }
+//                    Block.hasMeta[id] = true;
+//                } catch (NoSuchMethodException ignore) {
+//                    for (int data = 0; data < (1 << 4); ++data) {
+//                        int fullId = (id << 4) | data;
+//                        Block.fullList[fullId] = block;
+//                    }
+//                }
+//            } catch (Exception e) {
+//                Loader.getlogger().error("Error while registering "+c.getName(), e);
+//                for (int data = 0; data < (1 << 4); ++data) {
+//                    Block.fullList[(id << 4) | data] = new BlockUnknown(id, data);
+//                }
+//                block = Block.fullList[id << 4];
+//            }
+//
+//            Block.solid[id] = block.isSolid();
+//            Block.transparent[id] = block.isTransparent();
+//            try {
+//                Field diffField = Block.class.getDeclaredField("diffusesSkyLight");
+//                boolean[] source = (boolean[]) diffField.get(Block.class);
+//                source[id] = false;
+//            } catch (NoSuchFieldException | IllegalAccessException e) {
+//                e.printStackTrace();
+//            }
+//            Block.hardness[id] = block.getHardness();
+//            Block.light[id] = block.getLightLevel();
+//            Block.lightFilter[id] = 1;
+//        } else {
+//            Block.lightFilter[id] = 1;
+//            for (int data = 0; data < (1 << 4); ++data) {
+//                Block.fullList[(id << 4) | data] = new BlockUnknown(id, data);
+//            }
+//        }
+        /////
+
+//        Block block;
+//        try {
+//            block = clazz.newInstance();
+//            try {
+//                Constructor constructor = clazz.getDeclaredConstructor(int.class);
+//                constructor.setAccessible(true);
+//                for (int data = 0; data < 16; ++data) {
+//                    Block.fullList[(id << 4) | data] = (Block) constructor.newInstance(data);
+//                }
+//                Block.hasMeta[id] = true;
+//            } catch (NoSuchMethodException ignore) {
+//                for (int data = 0; data < 16; ++data) {
+//                    Block.fullList[(id << 4) | data] = block;
+//                }
+//            }
+//        } catch (Exception e) {
+//            Loader.getlogger().alert("Error while registering " + clazz.getName(), e);
+//            for (int data = 0; data < 16; ++data) {
+//                Block.fullList[(id << 4) | data] = new BlockUnknown(id, data);
+//            }
+//            return;
+//        }
+//        Block.solid[id] = block.isSolid();
+//        Block.transparent[id] = block.isTransparent();
+//        Block.hardness[id] = block.getHardness();
+//        Block.light[id] = block.getLightLevel();
+//        if (block.isSolid()) {
+//            if (block.isTransparent()) {
+//                Block.lightFilter[id] = 1;
+//            } else {
+//                Block.lightFilter[id] = 15;
+//            }
+//        } else {
+//            Block.lightFilter[id] = 1;
+//        }
     }
     //动态生成类并注册新的固体方块
     @Comment(value = "注册新的自定义方块")
@@ -811,6 +885,9 @@ public final class BlockItemManager extends BaseManager {
             }
             //记录方块id
             Loader.registerBlockIds.add(id);
+            Loader.registerCustomBlocks++;
+            //注册该方块的物品形式
+            injectItem2Nukkit(name, id);
             //获取类加载器并导入类路径
             ClassPool classPool = ClassPool.getDefault();
             CtClass blockClass = null;
@@ -843,8 +920,8 @@ public final class BlockItemManager extends BaseManager {
             //添加public int getTier()
             blockClass.addMethod(CtMethod.make("public int getTier(){return "+mineTier+";}",blockClass));
             //编译到jvm中
-            registerBlock(id, (Class<? extends Block>) blockClass.toClass());
-        } catch (NotFoundException | CannotCompileException e) {
+            registerBlock(id, name, (Class<? extends Block>) blockClass.toClass());
+        } catch (NotFoundException | CannotCompileException | NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
@@ -1179,7 +1256,9 @@ public final class BlockItemManager extends BaseManager {
 
     @Comment(value = "刷新客户端物品注册表")
     public void refreshItemPalette(){
-        //TODO: 优化算法复杂度
+        if(Loader.isEnabling){
+            return;
+        }
         InputStream stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_states.json");
         if(stream == null){
             stream = Server.class.getClassLoader().getResourceAsStream("runtime_item_ids.json");

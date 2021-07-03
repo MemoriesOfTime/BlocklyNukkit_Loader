@@ -2,15 +2,18 @@ package com.blocklynukkit.loader.other;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.block.Block;
 import cn.nukkit.event.player.PlayerLoginEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemApple;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.NukkitMath;
+import cn.nukkit.metadata.MetadataValue;
 import cn.nukkit.nbt.tag.*;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.*;
+import cn.nukkit.permission.PermissibleBase;
 import cn.nukkit.resourcepacks.ResourcePack;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
@@ -22,11 +25,20 @@ import com.blocklynukkit.loader.other.packets.ItemComponentPacket;
 import com.blocklynukkit.loader.other.packets.ProxyStartGamePacket;
 import javassist.CtMethod;
 
+import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 
 public final class ProxyPlayer extends Player {
+    public PermissibleBase perm;
     public ProxyPlayer(SourceInterface interfaz, Long clientID, InetSocketAddress socketAddress) {
         super(interfaz, clientID, socketAddress);
+        try {
+            Field permField = Player.class.getDeclaredField("perm");
+            permField.setAccessible(true);
+            perm = (PermissibleBase) permField.get(super.getPlayer());
+        } catch (NoSuchFieldException | IllegalAccessException exception) {
+            //ignore
+        }
     }
     @Override
     protected void completeLoginSequence(){

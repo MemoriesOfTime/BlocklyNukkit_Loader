@@ -29,6 +29,7 @@ import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.Entities.*;
+import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.MathUtils;
 
@@ -596,5 +597,11 @@ public final class EntityManager extends BaseManager {
         pk.eid = e.getId();
         pk.event = EntityEventPacket.DEATH_ANIMATION;
         e.getViewers().values().forEach((player -> player.dataPacket(pk)));
+    }
+
+    //创建寻路器
+    @Comment(value = "为实体创建寻路器")
+    public AdvancedRouteFinder buildRouteFinder(Entity entity){
+        return new AdvancedRouteFinder(entity);
     }
 }

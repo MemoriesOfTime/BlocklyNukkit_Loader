@@ -7,6 +7,7 @@ import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
@@ -423,6 +424,9 @@ public class BNNPC extends MovingEntity {
     }
     public void start(){
         this.spawnToAll();
+    }
+    public void start(Player player){
+        this.spawnTo(player);
     }
     public void setEntityRideOn(Entity entity){
         this.mountEntity(entity);

@@ -3,11 +3,11 @@ package com.blocklynukkit.loader.other.ai.route;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockAir;
 import cn.nukkit.block.BlockFence;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.other.ai.entity.Climbable;
 import com.blocklynukkit.loader.other.ai.entity.Fallable;
-import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +26,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 
 	private Grid grid = new Grid();
 
-	public AdvancedRouteFinder(MovingEntity entity){
+	public AdvancedRouteFinder(Entity entity){
 		super(entity);
 	}
 
@@ -51,6 +51,9 @@ public class AdvancedRouteFinder extends RouteFinder{
 		}
 
 		int limit = searchLimit;
+		Node node = null;
+		Node tmp = null;
+		Node previous = null;
 		while(!open.isEmpty() && limit-- > 0){
 			if (this.forceStop) {
 				this.resetNodes();
@@ -58,7 +61,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 				return this.succeed = this.searching = false;
 			}
 
-			Node node = null;
+			node = null;
 
 			double f = Double.MAX_VALUE;
 			try {
@@ -73,13 +76,12 @@ public class AdvancedRouteFinder extends RouteFinder{
 			}
 
 			if(endNode.equals(node)){
-				Node tmp = node;
+				tmp = node;
 				while((tmp = tmp.getParent()) != null){
 					tmp.add(0.5,0,0.5);
 				}
 				List<Node> nodes = new ArrayList<>();
 				nodes.add(node);
-				Node previous;
 				while((node = node.getParent()) != null){
 					previous = node;
 					if(((int)node.getX())==node.getX() && ((int)node.getZ())==node.getZ()){
@@ -97,7 +99,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 				Collections.reverse(nodes);
 
 				super.nodes = nodes;
-				nodes.forEach(n->level.addParticle(new cn.nukkit.level.particle.CriticalParticle(n.getVector3().add(0,0.15),3)));
+//				nodes.forEach(n->level.addParticle(new cn.nukkit.level.particle.CriticalParticle(n.getVector3().add(0,0.15),3)));
 				this.succeed = true; this.searching = false;
 				return true;
 			}
@@ -239,7 +241,7 @@ public class AdvancedRouteFinder extends RouteFinder{
 		return null;
 	}
 
-	public double isWalkableAt(Vector3 vec){
+	public final double isWalkableAt(Vector3 vec){
 		Block block = this.getHighestUnder(vec.x, vec.y + 1, vec.z);
 		if(block == null) return -256;
 

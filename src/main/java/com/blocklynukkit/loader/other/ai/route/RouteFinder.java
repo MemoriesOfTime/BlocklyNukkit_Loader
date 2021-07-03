@@ -1,5 +1,6 @@
 package com.blocklynukkit.loader.other.ai.route;
 
+import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
@@ -7,9 +8,10 @@ import cn.nukkit.math.Vector3;
 import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public abstract class RouteFinder{
+public abstract class RouteFinder implements Iterator {
 	private int current = 0;
 	protected Vector3 destination = null, start = null;
 	private boolean arrived = false;
@@ -17,16 +19,16 @@ public abstract class RouteFinder{
 	protected Level level = null;
 	protected AxisAlignedBB aabb = null;
 	public int searchLimit = 100;
-	protected MovingEntity entity = null;
+	protected Entity entity = null;
 	protected boolean forceStop = false;
 
-	public RouteFinder(MovingEntity entity){
+	public RouteFinder(Entity entity){
 		if(entity == null) throw new IllegalArgumentException("Entity cannot be null");
-
 		this.entity = entity;
+		this.setBoundingBox(null);
 	}
 
-	public MovingEntity getEntity(){
+	public Entity getEntity(){
 		return this.entity;
 	}
 
@@ -117,14 +119,14 @@ public abstract class RouteFinder{
 	 * Move to next node
 	 * @return true if succeed
 	 */
-	public boolean next(){
+	public Node next(){
 		if(nodes.size() == 0) throw new IllegalStateException("There is no path found");
 
 		if(this.hasNext()){
 			this.current++;
-			return true;
+			return nodes.get(current);
 		}
-		return false;
+		return null;
 	}
 
 	/**

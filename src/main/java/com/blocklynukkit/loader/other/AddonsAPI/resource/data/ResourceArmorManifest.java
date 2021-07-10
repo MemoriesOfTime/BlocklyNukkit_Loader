@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import java.nio.charset.StandardCharsets;
 
 public class ResourceArmorManifest extends ResourceData {
-    public ResourceArmorManifest(String itemName, String armorType){
+    public ResourceArmorManifest(String itemName, String armorType, String geometryId){
         this.dataType = ResourceDataType.JSON;
         JsonObject root = new JsonObject();
         root.addProperty("format_version", "1.16.200");
@@ -25,12 +25,19 @@ public class ResourceArmorManifest extends ResourceData {
         textures.addProperty("default", "textures/models/armor/"+itemName);
         description.add("textures", textures);
         JsonObject geometry = new JsonObject();
-        String geometryTmp = armorType;
-        if("chest".equals(geometryTmp)){
-            geometryTmp = "chestplate";
+
+        String geometryTmp;
+        if(geometryId != null){
+            geometryTmp = geometryId;
+        }else{
+            geometryTmp = armorType;
+            if("chest".equals(geometryTmp)){
+                geometryTmp = "chestplate";
+            }
         }
         geometry.addProperty("default", "geometry.humanoid.armor."+geometryTmp);
         description.add("geometry", geometry);
+
         JsonObject scripts = new JsonObject();
         scripts.addProperty("parent_setup", "variable.chest_layer_visible = 0.0;");
         description.add("scripts", scripts);

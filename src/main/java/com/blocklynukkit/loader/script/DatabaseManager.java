@@ -54,11 +54,19 @@ public final class DatabaseManager extends BaseManager {
         C3P0Utils.dataSource.setPassword(password);
         Connection conn = C3P0Utils.getConnection();
         connection =conn;
-        C3P0Utils.update("CREATE TABLE IF NOT EXISTS "+table,conn);
+        if(table != null)
+            C3P0Utils.update("CREATE TABLE IF NOT EXISTS "+table,conn);
     }
     public void databaseOpen(String url,String username,String password,String table){
         try {
             open(url, username, password, table);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    public void databaseOpen(String url,String username,String password){
+        try {
+            open(url, username, password, null);
         }catch (Exception e){
             e.printStackTrace();
         }

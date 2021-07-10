@@ -6,6 +6,7 @@ import cn.nukkit.resourcepacks.ZippedResourcePack;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceItemManifest;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceLogo;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceManifest;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceSoundManifest;
 import com.blocklynukkit.loader.script.BlockItemManager;
 
 import java.io.*;
@@ -62,7 +63,9 @@ public class ResourcePack {
                     .putData("pack_icon.png", new ResourceLogo()))
                     .addNode(new ResourceNode()
                             .putData("textures/item_texture.json", new ResourceItemManifest()))
-                    .addNode(BlockItemManager.mcpackTranslation);
+                    .addNode(BlockItemManager.mcpackTranslation)
+                    .addNode(new ResourceNode()
+                            .putData("sounds/sound_definitions.json", new ResourceSoundManifest()));
             File hashCodeFile = new File("./resource_pack.hashcode");
             if(hashCodeFile.exists() && new File(blocklyNukkitMcpack.outputPath).exists()){
                 try {

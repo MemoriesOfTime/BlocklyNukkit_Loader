@@ -1,5 +1,18 @@
 ## 1.2.9.5
 
+TODO
+
+1、创建或继承新的java类、将bn插件中的函数绑定到java类中，以bn插件中的函数覆写方法或实现接口、为java类定义新的字段
+2、模块名可以有多个别名、可以动态为模块创建别名
+3、添加jvm内存控制API
+4、添加CPU状态API、精确到每个核心的每个逻辑处理器，包括当前频率/最大频率/功耗/型号
+5、添加全局内存状态API、获取物理内存和虚拟内存实时利用率及物理内存型号
+6、添加虚拟机检测API和虚拟机宿主机检测API
+7、全局进程状态API，用以监听当前服务器的各个进程的占用，并关闭或创建一些进程
+8、系统信息API，获取系统种类和版本
+9、并发执行API，用以在多核机器上大幅提升计算密集型任务效率
+10、websocketAPI，用以更好地交换数据，与其他程序连接（如面板/机器人等）
+
 Bug Fixed
 
 - 修复了自定义工具伤害问题
@@ -15,6 +28,12 @@ New
 blockitem
 
 - boolean isBlockWaterLogged(Block block) --检测方块是否为含水方块
+- void addSoundFile(String soundName, String fileName) --向材质包添加新的声音文件
+- void addArmorTexture(@Comment(value = "物品id") int id
+  ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPicturePath
+  ,@Comment(value = "盔甲穿着时材质图片路径") String modelPicturePath
+  ,@Comment(value = "4d盔甲模型文件(.json)，可不填") String modelJSONPath)
+  --为自定义盔甲添加4d模型 
 
 BNNPC
 
@@ -23,6 +42,54 @@ BNNPC
 entity
 
 - RouteFinder buildRouteFinder(Entity entity) --为实体构建寻路器
+
+manager
+
+- void concurrentRun(String functionName, <E+>... args) --并行运行函数
+- void jvm.close(int returnCode / void) --强制关闭jvm并返回返回值，可不填，默认为0
+- JMemory jvm.getMemory() --获取jvm内存管理器
+- Class jvm.getJVMClass(String className) --根据类名获取jvm类对象
+- JClass jvm.newJVMClass(@Comment(value = "java类名") String className
+  ,@Comment("继承自的父类类名，可不填") String extendFromClass / void
+  ,@Comment("实现的接口类名，可不填") String... interfaceClasses / void) 
+  - 创建新的java类构造器
+
+JClass
+
+- JClass addConstructor(String modifier, String proxyFunction, String... argumentClasses)
+  - 为新java类添加构造函数
+  - modifier是构造函数修饰符，如public final等等
+  - proxyFunction是对应处理的bn插件函数名，调用时传入构造函数的所有参数，第一个参数永远是类自身，其余为自定义参数
+  - argumentClasses是构造函数自定义参数的类名
+  - 返回自身，便于链式调用
+- JClass addField(String modifier, String fieldClass, String fieldName, Object defaultValue / void)
+  - 为新java类添加字段（又称属性或成员变量）
+  - modifier是字段修饰符，如public final等等
+  - fieldClass是字段类名
+  - fieldName是字段名称，需遵守java规范
+  - defaultValue是字段的默认值，可以不填，默认没有默认值而非默认值为null
+  - 返回自身，便于链式调用
+- JClass addMethod(String modifier, String returnClass, String methodName, String proxyFunction, String... argumentClasses)
+  - 为新java类添加方法（又称成员函数）
+  - modifier是方法修饰符，如public final等等
+  - returnClass是方法返回值，无返回值填入void即可
+  - methodName是方法名称
+  - proxyFunction是对应处理的bn插件函数名，调用时传入方法的所有参数，第一个参数永远是类自身，其余为自定义参数
+  - argumentClasses是构造函数自定义参数的类名
+  - 返回自身，便于链式调用
+- JClass finish()
+  - 完成java类构造，此时java类才可以使用，且不可再次更改
+  - 返回自身，便于链式调用
+- Object newInstance(Object... args)
+  - 实例化自身，即对自身构建的java类进行new
+  - 必须在finish之后才能使用！
+  
+JMemory
+
+- long getMax() --获取JVM最大可用内存大小
+- long getFree() --获取JVM剩余内存大小
+- long getTotal() --获取JVM总内存大小
+- void gc() --进行内存清理
 
 RouteFinder
 

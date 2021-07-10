@@ -119,7 +119,7 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
         String[] codes = packText.replaceFirst("bnp","").split("-->\\$newPlugin@");
         for(String each:codes){
             if(each.trim().length()==0)continue;
-            String parts[] = each.split("#->:");
+            String parts[] = each.split("#->:", 2);
             output.put(parts[0],parts[1]);
         }
         return output;

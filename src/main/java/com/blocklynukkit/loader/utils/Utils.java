@@ -147,8 +147,12 @@ public class Utils {
                 String name = "";
                 for(File file:folder.listFiles()){
                     name = file.getName();
-                    if(name.contains("BlocklyNukkit")||name.contains("blocklynukkit") ||name.contains("Blocklynukkit")||
-                            name.contains("blocklyNukkit")|| name.contains("BN")||name.contains("]bn")){
+                    if((name.contains("BlocklyNukkit")||name.contains("blocklynukkit") ||name.contains("Blocklynukkit")||
+                            name.contains("blocklyNukkit")|| name.contains("BN")||name.contains("]bn")
+                            && !name.equalsIgnoreCase("BNGameAPI.jar")
+                            && !name.equalsIgnoreCase("PyBN.jar")
+                            && !name.equalsIgnoreCase("PHPBN.jar")
+                            && !name.equalsIgnoreCase("WebassemblyBN.jar"))){
                         bn = file;
                         break;
                     }

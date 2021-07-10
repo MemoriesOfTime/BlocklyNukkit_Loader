@@ -36,23 +36,21 @@ import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourceNode;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourcePack;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.TranslationNode;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceArmorManifest;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceItemManifest;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceJSON;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourcePicture;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.*;
 import com.blocklynukkit.loader.other.Items.ItemData;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import javassist.*;
 
 import javax.script.ScriptEngine;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -1310,8 +1308,16 @@ public final class BlockItemManager extends BaseManager {
 
     @Comment(value = "添加新的盔甲材质")
     public void addArmorTexture(@Comment(value = "物品id") int id
-            ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPath
-            ,@Comment(value = "盔甲穿着时材质图片路径") String modelPath){
+            ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPicturePath
+            ,@Comment(value = "盔甲穿着时材质图片路径") String modelPicturePath){
+        this.addArmorTexture(id, inventoryPicturePath, modelPicturePath, null);
+    }
+
+    @Comment(value = "添加新的盔甲材质")
+    public void addArmorTexture(@Comment(value = "物品id") int id
+            ,@Comment(value = "盔甲物品栏材质图片路径") String inventoryPicturePath
+            ,@Comment(value = "盔甲穿着时材质图片路径") String modelPicturePath
+            ,@Comment(value = "4d盔甲模型文件(.json)") String modelJSONPath){
         Item tmp = Item.get(id);
         ResourceItemManifest.addItem(tmp.getName());
         String type = "helmet";
@@ -1322,12 +1328,36 @@ public final class BlockItemManager extends BaseManager {
         }else if(tmp.isBoots()){
             type = "boots";
         }
+        String modelName = null;
+        if(modelJSONPath != null){
+            File modelJSONFile = new File(modelJSONPath);
+            if(modelJSONFile.exists()){
+                try {
+                    JsonObject root = JsonParser.parseReader(new FileReader(modelJSONFile)).getAsJsonObject();
+                    for (String key:root.keySet()){
+                        if(key.startsWith("geometry")){
+                            modelName = key;
+                            blocklyNukkitMcpack.addNode(
+                                    new ResourceNode().putData("models/entity/"+modelName+".json", new ResourceJSON(Utils.readToString(modelJSONPath))));
+                        }
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         blocklyNukkitMcpack.addNode(
                 new ResourceNode()
-                        .putData("textures/items/"+tmp.getName()+".png",new ResourcePicture(inventoryPath))
-                        .putData("textures/models/armor/"+tmp.getName()+".png", new ResourcePicture(modelPath))
-                        .putData("attachables/"+tmp.getName()+".json", new ResourceArmorManifest(tmp.getName(), type))
+                        .putData("textures/items/"+tmp.getName()+".png",new ResourcePicture(inventoryPicturePath))
+                        .putData("textures/models/armor/"+tmp.getName()+".png", new ResourcePicture(modelPicturePath))
+                        .putData("attachables/"+tmp.getName()+".json", new ResourceArmorManifest(tmp.getName(), type, modelName))
         );
+    }
+
+    @Comment(value = "添加新的资源包声音文件")
+    public void addSoundFile(@Comment(value = "声音名") String soundName
+            ,@Comment(value = "声音文件路径(.ogg)") String filePath){
+        ResourceSoundManifest.addSound(soundName, filePath);
     }
 
     @Comment(value = "为指定id物品添加中文翻译名")

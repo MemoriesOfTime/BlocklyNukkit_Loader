@@ -141,7 +141,8 @@ public final class ProxyPlayer extends Player {
                             .putInt("creative_category",customItemInfo.getType())
                             .putInt("max_stack_size",item.getMaxStackSize()))
                     .putCompound("minecraft:icon",new CompoundTag()
-                            .putString("texture",item.getName()))
+                            .putString("texture",item.getName())
+                    .putString("minecraft:render_offsets", "miscellaneous"))
             );
             if(customItemInfo.isTool()){
                 root.getCompound("components")
@@ -183,11 +184,11 @@ public final class ProxyPlayer extends Player {
                     root.getCompound("components")
                             .putCompound("minecraft:durability",new CompoundTag()
                                     .putInt("max_durability",customItemInfo.getDurability()))
+                            .putCompound("minecraft:armor", new CompoundTag()
+                                    .putInt("protection", item.getArmorPoints())
                             .putCompound("minecraft:wearable",new CompoundTag()
                                     .putBoolean("dispensable", true)
-                                    .putString("slot", "slot.armor.head"))
-                            .putCompound("minecraft:armor", new CompoundTag()
-                                    .putInt("protection", item.getArmorPoints()));
+                                    .putString("slot", "slot.armor.head")));
                 }else if(customItemInfo.isChest()){
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.chest");

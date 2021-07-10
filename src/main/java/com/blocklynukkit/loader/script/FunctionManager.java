@@ -26,6 +26,7 @@ import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.control.JVM;
 import com.blocklynukkit.loader.other.net.http.CustomHttpHandler;
 import com.blocklynukkit.loader.other.net.http.HttpRequestEntry;
 import com.blocklynukkit.loader.script.bases.BaseManager;
@@ -59,6 +60,7 @@ import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,6 +76,8 @@ public class FunctionManager extends BaseManager {
     private Loader plugin;
 
     public bnqqbot qq = Loader.qq;
+
+    public JVM jvm = new JVM();
 
     public FunctionManager(ScriptEngine engine){
         super(engine);
@@ -1114,6 +1118,11 @@ public class FunctionManager extends BaseManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Comment(value = "并行运行函数")
+    final public void concurrentRun(@Comment(value = "函数名") @CallbackFunction String functionName,@Comment(value = "参数") Object... args){
+        CompletableFuture.runAsync(() -> Loader.plugin.call(getScriptName()+"::"+functionName,args), mainExecutor);
     }
 
     private String strzero(int time){

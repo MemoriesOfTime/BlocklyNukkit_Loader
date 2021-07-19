@@ -32,12 +32,13 @@ public final class SimpleCallback extends WindowCallback {
 
     @Override
     public void call(PlayerFormRespondedEvent event) {
-        if(!(event.getResponse() instanceof FormResponseSimple))return;
         if(event.getResponse()==null){
-            if(hasDefaultCallback() && event.wasClosed()) {
-                Loader.plugin.call(defaultCallback,event);return;
-            }else return;
+            if(hasDefaultCallback() && event.wasClosed() && isAcceptClose()) {
+                Loader.plugin.call(defaultCallback,event);
+            }
+            return;
         }
+        if(!(event.getResponse() instanceof FormResponseSimple))return;
         FormResponseSimple response = (FormResponseSimple) event.getResponse();
         if(actionCallbacks.containsKey(response.getClickedButtonId())){
             Loader.plugin.call(actionCallbacks.get(response.getClickedButtonId()),event);

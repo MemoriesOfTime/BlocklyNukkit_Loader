@@ -11,6 +11,7 @@ import cn.nukkit.entity.data.Skin;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerKickEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
@@ -26,9 +27,12 @@ import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.Timing;
 import com.blocklynukkit.loader.other.control.JVM;
 import com.blocklynukkit.loader.other.net.http.CustomHttpHandler;
 import com.blocklynukkit.loader.other.net.http.HttpRequestEntry;
+import com.blocklynukkit.loader.other.net.websocket.WsClient;
+import com.blocklynukkit.loader.other.net.websocket.WsServer;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.blocklynukkit.loader.other.BstatsBN;
@@ -79,6 +83,8 @@ public class FunctionManager extends BaseManager {
 
     public JVM jvm = new JVM();
 
+    public Timing timing = new Timing();
+
     public FunctionManager(ScriptEngine engine){
         super(engine);
         this.plugin = Loader.plugin;
@@ -88,6 +94,46 @@ public class FunctionManager extends BaseManager {
             nodejs = new NodeJSNotFoundLoader();
         }
     }
+
+    @Comment(value = "创建WebSocket服务器")
+    final public WsServer createWsServer(@Comment(value = "端口") int port
+            ,@Comment(value = "有新的ws客户端连接回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket"}, parameters = {"server", "ws"}, comments = {"ws服务器对象", "ws连接对象"}) String newWsConnectCallback
+            ,@Comment(value = "ws客户端断开连接回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket", "int", "java.lang.String", "boolean"}, parameters = {"server", "ws", "existCode", "reason", "remoteClose"}, comments = {"ws服务器对象", "ws连接对象", "退出值", "断开原因", "是否客户端发起断开"}) String closeWsConnectCallback
+            ,@Comment(value = "接收到字符串数据回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket", "java.lang.String"}, parameters = {"server", "ws", "data"}, comments = {"ws服务器对象", "ws连接对象", "发送的字符串数据"}) String receiveStringCallback
+            ,@Comment(value = "接收到非字符串数据回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket", "java.nio.ByteBuffer"}, parameters = {"server", "ws", "data"}, comments = {"ws服务器对象", "ws连接对象", "发送的数据缓冲区"}) String receiveDataCallback){
+        return new WsServer(port, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+    }
+
+    @Comment(value = "创建WebSocket客户端")
+    final public WsClient createWsClient(@Comment(value = "远程ws服务器链接") String serverUrl
+            ,@Comment(value = "ws成功连接回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket"}, parameters = {"client", "ws"}, comments = {"ws客户端对象", "ws连接对象"}) String newWsConnectCallback
+            ,@Comment(value = "ws客户端断开连接回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket", "int", "java.lang.String", "boolean"}, parameters = {"client", "ws", "existCode", "reason", "remoteClose"}, comments = {"ws客户端对象", "ws连接对象", "退出值", "断开原因", "是否客户端发起断开"}) String closeWsConnectCallback
+            ,@Comment(value = "接收到字符串数据回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket", "java.lang.String"}, parameters = {"client", "ws", "data"}, comments = {"ws客户端对象", "ws连接对象", "发送的字符串数据"}) String receiveStringCallback
+            ,@Comment(value = "接收到非字符串数据回调")
+             @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket", "java.nio.ByteBuffer"}, parameters = {"client", "ws", "data"}, comments = {"ws客户端对象", "ws连接对象", "发送的数据缓冲区"}) String receiveDataCallback){
+        return new WsClient(serverUrl, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+    }
+
+    @Comment(value = "动态监听事件")
+    final public void customEventListener(@Comment(value = "要监听的事件的java类名") String fullEventName
+            ,@Comment(value = "事件回调函数") @CallbackFunction(classes = {"cn.nukkit.event.Event"}, parameters = {"event"}, comments = {"事件对象"}) String callbackFunction
+            ,@Comment(value = "事件优先级，可选NORMAL MONITOR LOWEST LOW HIGH HIGHEST") String priority){
+        try {
+            Server.getInstance().getPluginManager().registerEvent((Class<? extends Event>) Class.forName(fullEventName)
+                    , new Listener() {}, EventPriority.valueOf(priority)
+                    , (listener, event) -> Loader.plugin.call(callbackFunction, event), Loader.plugin);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Comment(value = "创建一个新的HTTP服务器，返回是否创建成功，如创建成功则可以启动")
     final public boolean createHttpServer(@Comment(value = "服务器端口") int port){
         if(Loader.httpServers.containsKey(port)){

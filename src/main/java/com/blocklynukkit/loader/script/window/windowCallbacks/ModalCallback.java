@@ -30,12 +30,13 @@ public final class ModalCallback extends WindowCallback {
 
     @Override
     public void call(PlayerFormRespondedEvent event) {
-        if(!(event.getResponse() instanceof FormResponseModal))return;
         if(event.getResponse()==null){
-            if(hasDefaultCallback() && event.wasClosed()) {
-                Loader.plugin.call(defaultCallback,event);return;
-            }else return;
+            if(hasDefaultCallback() && event.wasClosed() && isAcceptClose()) {
+                Loader.plugin.call(defaultCallback,event);
+            }
+            return;
         }
+        if(!(event.getResponse() instanceof FormResponseModal))return;
         FormResponseModal modal = (FormResponseModal) event.getResponse();
         if(modal.getClickedButtonId()==0 && yesCallback!=null){
             Loader.plugin.call(yesCallback,event);

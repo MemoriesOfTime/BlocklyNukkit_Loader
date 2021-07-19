@@ -5,6 +5,7 @@
       <element id="module-output" name="BlocklyNukkit" />
       <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
       <element id="dir-copy" path="$PROJECT_DIR$/nukkit/plugins/libs" />
+      <element id="dir-copy" path="$PROJECT_DIR$/nukkit/plugins/ws_libs" />
     </root>
   </artifact>
 </component>

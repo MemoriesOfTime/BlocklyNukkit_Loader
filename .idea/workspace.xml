@@ -5,25 +5,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/nukkit/math/SimpleAxisAlignedBB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceSound.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceSoundManifest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/control/IO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/control/IOHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/control/JClass.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/control/JMemory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/control/JVM.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/BNJava16Polyfill.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/Java-WebSocket-1.5.2-sources.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nukkit/plugins/Java-WebSocket-1.5.2.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AbstractTiming.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/FakeTiming.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Timing.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsClient.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BlocklyNukkit.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BlocklyNukkit.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/javassist.jar" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/javassist.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClassType.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/CtClassType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/FieldInitLink.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/FieldInitLink.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LocalVariableAttribute.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/LocalVariableAttribute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodParametersAttribute.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/MethodParametersAttribute.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Copier.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Copier.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$InsertLocal.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$InsertLocal.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$NewRemover.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$NewRemover.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$OffsetShifter.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$OffsetShifter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Printer.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Printer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Shifter.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Shifter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SimpleCopy.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SimpleCopy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SwitchShifter.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$SwitchShifter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Walker.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Walker.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Writer.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable$Writer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/StackMapTable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/Type.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/analysis/Type.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$AbsTypeVar.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$AbsTypeVar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ArrayElement.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ArrayElement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ArrayType.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ArrayType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ClassName.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$ClassName.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$NullType.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$NullType.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$TypeVar.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$TypeVar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitData.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitThis.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitThis.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitTypeVar.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData$UninitTypeVar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/bytecode/stackmap/TypeData.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/compiler/TypeChecker.class" beforeDir="false" afterPath="$PROJECT_DIR$/nukkit/plugins/libs/javassist/compiler/TypeChecker.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourceDataType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourceDataType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourcePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourcePack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceArmorManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceArmorManifest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tests/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/tests/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/DatabaseManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/DatabaseManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/BNPackageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/BNPackageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/event/CustomWindowEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/event/CustomWindowEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Custom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Modal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Modal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Simple.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/Simple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/CustomCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/CustomCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/ModalCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/ModalCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/SimpleCallback.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/window/windowCallbacks/SimpleCallback.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/scriptloader/JavaScriptLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -275,6 +312,7 @@
     <option name="generalSettings">
       <MavenGeneralSettings>
         <option name="mavenHome" value="D:\apache-maven-3.6.3" />
+        <option name="userSettingsFile" value="C:\Users\刘浩宇\.m2\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
@@ -627,11 +665,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last.edited.regexp" value="Sample Text" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/nukkit/powernukkit.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/nukkit/plugins/Java-WebSocket-1.5.2-sources.jar" />
     <property name="project.structure.last.edited" value="库" />
     <property name="project.structure.proportion" value="0.15" />
-    <property name="project.structure.side.proportion" value="0.4586207" />
-    <property name="settings.editor.selected.configurable" value="reference.settings.project.statistic.project.settings" />
+    <property name="project.structure.side.proportion" value="0.24252874" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
   </component>
   <component name="ReaderModeSettings">
     <option name="enabled" value="false" />
@@ -640,9 +678,12 @@
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.blocklynukkit.loader" />
     </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\nukkit\BlocklyNukkit\src\main\resources" />
+    <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\nukkit\BlocklyNukkit\nukkit\plugins" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\nukkit\BlocklyNukkit\nukkit\plugins" />
+      <recent name="D:\nukkit\BlocklyNukkit\src\main\resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="com.blocklynukkit.loader.api" />
@@ -656,10 +697,23 @@
       <recent name="com.blocklynukkit.loader.other.particle" />
     </key>
   </component>
-  <component name="RunManager" selected="应用程序.Test">
+  <component name="RunManager" selected="应用程序.WsServer">
     <configuration name="Test" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.blocklynukkit.loader.other.tests.Test" />
       <module name="BlocklyNukkit" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="WsServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.blocklynukkit.loader.other.net.websocket.WsServer" />
+      <module name="BlocklyNukkit" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.blocklynukkit.loader.other.net.websocket.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -677,6 +731,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="应用程序.WsServer" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
@@ -693,13 +752,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
-    </task>
-    <task id="LOCAL-00084" summary="修复wasm加载器版本不对问题">
-      <created>1611826916805</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1611826916805</updated>
     </task>
     <task id="LOCAL-00085" summary="1.2.9.0正式版">
       <created>1611833497300</created>
@@ -1037,7 +1089,14 @@
       <option name="project" value="LOCAL" />
       <updated>1625318663898</updated>
     </task>
-    <option name="localTasksCounter" value="133" />
+    <task id="LOCAL-00133" summary="1.2.9.5正式版">
+      <created>1625904908003</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1625904908004</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1089,7 +1148,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="更好的debug" />
     <MESSAGE value="尝试粒子发射器" />
     <MESSAGE value="优化npc" />
     <MESSAGE value="完善注册物品api" />
@@ -1114,7 +1172,8 @@
     <MESSAGE value="修复一些bug" />
     <MESSAGE value="1295-beta-r6" />
     <MESSAGE value="提交gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="提交gitignore" />
+    <MESSAGE value="1.2.9.5正式版" />
+    <option name="LAST_COMMIT_MESSAGE" value="1.2.9.5正式版" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

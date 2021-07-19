@@ -1,3 +1,95 @@
+## 1.2.9.6
+
+Bug Fixed
+
+- 修复了窗口回调接受窗口关闭无效的bug
+
+Event
+
+- AddMoneyEvent
+- ReduceMoneyEvent
+- SetMoneyEvent
+
+New
+
+- 小幅优化js加载性能
+- 在核心同级文件夹创建新文件debug.inf即可启动js加载计时
+
+manager
+
+- void customEventListener(
+      String fullEventName, --要监听的事件的java类名
+      String callbackFunction, --事件回调函数
+      String priority --事件优先级，可选NORMAL MONITOR LOWEST LOW HIGH HIGHEST
+  ) --动态监听事件
+- WsClient createWsClient(
+      String serverUrl, --远程ws服务器链接
+      String newWsConnectCallback, --ws成功连接回调
+      String closeWsConnectCallback, --ws客户端断开连接回调
+      String receiveStringCallback, --接收到字符串数据回调
+      String receiveDataCallback --接收到非字符串数据回调
+  ) --创建Ws客户端
+- WsServer createWsServer(
+      int port, --端口
+      String newWsConnectCallback, --有新的ws客户端连接回调
+      String closeWsConnectCallback, --ws客户端断开连接回调
+      String receiveStringCallback, --接收到字符串数据回调
+      String receiveDataCallback --接收到非字符串数据回调
+  ) --创建WebSocket服务器
+- long timing.start() --启动计时，返回计时器id，对性能无影响
+- long timing.end(long id) --结束计时，返回经过的纳秒
+- long timing.finish(long id) --结束计时并将结果输出到控制台
+- long timing.finish(String info) --结束最近一次启动的计时器并将经过的时间输出到控制台，info将作为输出的前缀
+   
+blockitem
+
+- @Comment(value = "注册新的简易物品, 允许任意自定义物品")
+  public void registerSimpleItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
+  ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+  ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction)
+
+- @Comment(value = "注册新的工具物品")
+  public void registerToolItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
+  ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
+  ,@Comment(value = "工具耐久值") int durability
+  ,@Comment(value = "攻击伤害") int attackDamage
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+  ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction)
+
+- @Comment(value = "注册新的食物物品")
+  public void registerFoodItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "提供的饥饿度") int nutrition
+  ,@Comment(value = "食用持续时间(刻)") int eatTime
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+  ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction)
+
+- @Comment(value = "注册新的饮品物品")
+  public void registerDrinkItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+  ,@Comment(value = "提供的饥饿度") int nutrition
+  ,@Comment(value = "饮用持续时间(刻)") int drinkTime
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+  ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction)
+
+- @Comment(value = "注册新的盔甲物品")
+  public void registerArmorItem(@Comment(value = "新物品的id") int id
+  ,@Comment(value = "新物品的名称") String name
+  ,@Comment(value = "盔甲种类,可为helmet chest leggings boots") String armorType
+  ,@Comment(value = "盔甲等级 0-无,1-皮革,2-铁,3-锁链,4-金,5-钻石,6-下界合金") int armorTier
+  ,@Comment(value = "工具耐久值") int durability
+  ,@Comment(value = "提供的盔甲值") int armorPoint
+  ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+  ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction)
+
 ## 1.2.9.5
 
 TODO

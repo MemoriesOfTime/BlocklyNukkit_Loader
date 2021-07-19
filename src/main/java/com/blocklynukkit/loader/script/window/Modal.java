@@ -6,6 +6,8 @@ import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.window.windowCallbacks.ModalCallback;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
 
@@ -20,54 +22,67 @@ public final class Modal {
     public String btn1Callback=null;
     public String btn2Callback=null;
     public short previous = 0;
-    public Modal setTitle(String title){
+    @Comment(value = "设置窗口标题")
+    public Modal setTitle(@Comment("窗口标题") String title){
         this.title=title;
         return this;
     }
-    public Modal title(String title){
+    @Comment(value = "设置窗口标题")
+    public Modal title(@Comment("窗口标题") String title){
         return setTitle(title);
     }
-    public Modal setContext(String context){
+    @Comment(value = "设置窗口提示文本")
+    public Modal setContext(@Comment(value = "窗口提示文本") String context){
         this.context=context;
         return this;
     }
-    public Modal context(String context){
+    @Comment(value = "设置窗口提示文本")
+    public Modal context(@Comment(value = "窗口提示文本") String context){
         return setContext(context);
     }
-    public Modal setButton1(String text){
+    @Comment(value = "设置左侧按钮文本")
+    public Modal setButton1(@Comment(value = "文本") String text){
         btn1=text;previous=1;
         return this;
     }
-    public Modal setButton2(String text){
+    @Comment(value = "设置左侧按钮文本")
+    public Modal setButton2(@Comment(value = "文本") String text){
         btn2=text;previous=2;
         return this;
     }
-    public Modal button1(String text){
+    @Comment(value = "设置左侧按钮文本")
+    public Modal button1(@Comment(value = "文本") String text){
         return setButton1(text);
     }
-    public Modal button2(String text){
+    @Comment(value = "设置左侧按钮文本")
+    public Modal button2(@Comment(value = "文本") String text){
         return setButton2(text);
     }
-    public Modal setAction(String callback){
+    @Comment(value = "为上一个操作的按钮绑定点击动作回调")
+    public Modal setAction(@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         if(previous==0)return this;
         if(previous==1)btn1Callback=callback;
         if(previous==2)btn2Callback=callback;
         return this;
     }
-    public Modal action(String callback){
+    @Comment(value = "为上一个添加的按钮绑定点击动作回调")
+    public Modal action(@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         return setAction(callback);
     }
-
-    public Modal showToPlayer(Player p){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal showToPlayer(@Comment(value = "发送给的玩家") Player p){
         return this.showToPlayer(p,null,false);
     }
-    public Modal showToPlayer(Player p,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         return this.showToPlayer(p,null,acceptClose);
     }
-    public Modal showToPlayer(Player p,String callback){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         return this.showToPlayer(p,callback,false);
     }
-    public Modal showToPlayer(Player p,String callback,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         synchronized (Loader.windowCallbackMap){
             ModalCallback windowCallback = new ModalCallback(acceptClose);
             FormWindowModal window=new FormWindowModal(title,context,btn1,btn2);
@@ -81,16 +96,20 @@ public final class Modal {
         }
         return this;
     }
-    public Modal show(Player p){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal show(@Comment(value = "发送给的玩家") Player p){
         return this.showToPlayer(p);
     }
-    public Modal show(Player p,boolean accpetClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "玩家关闭窗口是否触发回调") boolean accpetClose){
         return this.showToPlayer(p, accpetClose);
     }
-    public Modal show(Player p,String callback){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         return this.showToPlayer(p, callback);
     }
-    public Modal show(Player p,String callback,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Modal show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"cn.nukkit.event.player.PlayerFormRespondedEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         return this.showToPlayer(p, callback, acceptClose);
     }
 //    public Modal showToPlayer(Player p, String callback){

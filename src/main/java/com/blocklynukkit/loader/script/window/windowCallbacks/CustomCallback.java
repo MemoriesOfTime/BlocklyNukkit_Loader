@@ -35,12 +35,17 @@ public final class CustomCallback extends WindowCallback {
 
     @Override
     public void call(PlayerFormRespondedEvent event) {
-        if(!(event.getResponse() instanceof FormResponseCustom))return;
         if(event.getResponse()==null){
-            if(hasDefaultCallback() && event.wasClosed()) {
-                Loader.plugin.call(defaultCallback,new CustomWindowEvent(event));return;
-            }else return;
+            if(event.wasClosed() && isAcceptClose()) {
+                for(Map.Entry<Integer,String> each:actionCallbacks.int2ObjectEntrySet()){
+                    Loader.plugin.call(each.getValue(),new CustomWindowEvent(event));
+                }
+                if(hasDefaultCallback())
+                    Loader.plugin.call(defaultCallback,new CustomWindowEvent(event));
+            }
+            return;
         }
+        if(!(event.getResponse() instanceof FormResponseCustom))return;
         for(Map.Entry<Integer,String> each:actionCallbacks.int2ObjectEntrySet()){
             Loader.plugin.call(each.getValue(),new CustomWindowEvent(each.getKey(),event));
         }

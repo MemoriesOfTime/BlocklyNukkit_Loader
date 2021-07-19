@@ -11,6 +11,8 @@ import cn.nukkit.form.element.*;
 import cn.nukkit.form.window.FormWindowCustom;
 import cn.nukkit.form.window.FormWindowSimple;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.api.CallbackFunction;
+import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.window.windowCallbacks.CustomCallback;
 import com.blocklynukkit.loader.script.window.windowCallbacks.SimpleCallback;
 import jdk.nashorn.api.scripting.ScriptObjectMirror;
@@ -20,33 +22,41 @@ public final class Custom {
     private Element previousElement = null;
     public int id = (int) Math.floor(Math.random()*10000000);
     public String title="";
-    public Custom setTitle(String title){
+    @Comment(value = "设置窗口标题")
+    public Custom setTitle(@Comment("窗口标题") String title){
         this.title=title;
         return this;
     }
-    public Custom showToPlayer(Player p){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom showToPlayer(@Comment(value = "发送给的玩家") Player p){
         return this.showToPlayer(p,null,false);
     }
-    public Custom showToPlayer(Player p,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         return this.showToPlayer(p,null,acceptClose);
     }
-    public Custom showToPlayer(Player p,String callback){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.script.event.CustomWindowEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         return this.showToPlayer(p,callback,false);
     }
-
-    public Custom show(Player p){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom show(@Comment(value = "发送给的玩家") Player p){
         return this.showToPlayer(p);
     }
-    public Custom show(Player p,boolean accpetClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "玩家关闭窗口是否触发回调") boolean accpetClose){
         return this.showToPlayer(p, accpetClose);
     }
-    public Custom show(Player p,String callback){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.script.event.CustomWindowEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback){
         return this.showToPlayer(p, callback);
     }
-    public Custom show(Player p,String callback,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom show(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数") @CallbackFunction(classes = {"com.blocklynukkit.loader.script.event.CustomWindowEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         return this.showToPlayer(p, callback, acceptClose);
     }
-    public Custom showToPlayer(Player p,String callback,boolean acceptClose){
+    @Comment(value = "向玩家发送此窗口")
+    public Custom showToPlayer(@Comment(value = "发送给的玩家") Player p,@Comment(value = "回调函数")  @CallbackFunction(classes = {"com.blocklynukkit.loader.script.event.CustomWindowEvent"}, parameters = {"action"}, comments = {"玩家提交窗口事件"}) String callback,@Comment(value = "玩家关闭窗口是否触发回调") boolean acceptClose){
         synchronized (Loader.windowCallbackMap){
             CustomCallback windowCallback = new CustomCallback(acceptClose);
             FormWindowCustom window=new FormWindowCustom(title);
@@ -66,6 +76,7 @@ public final class Custom {
         }
         return this;
     }
+    @Comment(value = "将窗口作为服务器设置向玩家发送")
     public Custom showAsSetting(Player p, String callback){
         synchronized (Loader.serverSettingCallback){
             Loader.serverSettingCallback.put(p.getName(),callback);
@@ -73,6 +84,7 @@ public final class Custom {
         }
         return this;
     }
+    @Comment(value = "将窗口作为服务器设置向玩家发送")
     public Custom showAsSetting(Player p, String imageURL, String callback){
         synchronized (Loader.serverSettingCallback){
             Loader.serverSettingCallback.put(p.getName(),callback);

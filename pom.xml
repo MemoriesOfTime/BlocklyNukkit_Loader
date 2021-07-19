@@ -75,7 +75,7 @@
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.20.0-GA</version>
+            <version>3.28.0-GA</version>
         </dependency>
         <dependency>
             <groupId>cn.nukkit</groupId>
@@ -83,6 +83,13 @@
             <version>1.0-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${pom.basedir}/nukkit/nukkit.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.blocklynukkit.loader</groupId>
+            <artifactId>BNJava16Polyfill</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/nukkit/plugins/BNJava16Polyfill.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.creeperface.nukkit.placeholderapi</groupId>

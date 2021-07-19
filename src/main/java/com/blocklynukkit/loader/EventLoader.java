@@ -47,6 +47,9 @@ import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
+import me.onebone.economyapi.event.money.AddMoneyEvent;
+import me.onebone.economyapi.event.money.ReduceMoneyEvent;
+import me.onebone.economyapi.event.money.SetMoneyEvent;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -428,6 +431,9 @@ public class EventLoader implements Listener {
     public void onDataPacketReceive(DataPacketReceiveEvent event){
         if(event.getPacket().pid()== ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET){
             Loader.callEventHandler(event,"PlayerLocallyInitializedEvent");
+        }else if(event.getPacket().pid() == ProtocolInfo.RESOURCE_PACKS_INFO_PACKET){
+            ResourcePacksInfoPacket packet = (ResourcePacksInfoPacket) event.getPacket();
+
         }
 //        else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
 //            System.out.println("玩家"+event.getPlayer().getName()+"携带的表情动作uuid列表:");
@@ -780,5 +786,17 @@ public class EventLoader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerMapInfoRequestEvent(PlayerMapInfoRequestEvent event){
         Loader.callEventHandler(event, "PlayerMapInfoRequestEvent");
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerAddMoneyEvent(AddMoneyEvent event){
+        Loader.callEventHandler(event, "AddMoneyEvent");
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerReduceMoneyEvent(ReduceMoneyEvent event){
+        Loader.callEventHandler(event, "ReduceMoneyEvent");
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerSetMoneyEvent(SetMoneyEvent event){
+        Loader.callEventHandler(event, "SetMoneyEvent");
     }
 }

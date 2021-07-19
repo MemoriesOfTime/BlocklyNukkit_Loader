@@ -30,6 +30,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.utils.BinaryStream;
+import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
@@ -754,6 +755,12 @@ public final class BlockItemManager extends BaseManager {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
+        try{
+            Class BlockStateRegistry = Class.forName("cn.nukkit.blockstate.BlockStateRegistry");
+            Method registerPersistenceNameMethod = BlockStateRegistry.getMethod("registerPersistenceName", int.class, String.class);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
 
 //        /////
 //        Class<? extends Block> c = clazz;
@@ -949,6 +956,16 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
             ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        registerSimpleItem(id, name, stackSize, type, isDisplayAsTool, canOnOffhand, null);
+    }
+    @Comment(value = "注册新的简易物品")
+    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
+            ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+            ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -958,15 +975,25 @@ public final class BlockItemManager extends BaseManager {
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
             itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.Item"));
+            //添加初始化函数
+            CtMethod doInitMethod = null;
+            if(initFunction != null){
+                doInitMethod = CtMethod.make("public void doInit(){" +
+                        "return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(\"" + initFunction + "\", new java.lang.Object[]{this});" +
+                        "}", itemClass);
+            }else {
+                doInitMethod = CtMethod.make("public void doInit(){}", itemClass);
+            }
+            itemClass.addMethod(doInitMethod);
             //添加构造函数
             CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
-            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");doInit();}");
             itemClass.addConstructor(twoConstructor);
             CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
-            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");doInit();}");
             itemClass.addConstructor(oneConstructor);
             CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
-            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
@@ -1001,7 +1028,19 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
             ,@Comment(value = "工具耐久值") int durability
             ,@Comment(value = "攻击伤害") int attackDamage
-            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+    ){
+        registerToolItem(id, name, toolType, toolTier, durability, attackDamage, canOnOffhand, null);
+    }
+    @Comment(value = "注册新的工具物品")
+    public void registerToolItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
+            ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
+            ,@Comment(value = "工具耐久值") int durability
+            ,@Comment(value = "攻击伤害") int attackDamage
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+            ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1011,15 +1050,25 @@ public final class BlockItemManager extends BaseManager {
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
             itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemTool"));
+            //添加初始化函数
+            CtMethod doInitMethod = null;
+            if(initFunction != null){
+                doInitMethod = CtMethod.make("public void doInit(){" +
+                        "return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(\"" + initFunction + "\", new java.lang.Object[]{this});" +
+                        "}", itemClass);
+            }else {
+                doInitMethod = CtMethod.make("public void doInit(){}", itemClass);
+            }
+            itemClass.addMethod(doInitMethod);
             //添加构造函数
             CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
-            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");doInit();}");
             itemClass.addConstructor(twoConstructor);
             CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
-            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");doInit();}");
             itemClass.addConstructor(oneConstructor);
             CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
-            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return 1;}",itemClass));
@@ -1078,7 +1127,19 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "新物品的最大堆叠上限") int stackSize
             ,@Comment(value = "提供的饥饿度") int nutrition
             ,@Comment(value = "食用持续时间(刻)") int eatTime
-            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+    ){
+        registerFoodItem(id, name, stackSize, nutrition, eatTime, canOnOffhand, null);
+    }
+
+    @Comment(value = "注册新的食物物品")
+    public void registerFoodItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "食用持续时间(刻)") int eatTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+            ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1088,15 +1149,25 @@ public final class BlockItemManager extends BaseManager {
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
             itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            //添加初始化函数
+            CtMethod doInitMethod = null;
+            if(initFunction != null){
+                doInitMethod = CtMethod.make("public void doInit(){" +
+                        "return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(\"" + initFunction + "\", new java.lang.Object[]{this});" +
+                        "}", itemClass);
+            }else {
+                doInitMethod = CtMethod.make("public void doInit(){}", itemClass);
+            }
+            itemClass.addMethod(doInitMethod);
             //添加构造函数
             CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
-            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");doInit();}");
             itemClass.addConstructor(twoConstructor);
             CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
-            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");doInit();}");
             itemClass.addConstructor(oneConstructor);
             CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
-            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //覆写使用函数
             itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
@@ -1131,6 +1202,17 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "提供的饥饿度") int nutrition
             ,@Comment(value = "饮用持续时间(刻)") int drinkTime
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        registerDrinkItem(id, name, stackSize, nutrition, drinkTime, canOnOffhand, null);
+    }
+
+    @Comment(value = "注册新的饮品物品")
+    public void registerDrinkItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "新物品的最大堆叠上限") int stackSize
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "饮用持续时间(刻)") int drinkTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+            ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1140,15 +1222,25 @@ public final class BlockItemManager extends BaseManager {
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
             itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            //添加初始化函数
+            CtMethod doInitMethod = null;
+            if(initFunction != null){
+                doInitMethod = CtMethod.make("public void doInit(){" +
+                        "return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(\"" + initFunction + "\", new java.lang.Object[]{this});" +
+                        "}", itemClass);
+            }else {
+                doInitMethod = CtMethod.make("public void doInit(){}", itemClass);
+            }
+            itemClass.addMethod(doInitMethod);
             //添加构造函数
             CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
-            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");doInit();}");
             itemClass.addConstructor(twoConstructor);
             CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
-            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");doInit();}");
             itemClass.addConstructor(oneConstructor);
             CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
-            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //覆写使用函数
             itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
@@ -1184,6 +1276,18 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "工具耐久值") int durability
             ,@Comment(value = "提供的盔甲值") int armorPoint
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        registerArmorItem(id, name, armorType, armorTier, durability, armorPoint, canOnOffhand, null);
+    }
+
+    @Comment(value = "注册新的盔甲物品")
+    public void registerArmorItem(@Comment(value = "新物品的id") int id
+            ,@Comment(value = "新物品的名称") String name
+            ,@Comment(value = "盔甲种类,可为helmet chest leggings boots") String armorType
+            ,@Comment(value = "盔甲等级 0-无,1-皮革,2-铁,3-锁链,4-金,5-钻石,6-下界合金") int armorTier
+            ,@Comment(value = "工具耐久值") int durability
+            ,@Comment(value = "提供的盔甲值") int armorPoint
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
+            ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1193,15 +1297,25 @@ public final class BlockItemManager extends BaseManager {
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
             itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemArmor"));
+            //添加初始化函数
+            CtMethod doInitMethod = null;
+            if(initFunction != null){
+                doInitMethod = CtMethod.make("public void doInit(){" +
+                        "return com.blocklynukkit.loader.Loader.getFunctionManager().callFunction(\"" + initFunction + "\", new java.lang.Object[]{this});" +
+                        "}", itemClass);
+            }else {
+                doInitMethod = CtMethod.make("public void doInit(){}", itemClass);
+            }
+            itemClass.addMethod(doInitMethod);
             //添加构造函数
             CtConstructor twoConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer"),CtClass.intType},itemClass);
-            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");}");
+            twoConstructor.setBody("{super("+id+",$1,$2,\""+name+"\");doInit();}");
             itemClass.addConstructor(twoConstructor);
             CtConstructor oneConstructor = new CtConstructor(new CtClass[]{classPool.getCtClass("java.lang.Integer")},itemClass);
-            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");}");
+            oneConstructor.setBody("{super("+id+",$1,1,\""+name+"\");doInit();}");
             itemClass.addConstructor(oneConstructor);
             CtConstructor voidConstructor = new CtConstructor(new CtClass[]{},itemClass);
-            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");}");
+            voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return 1;}",itemClass));

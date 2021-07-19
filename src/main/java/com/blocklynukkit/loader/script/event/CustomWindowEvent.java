@@ -23,7 +23,7 @@ public class CustomWindowEvent extends PlayerFormRespondedEvent {
         assert event.getResponse() instanceof FormResponseCustom;
     }
     public String getResult(){
-        if(index==-1)return "CLOSED";
+        if(index==-1)return "NULL";
         FormResponseCustom response = (FormResponseCustom) window.getResponse();
         FormWindowCustom window =(FormWindowCustom) getWindow();
         Element element = window.getElements().get(index);

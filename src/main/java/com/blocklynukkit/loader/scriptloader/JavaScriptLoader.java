@@ -2,7 +2,9 @@ package com.blocklynukkit.loader.scriptloader;
 
 import cn.nukkit.Server;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.AbstractTiming;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.other.Timing;
 import com.blocklynukkit.loader.scriptloader.functions.JSExistFunction;
 import com.blocklynukkit.loader.scriptloader.transformer.JsES6Transformer;
 import com.blocklynukkit.loader.utils.Utils;
@@ -12,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import javassist.*;
 import jdk.nashorn.api.scripting.*;
 
+import javax.script.CompiledScript;
 import javax.script.Invocable;
 import javax.script.ScriptException;
 
@@ -25,15 +28,20 @@ import static com.blocklynukkit.loader.Loader.*;
 public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter {
     public String polyfilljs = null;
     public List<String> pragmas;
+    public AbstractTiming timing = AbstractTiming.get();
     public JavaScriptLoader(Loader plugin){
         super(plugin);
     }
     public void loadplugins(){
+        timing.start();
+        timing.finish("空计时");
         //加载js
         for (File file : Objects.requireNonNull(new File("./plugins/BlocklyNukkit").listFiles())) {
             if(file.isDirectory()) continue;
             if(file.getName().endsWith(".js")&&!file.getName().contains("bak")){
+                timing.start();
                 String js = Utils.readToString(file);
+                timing.finish("读取js");
                 pragmas = getPragma(js);
                 if(pragmas.contains("pragma autoload false")){
                     return;
@@ -78,8 +86,11 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         this.putJavaScriptEngine(name, code);
     }
     public void putJavaScriptEngine(String name,String js){
+        timing.start();
         js = formatExportJavaScript(name,js);
+        timing.finish("java类胶水导出");
         if(pragmas == null)pragmas = getPragma(js);
+        timing.start();
         if(pragmas.contains("pragma optimistic")){
             if(Utils.getVersion() >= 11){
                 engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--no-deprecation-warning", "--language=es6", "--optimistic-types=true"));
@@ -93,6 +104,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6"));
             }
         }
+        timing.finish("创建js引擎");
         if (engineMap.get(name) == null) {
             if (Server.getInstance().getLanguage().getName().contains("中文"))
                 getlogger().error("JavaScript引擎加载出错！");
@@ -113,6 +125,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 js = babel.transform(js);
                 Utils.writeWithString(new File("./plugins/BlocklyNukkit/"+name+".es5"),js);
             }
+            timing.start();
             engineMap.get(name).put("lambdaCount",-1);
             engineMap.get(name).put("baseInterpreterBNJavaScriptEngine",engineMap.get(name));
             engineMap.get(name).put("__exist",new JSExistFunction());
@@ -121,7 +134,17 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             putBaseObject(name);
             engineMap.get(name).put("javax.script.filename",name);
             engineMap.get(name).put("console",engineMap.get(name).get("logger"));
-            engineMap.get(name).eval(new JsES6Transformer(js).transform());
+            timing.finish("准备基对象和基本函数");
+            timing.start();
+            String rendered = new JsES6Transformer(js).transform();
+            timing.finish("es6转换");
+            timing.start();
+            CompiledScript script = ((NashornScriptEngine)engineMap.get(name)).compile(rendered);
+            timing.finish("编译js");
+            timing.start();
+            script.eval();
+            //engineMap.get(name).eval(rendered);
+            timing.finish("执行js");
         } catch (ScriptException e) {
             previousException = e;
             if (Server.getInstance().getLanguage().getName().contains("中文")){
@@ -205,6 +228,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
 
     @Override
     public List<String> getPragma(String code){
+        timing.start();
         List<String> pragma = new ArrayList<>();
         String[] lines = code.split("\n");
         for(String line:lines){
@@ -219,6 +243,7 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
                 }
             }
         }
+        timing.finish("获取宏");
         return pragma;
     }
 }

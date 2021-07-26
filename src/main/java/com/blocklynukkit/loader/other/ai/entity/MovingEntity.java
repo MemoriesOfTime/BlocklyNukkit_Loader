@@ -1,6 +1,5 @@
 package com.blocklynukkit.loader.other.ai.entity;
 
-import cn.nukkit.Server;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.format.FullChunk;

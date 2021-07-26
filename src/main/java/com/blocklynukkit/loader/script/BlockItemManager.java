@@ -4,7 +4,6 @@ import cn.nukkit.Nukkit;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
-import cn.nukkit.block.BlockUnknown;
 import cn.nukkit.block.BlockWater;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
@@ -50,11 +49,14 @@ import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import javassist.*;
 
+import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class BlockItemManager extends BaseManager {
     public static ResourcePack blocklyNukkitMcpack = new ResourcePack("./resource_packs/blocklynukkit.mcpack");
@@ -1221,7 +1223,11 @@ public final class BlockItemManager extends BaseManager {
             classPool.insertClassPath(new ClassClassPath(Nukkit.class));
             classPool.importPackage("com.blocklynukkit.loader");
             //构建物品类
-            itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            if(nutrition != 0){
+                itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.ItemEdible"));
+            }else{
+                itemClass = classPool.makeClass("Item_ID_"+id+"_"+Loader.registerItems++,classPool.getCtClass("cn.nukkit.item.Item"));
+            }
             //添加初始化函数
             CtMethod doInitMethod = null;
             if(initFunction != null){
@@ -1243,14 +1249,35 @@ public final class BlockItemManager extends BaseManager {
             voidConstructor.setBody("{super("+id+",new Integer(0),1,\""+name+"\");doInit();}");
             itemClass.addConstructor(voidConstructor);
             //覆写使用函数
-            itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
-                    "   return super.onUse(player, ticksUsed);" +
-                    "}",itemClass));
+            if(nutrition != 0){
+                itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
+                        "   return super.onUse(player, ticksUsed);" +
+                        "}",itemClass));
+            }else {
+                itemClass.addMethod(CtMethod.make("public boolean onUse(cn.nukkit.Player player, int ticksUsed){" +
+                        "    cn.nukkit.event.player.PlayerItemConsumeEvent consumeEvent = new cn.nukkit.event.player.PlayerItemConsumeEvent(player, this);" +
+                        "    player.getServer().getPluginManager().callEvent(consumeEvent);" +
+                        "    if (consumeEvent.isCancelled()) {" +
+                        "        return false;" +
+                        "    } else {" +
+                        "        if (player.isAdventure() || player.isSurvival()) {" +
+                        "            --this.count;" +
+                        "            player.getInventory().setItemInHand(this);" +
+                        "        }" +
+                        "        return true;" +
+                        "    }" +
+                        "}",itemClass));
+                itemClass.addMethod(CtMethod.make("public boolean onClickAir(cn.nukkit.Player player, cn.nukkit.math.Vector3 directionVector) {" +
+                        "     return true;" +
+                        "}",itemClass));
+            }
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
             Item.list[id] = itemClass.toClass();
             //构建食物类
-            Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            if(nutrition != 0){
+                Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            }
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
@@ -1446,17 +1473,13 @@ public final class BlockItemManager extends BaseManager {
         if(modelJSONPath != null){
             File modelJSONFile = new File(modelJSONPath);
             if(modelJSONFile.exists()){
-                try {
-                    JsonObject root = JsonParser.parseReader(new FileReader(modelJSONFile)).getAsJsonObject();
-                    for (String key:root.keySet()){
-                        if(key.startsWith("geometry")){
-                            modelName = key;
-                            blocklyNukkitMcpack.addNode(
-                                    new ResourceNode().putData("models/entity/"+modelName+".json", new ResourceJSON(Utils.readToString(modelJSONPath))));
-                        }
-                    }
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                String model = Utils.readToString(modelJSONPath);
+                Pattern pattern = Pattern.compile("\"(geometry\\..{0,999})\"");
+                Matcher matcher = pattern.matcher(model);
+                if(matcher.find()){
+                    modelName = matcher.group().replaceAll("\"","");
+                    blocklyNukkitMcpack.addNode(
+                            new ResourceNode().putData("models/entity/"+modelName+".json", new ResourceJSON(model)));
                 }
             }
         }

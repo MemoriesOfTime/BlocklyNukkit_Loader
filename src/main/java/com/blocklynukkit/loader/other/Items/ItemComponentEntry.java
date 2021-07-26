@@ -1,6 +1,6 @@
 package com.blocklynukkit.loader.other.Items;
 
-import cn.nukkit.nbt.tag.CompoundTag;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag;
 
 
 public class ItemComponentEntry {

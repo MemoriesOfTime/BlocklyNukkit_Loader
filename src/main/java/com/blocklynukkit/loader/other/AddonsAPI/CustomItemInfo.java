@@ -19,6 +19,8 @@ public final class CustomItemInfo {
     private boolean isChest;
     private boolean isLeggings;
     private boolean isBoots;
+    private boolean forceScale;
+    private float zoom;
 
     public CustomItemInfo(int id, int type, boolean isDisplayAsTool, boolean canOnOffhand) {
         this.id = id;
@@ -209,5 +211,21 @@ public final class CustomItemInfo {
 
     public void setArmor(boolean armor) {
         isArmor = armor;
+    }
+
+    public boolean isForceScale() {
+        return forceScale;
+    }
+
+    public void setForceScale(boolean forceScale) {
+        this.forceScale = forceScale;
+    }
+
+    public float getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(float zoom) {
+        this.zoom = zoom;
     }
 }

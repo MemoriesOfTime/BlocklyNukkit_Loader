@@ -1,3 +1,20 @@
+## 1.2.9.7
+
+Bug Fixed
+
+- 修复了错误的命令介绍
+- 修复了非EconomyAPI兼容性
+- 修复了饮品无法在满饱食度情况下饮用bug
+- 修复了BNNPC Steve皮肤从外部调用无效bug
+- 修复了BNNPC死亡异常掉落物品的bug
+- 修复了WebSocket服务器启动报错bug
+- 修复了Ws卡死主线程问题
+  
+entity
+
+- void setPlayerCompassTarget(Player player, position target) --设置玩家指南针指向位置
+- void setPlayerCape(Player player, String capeImagePath) --设置玩家的披风
+
 ## 1.2.9.6
 
 Bug Fixed

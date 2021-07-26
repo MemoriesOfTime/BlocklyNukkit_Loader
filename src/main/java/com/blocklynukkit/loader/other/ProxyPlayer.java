@@ -1,20 +1,15 @@
 package com.blocklynukkit.loader.other;
 
 import cn.nukkit.Player;
-import cn.nukkit.Server;
-import cn.nukkit.block.Block;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.*;
 import cn.nukkit.event.player.PlayerLoginEvent;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemApple;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.NukkitMath;
-import cn.nukkit.metadata.MetadataValue;
-import cn.nukkit.nbt.tag.*;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.permission.PermissibleBase;
-import cn.nukkit.resourcepacks.ResourcePack;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
@@ -23,7 +18,6 @@ import com.blocklynukkit.loader.other.Items.ItemComponentEntry;
 import com.blocklynukkit.loader.other.packets.BNResourcePackStackPacket;
 import com.blocklynukkit.loader.other.packets.ItemComponentPacket;
 import com.blocklynukkit.loader.other.packets.ProxyStartGamePacket;
-import javassist.CtMethod;
 
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
@@ -141,9 +135,36 @@ public final class ProxyPlayer extends Player {
                             .putInt("creative_category",customItemInfo.getType())
                             .putInt("max_stack_size",item.getMaxStackSize()))
                     .putCompound("minecraft:icon",new CompoundTag()
-                            .putString("texture",item.getName())
-                    .putString("minecraft:render_offsets", "miscellaneous"))
+                            .putString("texture",item.getName()))
             );
+//            if(customItemInfo.isForceScale()){
+//                System.out.println("HANDER" + customItemInfo.getZoom());
+////                FloatArrayTag __a = new FloatArrayTag(0.075f * customItemInfo.getZoom(), 0.125f * customItemInfo.getZoom(), 0.075f * customItemInfo.getZoom());
+////                FloatArrayTag __b = new FloatArrayTag();
+////                FloatArrayTag __c = new FloatArrayTag(0.075f * customItemInfo.getZoom(), 0.125f * customItemInfo.getZoom(), 0.075f * customItemInfo.getZoom());
+////                ListTag<FloatTag> __a = new ListTag<>();
+////                    __a.add(new FloatTag("",0.075f * customItemInfo.getZoom()));__a.add(new FloatTag("",0.125f * customItemInfo.getZoom()));__a.add(new FloatTag("",0.075f * customItemInfo.getZoom()));
+////                ListTag<FloatTag> __b = new ListTag<>();
+////                    __b.add(new FloatTag("", 0.45f));__b.add(new FloatTag("", 1.6f));__b.add(new FloatTag("", -0.7f));
+////                ListTag<FloatTag> __c = new ListTag<>();
+////                    __c.add(new FloatTag("",2f));__c.add(new FloatTag("",4f));__c.add(new FloatTag("",8f));
+//                IntArrayTag __a = new IntArrayTag("", new int[]{5, 5, 5});
+//                IntArrayTag __b = new IntArrayTag("", new int[]{5, 5, 5});
+//                IntArrayTag __c = new IntArrayTag("", new int[]{5, 5, 5});
+//                IntArrayTag __d = new IntArrayTag("", new int[]{0,0,0});
+//                root.getCompound("components")
+//                        .putCompound("minecraft:render_offsets"
+//                        , new CompoundTag().putCompound("main_hand"
+//                                , new CompoundTag().putCompound("first_person"
+//                                        , new CompoundTag().put("scale", __a))
+//                                .putCompound("third_person"//.put("position", __b)
+//                                        , new CompoundTag().put("position", __b).put("scale", __c))
+//                        ).putCompound("off_hand"
+//                                , new CompoundTag().putCompound("first_person"
+//                                        , new CompoundTag().put("position", __d).put("rotation", __d).put("scale", __d))
+//                                .putCompound("third_person"
+//                                        , new CompoundTag().put("position", __d).put("rotation", __d).put("scale", __d))));
+//            }
             if(customItemInfo.isTool()){
                 root.getCompound("components")
                         .putCompound("minecraft:durability",new CompoundTag()
@@ -162,7 +183,7 @@ public final class ProxyPlayer extends Player {
                             .putCompound("minecraft:digger", DiggerNBT.getShovelDiggerNBT(customItemInfo.getToolTier()));
                 }
             }else if(customItemInfo.isFood() || customItemInfo.isDrink()){
-                if(customItemInfo.isDrink()){
+                if(customItemInfo.isDrink() && customItemInfo.getNutrition() == 0){
                     root.getCompound("components")
                             .putCompound("minecraft:food",new CompoundTag()
                                     .putInt("nutrition",customItemInfo.getNutrition())
@@ -195,11 +216,11 @@ public final class ProxyPlayer extends Player {
                     root.getCompound("components")
                             .putCompound("minecraft:durability",new CompoundTag()
                                     .putInt("max_durability",customItemInfo.getDurability()))
+                            .putCompound("minecraft:armor", new CompoundTag()
+                                    .putInt("protection", item.getArmorPoints())
                             .putCompound("minecraft:wearable",new CompoundTag()
                                     .putBoolean("dispensable", true)
-                                    .putString("slot", "slot.armor.chest"))
-                            .putCompound("minecraft:armor", new CompoundTag()
-                                    .putInt("protection", item.getArmorPoints()));
+                                    .putString("slot", "slot.armor.chest")));
                 }else if(customItemInfo.isLeggings()){
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.legs");

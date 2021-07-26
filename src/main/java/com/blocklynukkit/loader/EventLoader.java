@@ -4,7 +4,6 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.item.EntityBoat;
 import cn.nukkit.entity.item.EntityFishingHook;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -22,44 +21,21 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.server.*;
 import cn.nukkit.event.vehicle.*;
 import cn.nukkit.event.weather.LightningStrikeEvent;
-import cn.nukkit.inventory.transaction.action.InventoryAction;
 import cn.nukkit.item.Item;
 import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.network.protocol.*;
 import cn.nukkit.scheduler.Task;
-import cn.nukkit.utils.BinaryStream;
-import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
-import com.blocklynukkit.loader.other.AddonsAPI.DiggerNBT;
-import com.blocklynukkit.loader.other.Items.ItemComponentEntry;
-import com.blocklynukkit.loader.other.Items.ItemData;
 import com.blocklynukkit.loader.other.ProxyPlayer;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
-import com.blocklynukkit.loader.other.packets.BNResourcePackStackPacket;
-import com.blocklynukkit.loader.other.packets.ItemComponentPacket;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
-import me.onebone.economyapi.event.money.AddMoneyEvent;
-import me.onebone.economyapi.event.money.ReduceMoneyEvent;
-import me.onebone.economyapi.event.money.SetMoneyEvent;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 public class EventLoader implements Listener {
@@ -788,15 +764,7 @@ public class EventLoader implements Listener {
         Loader.callEventHandler(event, "PlayerMapInfoRequestEvent");
     }
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerAddMoneyEvent(AddMoneyEvent event){
-        Loader.callEventHandler(event, "AddMoneyEvent");
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerReduceMoneyEvent(ReduceMoneyEvent event){
-        Loader.callEventHandler(event, "ReduceMoneyEvent");
-    }
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerSetMoneyEvent(SetMoneyEvent event){
-        Loader.callEventHandler(event, "SetMoneyEvent");
+    public void onJump(PlayerJumpEvent event){
+        Loader.callEventHandler(event,event.getClass().getSimpleName());
     }
 }

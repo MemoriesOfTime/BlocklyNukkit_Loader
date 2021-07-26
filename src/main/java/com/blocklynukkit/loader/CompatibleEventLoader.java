@@ -3,9 +3,9 @@ package com.blocklynukkit.loader;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.player.PlayerJumpEvent;
-import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
-import cn.nukkit.item.randomitem.Fishing;
+import me.onebone.economyapi.event.money.AddMoneyEvent;
+import me.onebone.economyapi.event.money.ReduceMoneyEvent;
+import me.onebone.economyapi.event.money.SetMoneyEvent;
 
 public class CompatibleEventLoader implements Listener {
     private Loader plugin;
@@ -16,7 +16,15 @@ public class CompatibleEventLoader implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onJump(PlayerJumpEvent event){
-        plugin.callEventHandler(event,event.getClass().getSimpleName());
+    public void onPlayerAddMoneyEvent(AddMoneyEvent event){
+        Loader.callEventHandler(event, "AddMoneyEvent");
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerReduceMoneyEvent(ReduceMoneyEvent event){
+        Loader.callEventHandler(event, "ReduceMoneyEvent");
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerSetMoneyEvent(SetMoneyEvent event){
+        Loader.callEventHandler(event, "SetMoneyEvent");
     }
 }

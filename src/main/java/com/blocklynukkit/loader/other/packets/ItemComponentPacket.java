@@ -1,6 +1,6 @@
 package com.blocklynukkit.loader.other.packets;
 
-import cn.nukkit.nbt.NBTIO;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.NBTIO;
 import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.utils.MainLogger;
 import com.blocklynukkit.loader.other.Items.ItemComponentEntry;

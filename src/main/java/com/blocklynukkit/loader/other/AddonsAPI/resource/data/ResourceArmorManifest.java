@@ -34,8 +34,9 @@ public class ResourceArmorManifest extends ResourceData {
             if("chest".equals(geometryTmp)){
                 geometryTmp = "chestplate";
             }
+            geometryTmp = ("geometry.humanoid.armor." + geometryTmp);
         }
-        geometry.addProperty("default", "geometry.humanoid.armor."+geometryTmp);
+        geometry.addProperty("default", geometryTmp);
         description.add("geometry", geometry);
 
         JsonObject scripts = new JsonObject();

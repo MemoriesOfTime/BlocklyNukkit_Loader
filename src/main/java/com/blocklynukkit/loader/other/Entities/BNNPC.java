@@ -2,19 +2,13 @@ package com.blocklynukkit.loader.other.Entities;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.block.BlockID;
-import cn.nukkit.block.BlockLiquid;
 import cn.nukkit.entity.Entity;
-import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
-import cn.nukkit.entity.projectile.EntityArrow;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.format.FullChunk;
-import cn.nukkit.level.particle.DestroyBlockParticle;
-import cn.nukkit.math.NukkitMath;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -23,16 +17,11 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
 import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
-import com.blocklynukkit.route.RouteFinder;
-import com.blocklynukkit.route.SimpleRouteFinder;
-import com.blocklynukkit.route.WalkerRouteFinder;
 
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.blocklynukkit.route.WalkerRouteFinder.canPassThroughBlock;
 
 public class BNNPC extends MovingEntity {
     public BNNPC bnnpc;
@@ -188,6 +177,8 @@ public class BNNPC extends MovingEntity {
         if(dropOffhand)tmp.add(this.getOffhandInventory().getItem(0));
         dropSlot.forEach(each->tmp.add(this.getInventory().getItem(each)));
         tmp.forEach(each->bnnpc.getLevel().dropItem(bnnpc,each));
+        this.getInventory().clearAll();
+        this.getOffhandInventory().clearAll();
         super.close();
     }
     public void addExtraDropItem(Item item){

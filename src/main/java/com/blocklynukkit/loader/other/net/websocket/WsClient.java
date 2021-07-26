@@ -13,6 +13,8 @@ public class WsClient extends WebSocketClient {
     private String closeCallback = null;
     private String messageStringCallback = null;
     private String messageDataCallback = null;
+    public Thread workingThread = null;
+    private final WsClient __self = this;
 
     public WsClient(URI serverURI) {
         super(serverURI);
@@ -25,7 +27,8 @@ public class WsClient extends WebSocketClient {
         this.closeCallback = closeCallback;
         this.messageStringCallback = messageStringCallback;
         this.messageDataCallback = messageDataCallback;
-        this.run();
+        workingThread = new Thread(__self::run);
+        workingThread.start();
     }
 
     @Override

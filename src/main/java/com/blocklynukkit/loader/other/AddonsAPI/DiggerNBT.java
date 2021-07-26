@@ -1,8 +1,8 @@
 package com.blocklynukkit.loader.other.AddonsAPI;
 
-import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.nbt.tag.ListTag;
-import cn.nukkit.nbt.tag.Tag;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag;
 
 public class DiggerNBT {
     public static String[] pickaxeBlocks = {

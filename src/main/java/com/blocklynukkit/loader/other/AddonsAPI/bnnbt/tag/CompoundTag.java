@@ -1,0 +1,276 @@
+package com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag;
+
+import cn.nukkit.nbt.stream.NBTInputStream;
+import cn.nukkit.nbt.stream.NBTOutputStream;
+
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.StringJoiner;
+
+public class CompoundTag extends Tag implements Cloneable {
+    private final Map<String, com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> tags = new HashMap<>();
+
+    public CompoundTag() {
+        super("");
+    }
+
+    public CompoundTag(String name) {
+        super(name);
+    }
+
+    @Override
+    public void write(NBTOutputStream dos) throws IOException {
+
+        for (Map.Entry<String, com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> entry : this.tags.entrySet()) {
+            com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag.writeNamedTag(entry.getValue(), entry.getKey(), dos);
+        }
+
+        dos.writeByte(com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag.TAG_End);
+    }
+
+    @Override
+    public void load(NBTInputStream dis) throws IOException {
+        tags.clear();
+        com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag tag;
+        while ((tag = com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag.readNamedTag(dis)).getId() != com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag.TAG_End) {
+            tags.put(tag.getName(), tag);
+        }
+    }
+
+    public Collection<com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> getAllTags() {
+        return tags.values();
+    }
+
+    @Override
+    public byte getId() {
+        return TAG_Compound;
+    }
+
+    public CompoundTag put(String name, com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag tag) {
+        tags.put(name, tag.setName(name));
+        return this;
+    }
+
+    public CompoundTag putByte(String name, int value) {
+        tags.put(name, new ByteTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putShort(String name, int value) {
+        tags.put(name, new ShortTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putInt(String name, int value) {
+        tags.put(name, new IntTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putLong(String name, long value) {
+        tags.put(name, new LongTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putFloat(String name, float value) {
+        tags.put(name, new FloatTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putDouble(String name, double value) {
+        tags.put(name, new DoubleTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putString(String name, String value) {
+        tags.put(name, new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.StringTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putByteArray(String name, byte[] value) {
+        tags.put(name, new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ByteArrayTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putIntArray(String name, int[] value) {
+        tags.put(name, new IntArrayTag(name, value));
+        return this;
+    }
+
+    public CompoundTag putList(com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<? extends com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> listTag) {
+        tags.put(listTag.getName(), listTag);
+        return this;
+    }
+
+    public CompoundTag putCompound(String name, CompoundTag value) {
+        tags.put(name, value.setName(name));
+        return this;
+    }
+
+    public CompoundTag putBoolean(String string, boolean val) {
+        putByte(string, val ? 1 : 0);
+        return this;
+    }
+
+    public com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag get(String name) {
+        return tags.get(name);
+    }
+
+    public boolean contains(String name) {
+        return tags.containsKey(name);
+    }
+
+    public CompoundTag remove(String name) {
+        tags.remove(name);
+        return this;
+    }
+
+    public <T extends com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> T removeAndGet(String name) {
+        return (T) tags.remove(name);
+    }
+
+
+    public int getByte(String name) {
+        if (!tags.containsKey(name)) return (byte) 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().intValue();
+    }
+
+    public int getShort(String name) {
+        if (!tags.containsKey(name)) return 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().intValue();
+    }
+
+    public int getInt(String name) {
+        if (!tags.containsKey(name)) return 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().intValue();
+    }
+
+    public long getLong(String name) {
+        if (!tags.containsKey(name)) return 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().longValue();
+    }
+
+    public float getFloat(String name) {
+        if (!tags.containsKey(name)) return (float) 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().floatValue();
+    }
+
+    public double getDouble(String name) {
+        if (!tags.containsKey(name)) return 0;
+        return ((com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) tags.get(name)).getData().doubleValue();
+    }
+
+    public String getString(String name) {
+        if (!tags.containsKey(name)) return "";
+        com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag tag = tags.get(name);
+        if (tag instanceof com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.NumberTag) {
+            return String.valueOf(((NumberTag) tag).getData());
+        }
+        return ((StringTag) tag).data;
+    }
+
+    public byte[] getByteArray(String name) {
+        if (!tags.containsKey(name)) return new byte[0];
+        return ((ByteArrayTag) tags.get(name)).data;
+    }
+
+    public int[] getIntArray(String name) {
+        if (!tags.containsKey(name)) return new int[0];
+        return ((IntArrayTag) tags.get(name)).data;
+    }
+
+    public CompoundTag getCompound(String name) {
+        if (!tags.containsKey(name)) return new CompoundTag(name);
+        return (CompoundTag) tags.get(name);
+    }
+
+    public com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<? extends com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> getList(String name) {
+        if (!tags.containsKey(name)) return new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<>(name);
+        return (com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<? extends com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag>) tags.get(name);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<T> getList(String name, Class<T> type) {
+        if (tags.containsKey(name)) {
+            return (com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<T>) tags.get(name);
+        }
+        return new ListTag<>(name);
+    }
+
+    public Map<String, com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> getTags() {
+        return new HashMap<>(this.tags);
+    }
+
+    @Override
+    public Map<String, Object> parseValue() {
+        Map<String, Object> value = new HashMap<>(this.tags.size());
+
+        for (Entry<String, com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> entry : this.tags.entrySet()) {
+            value.put(entry.getKey(), entry.getValue().parseValue());
+        }
+
+        return value;
+    }
+
+    public boolean getBoolean(String name) {
+        return getByte(name) != 0;
+    }
+
+    public String toString() {
+        StringJoiner joiner = new StringJoiner(",\n\t");
+        tags.forEach((key, tag) -> joiner.add('\'' + key + "' : " + tag.toString().replace("\n", "\n\t")));
+        return "CompoundTag '" + this.getName() + "' (" + tags.size() + " entries) {\n\t" + joiner.toString() + "\n}";
+    }
+
+    public void print(String prefix, PrintStream out) {
+        super.print(prefix, out);
+        out.println(prefix + "{");
+        String orgPrefix = prefix;
+        prefix += "   ";
+        for (com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag tag : tags.values()) {
+            tag.print(prefix, out);
+        }
+        out.println(orgPrefix + "}");
+    }
+
+    public boolean isEmpty() {
+        return tags.isEmpty();
+    }
+
+    public CompoundTag copy() {
+        CompoundTag tag = new CompoundTag(getName());
+        for (String key : tags.keySet()) {
+            tag.put(key, tags.get(key).copy());
+        }
+        return tag;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (super.equals(obj)) {
+            CompoundTag o = (CompoundTag) obj;
+            return tags.entrySet().equals(o.tags.entrySet());
+        }
+        return false;
+    }
+
+    /**
+     * Check existence of NBT tag
+     *
+     * @param name - NBT tag Id.
+     * @return - true, if tag exists
+     */
+    public boolean exist(String name) {
+        return tags.containsKey(name);
+    }
+
+    @Override
+    public CompoundTag clone() {
+        CompoundTag nbt = new CompoundTag();
+        this.getTags().forEach((key, value) -> nbt.put(key, value.copy()));
+        return nbt;
+    }
+}

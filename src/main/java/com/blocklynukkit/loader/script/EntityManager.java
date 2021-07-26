@@ -23,6 +23,7 @@ import cn.nukkit.nbt.tag.DoubleTag;
 import cn.nukkit.nbt.tag.FloatTag;
 import cn.nukkit.nbt.tag.ListTag;
 import cn.nukkit.network.protocol.EntityEventPacket;
+import cn.nukkit.network.protocol.SetSpawnPositionPacket;
 import cn.nukkit.potion.Effect;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
@@ -33,7 +34,10 @@ import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.MathUtils;
 
+import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -136,6 +140,28 @@ public final class EntityManager extends BaseManager {
             ,@Comment(value = "经验值等级") int lel){
         player.setExperience(player.getExperience(),lel);
         player.sendExperienceLevel(lel);
+    }
+    @Comment(value = "设置玩家指南针指向")
+    public void setPlayerCompassTarget(@Comment(value = "玩家") Player player
+            ,@Comment(value = "指向的位置") Position target){
+        if(target.getLevel() != null && target.getLevel().getGenerator().getDimension() != 0){
+            throw new RuntimeException("Operate compass in nether is not allowed");
+        }
+        SetSpawnPositionPacket packet = new SetSpawnPositionPacket();
+        packet.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN;
+        packet.x = target.getFloorX();
+        packet.y = target.getFloorY();
+        packet.z = target.getFloorZ();
+        player.dataPacket(packet);
+    }
+    @Comment(value = "设置玩家的披风图像")
+    public void setPlayerCape(@Comment(value = "玩家") Player player
+            ,@Comment(value = "披风图片路径") String capeImagePath){
+        try {
+            player.getSkin().setCapeData(ImageIO.read(new File(capeImagePath)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Comment(value = "获取玩家的经验值等级")
     public int getPlayerExpLevel(@Comment(value = "玩家对象") Player player){

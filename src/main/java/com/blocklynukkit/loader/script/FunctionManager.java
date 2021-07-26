@@ -105,7 +105,9 @@ public class FunctionManager extends BaseManager {
              @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket", "java.lang.String"}, parameters = {"server", "ws", "data"}, comments = {"ws服务器对象", "ws连接对象", "发送的字符串数据"}) String receiveStringCallback
             ,@Comment(value = "接收到非字符串数据回调")
              @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsServer", "org.java_websocket.WebSocket", "java.nio.ByteBuffer"}, parameters = {"server", "ws", "data"}, comments = {"ws服务器对象", "ws连接对象", "发送的数据缓冲区"}) String receiveDataCallback){
-        return new WsServer(port, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+        WsServer server = new WsServer(port, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+        wsServerList.add(server);
+        return server;
     }
 
     @Comment(value = "创建WebSocket客户端")
@@ -118,7 +120,9 @@ public class FunctionManager extends BaseManager {
              @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket", "java.lang.String"}, parameters = {"client", "ws", "data"}, comments = {"ws客户端对象", "ws连接对象", "发送的字符串数据"}) String receiveStringCallback
             ,@Comment(value = "接收到非字符串数据回调")
              @CallbackFunction(classes = {"com.blocklynukkit.loader.other.net.websocket.WsClient", "org.java_websocket.WebSocket", "java.nio.ByteBuffer"}, parameters = {"client", "ws", "data"}, comments = {"ws客户端对象", "ws连接对象", "发送的数据缓冲区"}) String receiveDataCallback){
-        return new WsClient(serverUrl, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+        WsClient client = new WsClient(serverUrl, newWsConnectCallback, closeWsConnectCallback, receiveStringCallback, receiveDataCallback);
+        wsClientList.add(client);
+        return client;
     }
 
     @Comment(value = "动态监听事件")

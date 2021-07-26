@@ -15,7 +15,7 @@ import static com.blocklynukkit.loader.Loader.getlogger;
 
 public class BNReloadCommand extends Command {
     public BNReloadCommand() {
-        super("bnreload","查看所有安装的blocklynukkit插件");
+        super("bnreload","重载指定的blocklynukkit插件");
         this.setPermission("blocklynukkit.opall");
         this.setAliases(new String[]{"bnr","reloadbn"});
     }

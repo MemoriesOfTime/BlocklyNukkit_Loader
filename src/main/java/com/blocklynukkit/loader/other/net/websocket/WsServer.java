@@ -14,6 +14,8 @@ public class WsServer extends WebSocketServer {
     private String closeCallback = null;
     private String messageStringCallback = null;
     private String messageDataCallback = null;
+    public Thread workingThread = null;
+    private final WsServer __self = this;
 
     public WsServer(InetSocketAddress address) {
         super(address);
@@ -26,7 +28,8 @@ public class WsServer extends WebSocketServer {
         this.closeCallback = closeCallback;
         this.messageStringCallback = messageStringCallback;
         this.messageDataCallback = messageDataCallback;
-        this.run();
+        workingThread = new Thread(__self::run);
+        workingThread.start();
     }
 
     @Override
@@ -56,6 +59,6 @@ public class WsServer extends WebSocketServer {
 
     @Override
     public void onStart() {
-        super.start();
+
     }
 }

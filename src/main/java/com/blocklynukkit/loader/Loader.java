@@ -31,6 +31,8 @@ import com.blocklynukkit.loader.other.debug.data.CommandInfo;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.other.lizi.bnqqbot;
 import com.blocklynukkit.loader.other.BNCrafting;
+import com.blocklynukkit.loader.other.net.websocket.WsClient;
+import com.blocklynukkit.loader.other.net.websocket.WsServer;
 import com.blocklynukkit.loader.script.*;
 import com.blocklynukkit.loader.script.event.*;
 import com.blocklynukkit.loader.script.window.windowCallbacks.WindowCallback;
@@ -122,6 +124,8 @@ public class Loader extends PluginBase implements Listener {
     public static String fakeNukkitCodeVersion = "";
     public static ExtendScriptLoader nodejs = null;
     public static Int2ObjectOpenHashMap<HttpServer> httpServers = new Int2ObjectOpenHashMap<>();
+    public static List<WsServer> wsServerList = new ArrayList<>();
+    public static List<WsClient> wsClientList = new ArrayList<>();
     //databaseManager变量
     public static MemoryStorage<Object,Object> memoryStorage = new MemoryStorage<>();
 
@@ -271,8 +275,13 @@ public class Loader extends PluginBase implements Listener {
         //注册事件监听器，驱动事件回调
         this.getServer().getPluginManager().registerEvents(this, this);
         eventLoader = new EventLoader(this);
-        //动态事件加载器(历史遗留问题)
-        new CompatibleEventLoader(this);
+        //动态事件加载器(兼容EconomyAPI)
+        try {
+            Thread.currentThread().getContextClassLoader().loadClass("me.onebone.economyapi.event.money.AddMoneyEvent");
+            new CompatibleEventLoader(this);
+        } catch (ClassNotFoundException e) {
+            //ignore
+        }
         //注册bn的生物实体
         Entity.registerEntity("BNFloatingText", FloatingText.class);
         Entity.registerEntity("BNNPC", BNNPC.class);
@@ -322,6 +331,14 @@ public class Loader extends PluginBase implements Listener {
             //ignore
         }
         httpServers.values().forEach(s -> {if(s!=null)s.stop(0);});
+        wsServerList.forEach(c -> {
+            try {
+                c.stop();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        wsClientList.forEach(s -> s.close());
         engineMap.clear();
         Server.getInstance().getScheduler().cancelTask(this);
         System.gc();
@@ -752,16 +769,6 @@ public class Loader extends PluginBase implements Listener {
             }else {
                 sender.sendMessage(TextFormat.YELLOW+""+TextFormat.BOLD+"Module "+args[0]+" has been installed");
             }
-            return false;
-        }
-    }
-
-    public class GenTestWorldCommand extends Command{
-        public GenTestWorldCommand() {
-            super("gentestworld","生成测试世界");
-        }
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] args) {
             return false;
         }
     }

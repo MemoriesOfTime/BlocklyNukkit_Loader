@@ -1,10 +1,10 @@
 package com.blocklynukkit.loader.other.packets;
 
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.RuntimeItemMapping;
 import cn.nukkit.item.RuntimeItems;
-import cn.nukkit.nbt.NBTIO;
-import cn.nukkit.nbt.tag.*;
+import com.blocklynukkit.loader.other.AddonsAPI.bnnbt.NBTIO;
 import cn.nukkit.network.protocol.StartGamePacket;
 import com.blocklynukkit.loader.Loader;
 
@@ -84,26 +84,26 @@ public final class ProxyStartGamePacket extends StartGamePacket {
             }
             Item itemBlock = Item.get(i);
             this.putString("blocklynukkit:"+itemBlock.getName());
-            ListTag<Tag> origin =  new ListTag<>("origin")
-                    .add(new FloatTag("", -8.0f))
-                    .add(new FloatTag("", 0.0f))
-                    .add(new FloatTag("", -8.0f));
-            ListTag<Tag> size = new ListTag<>("size")
-                    .add(new FloatTag("", 16.0f))
-                    .add(new FloatTag("", 16.0f))
-                    .add(new FloatTag("", 16.0f));
+            com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> origin =  new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<>("origin")
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", -8.0f))
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", 0.0f))
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", -8.0f));
+            com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.Tag> size = new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.ListTag<>("size")
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", 16.0f))
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", 16.0f))
+                    .add(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.FloatTag("", 16.0f));
             try {
-                this.put(NBTIO.write(new CompoundTag().putCompound("components"
-                        , new CompoundTag().putCompound("minecraft:entity_collision"
-                                , new CompoundTag()
+                this.put(NBTIO.write(new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag().putCompound("components"
+                        , new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag().putCompound("minecraft:entity_collision"
+                                , new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag()
                                         .putBoolean("enabled", false)
                                         .putList(origin).putList(size)
                                         )
                         .putCompound("minecraft:material_instances"
-                                , new CompoundTag()
-                                        .putCompound("mappings", new CompoundTag())
-                                        .putCompound("materials", new CompoundTag().putCompound("*"
-                                                , new CompoundTag().putBoolean("ambient_occlusion", true)
+                                , new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag()
+                                        .putCompound("mappings", new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag())
+                                        .putCompound("materials", new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag().putCompound("*"
+                                                , new com.blocklynukkit.loader.other.AddonsAPI.bnnbt.tag.CompoundTag().putBoolean("ambient_occlusion", true)
                                                         .putBoolean("face_dimming", true)
                                                         .putString("render_method", "opaque")
                                                         .putString("texture", "dirt"/*TODO Change texture*/))))

@@ -5,7 +5,6 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.nbt.tag.CompoundTag;
 import com.blocklynukkit.loader.Loader;
-import com.blocklynukkit.loader.other.Entities.EntityMob;
 
 public class FloatingText extends EntityMob {
     private int NetWorkId = 61;

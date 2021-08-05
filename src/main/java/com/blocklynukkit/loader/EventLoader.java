@@ -31,6 +31,7 @@ import com.blocklynukkit.loader.other.ProxyPlayer;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
+import cn.nukkit.event.player.PlayerFishEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
@@ -280,6 +281,11 @@ public class EventLoader implements Listener {
         if(event.getEntity() instanceof EntityFishingHook && event.getEntity().shootingEntity instanceof Player){
             Loader.callEventHandler(new StartFishingEvent(event),"StartFishingEvent","StartFishingEvent");
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerFish(PlayerFishEvent event){
+        Loader.callEventHandler(event, "PlayerFishEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

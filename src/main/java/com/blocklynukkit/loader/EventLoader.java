@@ -31,7 +31,6 @@ import com.blocklynukkit.loader.other.ProxyPlayer;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
-import cn.nukkit.event.player.PlayerFishEvent;
 import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;

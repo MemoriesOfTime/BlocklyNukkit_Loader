@@ -1032,6 +1032,8 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand) {
         int id = item.getId();
         String name = item.getName();
+
+        Loader.registerItems++;
         Item.list[id] = item.getClass();//add to nk items list
         //修改运行时物品数据
         try {
@@ -1089,6 +1091,8 @@ public final class BlockItemManager extends BaseManager {
             int toolTier = item.getTier();
             int durability = item.getMaxDurability();
             int attackDamage = item.getAttackDamage();
+
+            Loader.registerItems++;
             try{
             Item.list[id] = item.getClass();
             //修改运行时物品数据
@@ -1279,6 +1283,7 @@ public final class BlockItemManager extends BaseManager {
         try{
             int id = item.getId();
             String name = item.getName();
+            Loader.registerItems++;
             Item.list[id] = item.getClass();
             //构建食物类
             Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
@@ -1406,6 +1411,7 @@ public final class BlockItemManager extends BaseManager {
         try{
             int id = item.getId();
             String name = item.getName();
+            Loader.registerItems++;
             Item.list[id] = item.getClass();
             //构建食物类
             if(nutrition != 0){
@@ -1545,6 +1551,7 @@ public final class BlockItemManager extends BaseManager {
             else if (item.isBoots())
                 armorTypeNum = 3;
 
+            Loader.registerItems++;
             Item.list[id] = item.getClass();
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439

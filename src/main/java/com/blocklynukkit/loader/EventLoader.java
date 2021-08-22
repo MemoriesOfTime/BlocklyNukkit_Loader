@@ -283,6 +283,11 @@ public class EventLoader implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerFish(PlayerFishEvent event){
+        Loader.callEventHandler(event, "PlayerFishEvent");
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityLevelChangeEvent(EntityLevelChangeEvent event){
         Loader.callEventHandler(event, "EntityLevelChangeEvent");
     }

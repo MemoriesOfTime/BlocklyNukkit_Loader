@@ -999,7 +999,7 @@ public final class BlockItemManager extends BaseManager {
             itemClass.addConstructor(voidConstructor);
             //最大堆叠数量
             itemClass.addMethod(CtMethod.make("public int getMaxStackSize(){return "+stackSize+";}",itemClass));
-            Item.list[id] = itemClass.toClass();
+            Item.list[id] = itemClass.toClass();//add to nk items list
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
@@ -1023,7 +1023,40 @@ public final class BlockItemManager extends BaseManager {
             e.printStackTrace();
         }
     }
-    @Comment(value = "注册新的工具物品")
+
+    @Comment(value = "注册新的简易物品")
+    public void registerSimpleItem(
+            @Comment(value = "新物品的Item实例") Item item
+            ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
+            ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand) {
+        int id = item.getId();
+        String name = item.getName();
+        Item.list[id] = item.getClass();//add to nk items list
+        //修改运行时物品数据
+        try {
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+            injectItem2Nukkit(name, id);
+            Loader.registerItemIds.add(id);
+            //记录物品注册信息
+            CustomItemInfo customItemInfo = new CustomItemInfo(id, 4, isDisplayAsTool, canOnOffhand);
+            //记录物品分类种类
+            switch (type){
+                case "construction": customItemInfo.setType(1);break;
+                case "nature": customItemInfo.setType(2);break;
+                case "equipment": customItemInfo.setType(3);break;
+                default: customItemInfo.setType(4); //item
+            }
+            Loader.registerItemInfos.put(id, customItemInfo);
+            //更新物品注册表
+            this.refreshItemPalette();
+        }
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+        e.printStackTrace();
+    }
+    }
     public void registerToolItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
@@ -1034,6 +1067,47 @@ public final class BlockItemManager extends BaseManager {
     ){
         registerToolItem(id, name, toolType, toolTier, durability, attackDamage, canOnOffhand, null);
     }
+
+    @Comment(value = "注册新的工具物品")
+    public void registerToolItem(@Comment(value = "自定义的Item的实例") Item item
+            ,@Comment(value = "能否装备在副手") boolean canOnOffhand){
+            int id = item.getId();
+            String name = item.getName();
+
+            int toolTypeNum = 0;
+            if (item.isSword())
+                toolTypeNum = 1;
+            else if (item.isShovel())
+                toolTypeNum = 2;
+            else if (item.isPickaxe())
+                toolTypeNum = 3;
+            else if (item.isAxe())
+                toolTypeNum = 4;
+            else if (item.isHoe())
+                toolTypeNum = 5;
+
+            int toolTier = item.getTier();
+            int durability = item.getMaxDurability();
+            int attackDamage = item.getAttackDamage();
+            try{
+            Item.list[id] = item.getClass();
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录工具信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, canOnOffhand, toolTypeNum, toolTier, durability, attackDamage);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Comment(value = "注册新的工具物品")
     public void registerToolItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name
@@ -1197,6 +1271,34 @@ public final class BlockItemManager extends BaseManager {
         }
     }
 
+    @Comment(value = "注册新的食物物品")
+    public void registerFoodItem(@Comment(value = "Item实例") Item item
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "食用持续时间(刻)") int eatTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            int id = item.getId();
+            String name = item.getName();
+            Item.list[id] = item.getClass();
+            //构建食物类
+            Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录物品注册信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, true, canOnOffhand, eatTime, nutrition);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Comment(value = "注册新的饮品物品")
     public void registerDrinkItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name
@@ -1295,6 +1397,37 @@ public final class BlockItemManager extends BaseManager {
         }
     }
 
+    @Comment(value = "注册新的饮品物品")
+    public void registerDrinkItem(
+            @Comment(value = "Item实例") Item item
+            ,@Comment(value = "提供的饥饿度") int nutrition
+            ,@Comment(value = "饮用持续时间(刻)") int drinkTime
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            int id = item.getId();
+            String name = item.getName();
+            Item.list[id] = item.getClass();
+            //构建食物类
+            if(nutrition != 0){
+                Food.registerFood((new FoodNormal(nutrition, nutrition*0.6f)).addRelative(id), Loader.plugin);
+            }
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录物品注册信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, false, canOnOffhand, drinkTime, nutrition);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Comment(value = "注册新的盔甲物品")
     public void registerArmorItem(@Comment(value = "新物品的id") int id
             ,@Comment(value = "新物品的名称") String name
@@ -1389,6 +1522,43 @@ public final class BlockItemManager extends BaseManager {
                 this.refreshItemPalette();
             }
         } catch (NotFoundException | NoSuchFieldException | CannotCompileException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Comment(value = "注册新的盔甲物品")
+    public void registerArmorItem(
+            @Comment(value = "Item实例") Item item
+            ,@Comment(value = "是否可装备在副手") boolean canOnOffhand){
+        try{
+            int id = item.getId();
+            String name = item.getName();
+            int durability = item.getMaxDurability();
+
+            int armorTypeNum = 0;
+            if (item.isHelmet())
+                armorTypeNum = 0;
+            else if (item.isChestplate())
+                armorTypeNum = 1;
+            else if (item.isLeggings())
+                armorTypeNum = 2;
+            else if (item.isBoots())
+                armorTypeNum = 3;
+
+            Item.list[id] = item.getClass();
+            //修改运行时物品数据
+            if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
+                    || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                injectItem2Nukkit(name, id);
+                Loader.registerItemIds.add(id);
+                //记录盔甲信息
+                CustomItemInfo customItemInfo = new CustomItemInfo(id, armorTypeNum, canOnOffhand, durability);
+                Loader.registerItemInfos.put(id, customItemInfo);
+                //更新物品注册表
+                this.refreshItemPalette();
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }

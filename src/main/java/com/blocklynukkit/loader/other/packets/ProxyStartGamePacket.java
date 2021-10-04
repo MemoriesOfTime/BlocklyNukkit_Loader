@@ -66,6 +66,8 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putLInt(16); // Limited world width
         this.putLInt(16); // Limited world height
         this.putBoolean(false); // Nether type
+        this.putString(""); // EduSharedUriResource buttonName
+        this.putString(""); // EduSharedUriResource linkUri
         this.putBoolean(true); // Experimental Gameplay
 
         this.putString(this.levelId);

@@ -39,47 +39,49 @@ import java.util.regex.Pattern;
 public class Utils {
     static Matcher urlMatcher = null;
     static boolean sended = false;
-    public static void makeHttpServer(int port){
-        try{
+
+    public static void makeHttpServer(int port) {
+        try {
             InetSocketAddress address = new InetSocketAddress(port);
             HttpServer httpServer = HttpServer.create(address, 10);
-            Loader.httpServers.put(port,httpServer);
+            Loader.httpServers.put(port, httpServer);
             httpServer.createContext("/", new MyHttpHandler());
-            httpServer.createContext("/file",new MyFileHandler());
-            httpServer.createContext("/api",new MyCustomHandler());
+            httpServer.createContext("/file", new MyFileHandler());
+            httpServer.createContext("/api", new MyCustomHandler());
             //设置服务器的线程池对象
             httpServer.setExecutor(Loader.mainExecutor);
             //启动服务器
             httpServer.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             try {
                 HttpServer httpServer = HttpServer.create(new InetSocketAddress(54321), 10);
-                Loader.httpServers.put(54321,httpServer);
+                Loader.httpServers.put(54321, httpServer);
                 httpServer.createContext("/", new MyHttpHandler());
-                httpServer.createContext("/file",new MyFileHandler());
-                httpServer.createContext("/api",new MyCustomHandler());
+                httpServer.createContext("/file", new MyFileHandler());
+                httpServer.createContext("/api", new MyCustomHandler());
                 //设置服务器的线程池对象
                 httpServer.setExecutor(Loader.mainExecutor);
                 //启动服务器
                 httpServer.start();
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().info(TextFormat.RED+"您的"+port+"端口被占用！尝试在54321端口启动httpapi！");
-                }else {
-                    Loader.getlogger().info(TextFormat.RED+"The server's PORT"+port+" is not available! BlocklyNukkit is trying to start htttpapi service on PORT54321!");
+                if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                    Loader.getlogger().info(TextFormat.RED + "您的" + port + "端口被占用！尝试在54321端口启动httpapi！");
+                } else {
+                    Loader.getlogger().info(TextFormat.RED + "The server's PORT" + port + " is not available! BlocklyNukkit is trying to start htttpapi service on PORT54321!");
                 }
-            }catch (IOException e2){
+            } catch (IOException e2) {
                 e2.printStackTrace();
-            }catch (Exception e3){
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().info(TextFormat.RED+"启动httpapi服务失败！端口被完全拦截！");
-                    Loader.getlogger().info(TextFormat.YELLOW+"解释器正在以无网络服务模式运行！修改port.yml以解决此问题！");
-                }else {
-                    Loader.getlogger().info(TextFormat.RED+"Failed to start httpapi service!No available PORT to use!");
-                    Loader.getlogger().info(TextFormat.YELLOW+"BlocklyNukkit is running without providing net service! Rewrite port.yml to solve this problem!");
+            } catch (Exception e3) {
+                if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                    Loader.getlogger().info(TextFormat.RED + "启动httpapi服务失败！端口被完全拦截！");
+                    Loader.getlogger().info(TextFormat.YELLOW + "解释器正在以无网络服务模式运行！修改port.yml以解决此问题！");
+                } else {
+                    Loader.getlogger().info(TextFormat.RED + "Failed to start httpapi service!No available PORT to use!");
+                    Loader.getlogger().info(TextFormat.YELLOW + "BlocklyNukkit is running without providing net service! Rewrite port.yml to solve this problem!");
                 }
             }
         }
     }
+
     public static String replaceLast(String string, String match, String replace) {
         if (null == replace) {
             //参数不合法，原样返回
@@ -94,6 +96,7 @@ public class Utils {
 
         return sBuilder.replace(lastIndexOf, lastIndexOf + match.length(), replace).toString();
     }
+
     public static String readToString(String fileName) {
         String encoding = "UTF-8";
         File file = new File(fileName);
@@ -109,86 +112,92 @@ public class Utils {
             return null;
         }
     }
+
     public static int getVersion() {
         String version = System.getProperty("java.version");
-        if(version.startsWith("1.")) {
+        if (version.startsWith("1.")) {
             version = version.substring(2, 3);
         } else {
             int dot = version.indexOf(".");
-            if(dot != -1) { version = version.substring(0, dot); }
+            if (dot != -1) {
+                version = version.substring(0, dot);
+            }
         }
         return Integer.parseInt(version);
     }
-    public static String randomDeveloper(){
-        String[] list = new String[]{"冰凉","电池酱","企鹅","红楼君","夏亚","亦染","WetABQ","HBJ","你的旺财","若水","神奇的YYT"
-        ,"pqguanfang","泥土怪","“伟大的”P(屁)爷"};
-        return list[(int)Math.floor(list.length*Math.random())];
+
+    public static String randomDeveloper() {
+        String[] list = new String[]{"冰凉", "电池酱", "企鹅", "红楼君", "夏亚", "亦染", "WetABQ", "HBJ", "你的旺财", "若水", "神奇的YYT"
+                , "pqguanfang", "泥土怪", "“伟大的”P(屁)爷"};
+        return list[(int) Math.floor(list.length * Math.random())];
     }
-    public static void checkupdate(){
+
+    public static void checkupdate() {
         try {
-            if(sended)return;
+            if (sended) return;
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
-            String web = sendGet("https://tools.blocklynukkit.com/version.txt","");
-            web = web.replaceAll("[^0123456789.]","");
-            int webint = Integer.parseInt(web.replaceAll("\\.",""));
-            int verint = Integer.parseInt(version.replaceAll("\\.",""));
-            if((!version.equals(web)) || verint>10000){
-                if(webint<verint && !sended){
+            String web = sendGet("https://tools.blocklynukkit.com/version.txt", "");
+            web = web.replaceAll("[^0123456789.]", "");
+            int webint = Integer.parseInt(web.replaceAll("\\.", ""));
+            int verint = Integer.parseInt(version.replaceAll("\\.", ""));
+            if ((!version.equals(web)) || verint > 10000) {
+                if (webint < verint && !sended) {
                     sended = true;
-                    if (Server.getInstance().getLanguage().getName().contains("中文")){
-                        Loader.getlogger().warning(TextFormat.YELLOW+"您正在使用BlocklyNukkit先行测试版！");
-                    }else {
-                        Loader.getlogger().warning(TextFormat.YELLOW+"You are using BlocklyNukkit beta!");
+                    if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                        Loader.getlogger().warning(TextFormat.YELLOW + "您正在使用BlocklyNukkit先行测试版！");
+                    } else {
+                        Loader.getlogger().warning(TextFormat.YELLOW + "You are using BlocklyNukkit beta!");
                     }
                     return;
                 }
                 File folder = new File(Server.getInstance().getPluginPath());
                 File bn = null;
                 String name = "";
-                for(File file:folder.listFiles()){
+                for (File file : folder.listFiles()) {
                     name = file.getName();
-                    if((name.contains("BlocklyNukkit")||name.contains("blocklynukkit") ||name.contains("Blocklynukkit")||
-                            name.contains("blocklyNukkit")|| name.contains("BN")||name.contains("]bn")
+                    if ((name.contains("BlocklyNukkit") || name.contains("blocklynukkit") || name.contains("Blocklynukkit") ||
+                            name.contains("blocklyNukkit") || name.contains("BN") || name.contains("]bn")
                             && !name.equalsIgnoreCase("BNGameAPI.jar")
                             && !name.equalsIgnoreCase("PyBN.jar")
                             && !name.equalsIgnoreCase("PHPBN.jar")
-                            && !name.equalsIgnoreCase("WebassemblyBN.jar"))){
+                            && !name.equalsIgnoreCase("WebassemblyBN.jar"))) {
                         bn = file;
                         break;
                     }
                 }
                 bn.delete();
-                Utils.downLoadFromUrl("https://tools.blocklynukkit.com/BlocklyNukkit.jar",name+(name.endsWith("jar")?"":".jar"),Server.getInstance().getPluginPath());
-                if (Server.getInstance().getLanguage().getName().contains("中文")){
-                    Loader.getlogger().warning(TextFormat.YELLOW+"您的BlocklyNukkit解释器不是最新版！");
-                    Loader.getlogger().warning(TextFormat.WHITE+"最新版BlocklyNukkit已经为您自动更新到版本"+web+"！文件路径为： "+bn.getPath());
-                    Loader.getlogger().warning(TextFormat.WHITE+"新版本请重载插件或者重启服务器以使用。");
-                }else {
-                    Loader.getlogger().warning(TextFormat.YELLOW+"Your BlocklyNukkit.jar is not the latest version!");
-                    Loader.getlogger().warning(TextFormat.WHITE+"BlocklyNukkit has been updated to the latest version: "+web+". The file path is: "+bn.getPath());
-                    Loader.getlogger().warning(TextFormat.WHITE+"Please reload plugins or restart your nukkit server to use the latest version!");
+                Utils.downLoadFromUrl("https://tools.blocklynukkit.com/BlocklyNukkit.jar", name + (name.endsWith("jar") ? "" : ".jar"), Server.getInstance().getPluginPath());
+                if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                    Loader.getlogger().warning(TextFormat.YELLOW + "您的BlocklyNukkit解释器不是最新版！");
+                    Loader.getlogger().warning(TextFormat.WHITE + "最新版BlocklyNukkit已经为您自动更新到版本" + web + "！文件路径为： " + bn.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE + "新版本请重载插件或者重启服务器以使用。");
+                } else {
+                    Loader.getlogger().warning(TextFormat.YELLOW + "Your BlocklyNukkit.jar is not the latest version!");
+                    Loader.getlogger().warning(TextFormat.WHITE + "BlocklyNukkit has been updated to the latest version: " + web + ". The file path is: " + bn.getPath());
+                    Loader.getlogger().warning(TextFormat.WHITE + "Please reload plugins or restart your nukkit server to use the latest version!");
                 }
-                if(Loader.checkupdatetime>=1){
-                    if(LocalDateTime.now().getHour()>=23&&LocalDateTime.now().getHour()<=4){
-                        Server.getInstance().dispatchCommand(new ConsoleCommandSender(),"reload");
+                if (Loader.checkupdatetime >= 1) {
+                    if (LocalDateTime.now().getHour() >= 23 && LocalDateTime.now().getHour() <= 4) {
+                        Server.getInstance().dispatchCommand(new ConsoleCommandSender(), "reload");
                     }
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
-            String web = sendGet("https://tools.blocklynukkit.com/version.txt","");
-            web = web.replaceAll("[^0123456789.]","");
-            if (Server.getInstance().getLanguage().getName().contains("中文")){
-                Loader.getlogger().warning(TextFormat.YELLOW+"检测到新版本！当前版本"+version+" ,最新版本"+web);
-                Loader.getlogger().warning(TextFormat.RED+"自动更新失败，请您手动前往 https://tools.blocklynukkit.com/BlocklyNukkit.jar 更新！");
-            }else {
-                Loader.getlogger().warning(TextFormat.RED+"Failed to update!Please download the latest version on https://tools.blocklynukkit.com/BlocklyNukkit.jar .");
+            String web = sendGet("https://tools.blocklynukkit.com/version.txt", "");
+            web = web.replaceAll("[^0123456789.]", "");
+            if (Server.getInstance().getLanguage().getName().contains("中文")) {
+                Loader.getlogger().warning(TextFormat.YELLOW + "检测到新版本！当前版本" + version + " ,最新版本" + web);
+                Loader.getlogger().warning(TextFormat.RED + "自动更新失败，请您手动前往 https://tools.blocklynukkit.com/BlocklyNukkit.jar 更新！");
+            } else {
+                Loader.getlogger().warning(TextFormat.RED + "Failed to update!Please download the latest version on https://tools.blocklynukkit.com/BlocklyNukkit.jar .");
             }
-        }finally {
+        } finally {
             Loader.checkupdatetime++;
         }
 
     }
+
     public static void download(String downloadUrl, File file) {
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(file);
@@ -209,23 +218,26 @@ public class Utils {
 //                    Loader.getlogger().info(TextFormat.YELLOW+"Transcoding for windows... "+TextFormat.GREEN+"The Author says:(Will Bill Gates die if windows uses utf in all countries?)");
 //            }
         } catch (IOException e) {
-            Loader.getlogger().error("download error ! url :{"+downloadUrl+"}, exception:{"+e+"}");
+            Loader.getlogger().error("download error ! url :{" + downloadUrl + "}, exception:{" + e + "}");
         }
         if (Server.getInstance().getLanguage().getName().contains("中文"))
-            Loader.getlogger().info(TextFormat.GREEN+"成功同步："+file.getName());
+            Loader.getlogger().info(TextFormat.GREEN + "成功同步：" + file.getName());
         else
-            Loader.getlogger().info(TextFormat.GREEN+"successfully update: "+file.getName());
+            Loader.getlogger().info(TextFormat.GREEN + "successfully update: " + file.getName());
     }
+
     public static boolean isWindows() {
         return System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS");
     }
-    public static String translate(String chn,String eng){
-        if (Server.getInstance().getLanguage().getName().contains("中文")){
+
+    public static String translate(String chn, String eng) {
+        if (Server.getInstance().getLanguage().getName().contains("中文")) {
             return chn;
-        }else {
+        } else {
             return eng;
         }
     }
+
     public static String readToString(File file) {
         String encoding = getFilecharset(file);
         Long filelength = file.length();
@@ -250,10 +262,11 @@ public class Utils {
             return null;
         }
     }
-    public static void writeWithString(File file,String string,String charSet) {
+
+    public static void writeWithString(File file, String string, String charSet) {
         try {
-            if(!file.exists())file.createNewFile();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file),charSet));
+            if (!file.exists()) file.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charSet));
             writer.write(string);
             writer.flush();
             writer.close();
@@ -261,13 +274,15 @@ public class Utils {
             e.printStackTrace();
         }
     }
-    public static void writeWithString(File file,String string){
+
+    public static void writeWithString(File file, String string) {
         writeWithString(file, string, "UTF-8");
     }
-    public static void appendWithString(File file,String string,String charSet) {
+
+    public static void appendWithString(File file, String string, String charSet) {
         try {
-            if(!file.exists())file.createNewFile();
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file,true),charSet));
+            if (!file.exists()) file.createNewFile();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), charSet));
             writer.write(string);
             writer.flush();
             writer.close();
@@ -275,12 +290,14 @@ public class Utils {
             e.printStackTrace();
         }
     }
-    public static void appendWithString(File file,String string){
+
+    public static void appendWithString(File file, String string) {
         writeWithString(file, string, "UTF-8");
     }
+
     public static boolean check(File file1, File file2) {
         boolean isSame = false;
-        if((!file1.exists())||(!file2.exists())){
+        if ((!file1.exists()) || (!file2.exists())) {
             return false;
         }
         String img1Md5 = getMD5(file1);
@@ -337,14 +354,15 @@ public class Utils {
     public static String getMD5(File file) {
         return getMD5(getByte(file));
     }
-    public static void  downLoadFromUrl(String urlStr,String fileName,String savePath,String toekn) throws IOException{
+
+    public static void downLoadFromUrl(String urlStr, String fileName, String savePath, String toekn) throws IOException {
         URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         //设置超时间为3秒
-        conn.setConnectTimeout(3*1000);
+        conn.setConnectTimeout(3 * 1000);
         //防止屏蔽程序抓取而返回403错误
         conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
-        conn.setRequestProperty("lfwywxqyh_token",toekn);
+        conn.setRequestProperty("lfwywxqyh_token", toekn);
 
         //得到输入流
         InputStream inputStream = conn.getInputStream();
@@ -353,33 +371,35 @@ public class Utils {
 
         //文件保存位置
         File saveDir = new File(savePath);
-        if(!saveDir.exists()){
+        if (!saveDir.exists()) {
             saveDir.mkdir();
         }
-        File file = new File(saveDir+File.separator+fileName);
+        File file = new File(saveDir + File.separator + fileName);
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(getData);
-        if(fos!=null){
+        if (fos != null) {
             fos.close();
         }
-        if(inputStream!=null){
+        if (inputStream != null) {
             inputStream.close();
         }
 
 
     }
+
     /**
      * 从网络Url中下载文件
+     *
      * @param urlStr
      * @param fileName
      * @param savePath
      * @throws IOException
      */
-    public static void  downLoadFromUrl(String urlStr,String fileName,String savePath) throws IOException{
+    public static void downLoadFromUrl(String urlStr, String fileName, String savePath) throws IOException {
         URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         //设置超时间为3秒
-        conn.setConnectTimeout(3*1000);
+        conn.setConnectTimeout(3 * 1000);
         //防止屏蔽程序抓取而返回403错误
         conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
 
@@ -390,29 +410,30 @@ public class Utils {
 
         //文件保存位置
         File saveDir = new File(savePath);
-        if(!saveDir.exists()){
+        if (!saveDir.exists()) {
             saveDir.mkdirs();
         }
-        File file = new File(saveDir+File.separator+fileName);
+        File file = new File(saveDir + File.separator + fileName);
         FileOutputStream fos = new FileOutputStream(file);
         fos.write(getData);
-        if(fos!=null){
+        if (fos != null) {
             fos.close();
         }
-        if(inputStream!=null){
+        if (inputStream != null) {
             inputStream.close();
         }
 
     }
+
     public static void downloadPlugin(String urlStr) throws IOException {
-        File jar = new File(Server.getInstance().getPluginPath(), urlStr.substring(urlStr.lastIndexOf('/')+1,urlStr.length()));
-        if (jar.exists()){
+        File jar = new File(Server.getInstance().getPluginPath(), urlStr.substring(urlStr.lastIndexOf('/') + 1, urlStr.length()));
+        if (jar.exists()) {
             return;
         }
-        File tmp = new File(jar.getPath()+".au");
+        File tmp = new File(jar.getPath() + ".au");
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setConnectTimeout(3*1000);
+        conn.setConnectTimeout(3 * 1000);
         conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
         InputStream is = conn.getInputStream();
         int totalSize = conn.getContentLength();
@@ -421,29 +442,31 @@ public class Utils {
         FileOutputStream os = new FileOutputStream(tmp);
         byte[] buf = new byte[4096];
         int size = 0;
-        while((size = is.read(buf)) != -1) {
+        while ((size = is.read(buf)) != -1) {
             os.write(buf, 0, size);
             pbt.updateProgress(size);
         }
         is.close();
         os.flush();
         os.close();
-        if(jar.exists())
+        if (jar.exists())
             jar.delete();
         tmp.renameTo(jar);
         Server.getInstance().getPluginManager().loadPlugin(jar.getPath());
     }
+
     /**
      * 从输入流中获取字节数组
+     *
      * @param inputStream
      * @return
      * @throws IOException
      */
-    public static  byte[] readInputStream(InputStream inputStream) throws IOException {
+    public static byte[] readInputStream(InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int len = 0;
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        while((len = inputStream.read(buffer)) != -1) {
+        while ((len = inputStream.read(buffer)) != -1) {
             bos.write(buffer, 0, len);
         }
         bos.close();
@@ -459,8 +482,8 @@ public class Utils {
         BufferedReader in = null;
         try {
             String urlNameString = urlEncodeChinese(url);
-            if(!(param.length()==0||param==null)){
-                urlNameString = url + "?" + URLEncoder.encode(param.replaceAll("=","WaITeQuALsChaR").replaceAll("&","ASDGifsigIOSFHObisG"),"utf-8").replaceAll("WaITeQuALsChaR","=").replaceAll("ASDGifsigIOSFHObisG","&");
+            if (!(param.length() == 0 || param == null)) {
+                urlNameString = url + "?" + URLEncoder.encode(param.replaceAll("=", "WaITeQuALsChaR").replaceAll("&", "ASDGifsigIOSFHObisG"), "utf-8").replaceAll("WaITeQuALsChaR", "=").replaceAll("ASDGifsigIOSFHObisG", "&");
             }
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
@@ -477,7 +500,7 @@ public class Utils {
             in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream(), "utf-8"));
             String line;
-            result="";
+            result = "";
             while ((line = in.readLine()) != null) {
                 result += line;
             }
@@ -523,8 +546,8 @@ public class Utils {
                 result += line;
             }
         } catch (Exception e) {
-            Loader.getlogger().warning(TextFormat.RED+"The cloud black-list server crashed!goto https://ban.bugmc.com/ to solve the provlem!");
-            Loader.getlogger().warning(TextFormat.RED+"BlackBE的云黑数据库炸了！快去https://ban.bugmc.com/求救！");
+            Loader.getlogger().warning(TextFormat.RED + "The cloud black-list server crashed!goto https://ban.bugmc.com/ to solve the provlem!");
+            Loader.getlogger().warning(TextFormat.RED + "BlackBE的云黑数据库炸了！快去https://ban.bugmc.com/求救！");
             e.printStackTrace();
         }
         // 使用finally块来关闭输入流
@@ -540,7 +563,7 @@ public class Utils {
         return result;
     }
 
-    public static String sendPost(String url, String param){
+    public static String sendPost(String url, String param) {
         try {
             return sendPost(url, param, null);
         } catch (IOException e) {
@@ -560,7 +583,7 @@ public class Utils {
         conn.setRequestProperty("connection", "Keep-Alive");
         conn.setRequestProperty("user-agent",
                 "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-        if (header!=null) {
+        if (header != null) {
             for (Map.Entry<String, String> entry : header.entrySet()) {
                 conn.setRequestProperty(entry.getKey(), entry.getValue());
             }
@@ -577,10 +600,10 @@ public class Utils {
         while ((line = in.readLine()) != null) {
             result += line;
         }
-        if(outputStream != null){
+        if (outputStream != null) {
             outputStream.close();
         }
-        if(in!=null){
+        if (in != null) {
             in.close();
         }
         return result;
@@ -588,7 +611,7 @@ public class Utils {
 
     public static String urlEncodeChinese(String url) {
         try {
-            if(urlMatcher == null){
+            if (urlMatcher == null) {
                 urlMatcher = Pattern.compile("[\\u4e00-\\u9fa5]").matcher(url);
             }
             String tmp = "";
@@ -599,7 +622,7 @@ public class Utils {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        return url.replace(" ","%20");
+        return url.replace(" ", "%20");
     }
 
     private static String getFilecharset(File sourceFile) {
@@ -631,11 +654,13 @@ public class Utils {
                 int loc = 0;
                 while ((read = bis.read()) != -1) {
                     loc++;
-                    if (read >= 0xF0){
-                        charset = "GBK";break;
+                    if (read >= 0xF0) {
+                        charset = "GBK";
+                        break;
                     }
-                    if (0x80 <= read && read <= 0xBF){// 单独出现BF以下的，也算是GBK
-                        charset = "GBK";break;
+                    if (0x80 <= read && read <= 0xBF) {// 单独出现BF以下的，也算是GBK
+                        charset = "GBK";
+                        break;
                     }
                     if (0xC0 <= read && read <= 0xDF) {
                         read = bis.read();
@@ -643,8 +668,9 @@ public class Utils {
                             // (0x80
                             // - 0xBF),也可能在GB编码内
                             continue;
-                        else{
-                            charset = "GBK";break;
+                        else {
+                            charset = "GBK";
+                            break;
                         }
                     } else if (0xE0 <= read && read <= 0xEF) {// 也有可能出错，但是几率较小
                         read = bis.read();
@@ -653,11 +679,13 @@ public class Utils {
                             if (0x80 <= read && read <= 0xBF) {
                                 charset = "UTF-8";
                                 break;
-                            } else{
-                                charset = "GBK";break;
+                            } else {
+                                charset = "GBK";
+                                break;
                             }
-                        } else{
-                            charset = "GBK";break;
+                        } else {
+                            charset = "GBK";
+                            break;
                         }
                     }
                 }
@@ -668,6 +696,7 @@ public class Utils {
         }
         return charset;
     }
+
     public static byte[] hexStringToBytes(String hexString) {
         if (hexString == null || hexString.equals("")) {
             return null;
@@ -682,10 +711,12 @@ public class Utils {
         }
         return d;
     }
+
     private static byte charToByte(char c) {
         return (byte) "0123456789ABCDEF".indexOf(c);
     }
-    public static String bytesToHexString(byte[] src){
+
+    public static String bytesToHexString(byte[] src) {
         StringBuilder stringBuilder = new StringBuilder("");
         if (src == null || src.length <= 0) {
             return null;
@@ -701,7 +732,7 @@ public class Utils {
         return stringBuilder.toString();
     }
 
-    public static String StringEncryptor(String str,String type) {
+    public static String StringEncryptor(String str, String type) {
         try {
             // 生成一个MD5加密计算摘要
             MessageDigest md = MessageDigest.getInstance(type);
@@ -720,13 +751,13 @@ public class Utils {
         return field.get(instance);
     }
 
-    public static double limit(double a,double b){
+    public static double limit(double a, double b) {
         b = Math.abs(b);
-        if(a>b){
+        if (a > b) {
             return b;
-        }else if(a<(-b)){
+        } else if (a < (-b)) {
             return -b;
-        }else {
+        } else {
             return a;
         }
     }
@@ -734,12 +765,9 @@ public class Utils {
     /**
      * 利用递归找一个类的指定方法，如果找不到，去父亲里面找直到最上层Object对象为止。
      *
-     * @param clazz
-     *            目标类
-     * @param methodName
-     *            方法名
-     * @param classes
-     *            方法参数类型数组
+     * @param clazz      目标类
+     * @param methodName 方法名
+     * @param classes    方法参数类型数组
      * @return 方法对象
      * @throws Exception
      */
@@ -764,15 +792,10 @@ public class Utils {
     }
 
     /**
-     *
-     * @param obj
-     *            调整方法的对象
-     * @param methodName
-     *            方法名
-     * @param classes
-     *            参数类型数组
-     * @param objects
-     *            参数数组
+     * @param obj        调整方法的对象
+     * @param methodName 方法名
+     * @param classes    参数类型数组
+     * @param objects    参数数组
      * @return 方法的返回值
      */
     public static Object invoke(final Object obj, final String methodName,
@@ -788,16 +811,17 @@ public class Utils {
 
     public static Object invoke(final Object obj, final String methodName,
                                 final Class[] classes) {
-        return invoke(obj, methodName, classes, new Object[] {});
+        return invoke(obj, methodName, classes, new Object[]{});
     }
 
     public static Object invoke(final Object obj, final String methodName) {
-        return invoke(obj, methodName, new Class[] {}, new Object[] {});
+        return invoke(obj, methodName, new Class[]{}, new Object[]{});
     }
-    public static java.awt.Color hex2rgb (String hex) {
+
+    public static java.awt.Color hex2rgb(String hex) {
         // 用Integer转为十六进制的rgb值
-        hex = hex.replace("#","0x");
-        int rgb = Integer.parseInt(hex.substring(2),16);
+        hex = hex.replace("#", "0x");
+        int rgb = Integer.parseInt(hex.substring(2), 16);
         // 实例化java.awt.Color,获取对应的r、g、b值
         java.awt.Color color = new java.awt.Color(rgb);
         return color;
@@ -812,7 +836,7 @@ public class Utils {
 
     public static BufferedImage toBufferedImage(Image image) {
         if (image instanceof BufferedImage) {
-            return (BufferedImage)image;
+            return (BufferedImage) image;
         }
 
         // This code ensures that all the pixels in the image are loaded
@@ -860,6 +884,7 @@ public class Utils {
 
         return bimage;
     }
+
     /**
      * 把base64转化为文件.
      *

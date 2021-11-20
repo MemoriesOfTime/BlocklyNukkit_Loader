@@ -3,7 +3,7 @@ package com.blocklynukkit.route;
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.SimpleAxisAlignedBB;
+import cn.nukkit.math.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 
 import java.util.ArrayList;
@@ -132,7 +132,7 @@ public class WalkerRouteFinder extends SimpleRouteFinder {
 
         double radius = (this.entity.getWidth() * this.entity.getScale()) / 2;
         float height = this.entity.getHeight() * this.entity.getScale();
-        AxisAlignedBB bb = new SimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);
+        AxisAlignedBB bb = new BNSimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);
         boolean out = this.level.getCollisionBlocks(bb, true).length == 0 && !canPassThroughBlock(this.level.getBlock(vector3.add(0, -1, 0), false));
         return out;
     }
@@ -365,7 +365,7 @@ public class WalkerRouteFinder extends SimpleRouteFinder {
         double radius = (this.entity.getWidth() * this.entity.getScale()) / 2 + 0.1;
         double height = this.entity.getHeight() * this.entity.getScale();
         for (Vector3 vector3 : list) {
-            AxisAlignedBB bb = new SimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);
+            AxisAlignedBB bb = new BNSimpleAxisAlignedBB(vector3.getX() - radius, vector3.getY(), vector3.getZ() - radius, vector3.getX() + radius, vector3.getY() + height, vector3.getZ() + radius);
             if (this.level.getCollisionBlocks(bb, true).length != 0) return true;
 
             boolean xIsInt = vector3.getX() % 1 == 0;

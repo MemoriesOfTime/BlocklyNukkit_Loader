@@ -5,47 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/NBTIO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/ByteArrayTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/ByteTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/CompoundTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/DoubleTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/EndTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/FloatArrayTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/FloatTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/IntArrayTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/IntTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/ListTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/LongTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/NumberTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/ShortTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/StringTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/bnnbt/tag/Tag.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/CompatibleEventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/CompatibleEventLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/EventLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/Loader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/CustomItemInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/CustomItemInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/DiggerNBT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/DiggerNBT.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceArmorManifest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/data/ResourceArmorManifest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Clothes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Clothes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/BNNPC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingText.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Entities/FloatingText.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Items/ItemComponentEntry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/Items/ItemComponentEntry.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/nukkit/math/SimpleAxisAlignedBB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/nukkit/math/BNSimpleAxisAlignedBB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/entity/MovingEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/cmd/BNReloadCommand.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/inventoty/HopperFakeInventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/inventoty/HopperFakeInventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsClient.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/net/websocket/WsServer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/packets/ItemComponentPacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/packets/ItemComponentPacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/packets/ProxyStartGamePacket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/packets/ProxyStartGamePacket.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/particle/FireworkRocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/particle/FireworkRocket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/EntityManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/FunctionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/updatelog.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/updatelog.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -737,13 +704,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00086" summary="修复射箭函数">
-      <created>1612079353277</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1612079353277</updated>
-    </task>
     <task id="LOCAL-00087" summary="修复射箭函数中参数依赖问题">
       <created>1612079584535</created>
       <option name="number" value="00087" />
@@ -1080,7 +1040,14 @@
       <option name="project" value="LOCAL" />
       <updated>1626692664623</updated>
     </task>
-    <option name="localTasksCounter" value="135" />
+    <task id="LOCAL-00135" summary="兼容1.17.40">
+      <created>1637397246096</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1637397246096</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1132,7 +1099,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="优化npc" />
     <MESSAGE value="完善注册物品api" />
     <MESSAGE value="一些代码优化" />
     <MESSAGE value="去除一些调试信息，修复php超时bug" />
@@ -1157,7 +1123,8 @@
     <MESSAGE value="提交gitignore" />
     <MESSAGE value="1.2.9.5正式版" />
     <MESSAGE value="1.2.9.6" />
-    <option name="LAST_COMMIT_MESSAGE" value="1.2.9.6" />
+    <MESSAGE value="兼容1.17.40" />
+    <option name="LAST_COMMIT_MESSAGE" value="兼容1.17.40" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

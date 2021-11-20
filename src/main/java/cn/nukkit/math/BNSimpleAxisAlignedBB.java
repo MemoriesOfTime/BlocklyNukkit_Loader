@@ -3,7 +3,7 @@ package cn.nukkit.math;
 /**
  * Just for compatible!
  */
-public class SimpleAxisAlignedBB implements AxisAlignedBB {
+public class BNSimpleAxisAlignedBB implements AxisAlignedBB {
     private double minX;
     private double minY;
     private double minZ;
@@ -11,7 +11,7 @@ public class SimpleAxisAlignedBB implements AxisAlignedBB {
     private double maxY;
     private double maxZ;
 
-    public SimpleAxisAlignedBB(Vector3 pos1, Vector3 pos2) {
+    public BNSimpleAxisAlignedBB(Vector3 pos1, Vector3 pos2) {
         this.minX = Math.min(pos1.x, pos2.x);
         this.minY = Math.min(pos1.y, pos2.y);
         this.minZ = Math.min(pos1.z, pos2.z);
@@ -20,7 +20,7 @@ public class SimpleAxisAlignedBB implements AxisAlignedBB {
         this.maxZ = Math.max(pos1.z, pos2.z);
     }
 
-    public SimpleAxisAlignedBB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public BNSimpleAxisAlignedBB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -82,6 +82,6 @@ public class SimpleAxisAlignedBB implements AxisAlignedBB {
     }
 
     public AxisAlignedBB clone() {
-        return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
+        return new BNSimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 }

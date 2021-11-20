@@ -24,6 +24,7 @@ import java.net.InetSocketAddress;
 
 public final class ProxyPlayer extends Player {
     public PermissibleBase perm;
+
     public ProxyPlayer(SourceInterface interfaz, Long clientID, InetSocketAddress socketAddress) {
         super(interfaz, clientID, socketAddress);
         try {
@@ -34,8 +35,9 @@ public final class ProxyPlayer extends Player {
             //ignore
         }
     }
+
     @Override
-    protected void completeLoginSequence(){
+    protected void completeLoginSequence() {
         PlayerLoginEvent ev;
         this.server.getPluginManager().callEvent(ev = new PlayerLoginEvent(this, "Plugin reason"));
         if (ev.isCancelled()) {
@@ -44,9 +46,9 @@ public final class ProxyPlayer extends Player {
         }
 
         Level level = this.server.getLevelByName(this.namedTag.getString("SpawnLevel"));
-        if(level != null){
+        if (level != null) {
             this.spawnPosition = new Position(this.namedTag.getInt("SpawnX"), this.namedTag.getInt("SpawnY"), this.namedTag.getInt("SpawnZ"), level);
-        }else{
+        } else {
             this.spawnPosition = this.level.getSafeSpawn();
         }
 
@@ -121,21 +123,21 @@ public final class ProxyPlayer extends Player {
         super.doFirstSpawn();
         ItemComponentPacket itemComponentPacket = new ItemComponentPacket();
         itemComponentPacket.entries = new ItemComponentEntry[Loader.registerItemIds.size()];
-        for(int i=0,size = Loader.registerItemInfos.size();i<Loader.registerItemIds.size();i++){
+        for (int i = 0, size = Loader.registerItemInfos.size(); i < Loader.registerItemIds.size(); i++) {
             Item item = Item.get(Loader.registerItemIds.get(i));
-            if(i > size - 1){
+            if (i > size - 1) {
                 continue;
             }
-            CustomItemInfo customItemInfo = Loader.registerItemInfos.get((int)Loader.registerItemIds.get(i));
+            CustomItemInfo customItemInfo = Loader.registerItemInfos.get((int) Loader.registerItemIds.get(i));
             CompoundTag root = new CompoundTag("");
-            root.putCompound("components",new CompoundTag()
-                    .putCompound("item_properties",new CompoundTag()
-                            .putBoolean("allow_off_hand",customItemInfo.isCanOnOffhand())
-                            .putBoolean("hand_equipped",customItemInfo.isDisplayAsTool())
-                            .putInt("creative_category",customItemInfo.getType())
-                            .putInt("max_stack_size",item.getMaxStackSize()))
-                    .putCompound("minecraft:icon",new CompoundTag()
-                            .putString("texture",item.getName()))
+            root.putCompound("components", new CompoundTag()
+                    .putCompound("item_properties", new CompoundTag()
+                            .putCompound("minecraft:icon", new CompoundTag()
+                                    .putString("texture", item.getName()))
+                            .putBoolean("allow_off_hand", customItemInfo.isCanOnOffhand())
+                            .putBoolean("hand_equipped", customItemInfo.isDisplayAsTool())
+                            .putInt("creative_category", customItemInfo.getType())
+                            .putInt("max_stack_size", item.getMaxStackSize()))
             );
 //            if(customItemInfo.isForceScale()){
 //                System.out.println("HANDER" + customItemInfo.getZoom());
@@ -165,96 +167,96 @@ public final class ProxyPlayer extends Player {
 //                                .putCompound("third_person"
 //                                        , new CompoundTag().put("position", __d).put("rotation", __d).put("scale", __d))));
 //            }
-            if(customItemInfo.isTool()){
+            if (customItemInfo.isTool()) {
                 root.getCompound("components")
-                        .putCompound("minecraft:durability",new CompoundTag()
-                                .putInt("max_durability",customItemInfo.getDurability())
+                        .putCompound("minecraft:durability", new CompoundTag()
+                                .putInt("max_durability", customItemInfo.getDurability())
                         );
                 root.getCompound("components").getCompound("item_properties")
-                        .putInt("damage",customItemInfo.getAttackDamage());
-                if(customItemInfo.getToolType() == 3){
+                        .putInt("damage", customItemInfo.getAttackDamage());
+                if (customItemInfo.getToolType() == 3) {
                     root.getCompound("components")
                             .putCompound("minecraft:digger", DiggerNBT.getPickaxeDiggerNBT(customItemInfo.getToolTier()));
-                }else if(customItemInfo.getToolType() == 4){
+                } else if (customItemInfo.getToolType() == 4) {
                     root.getCompound("components")
                             .putCompound("minecraft:digger", DiggerNBT.getAxeDiggerNBT(customItemInfo.getToolTier()));
-                }else if(customItemInfo.getToolType() == 2){
+                } else if (customItemInfo.getToolType() == 2) {
                     root.getCompound("components")
                             .putCompound("minecraft:digger", DiggerNBT.getShovelDiggerNBT(customItemInfo.getToolTier()));
                 }
-            }else if(customItemInfo.isFood() || customItemInfo.isDrink()){
-                if(customItemInfo.isDrink() && customItemInfo.getNutrition() == 0){
+            } else if (customItemInfo.isFood() || customItemInfo.isDrink()) {
+                if (customItemInfo.isDrink() && customItemInfo.getNutrition() == 0) {
                     root.getCompound("components")
-                            .putCompound("minecraft:food",new CompoundTag()
-                                    .putInt("nutrition",customItemInfo.getNutrition())
-                                    .putBoolean("can_always_eat",true)
+                            .putCompound("minecraft:food", new CompoundTag()
+                                    .putInt("nutrition", customItemInfo.getNutrition())
+                                    .putBoolean("can_always_eat", true)
                             );
-                }else{
+                } else {
                     root.getCompound("components")
-                            .putCompound("minecraft:food",new CompoundTag()
-                                    .putInt("nutrition",customItemInfo.getNutrition())
+                            .putCompound("minecraft:food", new CompoundTag()
+                                    .putInt("nutrition", customItemInfo.getNutrition())
                             );
                 }
                 root.getCompound("components").getCompound("item_properties")
                         .putInt("use_duration", customItemInfo.getEatTick())
-                        .putInt("use_animation",customItemInfo.isFood()?1:2);
-            }else if(customItemInfo.isArmor()){
-                if(customItemInfo.isHelmet()){
+                        .putInt("use_animation", customItemInfo.isFood() ? 1 : 2);
+            } else if (customItemInfo.isArmor()) {
+                if (customItemInfo.isHelmet()) {
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.head");
                     root.getCompound("components")
-                            .putCompound("minecraft:durability",new CompoundTag()
-                                    .putInt("max_durability",customItemInfo.getDurability()))
+                            .putCompound("minecraft:durability", new CompoundTag()
+                                    .putInt("max_durability", customItemInfo.getDurability()))
                             .putCompound("minecraft:armor", new CompoundTag()
                                     .putInt("protection", item.getArmorPoints())
-                            .putCompound("minecraft:wearable",new CompoundTag()
-                                    .putBoolean("dispensable", true)
-                                    .putString("slot", "slot.armor.head")));
-                }else if(customItemInfo.isChest()){
+                                    .putCompound("minecraft:wearable", new CompoundTag()
+                                            .putBoolean("dispensable", true)
+                                            .putString("slot", "slot.armor.head")));
+                } else if (customItemInfo.isChest()) {
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.chest");
                     root.getCompound("components")
-                            .putCompound("minecraft:durability",new CompoundTag()
-                                    .putInt("max_durability",customItemInfo.getDurability()))
+                            .putCompound("minecraft:durability", new CompoundTag()
+                                    .putInt("max_durability", customItemInfo.getDurability()))
                             .putCompound("minecraft:armor", new CompoundTag()
                                     .putInt("protection", item.getArmorPoints())
-                            .putCompound("minecraft:wearable",new CompoundTag()
-                                    .putBoolean("dispensable", true)
-                                    .putString("slot", "slot.armor.chest")));
-                }else if(customItemInfo.isLeggings()){
+                                    .putCompound("minecraft:wearable", new CompoundTag()
+                                            .putBoolean("dispensable", true)
+                                            .putString("slot", "slot.armor.chest")));
+                } else if (customItemInfo.isLeggings()) {
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.legs");
                     root.getCompound("components")
-                            .putCompound("minecraft:durability",new CompoundTag()
-                                    .putInt("max_durability",customItemInfo.getDurability()))
-                            .putCompound("minecraft:wearable",new CompoundTag()
+                            .putCompound("minecraft:durability", new CompoundTag()
+                                    .putInt("max_durability", customItemInfo.getDurability()))
+                            .putCompound("minecraft:wearable", new CompoundTag()
                                     .putBoolean("dispensable", true)
                                     .putString("slot", "slot.armor.legs"))
                             .putCompound("minecraft:armor", new CompoundTag()
                                     .putInt("protection", item.getArmorPoints()));
-                }else if(customItemInfo.isBoots()){
+                } else if (customItemInfo.isBoots()) {
                     root.getCompound("components").getCompound("item_properties")
                             .putString("wearable_slot", "slot.armor.feet");
                     root.getCompound("components")
-                            .putCompound("minecraft:durability",new CompoundTag()
-                                    .putInt("max_durability",customItemInfo.getDurability()))
-                            .putCompound("minecraft:wearable",new CompoundTag()
+                            .putCompound("minecraft:durability", new CompoundTag()
+                                    .putInt("max_durability", customItemInfo.getDurability()))
+                            .putCompound("minecraft:wearable", new CompoundTag()
                                     .putBoolean("dispensable", true)
                                     .putString("slot", "slot.armor.feet"))
                             .putCompound("minecraft:armor", new CompoundTag()
                                     .putInt("protection", item.getArmorPoints()));
                 }
             }
-            root.putShort("minecraft:identifier",i);
-            ItemComponentEntry entry = new ItemComponentEntry("blocklynukkit:"+item.getName(),root);
+            root.putShort("minecraft:identifier", i);
+            ItemComponentEntry entry = new ItemComponentEntry("blocklynukkit:" + item.getName(), root);
             itemComponentPacket.entries[i] = entry;
         }
         this.dataPacket(itemComponentPacket);
     }
 
     @Override
-    public void handleDataPacket(DataPacket packet){
-        if(packet.pid() == ProtocolInfo.RESOURCE_PACK_CLIENT_RESPONSE_PACKET){
+    public void handleDataPacket(DataPacket packet) {
+        if (packet.pid() == ProtocolInfo.RESOURCE_PACK_CLIENT_RESPONSE_PACKET) {
             ResourcePackClientResponsePacket responsePacket = (ResourcePackClientResponsePacket) packet;
             if (responsePacket.responseStatus == ResourcePackClientResponsePacket.STATUS_HAVE_ALL_PACKS) {
                 BNResourcePackStackPacket stackPacket = new BNResourcePackStackPacket();
@@ -265,14 +267,14 @@ public final class ProxyPlayer extends Player {
             }
         }
         super.handleDataPacket(packet);
-        try{
-            if(packet.pid() == ProtocolInfo.PLAYER_ACTION_PACKET){
+        try {
+            if (packet.pid() == ProtocolInfo.PLAYER_ACTION_PACKET) {
                 PlayerActionPacket playerActionPacket = (PlayerActionPacket) packet;
-                if(playerActionPacket.action == 0){
+                if (playerActionPacket.action == 0) {
 
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             //ignore
         }
     }

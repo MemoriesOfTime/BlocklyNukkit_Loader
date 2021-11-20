@@ -24,7 +24,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
-import cn.nukkit.math.SimpleAxisAlignedBB;
+import cn.nukkit.math.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;
@@ -42,14 +42,11 @@ import com.blocklynukkit.loader.script.bases.BaseManager;
 import com.blocklynukkit.loader.utils.Utils;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import io.netty.util.collection.CharObjectHashMap;
 import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import javassist.*;
 
-import javax.imageio.ImageIO;
 import javax.script.ScriptEngine;
 import java.io.*;
 import java.lang.reflect.*;
@@ -170,7 +167,7 @@ public final class BlockItemManager extends BaseManager {
         BlockUpdateEvent ev = new BlockUpdateEvent(block);
         Server.getInstance().getPluginManager().callEvent(ev);
         if (!ev.isCancelled()) {
-            Entity[] entities = position.level.getNearbyEntities(new SimpleAxisAlignedBB((x - 1), (y - 1), (z - 1), (x + 1), (y + 1), (z + 1)));
+            Entity[] entities = position.level.getNearbyEntities(new BNSimpleAxisAlignedBB((x - 1), (y - 1), (z - 1), (x + 1), (y + 1), (z + 1)));
             for (Entity entity : entities) {
                 entity.scheduleUpdate();
             }

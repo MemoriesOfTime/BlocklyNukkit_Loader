@@ -3,9 +3,8 @@ package com.blocklynukkit.loader.other.ai.route;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.SimpleAxisAlignedBB;
+import cn.nukkit.math.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
-import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -86,14 +85,14 @@ public abstract class RouteFinder implements Iterator {
 
 	public void setBoundingBox(AxisAlignedBB bb){
 		if(bb == null){
-			this.aabb = new SimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
+			this.aabb = new BNSimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
 		}
 
 		this.aabb = bb;
 	}
 
 	public AxisAlignedBB getBoundingBox(){
-		if(this.aabb == null) return new SimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
+		if(this.aabb == null) return new BNSimpleAxisAlignedBB(0, 0, 0, 0, 0, 0);
 		return this.aabb.clone();
 	}
 

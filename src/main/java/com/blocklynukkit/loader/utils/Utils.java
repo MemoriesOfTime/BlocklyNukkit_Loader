@@ -138,10 +138,8 @@ public class Utils {
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
             String web = sendGet("https://tools.blocklynukkit.com/version.txt", "");
             web = web.replaceAll("[^0123456789.]", "");
-            int webint = Integer.parseInt(web.replaceAll("\\.", ""));
-            int verint = Integer.parseInt(version.replaceAll("\\.", ""));
-            if ((!version.equals(web)) || verint > 10000) {
-                if (webint < verint && !sended) {
+            if ((!version.equals(web))) {
+                if (compareVersion(version, web) > 0 && !sended) {
                     sended = true;
                     if (Server.getInstance().getLanguage().getName().contains("中文")) {
                         Loader.getlogger().warning(TextFormat.YELLOW + "您正在使用BlocklyNukkit先行测试版！");
@@ -196,6 +194,31 @@ public class Utils {
             Loader.checkupdatetime++;
         }
 
+    }
+
+    /**
+     * 比较版本号的大小
+     *
+     * @param version1 版本号
+     * @param version2 版本号
+     * @return 前者大则返回一个正数, 后者大返回一个负数, 相等则返回0
+     */
+    public static int compareVersion(String version1, String version2) {
+        assert version1 != null;
+        assert version2 != null;
+        String[] versionArray1 = version1.split("\\.");
+        String[] versionArray2 = version2.split("\\.");
+        int idx = 0;
+        int minLength = Math.min(versionArray1.length, versionArray2.length);//取最小长度值
+        int diff = 0;
+        while (idx < minLength
+                && (diff = versionArray1[idx].length() - versionArray2[idx].length()) == 0//先比较长度
+                && (diff = versionArray1[idx].compareTo(versionArray2[idx])) == 0) {//再比较字符
+            ++idx;
+        }
+        //如果已经分出大小，则直接返回，如果未分出大小，则再比较位数，有子版本的为大；
+        diff = (diff != 0) ? diff : versionArray1.length - versionArray2.length;
+        return diff;
     }
 
     public static void download(String downloadUrl, File file) {

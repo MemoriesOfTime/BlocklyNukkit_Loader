@@ -6,13 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="766902a9-1bd4-4a0d-a468-debf234bf230" name="Default Changelist" comment="尝试修复方块实体无法不坠落">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/nukkit/math/SimpleAxisAlignedBB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/nukkit/math/BNSimpleAxisAlignedBB.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ProxyPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/ai/route/RouteFinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/script/BlockItemManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/utils/Utils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/route/WalkerRouteFinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourcePack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/blocklynukkit/loader/other/AddonsAPI/resource/ResourcePack.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -704,13 +698,6 @@
       <option name="presentableId" value="Default" />
       <updated>1584170277696</updated>
     </task>
-    <task id="LOCAL-00087" summary="修复射箭函数中参数依赖问题">
-      <created>1612079584535</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1612079584535</updated>
-    </task>
     <task id="LOCAL-00088" summary="生成坠落方块返回实体">
       <created>1612087326577</created>
       <option name="number" value="00088" />
@@ -1047,7 +1034,14 @@
       <option name="project" value="LOCAL" />
       <updated>1637397246096</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="尝试兼容pm1nk?">
+      <created>1637405195541</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1637405195541</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1099,7 +1093,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="完善注册物品api" />
     <MESSAGE value="一些代码优化" />
     <MESSAGE value="去除一些调试信息，修复php超时bug" />
     <MESSAGE value="修复world.clearChunk" />
@@ -1124,7 +1117,8 @@
     <MESSAGE value="1.2.9.5正式版" />
     <MESSAGE value="1.2.9.6" />
     <MESSAGE value="兼容1.17.40" />
-    <option name="LAST_COMMIT_MESSAGE" value="兼容1.17.40" />
+    <MESSAGE value="尝试兼容pm1nk?" />
+    <option name="LAST_COMMIT_MESSAGE" value="尝试兼容pm1nk?" />
   </component>
   <component name="XPathView.XPathProjectComponent">
     <history />

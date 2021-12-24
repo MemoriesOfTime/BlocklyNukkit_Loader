@@ -1,13 +1,17 @@
 package com.blocklynukkit.loader.other.AddonsAPI.resource;
 
 import cn.nukkit.Server;
+import cn.nukkit.item.Item;
 import cn.nukkit.resourcepacks.ResourcePackManager;
 import cn.nukkit.resourcepacks.ZippedResourcePack;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceItemManifest;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceLogo;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceManifest;
-import com.blocklynukkit.loader.other.AddonsAPI.resource.data.ResourceSoundManifest;
+import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
+import com.blocklynukkit.loader.other.AddonsAPI.resource.data.*;
 import com.blocklynukkit.loader.script.BlockItemManager;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -66,6 +70,43 @@ public class ResourcePack {
                     .addNode(BlockItemManager.mcpackTranslation)
                     .addNode(new ResourceNode()
                             .putData("sounds/sound_definitions.json", new ResourceSoundManifest()));
+            ResourceNode itemsNode = new ResourceNode();
+            for(Integer i : Loader.registerItemIds){
+                Item item = Item.get(i);
+                CustomItemInfo info = Loader.registerItemInfos.get((int)i);
+                JsonObject jsonRoot = new JsonObject();
+                jsonRoot.addProperty("format_version", "1.16");
+                JsonObject jsonItem = new JsonObject();
+                JsonObject descriptionItem = new JsonObject();
+                descriptionItem.addProperty("identifier","blocklynukkit:"+item.getName());
+                descriptionItem.addProperty("category", "Item");
+                jsonItem.add("description", descriptionItem);
+                JsonObject componentItem = new JsonObject();
+                componentItem.addProperty("minecraft:icon", item.getName());
+                JsonObject renderOffset = new JsonObject();
+                JsonObject mainHand = new JsonObject();
+                JsonObject firstPersonMain = new JsonObject();
+                JsonArray firstPersonScale = new JsonArray();
+                firstPersonScale.add(0.075f * 0.5);
+                firstPersonScale.add(0.125f * 0.5);
+                firstPersonScale.add(0.075f * 0.5);
+                firstPersonMain.add("scale", firstPersonScale);
+                mainHand.add("first_person", firstPersonMain);
+                JsonObject thirdPersonMain = new JsonObject();
+                JsonArray thirdPersonScale = new JsonArray();
+                thirdPersonScale.add(0.075f * 0.2);
+                thirdPersonScale.add(0.125f * 0.2);
+                thirdPersonScale.add(0.075f * 0.2);
+                thirdPersonMain.add("scale", thirdPersonScale);
+                mainHand.add("third_person", thirdPersonMain);
+                renderOffset.add("main_hand", mainHand);
+                componentItem.add("minecraft:render_offsets", renderOffset);
+                jsonItem.add("components", componentItem);
+                jsonRoot.add("minecraft:item", jsonItem);
+                itemsNode.putData("items/"+item.getName()+".json", new ResourceJSON(new GsonBuilder()
+                        .setPrettyPrinting().create().toJson(jsonRoot)));
+            }
+            blocklyNukkitMcpack.addNode(itemsNode);
             File hashCodeFile = new File("./resource_pack.hashcode");
             if(hashCodeFile.exists() && new File(blocklyNukkitMcpack.outputPath).exists()){
                 try {

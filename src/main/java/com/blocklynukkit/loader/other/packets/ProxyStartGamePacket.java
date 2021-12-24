@@ -142,5 +142,6 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putString(this.multiplayerCorrelationId);
         this.putBoolean(this.isInventoryServerAuthoritative);
         this.putString("BlocklyNukkit");
+        this.putLLong(0L);
     }
 }

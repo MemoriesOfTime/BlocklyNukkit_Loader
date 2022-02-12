@@ -3,7 +3,6 @@ package com.blocklynukkit.loader.other.ai.route;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
-import cn.nukkit.math.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 
 import java.util.ArrayList;

@@ -24,7 +24,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
-import cn.nukkit.math.BNSimpleAxisAlignedBB;
+import com.blocklynukkit.loader.other.ai.route.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.ListTag;

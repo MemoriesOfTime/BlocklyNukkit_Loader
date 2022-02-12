@@ -1,3 +1,28 @@
+## 1.2.9.12
+
+entity
+
+- VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos, @Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId)
+- VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId,@Comment(value = "定时回调函数回调间隔") int calltick
+  ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"}) String callfunction)
+- VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId,@Comment(value = "定时回调函数回调间隔") int calltick
+  ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction
+  ,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"npc", "damageEvent"}, comments = {"执行此函数的npc实体", "实体受到的伤害事件"})  String attackfunction)
+
+VanillaNPC
+
+- void setWidth(float width)
+- void setLength(float length)
+- void setHeight(float height)
+- void setEyeHeight(float eyeHeight)
+
+window
+
+- long[] setPlayerBossBar(@Comment(value = "要设置玩家血条的id") Player player
+  ,@Comment(value = "血量内容，以;分割多个血条") String text
+  ,@Comment(value = "血条长度0~1") float len
+  ,@Comment(value = "可不填默认紫色，可选值PINK,BLUE,RED,GREEN,YELLOW,PURPLE,WHITE") String color)
+
 ## 1.2.9.7
 
 Bug Fixed

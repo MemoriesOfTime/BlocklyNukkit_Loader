@@ -1,4 +1,7 @@
-package cn.nukkit.math;
+package com.blocklynukkit.loader.other.ai.route;
+
+import cn.nukkit.math.AxisAlignedBB;
+import cn.nukkit.math.Vector3;
 
 /**
  * Just for compatible!

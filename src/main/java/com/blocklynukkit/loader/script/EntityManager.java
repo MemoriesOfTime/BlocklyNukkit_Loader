@@ -273,7 +273,7 @@ public final class EntityManager extends BaseManager {
             for(Entity entity:l.getEntities()){
                 if(entity!=null)
                 if(entity.getName()!=null)
-                if(entity.getName().equals("BNNPC") || entity instanceof BNNPC){
+                if(entity.getName().equals("BNNPC") || entity instanceof BNNPC || entity.getName().equals("VanillaNPC") || entity instanceof VanillaNPC){
                     entity.close();
                 }
             }
@@ -366,6 +366,21 @@ public final class EntityManager extends BaseManager {
             ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction
             ,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)")@CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC_Fix","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"npc", "damageEvent"}, comments = {"执行此函数的npc实体", "实体受到的伤害事件"})  String attackfunction){
         return new BNNPC_Fix(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,new Clothes(skinID),calltick,callfunction,attackfunction);
+    }
+    @Comment(value = "构建原版NPC")
+    public VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos, @Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId){
+        return new VanillaNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,networkId);
+    }
+    @Comment(value = "构建原版NPC")
+    public VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"}) String callfunction){
+        return new VanillaNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,networkId,calltick,callfunction);
+    }
+    @Comment(value = "构建原版NPC")
+    public VanillaNPC buildVanillaNPC(@Comment(value = "生成bnnpc的位置") Position pos,@Comment(value = "bnnpc的名字") String name, @Comment(value = "生物的网络id") int networkId,@Comment(value = "定时回调函数回调间隔") int calltick
+            ,@Comment(value = "定时回调函数名，参数(cn.nukkit.Entity bnnpc自身)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","int"}, parameters = {"npc", "tick"}, comments = {"执行此函数的npc实体", "当前实体运行刻"})  String callfunction
+            ,@Comment(value = "被打回调函数名，参数(cn.nukkit.Entity bnnpc自身, cn.nukkit.event.Event 实体收到伤害事件)") @CallbackFunction(classes = {"com.blocklynukkit.loader.other.Entities.BNNPC","cn.nukkit.event.entity.EntityDamageEvent"}, parameters = {"npc", "damageEvent"}, comments = {"执行此函数的npc实体", "实体受到的伤害事件"})  String attackfunction){
+        return new VanillaNPC(pos.level.getChunk(((int)pos.x)>>4,((int)pos.z)>>4),Entity.getDefaultNBT(pos),name,networkId,calltick,callfunction,attackfunction);
     }
     //构建展示4d模型
     @Comment(value = "构建4d展示模型")

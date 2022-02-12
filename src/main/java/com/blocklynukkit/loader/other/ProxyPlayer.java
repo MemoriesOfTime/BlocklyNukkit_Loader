@@ -64,7 +64,7 @@ public final class ProxyPlayer extends Player {
         startGamePacket.yaw = (float) this.yaw;
         startGamePacket.pitch = (float) this.pitch;
         startGamePacket.seed = -1;
-        startGamePacket.dimension = /*(byte) (this.level.getDimension() & 0xff)*/0;
+        startGamePacket.dimension = (byte) (this.level.getDimension() & 0xff);
         startGamePacket.worldGamemode = getClientFriendlyGamemode(this.gamemode);
         startGamePacket.difficulty = this.server.getDifficulty();
         startGamePacket.spawnX = spawnPosition.getFloorX();
@@ -78,7 +78,7 @@ public final class ProxyPlayer extends Player {
         startGamePacket.gameRules = getLevel().getGameRules();
         startGamePacket.levelId = "";
         startGamePacket.worldName = this.getServer().getNetwork().getName();
-        startGamePacket.generator = 1; //0 old, 1 infinite, 2 flat
+        startGamePacket.generator = (byte) ((this.level.getDimension() + 1) & 0xff);
         this.dataPacket(startGamePacket);
 
         this.dataPacket(new BiomeDefinitionListPacket());

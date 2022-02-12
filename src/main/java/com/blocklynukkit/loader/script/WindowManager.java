@@ -13,6 +13,7 @@ import cn.nukkit.form.window.FormWindowModal;
 import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.network.protocol.ShowCreditsPacket;
 import cn.nukkit.network.protocol.ShowProfilePacket;
+import cn.nukkit.utils.BossBarColor;
 import cn.nukkit.utils.DummyBossBar;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
@@ -207,6 +208,13 @@ public final class WindowManager extends BaseManager {
     public long[] setPlayerBossBar(@Comment(value = "要设置玩家血条的id") Player player
             ,@Comment(value = "血量内容，以;分割多个血条") String text
             ,@Comment(value = "血条长度0~1") float len){
+        return setPlayerBossBar(player, text, len, "PURPLE");
+    }
+    @Comment(value = "设置玩家的boss血条，返回此次设置的所有血条的id")
+    public long[] setPlayerBossBar(@Comment(value = "要设置玩家血条的id") Player player
+            ,@Comment(value = "血量内容，以;分割多个血条") String text
+            ,@Comment(value = "血条长度0~1") float len
+            ,@Comment(value = "颜色,可选值PINK,BLUE,RED,GREEN,YELLOW,PURPLE,WHITE") String color){
         for(long bar:player.getDummyBossBars().keySet()){
             player.removeBossBar(bar);
         }
@@ -214,17 +222,7 @@ public final class WindowManager extends BaseManager {
         long[] ids = new long[bossbars.length];
         for(int i=0;i<bossbars.length;i++){
             String each = bossbars[i].replaceAll("\\\\;",";");
-            if(each.startsWith("#")){
-                String hex = each.substring(0,7);
-                Color color = Utils.hex2rgb(hex);
-                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each.replaceFirst(hex,"")).color(color.getRed(),color.getGreen(),color.getBlue()).length(len).build());
-            }else if (text.startsWith("rgb(")){
-                String[] rgb = each.split("\\)",2)[0].replaceFirst("rgb\\(","").split(",");
-                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each.split("\\)",2)[1]).length(len)
-                        .color(Integer.parseInt(rgb[0]),Integer.parseInt(rgb[1]),Integer.parseInt(rgb[2])).build());
-            }else {
-                ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each).length(len).build());
-            }
+            ids[i]=player.createBossBar(new DummyBossBar.Builder(player).text(each).length(len).color(BossBarColor.valueOf(color)).build());
         }
         return ids;
     }

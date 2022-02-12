@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.other.ai.entity;
 
 import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.EntityCreature;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.AxisAlignedBB;
@@ -11,7 +12,7 @@ import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
 import com.blocklynukkit.loader.other.ai.route.Node;
 import com.blocklynukkit.loader.other.ai.route.RouteFinder;
 
-abstract public class MovingEntity extends EntityHuman {
+abstract public class MovingVanillaEntity extends EntityCreature {
     private boolean isKnockback = false;
     public RouteFinder route = null;
     private Vector3 target = null;
@@ -19,7 +20,7 @@ abstract public class MovingEntity extends EntityHuman {
     private int jammingTick = 0;
     private long passedTick = 1;
 
-    public MovingEntity(FullChunk chunk, CompoundTag nbt) {
+    public MovingVanillaEntity(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
         this.route = new AdvancedRouteFinder(this);
     }

@@ -12,19 +12,22 @@ import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.Vector2;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.protocol.*;
+import cn.nukkit.network.protocol.AddPlayerPacket;
+import cn.nukkit.network.protocol.EmotePacket;
+import cn.nukkit.network.protocol.EntityEventPacket;
+import cn.nukkit.network.protocol.SetEntityLinkPacket;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.other.Clothes;
 import com.blocklynukkit.loader.other.ai.entity.MovingEntity;
+import com.blocklynukkit.loader.other.ai.entity.MovingVanillaEntity;
 import com.blocklynukkit.loader.other.ai.route.AdvancedRouteFinder;
-
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BNNPC extends MovingEntity {
-    public BNNPC bnnpc;
+public class VanillaNPC extends MovingVanillaEntity {
+    public VanillaNPC vanillaNPC;
 
     public Vector3 dvec = new Vector3(0, 0, 0);
 
@@ -40,8 +43,8 @@ public class BNNPC extends MovingEntity {
     public boolean enableKnockBack = false;
     public double knockBase = 1.2d;
 
-    public String callbackfunction = "BNNPCUpdate";
-    public String attackfunction = "BNNPCAttack";
+    public String callbackfunction = "VanillaNPCUpdate";
+    public String attackfunction = "VanillaNPCAttack";
     public int calltimetick = 10;
 
     public boolean isjumping = false;
@@ -55,48 +58,49 @@ public class BNNPC extends MovingEntity {
     public Vector3 previousTo = null;
     public boolean justDamaged = false;
 
-    public BNNPC(FullChunk chunk, CompoundTag nbt) {
+    public float width = 0.6f;
+    public float length = 0.6f;
+    public float height = 1.8f;
+    public float eyeHeight = 1.62f;
+
+    public final int networkId;
+
+    public VanillaNPC(FullChunk chunk, CompoundTag nbt, int networkId) {
         super(chunk, nbt);
         super.close();
+        this.networkId = networkId;
     }
 
-    public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes) {
-        super(chunk, nbt.putString("NameTag", name).putString("name", "BNNPC")
-                .putCompound("Skin", new CompoundTag()).putBoolean("ishuman", true).putBoolean("npc", true)
+    public VanillaNPC(FullChunk chunk, CompoundTag nbt, String name, int networkId) {
+        super(chunk, nbt.putString("NameTag", name).putString("name", "VanillaNPC")
                 .putFloat("scale", 1));
-        Skin sk = clothes.build();
-        nbt.putByteArray("Data", sk.getSkinData().data);
-        nbt.putString("ModelID", sk.getSkinId())
-                .putString("GeometryName", clothes.gen)
-                .putByteArray("GeometryData", sk.getGeometryData().getBytes(StandardCharsets.UTF_8));
-        nbt.putString("SkinResourcePatch", "{\"geometry\" : {\"default\" : \"" + clothes.gen + "\"}}\n");
-        this.setSkin(clothes.build());
         this.setNameTag(name);
         this.setNameTagVisible(true);
         this.setNameTagAlwaysVisible(true);
         this.setScale(1.0f);
-        bnnpc = this;
+        vanillaNPC = this;
+        this.networkId = networkId;
     }
 
-    public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes, int calltick, String callback) {
-        this(chunk, nbt, name, clothes);
+    public VanillaNPC(FullChunk chunk, CompoundTag nbt, String name, int networkId, int calltick, String callback) {
+        this(chunk, nbt, name, networkId);
         calltimetick = calltick;
         callbackfunction = callback;
     }
 
-    public BNNPC(FullChunk chunk, CompoundTag nbt, String name, Clothes clothes, int calltick, String callback, String attackcall) {
-        this(chunk, nbt, name, clothes, calltick, callback);
+    public VanillaNPC(FullChunk chunk, CompoundTag nbt, String name, int networkId, int calltick, String callback, String attackcall) {
+        this(chunk, nbt, name, networkId, calltick, callback);
         attackfunction = attackcall;
     }
 
     @Override
     public String getName() {
-        return "BNNPC";
+        return "VanillaNPC";
     }
 
     @Override
     public int getNetworkId() {
-        return 63;
+        return networkId;
     }
 
     @Override
@@ -106,23 +110,39 @@ public class BNNPC extends MovingEntity {
 
     @Override
     public float getWidth() {
-        return 0.6F;
+        return width;
     }
 
     @Override
     public float getLength() {
-        return 0.6F;
+        return length;
     }
 
     @Override
     public float getHeight() {
-        return 1.8F;
+        return height;
     }
 
     @Override
     public float getEyeHeight() {
-        return 1.62F;
+        return eyeHeight;
         //return 0.0F;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setLength(float length) {
+        this.length = length;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public void setEyeHeight(float eyeHeight) {
+        this.eyeHeight = eyeHeight;
     }
 
     @Override
@@ -152,23 +172,6 @@ public class BNNPC extends MovingEntity {
         return super.onUpdate(currentTick);
     }
 
-//    @Override
-//    public boolean entityBaseTick(int tickDiff) {
-//        boolean re = super.entityBaseTick(tickDiff);
-//        MoveEntityAbsolutePacket packet = new MoveEntityAbsolutePacket();
-//        packet.eid = this.getId();
-//        packet.x = this.getX();
-//        packet.y = this.getY()+1.8;
-//        packet.z = this.getZ();
-//        packet.yaw = this.getYaw();
-//        packet.headYaw = this.getYaw();
-//        packet.pitch = this.getPitch();
-//        packet.onGround = this.isOnGround();
-//        packet.teleport = false;
-//        this.getViewers().values().forEach(p -> p.dataPacket(packet));
-//        return re;
-//    }
-
     @Override
     public boolean attack(EntityDamageEvent source) {
         this.updateMovement();
@@ -192,14 +195,8 @@ public class BNNPC extends MovingEntity {
 
     @Override
     public void close() {
-        List<Item> tmp = new ArrayList<>();
-        tmp.addAll(extraDropItems);
-        if (dropHand) tmp.add(this.getInventory().getItemInHand());
-        if (dropOffhand) tmp.add(this.getOffhandInventory().getItem(0));
-        dropSlot.forEach(each -> tmp.add(this.getInventory().getItem(each)));
-        tmp.forEach(each -> bnnpc.getLevel().dropItem(bnnpc, each));
-        this.getInventory().clearAll();
-        this.getOffhandInventory().clearAll();
+        List<Item> tmp = new ArrayList<>(extraDropItems);
+        tmp.forEach(each -> vanillaNPC.getLevel().dropItem(vanillaNPC, each));
         super.close();
     }
 
@@ -208,9 +205,9 @@ public class BNNPC extends MovingEntity {
     }
 
     public boolean hasDropItem(Item item) {
-        if (dropHand && this.getInventory().getItemInHand().equals(item, true, true)) {
+        if (dropHand) {
             return true;
-        } else if (dropOffhand && this.getOffhandInventory().getItem(0).equals(item, true, true)) {
+        } else if (dropOffhand) {
             return true;
         } else {
             for (Item i : this.extraDropItems) {
@@ -227,16 +224,12 @@ public class BNNPC extends MovingEntity {
     }
 
     public Item[] getExtraDropItems() {
-        return this.extraDropItems.toArray(new Item[this.extraDropItems.size()]);
+        return this.extraDropItems.toArray(new Item[0]);
     }
 
     public Item[] getDropItems() {
-        List<Item> tmp = new ArrayList<>();
-        tmp.addAll(extraDropItems);
-        if (dropHand) tmp.add(this.getInventory().getItemInHand());
-        if (dropOffhand) tmp.add(this.getOffhandInventory().getItem(0));
-        dropSlot.forEach(each -> tmp.add(this.getInventory().getItem(each)));
-        return tmp.toArray(new Item[tmp.size()]);
+        List<Item> tmp = new ArrayList<>(extraDropItems);
+        return tmp.toArray(new Item[0]);
     }
 
     public void setDropHand(boolean drop) {
@@ -474,14 +467,8 @@ public class BNNPC extends MovingEntity {
     }
 
     public void hit(Entity entity) {
-        double d;
-        if (this.getInventory().getItemInHand() != null) {
-            d = this.getInventory().getItemInHand().getAttackDamage();
-        } else {
-            d = 1;
-        }
         this.displaySwing();
-        entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK, (float) d, 0.5f));
+        entity.attack(new EntityDamageByEntityEvent(this, entity, EntityDamageEvent.DamageCause.ENTITY_ATTACK, 1f, 0.5f));
     }
 
     public void start() {
@@ -515,121 +502,5 @@ public class BNNPC extends MovingEntity {
             }
         }
         return null;
-    }
-
-    public void doEmote(String action) {
-        EmotePacket packet = new EmotePacket();
-        packet.runtimeId = this.getId();
-        packet.flags = 0;
-        switch (action) {
-            case "Wave":
-            case "挥手":
-            case "wave":
-                packet.emoteID = "4c8ae710-df2e-47cd-814d-cc7bf21a3d67";
-                break;
-            case "The Woodpunch":
-            case "打击":
-            case "拳击":
-            case "punch":
-            case "beat":
-            case "Punch":
-                packet.emoteID = "42fde774-37d4-4422-b374-89ff13a6535a";
-                break;
-            case "Simple Clap":
-            case "Clap":
-            case "clap":
-            case "鼓掌":
-                packet.emoteID = "9a469a61-c83b-4ba9-b507-bdbe64430582";
-                break;
-            case "OverThere":
-            case "overthere":
-            case "There":
-            case "那里":
-            case "指方向":
-                packet.emoteID = "ce5c0300-7f03-455d-aaf1-352e4927b54d";
-                break;
-            case "锤子":
-            case "Hammer":
-            case "hammer":
-                packet.emoteID = "7cec98d8-55cc-44fe-b0ae-2672b0b2bd37";
-                break;
-            case "FacePlant":
-            case "faceplant":
-            case "摔倒":
-            case "Plant":
-            case "Fall":
-            case "plant":
-            case "fall":
-            case "绊倒":
-                packet.emoteID = "6d9f24c0-6246-4c92-8169-4648d1981cbb";
-                break;
-            case "DiamondsToYou":
-            case "DiamondsForYou":
-            case "GiveYouDiamonds":
-            case "GiveDiamondsToYou":
-            case "Diamond!":
-            case "Diamond":
-            case "diamond":
-            case "给你钻石":
-            case "钻石":
-                packet.emoteID = "86b34976-8f41-475b-a386-385080dc6e83";
-                break;
-            case "The Pickaxe":
-            case "Pickaxe":
-            case "pickaxe":
-            case "挖矿":
-                packet.emoteID = "d7519b5a-45ec-4d27-997c-89d402c6b57f";
-                break;
-            default:
-                packet.emoteID = action;
-        }
-        this.level.getPlayers().values().forEach(e -> e.dataPacket(packet));
-    }
-
-    public void doEmote() {
-        String[] emotions = new String[]{
-                "Wave",
-                "Punch",
-                "Clap",
-                "OverThere",
-                "Hammer",
-                "Fall",
-                "Diamond",
-                "Pickaxe"
-        };
-        doEmote(emotions[Loader.mainRandom.nextInt(emotions.length)]);
-    }
-
-    public void reFresh() {
-        this.level.getPlayers().values().forEach(player -> {
-            this.server.updatePlayerListData(this.getUniqueId(), this.getId(), this.getName(), this.skin, new Player[]{player});
-            AddPlayerPacket pk = new AddPlayerPacket();
-            pk.uuid = this.getUniqueId();
-            pk.username = this.getName();
-            pk.entityUniqueId = this.getId();
-            pk.entityRuntimeId = this.getId();
-            pk.x = (float) this.x;
-            pk.y = (float) this.y;
-            pk.z = (float) this.z;
-            pk.speedX = (float) this.motionX;
-            pk.speedY = (float) this.motionY;
-            pk.speedZ = (float) this.motionZ;
-            pk.yaw = (float) this.yaw;
-            pk.pitch = (float) this.pitch;
-            pk.item = this.getInventory().getItemInHand();
-            pk.metadata = this.dataProperties;
-            player.dataPacket(pk);
-            this.inventory.sendArmorContents(player);
-            this.offhandInventory.sendContents(player);
-            if (this.riding != null) {
-                SetEntityLinkPacket pkk = new SetEntityLinkPacket();
-                pkk.vehicleUniqueId = this.riding.getId();
-                pkk.riderUniqueId = this.getId();
-                pkk.type = 1;
-                pkk.immediate = 1;
-                player.dataPacket(pkk);
-            }
-            this.server.removePlayerListData(this.getUniqueId(), player);
-        });
     }
 }

@@ -22,6 +22,7 @@ import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourcePack;
 import com.blocklynukkit.loader.other.BNLogger;
 import com.blocklynukkit.loader.other.Babel;
+import com.blocklynukkit.loader.other.Entities.VanillaNPC;
 import com.blocklynukkit.loader.other.cmd.*;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.FloatingItemManager;
@@ -73,6 +74,8 @@ public class Loader extends PluginBase implements Listener {
 
     public static String positionstmp = "";
     public static int checkupdatetime = 0;
+
+    public static boolean isPm1NK = false;
 
     public static Map<Item, Item> furnaceMap = new HashMap<>();
     public static Map<String, Skin> playerclothesmap = new HashMap<>();
@@ -285,6 +288,7 @@ public class Loader extends PluginBase implements Listener {
         //注册bn的生物实体
         Entity.registerEntity("BNFloatingText", FloatingText.class);
         Entity.registerEntity("BNNPC", BNNPC.class);
+        Entity.registerEntity("VanillaNPC", VanillaNPC.class);
         //注册bn命令
         plugin.getServer().getPluginManager().addPermission(new Permission("blocklynukkit.opall","blocklynukkit插件op权限","op"));
         plugin.getServer().getCommandMap().register("bnplugins",new BNPluginsListCommand());
@@ -308,12 +312,13 @@ public class Loader extends PluginBase implements Listener {
         Utils.makeHttpServer(portto);
         //初始化完成，通知各bn插件
         callEventHandler(new BNInitializedEvent(),"BNInitializedEvent","BNInitializedEvent");
+        isPm1NK = getFunctionManager().isPetteriM1Nukkit();
         //生成bn自定义物品材质包
-        ResourcePack.resourcePackGenerate();
+        if(!isPm1NK) ResourcePack.resourcePackGenerate();
         //启动完成
         isEnabling = false;
         //生成自定义物品数据序列
-        new BlockItemManager(null).refreshItemPalette();
+        if(!isPm1NK) new BlockItemManager(null).refreshItemPalette();
     }
 
 

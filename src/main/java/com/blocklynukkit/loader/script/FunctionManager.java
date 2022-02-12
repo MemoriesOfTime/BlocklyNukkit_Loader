@@ -1165,9 +1165,18 @@ public class FunctionManager extends BaseManager {
             Field codename = Nukkit.class.getDeclaredField("CODENAME");
             return codename.get(Nukkit.class).equals("PowerNukkit");
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
+    }
+
+    @Comment(value = "是否运行在PetteriM1Nukkit上")
+    final public boolean isPetteriM1Nukkit(){
+        try {
+            Field codename = Nukkit.class.getDeclaredField("NUKKIT");
+            return codename.get(Nukkit.class).equals("Nukkit PetteriM1 Edition");
+        } catch (NoSuchFieldException | NullPointerException | IllegalAccessException e) {
+            return false;
+        }
     }
 
     @Comment(value = "并行运行函数")

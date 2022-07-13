@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.ByteOrder;
+import java.util.UUID;
 
 import static com.blocklynukkit.loader.Loader.ItemPalette;
 
@@ -35,6 +36,7 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putVarInt(this.difficulty);
         this.putBlockVector3(this.spawnX, this.spawnY, this.spawnZ);
         this.putBoolean(this.hasAchievementsDisabled);
+        this.putBoolean(this.worldEditor);
         this.putVarInt(this.dayCycleStopTime);
         this.putVarInt(this.eduEditionOffer);
         this.putBoolean(this.hasEduFeaturesEnabled);
@@ -142,6 +144,12 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putString(this.multiplayerCorrelationId);
         this.putBoolean(this.isInventoryServerAuthoritative);
         this.putString("BlocklyNukkit");
-        this.putLLong(0L);
+        try {
+            this.put(NBTIO.writeNetwork(new CompoundTag(""))); // playerPropertyData
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        this.putLLong(0); // blockRegistryChecksum
+        this.putUUID(new UUID(0, 0)); // worldTemplateId
     }
 }

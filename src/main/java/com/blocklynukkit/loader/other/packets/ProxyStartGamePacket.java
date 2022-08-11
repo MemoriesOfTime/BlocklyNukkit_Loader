@@ -64,6 +64,8 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putBoolean(this.isFromWorldTemplate);
         this.putBoolean(this.isWorldTemplateOptionLocked);
         this.putBoolean(this.isOnlySpawningV1Villagers);
+        this.putBoolean(this.isDisablingPersonas);
+        this.putBoolean(this.isDisablingCustomSkins);
         this.putString(this.vanillaVersion);
         this.putLInt(16); // Limited world width
         this.putLInt(16); // Limited world height
@@ -72,6 +74,8 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         this.putString(""); // EduSharedUriResource linkUri
         this.putBoolean(true); // Experimental Gameplay
 
+        this.putByte(this.chatRestrictionLevel);
+        this.putBoolean(this.disablePlayerInteractions);
         this.putString(this.levelId);
         this.putString(this.worldName);
         this.putString(this.premiumWorldTemplateId);
@@ -151,5 +155,6 @@ public final class ProxyStartGamePacket extends StartGamePacket {
         }
         this.putLLong(0); // blockRegistryChecksum
         this.putUUID(new UUID(0, 0)); // worldTemplateId
+        this.putBoolean(this.clientSideGenerationEnabled);
     }
 }

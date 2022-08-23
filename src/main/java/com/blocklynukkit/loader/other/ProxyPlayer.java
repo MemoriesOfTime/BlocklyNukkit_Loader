@@ -78,6 +78,7 @@ public final class ProxyPlayer extends Player {
         startGamePacket.levelId = "";
         startGamePacket.worldName = this.getServer().getNetwork().getName();
         startGamePacket.generator = (byte) ((this.level.getDimension() + 1) & 0xff);
+        startGamePacket.isMovementServerAuthoritative = true;
         this.dataPacket(startGamePacket);
 
         this.dataPacket(new BiomeDefinitionListPacket());
@@ -266,16 +267,6 @@ public final class ProxyPlayer extends Player {
             }
         }
         super.handleDataPacket(packet);
-        try {
-            if (packet.pid() == ProtocolInfo.PLAYER_ACTION_PACKET) {
-                PlayerActionPacket playerActionPacket = (PlayerActionPacket) packet;
-                if (playerActionPacket.action == 0) {
-
-                }
-            }
-        } catch (Exception e) {
-            //ignore
-        }
     }
 
     private static int getClientFriendlyGamemode(int gamemode) {

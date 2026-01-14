@@ -12,7 +12,7 @@ import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
 import com.google.gson.GsonBuilder;
 import javassist.*;
-import jdk.nashorn.api.scripting.*;
+import org.openjdk.nashorn.api.scripting.*;
 
 import javax.script.CompiledScript;
 import javax.script.Invocable;
@@ -54,29 +54,29 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
             }else if(file.getName().endsWith(".py")&&!file.getName().contains("bak") && !plugins.containsKey("PyBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + file.getName()+"! 缺少python依赖库");
-                    getlogger().warning("请到 https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                    getlogger().warning("请到 https://tools.blocklynukkit.net/PyBN.jar下载依赖插件");
                 }
                 else{
                     getlogger().warning("cannot load BN plugin:" + file.getName()+" python libs not found!");
-                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.net/PyBN.jar");
                 }
             }else if(file.getName().endsWith(".php")&&!file.getName().contains("bak") && !plugins.containsKey("PHPBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + file.getName()+"! 缺少PHP依赖库");
-                    getlogger().warning("请到 https://tools.blocklynukkit.com/PHPBN.jar下载依赖插件");
+                    getlogger().warning("请到 https://tools.blocklynukkit.net/PHPBN.jar下载依赖插件");
                 }
                 else{
                     getlogger().warning("cannot load BN plugin:" + file.getName()+" PHP libs not found!");
-                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.net/PHPBN.jar");
                 }
             }else if(file.getName().endsWith(".wasm")&&!file.getName().contains("bak") && !plugins.containsKey("WebassemblyBN")){
                 if (Server.getInstance().getLanguage().getName().contains("中文")){
                     getlogger().warning("无法加载:" + file.getName()+"! 缺少Webassembly依赖库");
-                    getlogger().warning("请到 https://tools.blocklynukkit.com/Webassembly.jar下载依赖插件");
+                    getlogger().warning("请到 https://tools.blocklynukkit.net/Webassembly.jar下载依赖插件");
                 }
                 else{
                     getlogger().warning("cannot load BN plugin:" + file.getName()+" webassembly libs not found!");
-                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/WebassemblyBN.jar");
+                    getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.net/WebassemblyBN.jar");
                 }
             }
         }
@@ -92,17 +92,9 @@ public class JavaScriptLoader extends ExtendScriptLoader implements Interpreter 
         if(pragmas == null)pragmas = getPragma(js);
         timing.start();
         if(pragmas.contains("pragma optimistic")){
-            if(Utils.getVersion() >= 11){
-                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--no-deprecation-warning", "--language=es6", "--optimistic-types=true"));
-            }else{
-                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6", "--optimistic-types=true"));
-            }
+            engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6", "--optimistic-types=true"));
         }else{
-            if(Utils.getVersion() >= 11){
-                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--no-deprecation-warning", "--language=es6"));
-            }else{
-                engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6"));
-            }
+            engineMap.put(name,new NashornScriptEngineFactory().getScriptEngine("--language=es6"));
         }
         timing.finish("创建js引擎");
         if (engineMap.get(name) == null) {

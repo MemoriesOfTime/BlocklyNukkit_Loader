@@ -6,11 +6,11 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -141,7 +141,12 @@ public class MyFileHandler implements HttpHandler {
         }else if(path.endsWith(".js")){
             return "application/x-javascript";
         }else {
-            return new MimetypesFileTypeMap().getContentType(new File(path));
+            try {
+                String contentType = Files.probeContentType(new File(path).toPath());
+                return contentType != null ? contentType : "application/octet-stream";
+            } catch (Exception e) {
+                return "application/octet-stream";
+            }
         }
     }
 }

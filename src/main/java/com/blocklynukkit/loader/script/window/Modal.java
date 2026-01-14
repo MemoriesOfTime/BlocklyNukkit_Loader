@@ -9,7 +9,7 @@ import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.window.windowCallbacks.ModalCallback;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import java.util.Map;
 

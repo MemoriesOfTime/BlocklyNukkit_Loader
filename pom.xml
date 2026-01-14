@@ -30,30 +30,43 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>17</source>
+                    <target>17</target>
                     <compilerArgs>
                         <compilerArg>-parameters</compilerArg>
+                        <compilerArg>-proc:none</compilerArg>
                     </compilerArgs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/versions/</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>${project.basedir}/nukkit/plugins/libs</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/*.*</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
+
     <repositories>
         <repository>
             <id>central</id>
@@ -66,44 +79,54 @@
             <url>https://jcenter.bintray.com/</url>
         </repository>
         <repository>
-            <id>nukkitx-repo</id>
-            <url>http://repo.nukkitx.com/main/</url>
+            <id>opencollab-repo-release</id>
+            <url>https://repo.opencollab.dev/maven-releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
         <repository>
-            <id>releases</id>
-            <url>http://lucgameshd.de:8081/content/repositories/releases</url>
+            <id>opencollab-repo-snapshot</id>
+            <url>https://repo.opencollab.dev/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>repo-lanink-cn</id>
+            <url>https://repo.lanink.cn/repository/maven-public/</url>
         </repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>org.java-websocket</groupId>
             <artifactId>Java-WebSocket</artifactId>
-            <version>1.5.2</version>
+            <version>1.5.7</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>me.onebone</groupId>
             <artifactId>economyapi</artifactId>
-            <version>2.0.0-SNAPSHOT</version>
+            <version>2.0.5</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
-            <version>3.28.0-GA</version>
+            <version>3.30.0-GA</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>cn.nukkit</groupId>
-            <artifactId>nukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/nukkit.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.blocklynukkit.loader</groupId>
-            <artifactId>BNJava16Polyfill</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/BNJava16Polyfill.jar</systemPath>
+            <artifactId>Nukkit</artifactId>
+            <version>MOT-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.creeperface.nukkit.placeholderapi</groupId>
@@ -111,34 +134,31 @@
             <version>1.3-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${pom.basedir}/nukkit/plugins/PlaceholderAPI-1.3-SNAPSHOT.jar</systemPath>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>de.theamychan</groupId>
             <artifactId>ScoreboardAPI</artifactId>
-            <version>1.3</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/ScoreboardAPI-1.3-SNAPSHOT.jar</systemPath>
+            <version>1.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.nukkitx</groupId>
             <artifactId>fakeinventories</artifactId>
-            <version>1.0.3-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/fakeinventories-1.0.3.jar</systemPath>
+            <version>1.0.3-MOT-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.5</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/c3p0-0.9.5.5.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>mchange-commons-java</artifactId>
             <version>0.2.19</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/mchange-commons-java-0.2.19.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.kawamuray.wasmtime</groupId>
@@ -148,46 +168,40 @@
             <systemPath>${pom.basedir}/nukkit/plugins/wasmtime-java-0.3.0-fixed.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.46</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.eclipsesource.j2v8</groupId>
             <artifactId>j2v8_win32_x86_64</artifactId>
             <version>4.5.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.eclipsesource.j2v8</groupId>
             <artifactId>j2v8_linux_x86_64</artifactId>
             <version>4.5.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.luaj</groupId>
             <artifactId>luaj-jse</artifactId>
             <version>3.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.carrotsearch</groupId>
-            <artifactId>java-sizeof</artifactId>
-            <version>0.0.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.2.11</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>13.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/flatlaf-0.41.jar</systemPath>
+            <version>0.41</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.blocklynukkit.gameAPI</groupId>
@@ -211,10 +225,44 @@
             <systemPath>${pom.basedir}/nukkit/plugins/quercus.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>com.github.oshi</groupId>
-            <artifactId>oshi-core</artifactId>
-            <version>5.5.0</version>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>copy-to-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>copy-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!-- 复制构建好的 jar -->
+                                        <copy
+                                                file="${project.build.directory}/${project.build.finalName}.jar"
+                                                todir="D:\Minecraft_Server_Test\Nukkit-MOT\plugins"
+                                                overwrite="true"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

@@ -26,10 +26,8 @@ import cn.nukkit.lang.TranslationContainer;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.*;
-import cn.nukkit.scheduler.Task;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.VanillaNPC;
-import com.blocklynukkit.loader.other.ProxyPlayer;
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
@@ -37,12 +35,14 @@ import com.xxmicloxx.NoteBlockAPI.SongDestroyingEvent;
 import com.xxmicloxx.NoteBlockAPI.SongEndEvent;
 import com.xxmicloxx.NoteBlockAPI.SongStoppedEvent;
 import com.blocklynukkit.loader.script.event.StoneSpawnEvent;
+import com.blocklynukkit.loader.script.window.windowCallbacks.WindowCallback;
 
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class EventLoader implements Listener {
 
-    private Loader plugin;
+    private final Loader plugin;
     private EntityDamageByEntityEvent previous;
 
     public EventLoader(Loader plugin) {
@@ -52,7 +52,7 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerRespawn(PlayerRespawnEvent event) {
-        plugin.callEventHandler(event, "PlayerRespawnEvent");
+        Loader.callEventHandler(event, "PlayerRespawnEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -72,7 +72,7 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onGlide(PlayerToggleGlideEvent event) {
-        plugin.callEventHandler(event, "PlayerToggleGlideEvent");
+        Loader.callEventHandler(event, "PlayerToggleGlideEvent");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -132,19 +132,18 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onFormResponse(PlayerFormRespondedEvent event) {
-        synchronized (Loader.functioncallback) {
-            if (!event.wasClosed() && event.getResponse() != null) {
-                if (Loader.functioncallback.keySet().contains((Integer) event.getFormID())) {
-                    int a = event.getFormID();
-                    Loader.callEventHandler(event, Loader.functioncallback.get(a));
-                }
+        if (!event.wasClosed() && event.getResponse() != null) {
+            String callback = Loader.functioncallback.get(event.getFormID());
+            if (callback != null) {
+                Loader.callEventHandler(event, callback);
             }
         }
-        synchronized (Loader.windowCallbackMap) {
-            if (Loader.windowCallbackMap.containsKey(event.getFormID())) {
-                Loader.windowCallbackMap.get(event.getFormID()).call(event);
-            }
+
+        WindowCallback windowCallback = Loader.windowCallbackMap.get(event.getFormID());
+        if (windowCallback != null) {
+            windowCallback.call(event);
         }
+
         Loader.callEventHandler(event, "PlayerFormRespondedEvent");
     }
 
@@ -427,27 +426,11 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDataPacketReceive(DataPacketReceiveEvent event) {
-        if (event.getPacket().pid() == ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET) {
+        // 使用 packetId() 而非 pid()，因为新协议的包 ID 超过了 byte 范围
+        int packetId = event.getPacket().packetId();
+        if (packetId == ProtocolInfo.toNewProtocolID(ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET)) {
             Loader.callEventHandler(event, "PlayerLocallyInitializedEvent");
-        } else if (event.getPacket().pid() == ProtocolInfo.RESOURCE_PACKS_INFO_PACKET) {
-            ResourcePacksInfoPacket packet = (ResourcePacksInfoPacket) event.getPacket();
-
         }
-//        else if(event.getPacket().pid()==ProtocolInfo.EMOTE_LIST_PACKET){
-//            System.out.println("玩家"+event.getPlayer().getName()+"携带的表情动作uuid列表:");
-//            ((EmoteListPacket)event.getPacket()).pieceIds.forEach(e->{
-//                if(!(e.equals("4c8ae710-df2e-47cd-814d-cc7bf21a3d67")||
-//                        e.equals("42fde774-37d4-4422-b374-89ff13a6535a")||
-//                        e.equals("9a469a61-c83b-4ba9-b507-bdbe64430582")||
-//                        e.equals("ce5c0300-7f03-455d-aaf1-352e4927b54d")||
-//                        e.equals("d7519b5a-45ec-4d27-997c-89d402c6b57f")||
-//                        e.equals("86b34976-8f41-475b-a386-385080dc6e83")||
-//                        e.equals("6d9f24c0-6246-4c92-8169-4648d1981cbb")||
-//                        e.equals("7cec98d8-55cc-44fe-b0ae-2672b0b2bd37"))){
-//                    System.out.println(e);
-//                }
-//            });
-//        }
         Loader.callEventHandler(event, "DataPacketReceiveEvent");
     }
 
@@ -477,12 +460,9 @@ public class EventLoader implements Listener {
         Position position = Position.fromObject(new Vector3(
                 event.getBlock().x, event.getBlock().y, event.getBlock().z
         ), event.getBlock().getLevel());
-        Server.getInstance().getScheduler().scheduleDelayedTask(new Task() {
-            @Override
-            public void onRun(int i) {
-                if (position.getLevelBlock().getId() == 4 || position.getLevelBlock().getId() == 1) {
-                    Loader.callEventHandler(new StoneSpawnEvent(position, position.getLevelBlock()), "StoneSpawnEvent", "StoneSpawnEvent");
-                }
+        Server.getInstance().getScheduler().scheduleDelayedTask(this.plugin, () -> {
+            if (position.getLevelBlock().getId() == 4 || position.getLevelBlock().getId() == 1) {
+                Loader.callEventHandler(new StoneSpawnEvent(position, position.getLevelBlock()), "StoneSpawnEvent", "StoneSpawnEvent");
             }
         }, 5);
     }
@@ -734,9 +714,8 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCreationEvent(PlayerCreationEvent event) {
-        if (!Loader.isPm1NK) {
-            event.setPlayerClass(ProxyPlayer.class);
-        }
+        // ProxyPlayer removed - Nukkit-MOT handles experiments and server-authoritative movement natively
+        // Ensure enableExperimentMode is set to true in nukkit.yml for custom items to work
         Loader.callEventHandler(event, "PlayerCreationEvent");
     }
 

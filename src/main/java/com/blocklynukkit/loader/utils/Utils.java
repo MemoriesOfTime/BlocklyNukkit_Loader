@@ -136,7 +136,7 @@ public class Utils {
         try {
             if (sended) return;
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
-            String web = sendGet("https://tools.blocklynukkit.com/version.txt", "");
+            String web = sendGet("https://tools.blocklynukkit.net/version.txt", "");
             web = web.replaceAll("[^0123456789.]", "");
             if ((!version.equals(web))) {
                 if (compareVersion(version, web) > 0 && !sended) {
@@ -164,7 +164,7 @@ public class Utils {
                     }
                 }
                 bn.delete();
-                Utils.downLoadFromUrl("https://tools.blocklynukkit.com/BlocklyNukkit.jar", name + (name.endsWith("jar") ? "" : ".jar"), Server.getInstance().getPluginPath());
+                Utils.downLoadFromUrl("https://tools.blocklynukkit.net/BlocklyNukkit.jar", name + (name.endsWith("jar") ? "" : ".jar"), Server.getInstance().getPluginPath());
                 if (Server.getInstance().getLanguage().getName().contains("中文")) {
                     Loader.getlogger().warning(TextFormat.YELLOW + "您的BlocklyNukkit解释器不是最新版！");
                     Loader.getlogger().warning(TextFormat.WHITE + "最新版BlocklyNukkit已经为您自动更新到版本" + web + "！文件路径为： " + bn.getPath());
@@ -182,13 +182,13 @@ public class Utils {
             }
         } catch (IOException e) {
             String version = Server.getInstance().getPluginManager().getPlugin("BlocklyNukkit").getDescription().getVersion();
-            String web = sendGet("https://tools.blocklynukkit.com/version.txt", "");
+            String web = sendGet("https://tools.blocklynukkit.net/version.txt", "");
             web = web.replaceAll("[^0123456789.]", "");
             if (Server.getInstance().getLanguage().getName().contains("中文")) {
                 Loader.getlogger().warning(TextFormat.YELLOW + "检测到新版本！当前版本" + version + " ,最新版本" + web);
-                Loader.getlogger().warning(TextFormat.RED + "自动更新失败，请您手动前往 https://tools.blocklynukkit.com/BlocklyNukkit.jar 更新！");
+                Loader.getlogger().warning(TextFormat.RED + "自动更新失败，请您手动前往 https://tools.blocklynukkit.net/BlocklyNukkit.jar 更新！");
             } else {
-                Loader.getlogger().warning(TextFormat.RED + "Failed to update!Please download the latest version on https://tools.blocklynukkit.com/BlocklyNukkit.jar .");
+                Loader.getlogger().warning(TextFormat.RED + "Failed to update!Please download the latest version on https://tools.blocklynukkit.net/BlocklyNukkit.jar .");
             }
         } finally {
             Loader.checkupdatetime++;

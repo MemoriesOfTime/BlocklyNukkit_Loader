@@ -18,11 +18,9 @@ import cn.nukkit.utils.DummyBossBar;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.bases.BaseManager;
-import com.blocklynukkit.loader.utils.Utils;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
 import de.theamychan.scoreboard.api.ScoreboardAPI;
 import de.theamychan.scoreboard.network.DisplaySlot;
 import de.theamychan.scoreboard.network.Scoreboard;
@@ -54,6 +52,7 @@ public final class WindowManager extends BaseManager {
     public String toString() {
         return "BlocklyNukkit Based Object";
     }
+
     @Comment(value = "更新所有玩家的计分板内容")
     public void updateAllScoreBoard(@Comment(value = "计分板标题") String title
             ,@Comment(value = "计分板内容，以;分割多行") String text){
@@ -332,10 +331,11 @@ public final class WindowManager extends BaseManager {
                 }
                 break;
             case "Motif":
+                // MotifLookAndFeel removed in Java 17, fallback to Metal
                 try {
-                    UIManager.setLookAndFeel(new MotifLookAndFeel());
+                    UIManager.setLookAndFeel(new MetalLookAndFeel());
                 } catch( Exception ex ) {
-                    System.err.println( "Failed to initialize Motif" );
+                    System.err.println( "Failed to initialize Motif (using Metal fallback)" );
                 }
                 break;
             case "Multi":

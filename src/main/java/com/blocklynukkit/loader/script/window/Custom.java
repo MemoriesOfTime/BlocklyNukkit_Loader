@@ -15,7 +15,7 @@ import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.script.window.windowCallbacks.CustomCallback;
 import com.blocklynukkit.loader.script.window.windowCallbacks.SimpleCallback;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
 public final class Custom {
     public LinkedHashMap<Element,String> elementMap=new LinkedHashMap<>();

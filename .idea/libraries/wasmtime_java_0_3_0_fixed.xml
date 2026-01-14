@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="wasmtime-java-0.3.0-fixed">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../WebassemblyBN/wasmtime-java-0.3.0-fixed.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

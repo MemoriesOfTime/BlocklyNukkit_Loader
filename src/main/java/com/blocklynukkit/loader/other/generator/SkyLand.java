@@ -433,4 +433,8 @@ public class SkyLand extends Generator {
     public Vector3 getSpawn() {
         return new Vector3(0.5, 80, 0.5);
     }
+    @Override
+    public void populateStructure(int chunkX, int chunkZ) {
+        // No structures for sky land generator
+    }
 }

@@ -61,4 +61,8 @@ public class VoidGenerator extends Generator {
     public ChunkManager getChunkManager() {
         return this.level;
     }
+    @Override
+    public void populateStructure(int chunkX, int chunkZ) {
+        // No structures for void generator
+    }
 }

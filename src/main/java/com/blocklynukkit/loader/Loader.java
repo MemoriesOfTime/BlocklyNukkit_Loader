@@ -48,7 +48,7 @@ import de.theamychan.scoreboard.network.Scoreboard;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import javassist.CtClass;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
@@ -109,14 +109,12 @@ public class Loader extends PluginBase implements Listener {
     public static ConcurrentHashMap<String, Boolean> acceptCloseCallback = new ConcurrentHashMap<>();
     public static Map<String, Scoreboard> boards = new HashMap<>();
     public static Map<String,String> tipsVar = new HashMap<>();
-    //blockitemManager变量
-    public static byte[] ItemPalette = null;
-    public static short registerBlocks = 0;
-    public static short registerCustomBlocks = 0;
-    public static short registerItems = 0;
-    public static List<Integer> registerItemIds = new ArrayList<>();
-    public static List<Integer> registerBlockIds = new ArrayList<>();
-    public static Int2ObjectOpenHashMap<CustomItemInfo> registerItemInfos = new Int2ObjectOpenHashMap<>();
+    //blockitemManager变量 (已弃用，保留仅为向后兼容)
+    @Deprecated public static byte[] ItemPalette = null;
+    @Deprecated public static short registerItems = 0;
+    @Deprecated public static List<Integer> registerItemIds = new ArrayList<>();
+    @Deprecated public static Int2ObjectOpenHashMap<CustomItemInfo> registerItemInfos = new Int2ObjectOpenHashMap<>();
+    // 注：自定义方块已迁移到 Nukkit-MOT 原生 CustomBlockManager API
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;
@@ -151,7 +149,7 @@ public class Loader extends PluginBase implements Listener {
         ));
         if (!plugins.containsKey("EconomyAPI")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
+                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/me/onebone/economyapi/2.0.5/economyapi-2.0.5.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -161,9 +159,6 @@ public class Loader extends PluginBase implements Listener {
                     this.getLogger().warning(Utils.translate(
                             "EconomyAPI版本太低！请您及时更新！","The version of EconomyAPI is to low! Please update it!"
                     ));
-                    this.getLogger().warning(Utils.translate(
-                            "最新版本下载地址：https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar",
-                            "Latest version is here: https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar"));
                 }
             }catch (Exception e){
                 //ignore
@@ -184,22 +179,22 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("FakeInventories")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/fakeinventories-1.0.3-SNAPSHOT.jar");
+                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/com/nukkitx/fakeinventories/1.0.3-MOT-SNAPSHOT/fakeinventories-1.0.3-MOT-20260114.132316-2.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (!plugins.containsKey("ScoreboardPlugin")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/ScoreboardAPI-1.3-SNAPSHOT.jar");
+                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/de/theamychan/ScoreboardAPI/1.3-SNAPSHOT/ScoreboardAPI-1.3-20210911.133107-1.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (!plugins.containsKey("GameAPI")){
             this.getLogger().warning(Utils.translate(
-                    TextFormat.RED+"您没有安装BNGameAPI,虽然不是必须安装，但它是部分bn插件的必要依赖，建议您安装，下载地址：https://tools.blocklynukkit.com/BNGameAPI.jar",
-                    TextFormat.RED+"You haven't installed bngameapi,although it's not necessary,but PlaceHolderAPI is needed by the gameapi module,we suggest you to install,download link: https://tools.blocklynukkit.com/BNGameAPI.jar"
+                    TextFormat.RED+"您没有安装BNGameAPI,虽然不是必须安装，但它是部分bn插件的必要依赖，建议您安装，下载地址：https://tools.blocklynukkit.net/BNGameAPI.jar",
+                    TextFormat.RED+"You haven't installed bngameapi,although it's not necessary,but PlaceHolderAPI is needed by the gameapi module,we suggest you to install,download link: https://tools.blocklynukkit.net/BNGameAPI.jar"
             ));
         }
         //创建各种基对象
@@ -317,8 +312,7 @@ public class Loader extends PluginBase implements Listener {
         if(!isPm1NK) ResourcePack.resourcePackGenerate();
         //启动完成
         isEnabling = false;
-        //生成自定义物品数据序列
-        if(!isPm1NK) new BlockItemManager(null).refreshItemPalette();
+        // 已迁移到 MOT 原生自定义物品 API，不再需要手动刷新物品数据
     }
 
 
@@ -364,7 +358,7 @@ public class Loader extends PluginBase implements Listener {
                         "无法加载:" + name+"! 缺少python依赖库","cannot load BN plugin:" + name+" python libs not found!"
                 ));
                 getlogger().warning(Utils.translate(
-                        "请到 https://tools.blocklynukkit.com/PyBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar"
+                        "请到 https://tools.blocklynukkit.net/PyBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.net/PyBN.jar"
                 ));
             }
         }else if(js.contains("--pragma Lua")||js.contains("--pragma lua")||js.contains("--pragma LUA")
@@ -381,7 +375,7 @@ public class Loader extends PluginBase implements Listener {
                         "无法加载:" + name+"! 缺少php依赖库","cannot load BN plugin:" + name+" PHP libs not found!"
                 ));
                 getlogger().warning(Utils.translate(
-                        "请到 https://tools.blocklynukkit.com/PHPBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar"
+                        "请到 https://tools.blocklynukkit.net/PHPBN.jar 下载依赖插件","please download python lib plugin at https://tools.blocklynukkit.net/PHPBN.jar"
                 ));
             }
         }else if(js.startsWith("bnp")){

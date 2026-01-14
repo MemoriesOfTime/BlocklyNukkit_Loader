@@ -23,6 +23,7 @@ import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
+import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
@@ -49,8 +50,8 @@ import com.mchange.net.ProtocolException;
 import com.mchange.net.SmtpMailSender;
 import com.sun.management.OperatingSystemMXBean;
 import com.sun.net.httpserver.HttpServer;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.internal.ir.Block;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -432,6 +433,14 @@ public class FunctionManager extends BaseManager {
         player.dataPacket(packet);
     }
 
+    @Comment(value = "获取玩家第一个boss血条的id")
+    final public long getBossBarId(@Comment(value = "玩家对象") Player player){
+        for(long bar : player.getDummyBossBars().keySet()){
+            return bar;
+        }
+        return -1;
+    }
+
     //here 8/4
     @Comment(value = "从指定文件名的bn插件中获取指定变量名的变量")
     final public Object getVariableFrom(@Comment(value = "插件文件名") String scriptName
@@ -568,6 +577,11 @@ public class FunctionManager extends BaseManager {
             }
 
             @Override
+            public File getFile() {
+                return Loader.plugin.getFile();
+            }
+
+            @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
                 return false;
             }
@@ -598,22 +612,26 @@ public class FunctionManager extends BaseManager {
     }
     //json与yaml互转
     @Comment(value = "JSON字符串转YAML字符串")
+    @SuppressWarnings("unchecked")
     final public String JSONtoYAML(@Comment(value = "要转换的json字符串") String json){
         json = formatJSON(json);
         Config config = new Config(Config.YAML);
-        config.setAll((LinkedHashMap)new Gson().fromJson(json, (new TypeToken<LinkedHashMap<String, Object>>() {}).getType()));
+        LinkedHashMap<String, Object> map = new Gson().fromJson(json, new TypeToken<LinkedHashMap<String, Object>>() {}.getType());
+        config.setAll(new ConfigSection(map));
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
         return yaml.dump(config.getRootSection());
     }
     @Comment(value = "YAML字符串转JSON字符串")
+    @SuppressWarnings("unchecked")
     final public String YAMLtoJSON(@Comment(value = "要转换的YAML字符串") String yaml){
         Config config = new Config(Config.JSON);
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yamlObj = new Yaml(dumperOptions);
-        config.setAll(yamlObj.loadAs(yaml, LinkedHashMap.class));
+        LinkedHashMap<String, Object> map = yamlObj.loadAs(yaml, LinkedHashMap.class);
+        config.setAll(new ConfigSection(map));
         return new GsonBuilder().setPrettyPrinting().create().toJson(config.getRootSection());
     }
     @Comment(value = "格式化JSON字符串（重排版）")
@@ -706,6 +724,14 @@ public class FunctionManager extends BaseManager {
         } catch (IOException | ProtocolException e) {
             e.printStackTrace();
         }
+    }
+    @Comment(value = "通过smtp服务器发送电子邮件（简化版，无抄送）")
+    final public void sendMail(@Comment(value = "smtp服务器地址") String smtpMailServer
+            ,@Comment(value = "发件人") String from
+            ,@Comment(value = "收件人") String to
+            ,@Comment(value = "主题") String subject
+            ,@Comment(value = "内容") String content){
+        sendMail(smtpMailServer, from, to, "", "", subject, content);
     }
     //私有回调
     @Deprecated

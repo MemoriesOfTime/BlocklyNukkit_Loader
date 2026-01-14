@@ -3,7 +3,7 @@ package com.blocklynukkit.loader.other;
 import cn.nukkit.utils.TextFormat;
 import com.blocklynukkit.loader.Loader;
 import com.blocklynukkit.loader.utils.Utils;
-import jdk.nashorn.api.scripting.NashornScriptEngineFactory;
+import org.openjdk.nashorn.api.scripting.NashornScriptEngineFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

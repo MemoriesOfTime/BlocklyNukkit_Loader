@@ -149,7 +149,7 @@ public class Loader extends PluginBase implements Listener {
         ));
         if (!plugins.containsKey("EconomyAPI")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar");
+                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/me/onebone/economyapi/2.0.5/economyapi-2.0.5.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -159,9 +159,6 @@ public class Loader extends PluginBase implements Listener {
                     this.getLogger().warning(Utils.translate(
                             "EconomyAPI版本太低！请您及时更新！","The version of EconomyAPI is to low! Please update it!"
                     ));
-                    this.getLogger().warning(Utils.translate(
-                            "最新版本下载地址：https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar",
-                            "Latest version is here: https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/EconomyAPI.jar"));
                 }
             }catch (Exception e){
                 //ignore

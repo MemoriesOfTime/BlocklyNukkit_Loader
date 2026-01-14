@@ -433,6 +433,14 @@ public class FunctionManager extends BaseManager {
         player.dataPacket(packet);
     }
 
+    @Comment(value = "获取玩家第一个boss血条的id")
+    final public long getBossBarId(@Comment(value = "玩家对象") Player player){
+        for(long bar : player.getDummyBossBars().keySet()){
+            return bar;
+        }
+        return -1;
+    }
+
     //here 8/4
     @Comment(value = "从指定文件名的bn插件中获取指定变量名的变量")
     final public Object getVariableFrom(@Comment(value = "插件文件名") String scriptName
@@ -716,6 +724,14 @@ public class FunctionManager extends BaseManager {
         } catch (IOException | ProtocolException e) {
             e.printStackTrace();
         }
+    }
+    @Comment(value = "通过smtp服务器发送电子邮件（简化版，无抄送）")
+    final public void sendMail(@Comment(value = "smtp服务器地址") String smtpMailServer
+            ,@Comment(value = "发件人") String from
+            ,@Comment(value = "收件人") String to
+            ,@Comment(value = "主题") String subject
+            ,@Comment(value = "内容") String content){
+        sendMail(smtpMailServer, from, to, "", "", subject, content);
     }
     //私有回调
     @Deprecated

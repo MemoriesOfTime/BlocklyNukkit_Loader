@@ -134,13 +134,13 @@
             <version>1.3-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${pom.basedir}/nukkit/plugins/PlaceholderAPI-1.3-SNAPSHOT.jar</systemPath>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>de.theamychan</groupId>
             <artifactId>ScoreboardAPI</artifactId>
-            <version>1.3</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/ScoreboardAPI-1.3-SNAPSHOT.jar</systemPath>
+            <version>1.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.nukkitx</groupId>
@@ -152,15 +152,13 @@
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.5</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/c3p0-0.9.5.5.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>mchange-commons-java</artifactId>
             <version>0.2.19</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/mchange-commons-java-0.2.19.jar</systemPath>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.github.kawamuray.wasmtime</groupId>
@@ -202,9 +200,8 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>1</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/nukkit/plugins/flatlaf-0.41.jar</systemPath>
+            <version>0.41</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.blocklynukkit.gameAPI</groupId>

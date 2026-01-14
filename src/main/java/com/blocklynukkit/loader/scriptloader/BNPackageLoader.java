@@ -154,11 +154,11 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         getlogger().warning("无法加载:" + entry.getKey()+"! 缺少python依赖库");
-                        getlogger().warning("请到 https://tools.blocklynukkit.com/PyBN.jar下载依赖插件");
+                        getlogger().warning("请到 https://tools.blocklynukkit.net/PyBN.jar下载依赖插件");
                     }
                     else{
                         getlogger().warning("cannot load BN plugin:" + entry.getKey()+"! python libs not found!");
-                        getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PyBN.jar");
+                        getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.net/PyBN.jar");
                     }
                 }
             }else if(entry.getKey().endsWith(".php")||entry.getKey().endsWith(".phpfile")){
@@ -169,11 +169,11 @@ public class BNPackageLoader extends ExtendScriptLoader implements BytePackager,
                 }else {
                     if (Server.getInstance().getLanguage().getName().contains("中文")){
                         getlogger().warning("无法加载:" + entry.getKey()+"! 缺少PHP依赖库");
-                        getlogger().warning("请到 https://tools.blocklynukkit.com/PHPBN.jar下载依赖插件");
+                        getlogger().warning("请到 https://tools.blocklynukkit.net/PHPBN.jar下载依赖插件");
                     }
                     else{
                         getlogger().warning("cannot load BN plugin:" + entry.getKey()+"! PHP libs not found!");
-                        getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.com/PHPBN.jar");
+                        getlogger().warning("please download python lib plugin at https://tools.blocklynukkit.net/PHPBN.jar");
                     }
                 }
             }else if(entry.getKey().endsWith(".json")||entry.getKey().endsWith(".yml")

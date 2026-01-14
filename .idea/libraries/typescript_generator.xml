@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="typescript-generator">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/out/typescript/typescript-generator.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

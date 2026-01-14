@@ -25,15 +25,15 @@ public final class ParticleManager extends BaseManager {
     public String toString() {
         return "BlocklyNukkit Based Object";
     }
-    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.com/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
+    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.net/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
     public void drawEmitter(@Comment(value = "坐标") Position pos,@Comment(value = "发射器id") String id,@Comment(value = "可以看见粒子发射器的玩家") Player toPlayer){
         pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension(),toPlayer);
     }
-    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.com/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
+    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.net/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
     public void drawEmitter(@Comment(value = "坐标") Position pos,@Comment(value = "发射器id") String id){
         pos.level.addParticleEffect(pos.asVector3f(),id, -1L,pos.level.getGenerator().getDimension(),(Player[])null);
     }
-    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.com/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
+    @Comment(value = "绘制粒子发射器，详见[编程开发文档](https://wiki.blocklynukkit.net/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
     public void drawEmitter(@Comment(value = "坐标") Position pos){
         ParticleEffect[] random = ParticleEffect.values();
         pos.level.addParticleEffect(pos,random[Loader.mainRandom.nextInt(random.length)-1]);
@@ -81,7 +81,7 @@ public final class ParticleManager extends BaseManager {
             ,@Comment(value = "粒子id") int pid){
         new Thread(new LineFlat(pos1, pos2, sep, pid)).start();
     }
-    @Comment(value = "绘制烟花，详见[编程开发文档](https://wiki.blocklynukkit.com/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
+    @Comment(value = "绘制烟花，详见[编程开发文档](https://wiki.blocklynukkit.net/%E7%BC%96%E7%A8%8B%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/#particle%E5%9F%BA%E5%AF%B9%E8%B1%A1)")
     public void drawFireWork(@Comment(value = "位置") Position pos
             ,@Comment(value = "颜色码") int colornum
             ,@Comment(value = "是否闪烁") boolean flick

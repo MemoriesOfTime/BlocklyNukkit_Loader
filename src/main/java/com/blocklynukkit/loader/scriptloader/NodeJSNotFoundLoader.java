@@ -28,12 +28,12 @@ public class NodeJSNotFoundLoader extends ExtendScriptLoader {
     public void mkwarn(){
         if (Server.getInstance().getLanguage().getName().contains("中文")){
             Loader.getlogger().warning(TextFormat.RED+"Node.js模块未安装！请去下载安装后再使用！下载链接：");
-            Loader.getlogger().warning(TextFormat.RED+"Windows64版本: https://tools.blocklynukkit.com/NodeBN_Windows64.jar");
+            Loader.getlogger().warning(TextFormat.RED+"Windows64版本: https://tools.blocklynukkit.net/NodeBN_Windows64.jar");
             Loader.getlogger().warning(TextFormat.RED+"Windows32版本: null");
             Loader.getlogger().warning(TextFormat.RED+"Linux64版本: null");
         }else {
             Loader.getlogger().warning(TextFormat.RED+"Node.js module not found! Please install node.js plugin first! Download link:");
-            Loader.getlogger().warning(TextFormat.RED+"For Windows64: https://tools.blocklynukkit.com/NodeBN_Windows64.jar");
+            Loader.getlogger().warning(TextFormat.RED+"For Windows64: https://tools.blocklynukkit.net/NodeBN_Windows64.jar");
             Loader.getlogger().warning(TextFormat.RED+"For Windows32: null");
             Loader.getlogger().warning(TextFormat.RED+"For Linux64: null");
         }

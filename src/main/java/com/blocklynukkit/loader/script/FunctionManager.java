@@ -23,6 +23,7 @@ import cn.nukkit.plugin.*;
 import cn.nukkit.scheduler.Task;
 import cn.nukkit.scheduler.TaskHandler;
 import cn.nukkit.utils.Config;
+import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.EventException;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
@@ -603,22 +604,26 @@ public class FunctionManager extends BaseManager {
     }
     //json与yaml互转
     @Comment(value = "JSON字符串转YAML字符串")
+    @SuppressWarnings("unchecked")
     final public String JSONtoYAML(@Comment(value = "要转换的json字符串") String json){
         json = formatJSON(json);
         Config config = new Config(Config.YAML);
-        config.setAll((LinkedHashMap)new Gson().fromJson(json, (new TypeToken<LinkedHashMap<String, Object>>() {}).getType()));
+        LinkedHashMap<String, Object> map = new Gson().fromJson(json, new TypeToken<LinkedHashMap<String, Object>>() {}.getType());
+        config.setAll(new ConfigSection(map));
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
         return yaml.dump(config.getRootSection());
     }
     @Comment(value = "YAML字符串转JSON字符串")
+    @SuppressWarnings("unchecked")
     final public String YAMLtoJSON(@Comment(value = "要转换的YAML字符串") String yaml){
         Config config = new Config(Config.JSON);
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yamlObj = new Yaml(dumperOptions);
-        config.setAll(yamlObj.loadAs(yaml, LinkedHashMap.class));
+        LinkedHashMap<String, Object> map = yamlObj.loadAs(yaml, LinkedHashMap.class);
+        config.setAll(new ConfigSection(map));
         return new GsonBuilder().setPrettyPrinting().create().toJson(config.getRootSection());
     }
     @Comment(value = "格式化JSON字符串（重排版）")

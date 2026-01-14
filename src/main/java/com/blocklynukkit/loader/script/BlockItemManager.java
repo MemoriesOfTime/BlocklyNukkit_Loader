@@ -5,6 +5,8 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.block.BlockWater;
+import cn.nukkit.block.custom.CustomBlockDefinition;
+import cn.nukkit.block.custom.CustomBlockManager;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.event.block.BlockUpdateEvent;
@@ -24,6 +26,7 @@ import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.generic.BaseFullChunk;
 import cn.nukkit.level.particle.DestroyBlockParticle;
+import cn.nukkit.network.protocol.ProtocolInfo;
 import com.blocklynukkit.loader.other.ai.route.BNSimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -32,6 +35,7 @@ import cn.nukkit.utils.BinaryStream;
 import com.blocklynukkit.loader.api.CallbackFunction;
 import com.blocklynukkit.loader.api.Comment;
 import com.blocklynukkit.loader.Loader;
+import com.blocklynukkit.loader.other.AddonsAPI.BNCustomBlock;
 import com.blocklynukkit.loader.other.AddonsAPI.CustomItemInfo;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourceNode;
 import com.blocklynukkit.loader.other.AddonsAPI.resource.ResourcePack;
@@ -173,7 +177,7 @@ public final class BlockItemManager extends BaseManager {
             }
             block = ev.getBlock();
             block.onUpdate(1);
-            position.level.updateAround(x, y, z);
+            position.level.updateAround(new Vector3(x, y, z));
         }
     }
     //-获取玩家手中物品
@@ -644,7 +648,7 @@ public final class BlockItemManager extends BaseManager {
             default:
                 parent = Fishing.FISHES;
         }
-        RandomItem.putSelector(new ConstantItemSelector(item, parent),(float) chance);
+        RandomItem.putSelector(new ConstantItemSelector(item, parent, false),(float) chance);
     }
     //检测是否为含水方块
     static Method getLevelBlockAtLayerMethod = null;
@@ -680,7 +684,7 @@ public final class BlockItemManager extends BaseManager {
     public void injectItem2Nukkit(String name, int id) throws NoSuchFieldException, IllegalAccessException {
         RuntimeItemMapping runtimeItemMapping = null;
         try {
-            runtimeItemMapping = RuntimeItems.getMapping();
+            runtimeItemMapping = RuntimeItems.getMapping(ProtocolInfo.CURRENT_PROTOCOL);
         }catch (NoSuchMethodError error){
             try {
                 if(getRuntimeItemMappingMethod == null) getRuntimeItemMappingMethod = RuntimeItems.class.getMethod("getRuntimeMapping");
@@ -869,10 +873,10 @@ public final class BlockItemManager extends BaseManager {
 //            Block.lightFilter[id] = 1;
 //        }
     }
-    //动态生成类并注册新的固体方块
+    //使用 Nukkit-MOT 原生 API 注册自定义方块
     @Comment(value = "注册新的自定义方块")
     public void registerSolidBlock(
-            @Comment(value = "新方块的id") int id
+            @Comment(value = "新方块的id，必须>=10000") int id
             ,@Comment(value = "新方块的名称") String name
             ,@Comment(value = "新方块的硬度") double hardness
             ,@Comment(value = "新方块的抗爆炸度") double resistance
@@ -882,50 +886,41 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "挖掘后掉落的最大经验") int dropMaxExp
             ,@Comment(value = "新方块的挖掘等级，0-空手,1-木,2-金,3-石,4-铁,5-钻石") int mineTier){
         try {
-            //仅在PowerNukkit上可用
-            if(!Loader.getFunctionManager().isPowerNukkit()){
-                Loader.getlogger().alert("Custom block can only work on powernukkit!");
+            // 检查 ID 是否符合要求
+            if (id < 10000) {
+                Loader.getlogger().alert("Custom block ID must be >= 10000, got: " + id);
                 return;
             }
-            //记录方块id
-            Loader.registerBlockIds.add(id);
-            Loader.registerCustomBlocks++;
-            //注册该方块的物品形式
-            injectItem2Nukkit(name, id);
-            //获取类加载器并导入类路径
-            ClassPool classPool = ClassPool.getDefault();
-            CtClass blockClass = null;
-            classPool.insertClassPath(Loader.pluginFile.getAbsolutePath());
-            classPool.insertClassPath(new ClassClassPath(Loader.class));
-            classPool.insertClassPath(new ClassClassPath(Nukkit.class));
-            classPool.importPackage("com.blocklynukkit.loader");
-            //创建继承固体方块的类
-            blockClass = classPool.makeClass("Block_ID_"+id+"_"+Loader.registerBlocks++,classPool.getCtClass("com.blocklynukkit.loader.other.AddonsAPI.BaseSolidBlock"));
-            //添加构造函数
-            CtConstructor constructor = new CtConstructor(new CtClass[]{},blockClass);
-            constructor.setBody("{}");
-            blockClass.addConstructor(constructor);
-            //添加public int getId()方法
-            blockClass.addMethod(CtMethod.make("public int getId(){return "+id+";}",blockClass));
-            //添加public String getName()
-            blockClass.addMethod(CtMethod.make("public String getName(){return \""+name+"\";}",blockClass));
-            //添加public double getHardness()
-            blockClass.addMethod(CtMethod.make("public double getHardness(){return "+hardness+";}",blockClass));
-            //添加public double getResistance()
-            blockClass.addMethod(CtMethod.make("public double getResistance(){return "+resistance+";}",blockClass));
-            //添加public int getToolType()
-            blockClass.addMethod(CtMethod.make("public int getToolType(){return "+toolType+";}",blockClass));
-            //添加public int getDropExp()
-            blockClass.addMethod(CtMethod.make("public int getDropExp(){return new cn.nukkit.math.NukkitRandom().nextRange("+dropMinExp+","+dropMaxExp+");}",blockClass));
-            //添加public boolean canHarvestWithHand()
-            blockClass.addMethod(CtMethod.make("public boolean canHarvestWithHand(){return false;}",blockClass));
-            //添加public boolean canSilkTouch()
-            blockClass.addMethod(CtMethod.make("public boolean canSilkTouch(){return "+isSilkTouchable+";}",blockClass));
-            //添加public int getTier()
-            blockClass.addMethod(CtMethod.make("public int getTier(){return "+mineTier+";}",blockClass));
-            //编译到jvm中
-            registerBlock(id, name, (Class<? extends Block>) blockClass.toClass());
-        } catch (NotFoundException | CannotCompileException | NoSuchFieldException | IllegalAccessException e) {
+
+            // 检查 CustomBlockManager 是否可用
+            CustomBlockManager blockManager = CustomBlockManager.get();
+            if (blockManager == null) {
+                Loader.getlogger().alert("CustomBlockManager is not available!");
+                return;
+            }
+
+            String identifier = "blocklynukkit:" + name.toLowerCase().replace(" ", "_");
+
+            // 使用 Nukkit-MOT 原生 API 注册方块
+            blockManager.registerCustomBlock(
+                identifier,
+                id,
+                CustomBlockDefinition.builder(new BNCustomBlock(
+                    identifier, id, name, hardness, resistance,
+                    toolType, mineTier, isSilkTouchable, dropMinExp, dropMaxExp
+                ))
+                .breakTime(hardness)
+                .build(),
+                () -> new BNCustomBlock(
+                    identifier, id, name, hardness, resistance,
+                    toolType, mineTier, isSilkTouchable, dropMinExp, dropMaxExp
+                )
+            );
+
+            Loader.getlogger().info("Registered custom block: " + identifier + " (ID: " + id + ")");
+
+        } catch (Exception e) {
+            Loader.getlogger().error("Failed to register custom block: " + name, e);
             e.printStackTrace();
         }
     }
@@ -958,13 +953,17 @@ public final class BlockItemManager extends BaseManager {
         registerSimpleItem(id, name, stackSize, type, isDisplayAsTool, canOnOffhand, null);
     }
     @Comment(value = "注册新的简易物品")
-    public void registerSimpleItem(@Comment(value = "新物品的id") int id
+    public void registerSimpleItem(@Comment(value = "新物品的id，建议>=2000") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "新物品的最大堆叠上限") int stackSize
             ,@Comment(value = "新物品的类别，可选construction nature equipment items") String type
             ,@Comment(value = "是否展示为工具(竖着拿在手里)") boolean isDisplayAsTool
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
             ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
+        // 自定义物品ID建议 >= 2000，避免与内置物品冲突
+        if (id < 2000) {
+            Loader.getlogger().warning("Custom item ID " + id + " is less than 2000, may conflict with built-in items!");
+        }
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1000,7 +999,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录物品注册信息
@@ -1036,7 +1035,7 @@ public final class BlockItemManager extends BaseManager {
         try {
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                 || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
             injectItem2Nukkit(name, id);
             Loader.registerItemIds.add(id);
             //记录物品注册信息
@@ -1095,7 +1094,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录工具信息
@@ -1110,7 +1109,7 @@ public final class BlockItemManager extends BaseManager {
     }
 
     @Comment(value = "注册新的工具物品")
-    public void registerToolItem(@Comment(value = "新物品的id") int id
+    public void registerToolItem(@Comment(value = "新物品的id，建议>=2000") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "工具种类,可为sword shovel pickaxe axe hoe") String toolType
             ,@Comment(value = "工具挖掘等级 0-空手,1-木,2-金,3-石,4-铁,5-钻石,6-下界合金") int toolTier
@@ -1118,6 +1117,10 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "攻击伤害") int attackDamage
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
             ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
+        // 自定义物品ID建议 >= 2000，避免与内置物品冲突
+        if (id < 2000) {
+            Loader.getlogger().warning("Custom item ID " + id + " is less than 2000, may conflict with built-in items!");
+        }
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1184,7 +1187,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录工具信息
@@ -1210,13 +1213,17 @@ public final class BlockItemManager extends BaseManager {
     }
 
     @Comment(value = "注册新的食物物品")
-    public void registerFoodItem(@Comment(value = "新物品的id") int id
+    public void registerFoodItem(@Comment(value = "新物品的id，建议>=2000") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "新物品的最大堆叠上限") int stackSize
             ,@Comment(value = "提供的饥饿度") int nutrition
             ,@Comment(value = "食用持续时间(刻)") int eatTime
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
             ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
+        // 自定义物品ID建议 >= 2000，避免与内置物品冲突
+        if (id < 2000) {
+            Loader.getlogger().warning("Custom item ID " + id + " is less than 2000, may conflict with built-in items!");
+        }
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1258,7 +1265,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录物品注册信息
@@ -1287,7 +1294,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录物品注册信息
@@ -1312,13 +1319,17 @@ public final class BlockItemManager extends BaseManager {
     }
 
     @Comment(value = "注册新的饮品物品")
-    public void registerDrinkItem(@Comment(value = "新物品的id") int id
+    public void registerDrinkItem(@Comment(value = "新物品的id，建议>=2000") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "新物品的最大堆叠上限") int stackSize
             ,@Comment(value = "提供的饥饿度") int nutrition
             ,@Comment(value = "饮用持续时间(刻)") int drinkTime
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
             ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
+        // 自定义物品ID建议 >= 2000，避免与内置物品冲突
+        if (id < 2000) {
+            Loader.getlogger().warning("Custom item ID " + id + " is less than 2000, may conflict with built-in items!");
+        }
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1385,7 +1396,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录物品注册信息
@@ -1417,7 +1428,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录物品注册信息
@@ -1443,7 +1454,7 @@ public final class BlockItemManager extends BaseManager {
     }
 
     @Comment(value = "注册新的盔甲物品")
-    public void registerArmorItem(@Comment(value = "新物品的id") int id
+    public void registerArmorItem(@Comment(value = "新物品的id，建议>=2000") int id
             ,@Comment(value = "新物品的名称") String name
             ,@Comment(value = "盔甲种类,可为helmet chest leggings boots") String armorType
             ,@Comment(value = "盔甲等级 0-无,1-皮革,2-铁,3-锁链,4-金,5-钻石,6-下界合金") int armorTier
@@ -1451,6 +1462,10 @@ public final class BlockItemManager extends BaseManager {
             ,@Comment(value = "提供的盔甲值") int armorPoint
             ,@Comment(value = "是否可装备在副手") boolean canOnOffhand
             ,@Comment(value = "物品初始化函数") @CallbackFunction(classes = {"cn.nukkit.item.Item"}, parameters = {"self"}, comments = {"新创建的物品自身"}) String initFunction){
+        // 自定义物品ID建议 >= 2000，避免与内置物品冲突
+        if (id < 2000) {
+            Loader.getlogger().warning("Custom item ID " + id + " is less than 2000, may conflict with built-in items!");
+        }
         try{
             ClassPool classPool = ClassPool.getDefault();
             CtClass itemClass = null;
@@ -1515,7 +1530,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录盔甲信息
@@ -1553,7 +1568,7 @@ public final class BlockItemManager extends BaseManager {
             //修改运行时物品数据
             if(id == 326 || id == 327 || id == 343 || id == 435 || id == 436 || id == 439
                     || id == 440 ||(id>477&&id<498)|| id == 512 ||(id>513&&id<720)
-                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>801){
+                    ||(id>720&&id<734)|| id == 735 ||(id>760&&id<801)|| id>=2000){
                 injectItem2Nukkit(name, id);
                 Loader.registerItemIds.add(id);
                 //记录盔甲信息

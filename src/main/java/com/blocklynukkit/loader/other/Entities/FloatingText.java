@@ -53,13 +53,11 @@ public class FloatingText extends EntityMob {
         if (this.closed) {
             return false;
         } else {
-            this.timing.startTiming();
             if(currentTick%CallTick==0){
                 Loader.plugin.call(CallBack,this);
                 this.spawnToAll();
             }
             boolean hasUpdate = super.onUpdate(currentTick);
-            this.timing.stopTiming();
             return hasUpdate;
         }
     }

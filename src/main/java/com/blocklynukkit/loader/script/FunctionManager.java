@@ -49,8 +49,8 @@ import com.mchange.net.ProtocolException;
 import com.mchange.net.SmtpMailSender;
 import com.sun.management.OperatingSystemMXBean;
 import com.sun.net.httpserver.HttpServer;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.internal.ir.Block;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.internal.ir.Block;
 import me.onebone.economyapi.EconomyAPI;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -565,6 +565,11 @@ public class FunctionManager extends BaseManager {
             @Override
             public PluginLoader getPluginLoader() {
                 return null;
+            }
+
+            @Override
+            public File getFile() {
+                return Loader.plugin.getFile();
             }
 
             @Override

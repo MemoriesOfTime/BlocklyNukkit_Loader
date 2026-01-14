@@ -1,6 +1,6 @@
 package com.blocklynukkit.loader.scriptloader.functions;
 
-import jdk.nashorn.api.scripting.JSObject;
+import org.openjdk.nashorn.api.scripting.JSObject;
 
 import java.util.Collection;
 import java.util.Set;

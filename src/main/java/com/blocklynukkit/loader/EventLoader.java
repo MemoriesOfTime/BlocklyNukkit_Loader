@@ -29,7 +29,7 @@ import cn.nukkit.network.protocol.*;
 import cn.nukkit.scheduler.Task;
 import com.blocklynukkit.loader.other.Entities.BNNPC;
 import com.blocklynukkit.loader.other.Entities.VanillaNPC;
-import com.blocklynukkit.loader.other.ProxyPlayer;
+// ProxyPlayer removed - using Nukkit-MOT native implementation
 import com.blocklynukkit.loader.other.generator.render.BaseRender;
 import com.blocklynukkit.loader.script.event.FakeSlotChangeEvent;
 import com.blocklynukkit.loader.script.event.StartFishingEvent;
@@ -734,9 +734,8 @@ public class EventLoader implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerCreationEvent(PlayerCreationEvent event) {
-        if (!Loader.isPm1NK) {
-            event.setPlayerClass(ProxyPlayer.class);
-        }
+        // ProxyPlayer removed - Nukkit-MOT handles experiments and server-authoritative movement natively
+        // Ensure enableExperimentMode is set to true in nukkit.yml for custom items to work
         Loader.callEventHandler(event, "PlayerCreationEvent");
     }
 

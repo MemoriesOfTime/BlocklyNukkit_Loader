@@ -3,7 +3,6 @@ package com.blocklynukkit.loader.utils;
 
 import cn.nukkit.plugin.PluginLogger;
 import com.blocklynukkit.loader.Loader;
-import sun.misc.BASE64Decoder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

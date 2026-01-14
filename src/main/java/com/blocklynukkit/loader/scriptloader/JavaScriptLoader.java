@@ -12,7 +12,7 @@ import com.blocklynukkit.loader.scriptloader.bases.ExtendScriptLoader;
 import com.blocklynukkit.loader.scriptloader.bases.Interpreter;
 import com.google.gson.GsonBuilder;
 import javassist.*;
-import jdk.nashorn.api.scripting.*;
+import org.openjdk.nashorn.api.scripting.*;
 
 import javax.script.CompiledScript;
 import javax.script.Invocable;

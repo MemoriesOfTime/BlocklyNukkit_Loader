@@ -76,4 +76,8 @@ public class OceanGenerator extends cn.nukkit.level.generator.Generator {
     public ChunkManager getChunkManager() {
         return this.level;
     }
+    @Override
+    public void populateStructure(int chunkX, int chunkZ) {
+        // No structures for ocean generator
+    }
 }

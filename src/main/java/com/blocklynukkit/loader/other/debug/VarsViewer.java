@@ -1,8 +1,8 @@
 package com.blocklynukkit.loader.other.debug;
 
 import com.blocklynukkit.loader.Loader;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
-import jdk.nashorn.internal.runtime.JSType;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.internal.runtime.JSType;
 
 import javax.script.Bindings;
 import javax.script.ScriptContext;

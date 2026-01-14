@@ -48,7 +48,7 @@ import de.theamychan.scoreboard.network.Scoreboard;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import javassist.CtClass;
-import jdk.nashorn.api.scripting.ScriptObjectMirror;
+import org.openjdk.nashorn.api.scripting.ScriptObjectMirror;
 
 import javax.script.*;
 import java.awt.image.BufferedImage;
@@ -111,12 +111,10 @@ public class Loader extends PluginBase implements Listener {
     public static Map<String,String> tipsVar = new HashMap<>();
     //blockitemManager变量
     public static byte[] ItemPalette = null;
-    public static short registerBlocks = 0;
-    public static short registerCustomBlocks = 0;
     public static short registerItems = 0;
     public static List<Integer> registerItemIds = new ArrayList<>();
-    public static List<Integer> registerBlockIds = new ArrayList<>();
     public static Int2ObjectOpenHashMap<CustomItemInfo> registerItemInfos = new Int2ObjectOpenHashMap<>();
+    // 注：自定义方块已迁移到 Nukkit-MOT 原生 CustomBlockManager API
     //levelManager变量
     public static Map<String,Object> skylandoptions = new HashMap<>();
     public static int OceanSeaLevel = 64;

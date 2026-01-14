@@ -2,6 +2,7 @@ package com.blocklynukkit.loader.scriptloader.scriptengines;
 
 import com.blocklynukkit.loader.other.BNLogger;
 import io.github.kawamuray.wasmtime.*;
+import io.github.kawamuray.wasmtime.Module;
 import io.github.kawamuray.wasmtime.wasi.Wasi;
 import io.github.kawamuray.wasmtime.wasi.WasiConfig;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -583,7 +584,7 @@ public class WasmScriptEngine extends AbstractScriptEngine implements ScriptEngi
         if(evaluated) throw new ScriptException("A wasm program has already been evaluated!");
         try {
             evaluated = true;
-            linker.module(currentModuleName(),Module.fromBinary(store.engine(),binary));
+            linker.module(currentModuleName(), Module.fromBinary(store.engine(),binary));
             linker.getOneByName(currentModuleName(),"_initialize").func().call();
             linker.getOneByName(currentModuleName(),"init").func().call();
             return 0;
@@ -602,7 +603,7 @@ public class WasmScriptEngine extends AbstractScriptEngine implements ScriptEngi
                 linker.module(currentModuleName(),new Module(store.engine(),script.getBytes(StandardCharsets.UTF_8)));
             }else {
                 byte[] wasmBinaries = Base64.getDecoder().decode(script);
-                linker.module(currentModuleName(),Module.fromBinary(store.engine(),wasmBinaries));
+                linker.module(currentModuleName(), Module.fromBinary(store.engine(),wasmBinaries));
             }
             linker.getOneByName(currentModuleName(),"_initialize").func().call();
             linker.getOneByName(currentModuleName(),"init").func().call();

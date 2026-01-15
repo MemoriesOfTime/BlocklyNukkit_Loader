@@ -166,7 +166,7 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("KotlinLib")){
             try {
-                Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/KotlinLib.jar"); //KotlinLib url
+                //Utils.downloadPlugin("https://blocklynukkitxml-1259395953.cos.ap-beijing.myqcloud.com/jar/KotlinLib.jar"); //KotlinLib url
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -179,7 +179,7 @@ public class Loader extends PluginBase implements Listener {
         }
         if (!plugins.containsKey("FakeInventories")){
             try {
-                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/com/nukkitx/fakeinventories/1.0.3-MOT-SNAPSHOT/fakeinventories-1.0.3-MOT-20260114.132316-2.jar");
+                Utils.downloadPlugin("https://repo.lanink.cn/repository/maven-public/com/nukkitx/fakeinventories/1.0.3-MOT-SNAPSHOT/fakeinventories-1.0.3-MOT-20260114.143002-3.jar");
             } catch (Exception e) {
                 e.printStackTrace();
             }
